@@ -2,9 +2,9 @@
 import React from 'react';
 import { Button } from '@/components/ui/button'; // Adjust path if needed
 import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react';
-import Calfshakti from '../../../assets/Images/Calfshakti.jpg';
+import Calfshakti from '../../../assets/Images/CalfShakti.jpg';
 import One from '../../../assets/Images/one-photoroom.png';
-import R3 from '../../../assets/Images/R3.png';
+import R3 from '../../../assets/Images/R3.jpg';
 import MakkiInjection from '../../../assets/Images/Makki-Injection.jpg';
 
 const TopSellingSection = () => {
