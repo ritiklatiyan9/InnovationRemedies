@@ -19,7 +19,7 @@ import {
   ShoppingCart
 } from 'lucide-react';
 
-import R3 from '../../../assets/Images/r3.png'; // Adjusted path assumption
+import R3 from '../../../assets/Images/R3.png'; // Adjusted path assumption
 
 // --- Sample Product Data with STRING SLUGS for ID ---
 const products = [
