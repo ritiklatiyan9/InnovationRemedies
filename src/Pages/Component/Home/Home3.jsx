@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import makkhiinjection from '../../../assets/Images/makkhiinjection-photoroom.png';
 import one from '../../../assets/Images/one-photoroom.png';
 import r3 from '../../../assets/Images/R3.png';
-import calfshakti from '../../../assets/Images/Calfshakti.jpg';
+import calfshakti from '../../../assets/Images/calfshakti.jpg';
 import racerkit from '../../../assets/Images/racer-kit-all-photoroom.png';
-import urocenta from '../../../assets/Images/Urocenta-photoroom.png';
+import urocenta from '../../../assets/Images/urocenta-photoroom.png';
 
 // Reduced to 6 cards with more detailed information
 const cardImages = [

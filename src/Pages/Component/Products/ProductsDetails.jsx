@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import WeightBoostImage from '../../../assets/Images/one.jpg';
-import R3Image from '../../../assets/Images/R3.png';
+import R3Image from '../../../assets/Images/R3.jpg';
 
 // --- Sample Images (adjust paths/imports as necessary) ---
 const PlaceholderMoodImage = '/placeholder-mood.png';
