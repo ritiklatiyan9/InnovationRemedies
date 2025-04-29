@@ -2,10 +2,10 @@
 import React from 'react';
 import { Button } from '@/components/ui/button'; // Adjust path if needed
 import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react';
-import Calfshakti from '../../../assets/Images/Calfshakti.jpg';
-import One from '../../../assets/Images/one-photoroom.png';
+import Calfshakti from '../../../assets/Images/thirteen.png';
+import One from '../../../assets/Images/one.png';
 import R3 from '../../../assets/Images/R3.png';
-import MakkiInjection from '../../../assets/Images/Makki-Injection.jpg';
+import MakkiInjection from '../../../assets/Images/nineteen.png';
 
 const TopSellingSection = () => {
   // Placeholder image data - replace with your actual images

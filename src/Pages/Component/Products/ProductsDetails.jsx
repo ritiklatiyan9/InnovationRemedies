@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import WeightBoostImage from '../../../assets/Images/one.jpg';
+import WeightBoostImage from '../../../assets/Images/one.png';
 import R3Image from '../../../assets/Images/R3.png';
 
 // --- Sample Images (adjust paths/imports as necessary) ---

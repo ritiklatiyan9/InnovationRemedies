@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import WellnessCheckImage from '../../../assets/Images/one.jpg';
+import WellnessCheckImage from '../../../assets/Images/one.png';
 import { ArrowRight, ArrowUpRight, Eye, ShoppingBag, Stethoscope } from 'lucide-react';
 
 function VeterinaryPage() {
@@ -33,7 +33,7 @@ function VeterinaryPage() {
             </div>
 
             {/* Right Column - Top: Service Highlight Card (e.g., Wellness Exams) */}
-            <Card className="group rounded-3xl overflow-hidden relative h-full min-h-[300px] md:min-h-[400px] cursor-pointer">
+            <Card className="group rounded-3xl overflow-hidden relative h-full min-h-[500px] md:min-h-[500px] cursor-pointer">
               <img
                 src={WellnessCheckImage}
                 alt="Veterinarian performing a checkup on a dog"
