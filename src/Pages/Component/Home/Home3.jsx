@@ -5,6 +5,7 @@ import r3 from '../../../assets/Images/R3.png';
 import calfshakti from '../../../assets/Images/thirteen.png';
 import racerkit from '../../../assets/Images/two.png';
 import urocenta from '../../../assets/Images/three.png';
+import maintwo from '../../../assets/Images/twelve.png';
 
 // Reduced to 6 cards with more detailed information
 const cardImages = [
@@ -469,7 +470,9 @@ const MasterpieceDisplay = () => {
           ))}
         </div>
       )}
-
+  <div>
+    <img className='w-full h-full' src={maintwo} alt="" />
+  </div>
       {/* Sub-headline / Description */}
       <p className="text-center text-gray-700 max-w-lg text-sm md:text-base relative z-10 mt-4">
         Discover our trusted range of products designed for the well-being of your livestock family.

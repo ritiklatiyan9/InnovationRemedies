@@ -4,6 +4,7 @@ import Home2 from "./Home2";
 import Home3 from "./Home3";
 import Home4 from "./Home4";
 import Home6 from "./Home6";
+import Products from "../Products/ListProducts";
 import videoSourceUrl from "../../../assets/Video/bg.mp4";
 import logo from '../../../assets/Images/logo.png';
 
@@ -182,6 +183,7 @@ const VetWellbeingDashboardRedesigned = () => {
         <Home2 />
         <Home3 />
         <Home4 />
+        <Products/>
         <Home6 />
       </div>
     </div>

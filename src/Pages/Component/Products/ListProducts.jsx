@@ -109,9 +109,9 @@ function ProductCard({
               {description}
           </p>
         )}
-        <p className="text-lg font-bold text-gray-900 pt-1">
+        {/* <p className="text-lg font-bold text-gray-900 pt-1">
         ₹{price.toFixed(2)}
-        </p>
+        </p> */}
         {/* Button: Stop propagation to prevent card click */}
         <Button
           variant="default"
@@ -120,7 +120,7 @@ function ProductCard({
           
         >
           <ShoppingCart size={16} className="mr-2" />
-          Add to Cart
+          Go to Details
         </Button>
       </CardContent>
     </Card>

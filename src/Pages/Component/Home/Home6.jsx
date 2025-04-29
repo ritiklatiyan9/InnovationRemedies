@@ -1,120 +1,128 @@
-// src/components/TopSellingSection.jsx (or your preferred path)
-import React from 'react';
-import { Button } from '@/components/ui/button'; // Adjust path if needed
+// src/components/TopSellingSection.jsx
+import React, { useRef, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react';
 import Calfshakti from '../../../assets/Images/thirteen.png';
 import One from '../../../assets/Images/one.png';
 import R3 from '../../../assets/Images/R3.png';
 import MakkiInjection from '../../../assets/Images/nineteen.png';
 
-const TopSellingSection = () => {
-  // Placeholder image data - replace with your actual images
-  const products = [
-    { id: 1, src: Calfshakti, alt: 'Girl in orange dress jumping', heightClass: 'h-[450px]' },
-    { id: 2, src: One, alt: 'Person in yellow hoodie stretching', heightClass: 'h-[550px]' },
-    { id: 3, src: R3, alt: 'Hand holding a water bottle', heightClass: 'h-[400px]' },
-    { id: 4, src: MakkiInjection, alt: 'Yellow baseball cap', heightClass: 'h-[450px]', hasIcon: true },
-  ];
+const products = [
+  { id: 1, src: Calfshakti, alt: 'Girl in orange dress jumping' },
+  { id: 2, src: One, alt: 'Person in yellow hoodie stretching' },
+  { id: 3, src: R3, alt: 'Hand holding a water bottle' },
+  { id: 4, src: MakkiInjection, alt: 'Yellow baseball cap', hasIcon: true },
+];
+
+export default function TopSellingSection() {
+  const carouselRef = useRef(null);
+
+  // Auto-scroll every 4s
+  useEffect(() => {
+    const el = carouselRef.current;
+    if (!el) return;
+    let idx = 0;
+    const max = products.length;
+    const scroll = () => {
+      idx = (idx + 1) % max;
+      const cardWidth = el.children[0].clientWidth + parseInt(getComputedStyle(el).columnGap);
+      el.scrollTo({ left: idx * cardWidth, behavior: 'smooth' });
+    };
+    const iv = setInterval(scroll, 4000);
+    return () => clearInterval(iv);
+  }, []);
 
   return (
-    <div className="bg-white font-sans py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Top Section: Header, Text, Buttons */}
-        <div className="flex flex-col md:flex-row justify-between items-start mb-12">
-          {/* Left Side */}
-          <div className="mb-8 md:mb-0">
-            <Button
-              variant="secondary"
-              className="bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-full px-4 py-1 text-sm font-medium h-auto mb-4"
-            >
-              See More product
-            </Button>
-            <h1 className="text-4xl sm:text-5xl font-bold text-black leading-tight">
-              Top-Selling Product <br />
-              of the year Collection
-            </h1>
-          </div>
-
-          {/* Right Side */}
-          <div className="flex flex-col items-start md:items-end">
-            <p className="text-gray-600 text-sm sm:text-base max-w-xs mb-6 text-left md:text-right">
-              We do not divide our collections to seasons we create new models every week, and we in a few items
+    <section className="bg-white text-gray-900 py-16 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto space-y-12">
+        {/* Header */}
+        <div className="md:flex md:justify-between md:items-center">
+          <div>
+            <p className="inline-block bg-blue-100 text-blue-600 rounded-full px-3 py-1 text-sm font-medium mb-4">
+              New Arrivals
             </p>
-            <div className="flex flex-col items-start md:items-end w-full">
-              <Button
-                variant="outline"
-                className="rounded-full px-6 py-2 border-gray-300 hover:bg-gray-50 text-black mb-4"
-              >
-                Shop Now
-              </Button>
-              <div className="flex space-x-2">
-                <Button variant="outline" size="icon" className="rounded-full border-gray-300 h-9 w-9">
-                  <ArrowLeft className="h-4 w-4 text-gray-600" />
-                </Button>
-                <Button variant="outline" size="icon" className="rounded-full border-gray-300 h-9 w-9">
-                  <ArrowRight className="h-4 w-4 text-gray-600" />
-                </Button>
-              </div>
-            </div>
+            <h2 className="text-4xl font-extrabold leading-tight">
+              Top-Selling Products<br />of the Year
+            </h2>
+            <p className="mt-4 text-gray-600 max-w-md">
+              We release fresh designs every week—no seasons, just the very best.
+            </p>
+          </div>
+          <div className="mt-6 md:mt-0 flex space-x-3">
+            <Button variant="default" className="px-6 py-2.5 rounded-full">
+              Shop Now
+            </Button>
+            <Button variant="outline" className="px-6 py-2.5 rounded-full">
+              See All
+            </Button>
           </div>
         </div>
 
-        {/* Bottom Section: Product Image Grid */}
-        {/* Added overflow-x-auto and padding-bottom for better scrolling experience */}
-        <div className="flex space-x-4 md:space-x-6 items-end -mb-8 overflow-x-auto pb-8">
-          {products.map((product) => (
-            <div
-              key={product.id}
-              // Add 'group' class here for hover effects on children
-              className={`group relative rounded-xl overflow-hidden shadow-md flex-shrink-0 w-[280px] sm:w-[300px] ${product.heightClass} bg-gray-200 cursor-pointer`} // Added cursor-pointer
-            >
-              <img
-                src={product.src}
-                alt={product.alt}
-                // Add transition to image for potential zoom effect (optional)
-                className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-105" // Optional: slight zoom on hover
-              />
+        {/* Carousel */}
+        <div className="relative">
+          {/* Prev/Next controls */}
+          <button
+            onClick={() => {
+              const el = carouselRef.current;
+              if (el) el.scrollBy({ left: -el.children[0].clientWidth - 16, behavior: 'smooth' });
+            }}
+            className="absolute left-0 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow z-10"
+            aria-label="Previous"
+          >
+            <ArrowLeft className="h-5 w-5 text-gray-700" />
+          </button>
+          <button
+            onClick={() => {
+              const el = carouselRef.current;
+              if (el) el.scrollBy({ left: el.children[0].clientWidth + 16, behavior: 'smooth' });
+            }}
+            className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow z-10"
+            aria-label="Next"
+          >
+            <ArrowRight className="h-5 w-5 text-gray-700" />
+          </button>
 
-              {/* --- Hover Overlay & Button --- */}
-              {/* Optional: Add a semi-transparent overlay that appears on hover */}
+          <div
+            ref={carouselRef}
+            className="flex overflow-x-auto scroll-smooth snap-x snap-mandatory gap-4 px-2 pb-4 scrollbar-none"
+          >
+            {products.map((product) => (
               <div
-                className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out"
-                aria-hidden="true" // Hide from screen readers
-              ></div>
+                key={product.id}
+                className="relative flex-shrink-0 w-[260px] sm:w-[300px] h-[400px] bg-gray-50 rounded-xl shadow hover:shadow-lg transition-shadow duration-300 snap-start group"
+              >
+                <img
+                  src={product.src}
+                  alt={product.alt}
+                  className="w-full h-full object-cover rounded-xl p-16"
+                />
 
-              {/* Shop Now Button - Appears on hover */}
-              <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-10 w-[calc(100%-40px)] flex justify-center"> {/* Centering container */}
-                 <Button
-                    variant="default" // Use primary button style or adjust as needed
-                    // Hidden by default, fades in on hover
-                    className="opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out transform translate-y-2 group-hover:translate-y-0 px-5 py-2.5 text-sm rounded-lg" // Added subtle translate effect
-                 >
-                    Shop Now
-                 </Button>
+                {/* Icon button */}
+                {product.hasIcon && (
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    className="absolute bottom-3 right-3 bg-white/80 hover:bg-white backdrop-blur-sm"
+                  >
+                    <ArrowUpRight className="h-5 w-5 text-gray-800" />
+                  </Button>
+                )}
+
+                {/* Hover overlay */}
+                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
+
+                {/* Shop Now on hover */}
+                <Button
+                  variant="default"
+                  className="opacity-0 group-hover:opacity-100 transition-all duration-300 absolute bottom-5 left-1/2 -translate-x-1/2 px-5 py-2.5 rounded-lg"
+                >
+                  Shop Now
+                </Button>
               </div>
-              {/* --- End Hover Overlay & Button --- */}
-
-
-              {/* Existing Icon Button (conditionally rendered) */}
-              {product.hasIcon && (
-                 // Keep this button visible or apply hover effect as needed
-                 // Added z-10 to ensure it's above potential overlays
-                 <div className="absolute bottom-4 right-4 z-10">
-                    <Button
-                      variant="secondary"
-                      size="icon"
-                      className="rounded-full bg-white/70 hover:bg-white/90 backdrop-blur-sm h-10 w-10 shadow-md"
-                    >
-                      <ArrowUpRight className="h-5 w-5 text-black" />
-                    </Button>
-                 </div>
-              )}
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
-};
-
-export default TopSellingSection;
+}
