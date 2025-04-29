@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import WeightBoostImage from '../../../assets/Images/one.jpg';
-import R3Image from '../../../assets/Images/R3.jpg';
+import R3Image from '../../../assets/Images/R3.png';
 
 // --- Sample Images (adjust paths/imports as necessary) ---
 const PlaceholderMoodImage = '/placeholder-mood.png';
@@ -643,7 +643,7 @@ function ProductDetailPage() {
             You Might Also Like
           </h2>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Related product cards - show up to 4 products that aren't the current one */}
             {Object.values(products)
               .filter(p => p.id !== product.id)

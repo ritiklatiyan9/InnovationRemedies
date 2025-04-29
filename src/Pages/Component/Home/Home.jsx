@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import Home2 from "./Home2";
 import Home3 from './Home3'
 import Home4 from './Home4'
- import Home6 from './Home6'
+import Home6 from './Home6'
+import logo from '../../../assets/Images/logo.png'
 
 import { FlipWords } from "../../../components/ui/flips-words";
 import {
@@ -28,6 +29,12 @@ import {
   Check,
   Home, // Used in floating card
 } from "lucide-react";
+
+const customFontStyle2 = {
+  fontFamily: "SF Pro Text Semibold",
+  fontWeight: 400,
+  customFontStyle: "normal",
+}
 
 const VetWellbeingDashboardRedesigned = () => {
   const words = ["World", "Care", "Family", "Health"];
@@ -55,7 +62,7 @@ const VetWellbeingDashboardRedesigned = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-blue-50 via-emerald-50/50 to-white text-gray-800 font-sans">
+    <div style={customFontStyle2} className="min-h-screen w-full bg-gradient-to-br from-blue-50 via-emerald-50/50 to-white text-gray-800 font-sans">
       {/* Use Flexbox for main layout: column on mobile, row on large screens */}
       <div className="flex flex-col lg:flex-row min-h-screen w-full">
         {/* Left Column: Content */}
@@ -66,18 +73,24 @@ const VetWellbeingDashboardRedesigned = () => {
             {" "}
             {/* Constrain content width */}
             {/* Decorative Paw Print */}
-            <div className="w-14 h-14 mb-5">
+          
+            <div className="flex ">
+              <img className="h-24" src={logo} alt="" />
+              <div className="w-14 h-14 mb-5">
               {" "}
               {/* Slightly smaller, adjusted margin */}
-              <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-200 to-emerald-200 flex items-center justify-center shadow-md">
+              <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-400 to-emerald-200 flex items-center justify-center shadow-md">
                 <PawPrint className="w-7 h-7 text-white" />{" "}
+                
                 {/* Adjusted size */}
               </div>
+              
             </div>
+              </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight tracking-tight text-gray-900 mb-4">
               {" "}
               {/* Adjusted mobile size & margin */}
-              Innovation Remedies <br />{" "}
+              <span className="bg-gradient-to-r from-orange-500 via-blue-400 to-emerald-500 bg-clip-text text-transparent">Innovation Remedies</span> <br />{" "}
               <span className="text-3xl sm:text-4xl lg:text-5xl">
                 Better{" "}
                 
@@ -127,90 +140,7 @@ const VetWellbeingDashboardRedesigned = () => {
               </div>
             </div>
             {/* Key Features/Insights Section */}
-            <div>
-              <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
-                {" "}
-                {/* Adjusted size */}
-                Quick Insights & Actions
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {/* Card 1: Activity */}
-                <Card className="group bg-white/90 backdrop-blur-lg rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100/50 cursor-pointer">
-                  {" "}
-                  {/* Added group */}
-                  <CardContent className="p-4 flex flex-col items-start space-y-2">
-                    <div className="flex justify-between items-center w-full">
-                      <span className="p-2 bg-gray-800 rounded-lg text-emerald-400">
-                        <Footprints size={20} />
-                      </span>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="w-7 h-7 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-transform duration-200" // Hover effect on arrow
-                      >
-                        <ArrowRight size={16} />
-                      </Button>
-                    </div>
-                    <p className="text-sm font-semibold pt-1 text-gray-800">
-                      Activity Tracking
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      Monitor daily movement patterns.
-                    </p>
-                  </CardContent>
-                </Card>
-                {/* Card 2: Behavior */}
-                <Card className="group bg-white/90 backdrop-blur-lg rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100/50 cursor-pointer">
-                  {" "}
-                  {/* Added group */}
-                  <CardContent className="p-4 flex flex-col items-start space-y-2">
-                    <div className="flex justify-between items-center w-full">
-                      <span className="p-2 bg-gray-800 rounded-lg text-blue-400">
-                        <Dog size={20} />
-                      </span>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="w-7 h-7 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-transform duration-200" // Hover effect on arrow
-                      >
-                        <ArrowRight size={16} />
-                      </Button>
-                    </div>
-                    <p className="text-sm font-semibold pt-1 text-gray-800">
-                      Behavior Analysis
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      Detect subtle changes & alerts.
-                    </p>
-                  </CardContent>
-                </Card>
-                {/* Card 3: Analytics */}
-                <Card className="group bg-white/90 backdrop-blur-lg rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100/50 cursor-pointer">
-                  {" "}
-                  {/* Added group */}
-                  <CardContent className="p-4 flex flex-col items-start space-y-2">
-                    <div className="flex justify-between items-center w-full">
-                      <span className="p-2 bg-gray-800 rounded-lg text-purple-400">
-                        <BarChart3 size={20} />
-                      </span>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="w-7 h-7 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-transform duration-200" // Hover effect on arrow
-                      >
-                        <ArrowRight size={16} />
-                      </Button>
-                    </div>
-                    <p className="text-sm font-semibold pt-1 text-gray-800">
-                      Health Analytics
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      View trends, reports & insights.
-                    </p>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
+           
           </div>
         </div>
 

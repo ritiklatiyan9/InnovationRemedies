@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './fonts.css';
 import Header from './Pages/Component/Header/Header';
 import ProductDetailPage from './Pages/Component/Products/ProductsDetails';
 import Home from './Pages/Component/Home/Home';
@@ -7,6 +8,8 @@ import NotFound from './Pages/SinglePages/NotFound';
 import Footer from './Pages/Component/Footer/Footer';
 import ListProducts from './Pages/Component/Products/ListProducts'
 import Contact from './Pages/SinglePages/Contact';
+import Store from './Pages/Component/Store/Store'
+import About from './Pages/Component/About/About';
 
 function App() {
   return (
@@ -20,6 +23,10 @@ function App() {
             <Route path="*" element={<NotFound />} />
             <Route path="/products" element={<ListProducts />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/store" element={<Store />} />
+            <Route path="/about" element={<About />} />
+            
+            {/* <Route path="/product/:productId" element={<ProductDetailPage />} /> */}
             <Route path="/product/:productId" element={<ProductDetailPage />} />
           </Routes>
         </main>

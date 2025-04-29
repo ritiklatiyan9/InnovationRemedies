@@ -1,0 +1,36 @@
+@font-face {
+  font-family: "Autumn Flowers";
+  src: url("../fonts/AutumnFlowers.woff2") format("woff2"),
+    url("../fonts/AutumnFlowers.otf") format("opentype");
+
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+    font-family: "SF Pro Text Semibold";
+    src: url("../fonts/SF.woff2") format("woff2"),
+      url("../fonts/SF.ttf") format("trueType");
+  
+    font-weight: 600;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: "Josefin Sans";
+    src: url("../fonts/SF.woff2") format("woff2"),
+      url("../fonts/SF.ttf") format("trueType");
+  
+    font-weight: 600;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: "SF Pro Text Regular";
+    src: url("../fonts/SF-Pro.woff2") format("woff2"),
+      url("../fonts/SF-Pro.ttf") format("trueType");
+  
+    font-weight: 600;
+    font-style: normal;
+  }
+  

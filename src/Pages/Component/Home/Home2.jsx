@@ -117,19 +117,7 @@ function VeterinaryPage() {
                     <p className="text-sm text-gray-600">of dedicated pet care experience</p>
                 </div>
 
-                {/* Technology / Services Info Section */}
-                 <div className='flex flex-col items-start space-y-4'>
-                     <p className="text-lg font-medium text-gray-800">
-                         Advanced Diagnostics <br/> & Compassionate Care
-                     </p>
-                     <Button className="rounded-full bg-teal-500 hover:bg-teal-600 text-white px-5 py-2.5 text-sm w-full sm:w-auto justify-between h-auto">
-                         <div className='flex items-center'>
-                            <Stethoscope className="mr-2 h-4 w-4" />
-                            Explore Our Services
-                         </div>
-                         <ArrowRight className="h-4 w-4" />
-                     </Button>
-                 </div>
+               
             </div>
 
           </div>
