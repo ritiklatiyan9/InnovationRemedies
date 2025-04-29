@@ -1,57 +1,67 @@
 // src/components/Footer.jsx
 import React from 'react';
-import { Link } from 'react-router-dom'; // Or use <a> tags if not using React Router
-import { Linkedin, Twitter, Instagram, Mail, MapPin, Phone } from 'lucide-react';
-import logo from '../../../assets/Images/logo.png'; // Adjust the path to your logo image
-
-// If you have a logo, uncomment and adjust the path
-// import Logo from '../assets/images/innovation-remedies-logo.png';
+import { Link } from 'react-router-dom';
+import { 
+  Linkedin, 
+  Twitter, 
+  Instagram, 
+  Mail, 
+  MapPin, 
+  Phone,
+  Info,        // Icon for About Us
+  Package,     // Icon for Products
+  Cog,         // Icon for Services
+  Shield,      // Icon for Privacy
+  FileText,    // Icon for Terms
+  HelpCircle,  // Icon for FAQ
+  Send         // Icon for Newsletter button
+} from 'lucide-react';
+import logo from '../../../assets/Images/logo.png'; // Ensure this path is correct
 
 function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-gradient-to-b from-white to-gray-50 border-t border-gray-100">
-      <div className="container mx-auto px-6 py-16"> {/* Increased vertical padding */}
-        {/* Top Section with main content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12 mb-12"> {/* Increased gap and bottom margin */}
+    <footer 
+      className="bg-slate-50 border-t border-slate-200 pt-16 pb-12" // Lighter bg, more padding
+    >
+      <div className="container mx-auto px-6">
+        {/* Main content */}
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10 mb-12"> {/* Added lg:grid-cols-4 for flexibility */}
 
-          {/* Brand Column */}
-          <div className="flex flex-col">
-            <div className="mb-6"> {/* Increased bottom margin */}
-              {/* Logo Placeholder */}
-              {/* <img src={Logo} alt="Innovation Remedies" className="h-12 w-auto mb-4" /> */}
-              <h3 className="text-2xl font-bold mb-4"> {/* Larger heading */}
-                <img src={logo} className="h-24 w-auto mb-4" alt="" />
-                <span className="bg-gradient-to-r from-purple-600 via-blue-500 to-emerald-500 bg-clip-text text-transparent">
-                  Innovation Remedies
-                </span>
-              </h3>
-              <p className="text-gray-600 text-sm leading-relaxed max-w-xs"> {/* Added max-width */}
-                Dedicated to enhancing animal health and wellbeing through innovative products and solutions.
-              </p>
-            </div>
-
+          {/* Brand & Social Column */}
+          <div className="lg:col-span-1"> {/* Adjusted span */}
+            <img 
+              src={logo} 
+              className="h-14 w-auto mb-4" // Slightly smaller logo
+              alt="Innovation Remedies" 
+            />
+            <h3 className="text-lg font-semibold mb-2 text-slate-800">
+              Innovation Remedies
+            </h3>
+            <p className="text-slate-600 text-sm mb-5">
+              Enhancing animal health through innovative solutions.
+            </p>
             {/* Social Media Icons */}
-            <div className="flex space-x-3"> {/* Slightly reduced space for visual density */}
+            <div className="flex space-x-3">
               <a
-                href="#" // Replace with actual LinkedIn URL
+                href="#" // Replace with actual links
                 aria-label="LinkedIn"
-                className="w-9 h-9 rounded-full bg-gray-100 hover:bg-emerald-50 flex items-center justify-center text-gray-500 hover:text-emerald-600 transition-all duration-200 ease-in-out"
+                className="w-9 h-9 rounded-full bg-slate-100 hover:bg-emerald-100 flex items-center justify-center text-slate-500 hover:text-emerald-600 transition-all duration-300 transform hover:scale-110"
               >
-                <Linkedin size={18} /> {/* Slightly larger icon */}
+                <Linkedin size={18} />
               </a>
               <a
-                href="#" // Replace with actual Twitter URL
+                href="#" // Replace with actual links
                 aria-label="Twitter"
-                className="w-9 h-9 rounded-full bg-gray-100 hover:bg-emerald-50 flex items-center justify-center text-gray-500 hover:text-emerald-600 transition-all duration-200 ease-in-out"
+                className="w-9 h-9 rounded-full bg-slate-100 hover:bg-emerald-100 flex items-center justify-center text-slate-500 hover:text-emerald-600 transition-all duration-300 transform hover:scale-110"
               >
                 <Twitter size={18} />
               </a>
               <a
-                href="#" // Replace with actual Instagram URL
+                href="#" // Replace with actual links
                 aria-label="Instagram"
-                className="w-9 h-9 rounded-full bg-gray-100 hover:bg-emerald-50 flex items-center justify-center text-gray-500 hover:text-emerald-600 transition-all duration-200 ease-in-out"
+                className="w-9 h-9 rounded-full bg-slate-100 hover:bg-emerald-100 flex items-center justify-center text-slate-500 hover:text-emerald-600 transition-all duration-300 transform hover:scale-110"
               >
                 <Instagram size={18} />
               </a>
@@ -59,131 +69,106 @@ function Footer() {
           </div>
 
           {/* Quick Links Column */}
-          <div>
-            <h4 className="text-base font-semibold text-gray-900 mb-5">Quick Links</h4> {/* Darker heading, increased margin */}
-            <ul className="space-y-2.5"> {/* Slightly increased spacing */}
+          <div className="lg:col-span-1"> {/* Adjusted span */}
+            <h4 className="text-base font-semibold text-slate-800 mb-4">Explore</h4>
+            <ul className="space-y-2.5">
               <li>
-                <Link to="/about" className="text-gray-600 hover:text-emerald-600 transition-colors duration-200 ease-in-out text-sm flex items-center group">
-                  <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-2.5 transition-transform duration-200 ease-in-out group-hover:translate-x-0.5"></span> {/* Subtle hover effect */}
+                <Link to="/about" className="text-slate-600 hover:text-emerald-600 text-sm flex items-center group transition-colors duration-200">
+                  <Info size={16} className="mr-2 text-emerald-500 group-hover:text-emerald-700 transition-colors duration-200 flex-shrink-0" />
                   About Us
                 </Link>
               </li>
               <li>
-                <Link to="/products" className="text-gray-600 hover:text-emerald-600 transition-colors duration-200 ease-in-out text-sm flex items-center group">
-                  <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-2.5 transition-transform duration-200 ease-in-out group-hover:translate-x-0.5"></span>
-                  Our Products
+                <Link to="/products" className="text-slate-600 hover:text-emerald-600 text-sm flex items-center group transition-colors duration-200">
+                  <Package size={16} className="mr-2 text-emerald-500 group-hover:text-emerald-700 transition-colors duration-200 flex-shrink-0" />
+                  Products
                 </Link>
               </li>
               <li>
-                <Link to="/services" className="text-gray-600 hover:text-emerald-600 transition-colors duration-200 ease-in-out text-sm flex items-center group">
-                  <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-2.5 transition-transform duration-200 ease-in-out group-hover:translate-x-0.5"></span>
+                <Link to="/services" className="text-slate-600 hover:text-emerald-600 text-sm flex items-center group transition-colors duration-200">
+                  <Cog size={16} className="mr-2 text-emerald-500 group-hover:text-emerald-700 transition-colors duration-200 flex-shrink-0" />
                   Services
-                </Link>
-              </li>
-              <li>
-                <Link to="/blog" className="text-gray-600 hover:text-emerald-600 transition-colors duration-200 ease-in-out text-sm flex items-center group">
-                  <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-2.5 transition-transform duration-200 ease-in-out group-hover:translate-x-0.5"></span>
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link to="/careers" className="text-gray-600 hover:text-emerald-600 transition-colors duration-200 ease-in-out text-sm flex items-center group">
-                  <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-2.5 transition-transform duration-200 ease-in-out group-hover:translate-x-0.5"></span>
-                  Careers
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Legal Column */}
-          <div>
-            <h4 className="text-base font-semibold text-gray-900 mb-5">Legal</h4>
+          {/* Legal & Help Column */}
+          <div className="lg:col-span-1"> {/* Adjusted span */}
+             <h4 className="text-base font-semibold text-slate-800 mb-4">Support</h4>
             <ul className="space-y-2.5">
               <li>
-                <Link to="/privacy" className="text-gray-600 hover:text-emerald-600 transition-colors duration-200 ease-in-out text-sm flex items-center group">
-                  <span className="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2.5 transition-transform duration-200 ease-in-out group-hover:translate-x-0.5"></span>
+                <Link to="/privacy" className="text-slate-600 hover:text-emerald-600 text-sm flex items-center group transition-colors duration-200">
+                  <Shield size={16} className="mr-2 text-blue-500 group-hover:text-blue-700 transition-colors duration-200 flex-shrink-0" />
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link to="/terms" className="text-gray-600 hover:text-emerald-600 transition-colors duration-200 ease-in-out text-sm flex items-center group">
-                  <span className="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2.5 transition-transform duration-200 ease-in-out group-hover:translate-x-0.5"></span>
+                <Link to="/terms" className="text-slate-600 hover:text-emerald-600 text-sm flex items-center group transition-colors duration-200">
+                  <FileText size={16} className="mr-2 text-blue-500 group-hover:text-blue-700 transition-colors duration-200 flex-shrink-0" />
                   Terms of Service
                 </Link>
               </li>
               <li>
-                <Link to="/disclaimer" className="text-gray-600 hover:text-emerald-600 transition-colors duration-200 ease-in-out text-sm flex items-center group">
-                  <span className="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2.5 transition-transform duration-200 ease-in-out group-hover:translate-x-0.5"></span>
-                  Disclaimer
-                </Link>
-              </li>
-              <li>
-                <Link to="/faq" className="text-gray-600 hover:text-emerald-600 transition-colors duration-200 ease-in-out text-sm flex items-center group">
-                  <span className="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2.5 transition-transform duration-200 ease-in-out group-hover:translate-x-0.5"></span>
+                <Link to="/faq" className="text-slate-600 hover:text-emerald-600 text-sm flex items-center group transition-colors duration-200">
+                  <HelpCircle size={16} className="mr-2 text-blue-500 group-hover:text-blue-700 transition-colors duration-200 flex-shrink-0" />
                   FAQ
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Contact Column */}
-          <div>
-            <h4 className="text-base font-semibold text-gray-900 mb-5">Contact Us</h4>
-            <ul className="space-y-3.5"> {/* Slightly increased spacing */}
+          {/* Contact & Newsletter Column */}
+          <div className="lg:col-span-1"> {/* Adjusted span */}
+            <h4 className="text-base font-semibold text-slate-800 mb-4">Get in Touch</h4>
+            <ul className="space-y-3 mb-5">
               <li className="flex items-start">
-                <MapPin size={18} className="text-emerald-500 mt-0.5 mr-2.5 flex-shrink-0" /> {/* Increased icon size and margin */}
-                <span className="text-gray-600 text-sm leading-snug"> {/* Added leading-snug for tight lines */}
-                  Sharadhapuri Phase 1  , <br/>Near Kankar Khera Bypass , Meerut
+                <MapPin size={16} className="text-emerald-500 mt-0.5 mr-2.5 flex-shrink-0" />
+                <span className="text-slate-600 text-sm">
+                  Sharadhapuri Phase 1, Near Kankar Khera Bypass, Meerut
                 </span>
               </li>
               <li className="flex items-center">
-                <Phone size={18} className="text-emerald-500 mr-2.5 flex-shrink-0" />
-                <a href="tel:+15551234567" className="text-gray-600 hover:text-emerald-600 transition-colors duration-200 ease-in-out text-sm">
+                <Phone size={16} className="text-emerald-500 mr-2.5 flex-shrink-0" />
+                <a href="tel:+15551234567" className="text-slate-600 hover:text-emerald-600 text-sm transition-colors duration-200">
                   +1 (555) 123-4567
                 </a>
               </li>
               <li className="flex items-center">
-                <Mail size={18} className="text-emerald-500 mr-2.5 flex-shrink-0" />
-                <a href="mailto:info@innovationremedies.com" className="text-gray-600 hover:text-emerald-600 transition-colors duration-200 ease-in-out text-sm break-all"> {/* Added break-all for long emails */}
+                <Mail size={16} className="text-emerald-500 mr-2.5 flex-shrink-0" />
+                <a href="mailto:info@innovationremedies.com" className="text-slate-600 hover:text-emerald-600 text-sm transition-colors duration-200">
                   info@innovationremedies.com
                 </a>
               </li>
             </ul>
 
-            {/* Newsletter Signup - Optional */}
-            <div className="mt-8"> {/* Increased top margin */}
-              <h5 className="text-sm font-medium text-gray-800 mb-2">Subscribe to our newsletter</h5>
-              <form className="flex mt-2">
-                <label htmlFor="footer-email" className="sr-only">Email address</label> {/* Accessibility */}
-                <input
-                  id="footer-email"
-                  type="email"
-                  required // Basic validation
-                  placeholder="Your email address"
-                  className="px-3 py-2 text-sm bg-white border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-emerald-400 focus:border-emerald-400 flex-grow placeholder-gray-400 transition-shadow duration-200 ease-in-out" // Added placeholder color, improved focus
-                />
-                <button
-                  type="submit"
-                  className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 text-sm font-medium rounded-r-md transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-emerald-500" // Improved focus, added font-medium
-                >
-                  Subscribe
-                </button>
-              </form>
-            </div>
+            {/* Enhanced Newsletter Signup */}
+            <h5 className="text-sm font-medium text-slate-700 mb-2">Stay Updated</h5>
+            <form className="flex items-center">
+              <label htmlFor="footer-email" className="sr-only">Email for newsletter</label>
+              <input
+                id="footer-email"
+                type="email"
+                required
+                placeholder="Your email"
+                className="px-3 py-2 text-sm bg-white border border-slate-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 flex-grow transition-shadow duration-200"
+              />
+              <button
+                type="submit"
+                aria-label="Subscribe to newsletter"
+                className="bg-emerald-500 hover:bg-emerald-600 text-white p-2.5 rounded-r-md transition-colors duration-200 flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-emerald-500" // Increased padding for better icon visibility
+              >
+                <Send size={18} /> 
+              </button>
+            </form>
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="border-t border-gray-200 pt-8"> {/* Increased padding top */}
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            {/* Copyright */}
-            <p className="text-sm text-gray-500 text-center md:text-left mb-4 md:mb-0">
-              © {currentYear} <span className="font-medium text-gray-700">Innovation Remedies</span>. All rights reserved.
-            </p>
-
-            {/* Optional: Keep or remove based on need */}
-           
-          </div>
+        {/* Copyright */}
+        <div className="border-t border-slate-200 pt-8 mt-8">
+          <p className="text-sm text-slate-500 text-center">
+            © {currentYear} <Link to="/" className="font-medium text-slate-700 hover:text-emerald-600 transition-colors duration-200">Innovation Remedies</Link>. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>
