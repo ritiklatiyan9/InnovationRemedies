@@ -1,4 +1,4 @@
-// VetWellbeingDashboardRedesigned.jsx
+// src/components/VetWellbeingDashboard.jsx
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
@@ -10,18 +10,20 @@ import Products from "../Products/ListProducts";
 import videoSourceUrl from "../../../assets/Video/bg.mp4";
 import logo from "../../../assets/Images/logo.png";
 import twelveone from "../../../assets/Images/twelveone.png";
-
 import { FlipWords } from "../../../components/ui/flips-words";
-import { Card, CardContent } from "@/components/ui/card";
-import { HeartPulse, Activity, PawPrint, Check } from "lucide-react";
+import { PawPrint, HeartPulse, Activity } from "lucide-react";
 
-const VetWellbeingDashboardRedesigned = () => {
+const VetWellbeingDashboard = () => {
   const words = ["World", "Care", "Family", "Health"];
   const heartBeat = {
-    /* ... your existing animation config ... */
+    // your existing framer-motion heartbeat animation config
+    initial: { scale: 1 },
+    animate: { scale: [1, 1.2, 1], transition: { duration: 1.5, repeat: Infinity } }
   };
   const actSwing = {
-    /* ... your existing animation config ... */
+    // your existing framer-motion swing animation config
+    initial: { rotate: 0 },
+    animate: { rotate: [0, 15, -15, 0], transition: { duration: 2, repeat: Infinity } }
   };
 
   // 🌐 Domain Configuration
@@ -95,80 +97,77 @@ const VetWellbeingDashboardRedesigned = () => {
       </Helmet>
 
       {/* HERO SECTION */}
-      <section className="relative h-screen w-full bg-gradient-to-br from-blue-50 via-emerald-50/50 to-white">
-        <video
-          className="absolute inset-0 w-full h-full object-cover filter brightness-50 contrast-120 sepia-30 saturate-140 hue-rotate-(-10deg)"
-          src={videoSourceUrl}
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-        />
-        <div className="absolute inset-0 bg-black/30" />
+      <section className="relative w-full bg-gradient-to-br from-blue-50 via-emerald-50/50 to-white">
+        {/* Video background */}
+        <div className="absolute inset-0 w-full h-full overflow-hidden">
+          <video
+            className="absolute top-0 left-0 w-full h-full object-cover filter brightness-50 contrast-120 sepia-30 saturate-140 hue-rotate-[-10deg]"
+            src={videoSourceUrl}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+          />
+          <div className="absolute inset-0 bg-black/30" />
+        </div>
 
-        <div className="relative z-10 flex flex-col lg:flex-row h-full">
-          {/* LEFT COLUMN (Text) */}
-          <div className="lg:w-1/2 w-full flex flex-col justify-center items-center lg:items-start p-6 sm:p-8 lg:p-12">
-            <div className="max-w-2xl text-start lg:text-left">
-              {/* Logo Icon */}
-              <div className="mb-6 flex  mt-20 md:mt-0 justify-start lg:justify-start ">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-blue-400 to-emerald-200 flex items-center justify-center shadow-md">
-                  <PawPrint className="w-7 h-7 text-white" />
-                </div>
+        {/* Content: stacks on mobile, splits at md */}
+        <div className="relative z-10 flex flex-col md:flex-row items-center md:items-stretch min-h-[80vh] py-12 md:py-0">
+          {/* LEFT COLUMN */}
+          <div className="w-full md:w-1/2 flex flex-col justify-center px-6 sm:px-10 md:px-16 lg:px-24">
+            {/* Logo icon */}
+            <div className="mb-6 flex">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-blue-400 to-emerald-200 flex items-center justify-center shadow-md">
+                <PawPrint className="w-7 h-7 text-white" />
               </div>
+            </div>
 
-              {/* Main Title */}
-              <h1 className="mb-8">
-                <span className="block text-5xl sm:text-6xl md:text-7xl lg:text-7xl font-extrabold tracking-tight bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent drop-shadow-lg">
-                  Innovation Remedies
-                </span>
-                <span className="block mt-3 text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-semibold text-white drop-shadow-md">
-                  Better <FlipWords words={words} /> 
-                </span>
-                <span className="block mt-3 text-4xl sm:text-5xl md:text-6xl lg:text-6xl font-extrabold bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 bg-clip-text text-transparent drop-shadow-lg">
-                
-                </span>
-              </h1>
+            {/* Titles */}
+            <h1 className="mb-6">
+              <span className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent drop-shadow-lg">
+                Innovation Remedies
+              </span>
+              <span className="block mt-2 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-white drop-shadow-md">
+                Better <FlipWords words={words} />
+              </span>
+            </h1>
 
-              {/* Hindi Subtitle */}
-              <p className="text-base sm:text-lg text-gray-200 max-w-xl mb-10" lang="hi">
+            {/* Hindi subtitle */}
+            <p className="text-sm sm:text-base md:text-lg text-gray-200 max-w-xl mb-8" lang="hi">
               उत्तम उत्पाद, बेहतर देखभाल – क्योंकि पशु परिवार का हिस्सा हैं।
-              </p>
+            </p>
 
-              {/* Feature Tags */}
-              <div className="flex flex-wrap gap-4 justify-center lg:justify-start mb-10">
-                <div className="flex items-center space-x-2 bg-white p-3 rounded-full shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
-                  <motion.span className="p-2 bg-rose-100 rounded-full text-red-600" animate={heartBeat}>
-                    <HeartPulse size={20} />
-                  </motion.span>
-                  <p className="text-sm font-medium text-gray-700">Health Booster</p>
-                </div>
-                <div className="flex items-center space-x-2 bg-white p-3 rounded-full shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
-                  <motion.span className="p-2 bg-emerald-100 rounded-full text-emerald-600" animate={actSwing}>
-                    <Activity size={20} />
-                  </motion.span>
-                  <p className="text-sm font-medium text-gray-700">Enhance Activity</p>
-                </div>
+            {/* Feature tags */}
+            <div className="flex flex-wrap gap-4">
+              <div className="flex items-center space-x-2 bg-white px-3 py-2 rounded-full shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
+                <motion.span className="p-2 bg-rose-100 rounded-full text-red-600" animate={heartBeat}>
+                  <HeartPulse size={20} />
+                </motion.span>
+                <span className="text-sm font-medium text-gray-700">Health Booster</span>
+              </div>
+              <div className="flex items-center space-x-2 bg-white px-3 py-2 rounded-full shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
+                <motion.span className="p-2 bg-emerald-100 rounded-full text-emerald-600" animate={actSwing}>
+                  <Activity size={20} />
+                </motion.span>
+                <span className="text-sm font-medium text-gray-700">Enhance Activity</span>
               </div>
             </div>
           </div>
-<div>
-  
-</div>
-          {/* RIGHT COLUMN (Image) */}
-          <div className="lg:w-1/2 w-full ml-12 -mt-10 justify-center lg:justify-end items-center  md:flex sm:p-8 lg:p-12">
+
+          {/* RIGHT COLUMN */}
+          <div className="w-full md:w-1/2 flex justify-center items-center px-6 sm:px-10 md:px-16 lg:px-24 mt-8 md:mt-0">
             <img
-              className=" lg:mt-48 h-[24vh]  sm:h-[50vh] md:h-[60vh] lg:h-[60vh] max-w-full object-contain"
               src={twelveone}
               alt="Animal wellness"
+              className="w-full max-w-lg h-auto object-contain"
             />
           </div>
         </div>
       </section>
 
       {/* OTHER SECTIONS */}
-      <div className="relative mt-10 z-0">
+      <div className="mt-10">
         <Home2 />
         <Home3 />
         <Home4 />
@@ -179,4 +178,4 @@ const VetWellbeingDashboardRedesigned = () => {
   );
 };
 
-export default VetWellbeingDashboardRedesigned;
+export default VetWellbeingDashboard;
