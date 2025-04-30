@@ -253,7 +253,7 @@ const MasterpieceDisplay = () => {
 
       {/* Footer image & text */}
       <div className="w-full flex items-center  justify-center">
-        <img className="max-w-3xl h-full" src={maintwo} alt="" />
+        <img className="max-w-md p-8 md:max-w-3xl h-full" src={maintwo} alt="" />
       </div>
       <p className="text-center text-gray-700 max-w-lg text-sm md:text-base relative z-10 mt-4">
         अपने पशुधन की भलाई के लिए बनाए गए हमारे भरोसेमंद उत्पादों को देखें।

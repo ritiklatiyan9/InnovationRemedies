@@ -286,13 +286,11 @@ function ListProducts() {
 
       {/* 👇 Local SEO Content Block */}
       <section className="mt-16 border-t pt-8">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Animal Health Products in Meerut & Delhi NCR</h2>
-        <p className="text-gray-700 mb-4">
+        <h2 className="text-3xl font-bold text-gray-900 mb-4">Animal Health Products in Meerut & Delhi NCR</h2>
+        <p className="text-gray-700 mb-4 text-xl">
           Innovation Remedies is your trusted supplier of premium veterinary products in Meerut and Delhi NCR. We offer a wide range of animal health supplements designed to enhance immunity, wellness, and performance for livestock, pets, and working animals.
         </p>
-        <p className="text-gray-700">
-          From <strong>CalfShakti Advanced</strong> for muscle development to <strong>Makkhi Injection</strong> for parasite control, our products are formulated to meet the highest standards of quality and effectiveness. Serving farmers, veterinarians, and pet owners across Uttar Pradesh and National Capital Region.
-        </p>
+      
       </section>
     </div>
   );

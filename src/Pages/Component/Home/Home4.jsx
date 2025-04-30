@@ -46,7 +46,7 @@ const Home4 = () => {
             भरोसा ही हमारे उत्पादों को सबसे बेहतरीन बनाता है।
           </h1>
           <p className="text-lg text-gray-300 drop-shadow-sm">
-            Join thousands of satisfied customers who rely on our platform for seamless integration and powerful features. Experience the difference trust makes.
+          हज़ारों संतुष्ट ग्राहकों की तरह आप भी हमारे प्लेटफ़ॉर्म पर निर्भर करें, जो सहज एकीकरण और शक्तिशाली सुविधाएँ प्रदान करता है। भरोसे का अनुभव कीजिए – फर्क साफ़ नज़र आएगा।
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-5 mt-6">
             <Button size="lg" className="px-8 py-3 bg-slate-300 text-black rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-shadow duration-300">
@@ -83,7 +83,7 @@ const Home4 = () => {
             {/* Center Stats - Enhanced text contrast */}
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
               <p className="text-5xl sm:text-6xl md:text-7xl font-bold text-purple-100 dark:text-purple-200 drop-shadow-lg">
-                20,000+
+                25,000+
               </p>
               <p className="text-xl sm:text-2xl text-purple-200 dark:text-purple-300/80 mt-1">
                 Customers
