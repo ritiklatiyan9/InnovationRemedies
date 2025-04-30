@@ -51,7 +51,7 @@ const InfiniteScrollStrip = ({ images, direction = 'left', speed = 25, className
   const duplicatedImages = [...images, ...images];
 
   return (
-    <div className={cn("overflow-hidden whitespace-nowrap", className)}>
+    <div  className={cn("overflow-hidden whitespace-nowrap", className)}>
       <div
         className={`inline-block animate-scroll-${direction}`}
         style={{
@@ -124,7 +124,10 @@ const CommunityShowcase = () => {
   }, []);
 
   return (
-    <div className="relative">
+    <div  style={{
+      fontFamily: '"SF Pro Text Semibold", system-ui, sans-serif',
+      fontWeight: 600,
+    }} className="relative">
       {/* Scrolling animations CSS */}
       <style jsx global>{`
         @keyframes scrollLeft {
@@ -155,7 +158,7 @@ const CommunityShowcase = () => {
       {/* Showcase Section with improved responsiveness */}
       <div
         ref={animationRef}
-        className="relative flex flex-col items-center justify-center min-h-[60vh] sm:min-h-screen w-full overflow-hidden py-8 sm:py-12 lg:py-20 bg-gradient-to-br from-blue-100 via-white to-indigo-100 dark:from-blue-950/40 dark:via-gray-900 dark:to-indigo-950/40"
+        className="relative flex flex-col items-center justify-center min-h-[60vh] sm:min-h-screen w-full overflow-hidden py-8 sm:py-12 lg:py-20 bg-gradient-to-br from-green-100 via-white to-indigo-300 dark:from-blue-950/40 dark:via-gray-900 dark:to-indigo-950/40"
       >
         {/* Top scrolling strip - adjusted positioning for mobile */}
         <div className="absolute top-10 sm:top-16 lg:top-32 w-full z-10">
@@ -179,7 +182,10 @@ const CommunityShowcase = () => {
         <div className="relative z-30 flex flex-col items-center text-center max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto px-4 sm:px-6  transform transition-all duration-500">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 text-blue-900 dark:text-blue-100 leading-tight">
 
-            <span className="mt-1 sm:mt-2 inline-block bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            <span  style={{
+        fontFamily: '"SF Pro Text Semibold", system-ui, sans-serif',
+        fontWeight: 600,
+      }} className="mt-1 sm:mt-2 inline-block bg-gradient-to-r from-blue-600 to-indigo-900 bg-clip-text text-transparent">
               Our Products
             </span>
 

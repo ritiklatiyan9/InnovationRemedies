@@ -11,13 +11,15 @@ import {
   Settings, 
   ChevronRight, 
   Bell,
-  User
+  User,
+  Book
 } from 'lucide-react';
 // --- Make sure these paths are correct for your project structure ---
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 import useScrollDirection from '../../../hooks/useScrollDirection'; // Adjust path if necessary
 import Logo from '../../../assets/Images/logo.png'; // Adjust path if necessary
+import { Button } from '@/components/ui/button';
 // --------------------------------------------------------------------
 
 function Header() {
@@ -27,7 +29,7 @@ function Header() {
   const navItems = [
     { to: '/', label: 'Home', icon: <Home />, color: '#f43f5e' }, // Rose/Pink
     { to: '/products', label: 'Products', icon: <ShoppingBag />, color: '#3b82f6' }, // Blue
-    { to: '/store', label: 'Store', icon: <ShoppingCart />, color: '#10b981' }, // Emerald/Green
+    { to: '/store', label: 'Information', icon: <Book />, color: '#10b981' }, // Emerald/Green
     { to: '/about', label: 'About Us', icon: <Users />, color: '#f59e0b' }, // Amber
     { to: '/contact', label: 'Contact', icon: <Mail />, color: '#6366f1' } // Indigo
   ];
@@ -89,11 +91,9 @@ function Header() {
         <div className="flex items-center gap-2 flex-shrink-0 ml-4">
           {/* Profile picture for desktop */}
           <div className="hidden md:block">
-            <img
-              src="https://i.pinimg.com/1200x/34/c3/33/34c3332cb8eb6c448bb4544cd7df4bcd.jpg" // Placeholder image
-              alt="Profile"
-              className="h-9 w-9 rounded-full border-2 border-white object-cover shadow-sm"
-            />
+          <Link to="/login" className="flex items-center flex-shrink-0 mr-4">
+         <Button className='rounded-full bg-green-500 hover:bg-blue-500'>Login</Button>
+          </Link>
           </div>
 
           {/* Mobile Navigation Trigger */}
@@ -115,21 +115,11 @@ function Header() {
                     alt="Profile"
                     className="h-14 w-14 rounded-full border-2 border-white object-cover shadow-md flex-shrink-0"
                   />
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-800">Welcome!</h3>
-                    <p className="text-sm text-gray-500">John Doe</p>
-                  </div>
+               
                 </div>
 
                 {/* Notification banner */}
-                <div className="mx-4 mt-4 p-3 bg-blue-50 rounded-lg border border-blue-100 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Bell className="h-5 w-5 text-blue-500" />
-                    <span className="text-sm text-blue-700">2 new notifications</span>
-                  </div>
-                  <ChevronRight className="h-4 w-4 text-blue-400" />
-                </div>
-
+              
                 {/* Mobile Menu Navigation */}
                 <nav className="px-4 py-3 overflow-y-auto flex-grow">
                   <div className="mb-2 ml-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
@@ -186,24 +176,13 @@ function Header() {
 
                 {/* Actions at the bottom */}
                 <div className="p-4 border-t border-gray-100 flex-shrink-0 space-y-1 bg-white/50">
-                  <button className="w-full text-left flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 text-gray-700 transition-colors duration-150 text-sm">
-                    <div className="p-2 rounded-md bg-gray-100">
-                      <User className="h-5 w-5 text-gray-500"/>
-                    </div>
-                    <span>My Profile</span>
-                  </button>
-                  <button className="w-full text-left flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 text-gray-700 transition-colors duration-150 text-sm">
-                    <div className="p-2 rounded-md bg-gray-100">
-                      <Settings className="h-5 w-5 text-gray-500"/>
-                    </div>
-                    <span>Account Settings</span>
-                  </button>
-                  <button className="w-full text-left flex items-center gap-3 p-3 rounded-lg hover:bg-red-50 text-red-600 transition-colors duration-150 text-sm">
-                    <div className="p-2 rounded-md bg-red-50">
-                      <LogOut className="h-5 w-5"/>
-                    </div>
-                    <span>Logout</span>
-                  </button>
+               <Link to="/login" className="flex items-center flex-shrink-0 mr-4">
+               <button className="w-full text-left flex items-center gap-3 p-3 rounded-lg hover:bg-red-50 text-green-600 transition-colors duration-150 text-sm">
+                   
+                   <span>Login</span>
+                 </button>
+               </Link>
+                 
                 </div>
               </SheetContent>
             </Sheet>

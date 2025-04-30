@@ -11,6 +11,7 @@ import Contact from './Pages/SinglePages/Contact';
 import Store from './Pages/Component/Store/Store';
 import About from './Pages/Component/About/About';
 import Preloader from './Pages/Component/Preloader/Preloader'; // Import the Preloader
+import Login from './Pages/Component/Login/Login';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -52,6 +53,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/store" element={<Store />} />
             <Route path="/about" element={<About />} />
+            <Route path="/login" element={<Login />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
