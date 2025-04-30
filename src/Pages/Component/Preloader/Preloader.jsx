@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './Preloader.css';
+import './preloader.css';
 
 // Replace 'logo.png' with the path to your actual logo
 import Logo from '../../../assets/Images/logo.png';
