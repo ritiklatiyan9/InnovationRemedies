@@ -339,7 +339,7 @@ export default function EnhancedAboutUs() {
                            viewport={{ once: true, amount: 0.5 }}
                            transition={{ duration: 0.8, type: 'spring' }}
                         >
-                            <GlobeIllustration />
+                           <img src="https://www.blogtyrant.com/wp-content/uploads/2011/02/best-about-us-pages.png" alt="" />
                         </motion.div>
                     </div>
                 </div>

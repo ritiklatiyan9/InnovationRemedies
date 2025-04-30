@@ -136,3 +136,44 @@
     background-position: 0% 50%; /* Return to start */
   }
 }
+
+html.has-scroll-smooth {
+  overflow: hidden;
+}
+
+.scroll-container {
+  min-height: 100vh;
+  width: 100%;
+}
+
+[data-scroll-direction="horizontal"] {
+  will-change: transform;
+}
+
+/* Animation classes for reveal effects */
+.scroll-reveal {
+  will-change: transform, opacity;
+}
+
+/* You can add more custom animations here */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
