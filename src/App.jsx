@@ -1,5 +1,9 @@
+// src/App.js
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
+
+// Page & component imports
 import ScrollToTop from './Pages/SinglePages/ScrollToTop';
 import Header from './Pages/Component/Header/Header';
 import ListProducts from './Pages/Component/Products/ListProducts';
@@ -10,56 +14,120 @@ import Footer from './Pages/Component/Footer/Footer';
 import Contact from './Pages/SinglePages/Contact';
 import Store from './Pages/Component/Store/Store';
 import About from './Pages/Component/About/About';
-import Preloader from './Pages/Component/Preloader/Preloader'; // Import the Preloader
+import Preloader from './Pages/Component/Preloader/Preloader';
 import Login from './Pages/Component/Login/Login';
+
+import './fonts.css';
 
 function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Force reloading of preloader when page is refreshed
     const handleBeforeUnload = () => {
       window.sessionStorage.setItem('isReloading', 'true');
     };
-    
     window.addEventListener('beforeunload', handleBeforeUnload);
-    
+
     const isReloading = window.sessionStorage.getItem('isReloading') === 'true';
-    
     if (isReloading) {
       setLoading(true);
       window.sessionStorage.removeItem('isReloading');
     }
-    
+
+    const timer = setTimeout(() => {
+      if (loading) setLoading(false);
+    }, 1500);
+
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
+      clearTimeout(timer);
     };
-  }, []);
-  
+  }, []); // no loading dependency to avoid loops
+
+  // your primary nav links
+  const navLinks = [
+    { name: 'Home',   url: 'https://www.innovationremedies.com/' },
+    { name: 'Products', url: 'https://www.innovationremedies.com/products' },
+    { name: 'Store',  url: 'https://www.innovationremedies.com/store' },
+    { name: 'About',  url: 'https://www.innovationremedies.com/about' },
+    { name: 'Contact',url: 'https://www.innovationremedies.com/contact' },
+    { name: 'Login',  url: 'https://www.innovationremedies.com/login' },
+  ];
+
+  // build the JSON-LD for your nav
+  const navJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": navLinks.map((link, i) => ({
+      "@type": "SiteNavigationElement",
+      "position": i + 1,
+      "name": link.name,
+      "url": link.url
+    }))
+  };
+
+  // JSON-LD for a site-search box on Google
+  const searchJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "url": "https://www.innovationremedies.com/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://www.innovationremedies.com/products?search={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  };
+
   return (
-    <>
+    <HelmetProvider>
+      <Helmet
+        titleTemplate="%s | Innovation Remedies"
+        defaultTitle="Innovation Remedies - Better Care For Every Animal"
+      >
+        <meta
+          name="description"
+          content="Innovation Remedies offers high-quality veterinary products and solutions for the health and wellbeing of all animals. Explore our range for better care."
+        />
+        <meta
+          name="keywords"
+          content="veterinary, animal health, pet care, livestock, innovation remedies, animal wellness"
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Innovation Remedies" />
+
+        {/* --- JSON-LD for SearchBox --- */}
+        <script type="application/ld+json">
+          {JSON.stringify(searchJsonLd, null, 2)}
+        </script>
+
+        {/* --- JSON-LD for Sitelinks Navigation --- */}
+        <script type="application/ld+json">
+          {JSON.stringify(navJsonLd, null, 2)}
+        </script>
+      </Helmet>
+
       {loading && <Preloader setLoading={setLoading} />}
-      
-      <Router>
-        {/* hook into every navigation */}
-        <ScrollToTop />
-        
-        <Header />
-        <main className="pt-16 min-h-screen">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/products" element={<ListProducts />} />
-            <Route path="/product/:id" element={<ProductDetailPage />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/store" element={<Store />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
-        <Footer />
-      </Router>
-    </>
+
+      {!loading && (
+        <Router>
+          <ScrollToTop />
+          <Header />
+          <main className="pt-16 min-h-screen">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/products" element={<ListProducts />} />
+              <Route path="/product/:id" element={<ProductDetailPage />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/store" element={<Store />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </main>
+          <Footer />
+        </Router>
+      )}
+    </HelmetProvider>
   );
 }
 
