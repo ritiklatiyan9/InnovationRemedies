@@ -97,7 +97,7 @@ const VetWellbeingDashboard = () => {
       </Helmet>
 
       {/* HERO SECTION */}
-      <section className="relative w-full bg-gradient-to-br from-blue-50 via-emerald-50/50 to-white">
+      <section className="relative w-full h-screen bg-gradient-to-br from-blue-50 via-emerald-50/50 to-white">
         {/* Video background */}
         <div className="absolute inset-0 w-full h-full overflow-hidden">
           <video
@@ -139,7 +139,7 @@ const VetWellbeingDashboard = () => {
             </p>
 
             {/* Feature tags */}
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-col md:flex-row flex-wrap gap-4">
               <div className="flex items-center space-x-2 bg-white px-3 py-2 rounded-full shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
                 <motion.span className="p-2 bg-rose-100 rounded-full text-red-600" animate={heartBeat}>
                   <HeartPulse size={20} />

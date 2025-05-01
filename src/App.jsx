@@ -1,9 +1,8 @@
-// src/App.js
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
-// Page & component imports
+// Page & Component Imports
 import ScrollToTop from './Pages/SinglePages/ScrollToTop';
 import Header from './Pages/Component/Header/Header';
 import ListProducts from './Pages/Component/Products/ListProducts';
@@ -17,15 +16,22 @@ import About from './Pages/Component/About/About';
 import Preloader from './Pages/Component/Preloader/Preloader';
 import Login from './Pages/Component/Login/Login';
 
+// Chat Components - Using our enhanced versions
+import ChatIcon from './Pages/Component/Chat/ChatIcon';
+import ChatModal from './Pages/SinglePages/AiAssistant'; // Make sure this points to our new file
+
 import './fonts.css';
 
 function App() {
   const [loading, setLoading] = useState(true);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
+  // Handle page reload detection and preloader
   useEffect(() => {
     const handleBeforeUnload = () => {
       window.sessionStorage.setItem('isReloading', 'true');
     };
+    
     window.addEventListener('beforeunload', handleBeforeUnload);
 
     const isReloading = window.sessionStorage.getItem('isReloading') === 'true';
@@ -42,19 +48,19 @@ function App() {
       window.removeEventListener('beforeunload', handleBeforeUnload);
       clearTimeout(timer);
     };
-  }, []); // no loading dependency to avoid loops
+  }, []);
 
-  // your primary nav links
+  // Navigation Links for JSON-LD
   const navLinks = [
-    { name: 'Home',   url: 'https://www.innovationremedies.com/' },
+    { name: 'Home', url: 'https://www.innovationremedies.com/' },
     { name: 'Products', url: 'https://www.innovationremedies.com/products' },
-    { name: 'Store',  url: 'https://www.innovationremedies.com/store' },
-    { name: 'About',  url: 'https://www.innovationremedies.com/about' },
-    { name: 'Contact',url: 'https://www.innovationremedies.com/contact' },
-    { name: 'Login',  url: 'https://www.innovationremedies.com/login' },
+    { name: 'Store', url: 'https://www.innovationremedies.com/store' },
+    { name: 'About', url: 'https://www.innovationremedies.com/about' },
+    { name: 'Contact', url: 'https://www.innovationremedies.com/contact' },
+    { name: 'Login', url: 'https://www.innovationremedies.com/login' },
   ];
 
-  // build the JSON-LD for your nav
+  // JSON-LD for Sitelinks Navigation
   const navJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -66,7 +72,7 @@ function App() {
     }))
   };
 
-  // JSON-LD for a site-search box on Google
+  // JSON-LD for Site Search
   const searchJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -95,23 +101,26 @@ function App() {
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Innovation Remedies" />
 
-        {/* --- JSON-LD for SearchBox --- */}
+        {/* JSON-LD for SearchBox */}
         <script type="application/ld+json">
           {JSON.stringify(searchJsonLd, null, 2)}
         </script>
 
-        {/* --- JSON-LD for Sitelinks Navigation --- */}
+        {/* JSON-LD for Sitelinks Navigation */}
         <script type="application/ld+json">
           {JSON.stringify(navJsonLd, null, 2)}
         </script>
       </Helmet>
 
+      {/* Preloader */}
       {loading && <Preloader setLoading={setLoading} />}
 
+      {/* Main Application */}
       {!loading && (
         <Router>
           <ScrollToTop />
           <Header />
+          
           <main className="pt-16 min-h-screen">
             <Routes>
               <Route path="/" element={<Home />} />
@@ -124,7 +133,12 @@ function App() {
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
+          
           <Footer />
+          
+          {/* Floating Chat Components - Updated */}
+          <ChatIcon onClick={() => setIsChatOpen(true)} isOpen={isChatOpen} />
+          <ChatModal  isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
         </Router>
       )}
     </HelmetProvider>
