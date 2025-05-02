@@ -17,6 +17,112 @@ export const AuthProvider = ({ children }) => {
     refreshToken: localStorage.getItem('refreshToken') || null
   });
 
+  // Axios instance with credentials
+  const api = axios.create({
+    baseURL: API_URL,
+    withCredentials: true,
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  });
+
+  // Set token in axios header whenever it changes
+  useEffect(() => {
+    if (tokens.accessToken) {
+      api.defaults.headers.common['Authorization'] = `Bearer ${tokens.accessToken}`;
+    } else {
+      delete api.defaults.headers.common['Authorization'];
+    }
+  }, [tokens.accessToken]);
+
+  // Save tokens to local storage
+  const saveTokens = (accessToken, refreshToken) => {
+    if (accessToken) localStorage.setItem('accessToken', accessToken);
+    if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
+    
+    setTokens({
+      accessToken: accessToken || tokens.accessToken,
+      refreshToken: refreshToken || tokens.refreshToken
+    });
+  };
+
+  // Get user profile
+  const getUserProfile = async () => {
+    try {
+      const response = await api.get('/users/profile');
+      setUser(response.data.data);
+      return response.data;
+    } catch (err) {
+      console.error("Failed to fetch user profile:", err);
+      throw err;
+    }
+  };
+
+  // Refresh token
+  const refreshToken = async () => {
+    try {
+      // Include stored refresh token in request if available
+      const storedRefreshToken = localStorage.getItem('refreshToken');
+      
+      if (!storedRefreshToken) {
+        throw new Error("No refresh token available");
+      }
+      
+      const response = await api.post('/users/refresh-token', {
+        refreshToken: storedRefreshToken
+      });
+      
+      if (response.data?.data?.user) {
+        setUser(response.data.data.user);
+      }
+      
+      // Save new tokens
+      if (response.data?.data?.accessToken && response.data?.data?.refreshToken) {
+        saveTokens(response.data.data.accessToken, response.data.data.refreshToken);
+        return response.data;
+      } else {
+        throw new Error("No tokens received from server");
+      }
+    } catch (err) {
+      // Clear user and tokens on refresh failure
+      setUser(null);
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      setTokens({ accessToken: null, refreshToken: null });
+      throw err;
+    }
+  };
+
+  // Interceptor to handle token refresh
+  api.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const originalRequest = error.config;
+      
+      if (error.response?.status === 401 && 
+          !originalRequest._retry &&
+          !originalRequest.url?.includes('refresh-token')) {
+        originalRequest._retry = true;
+        
+        try {
+          const refreshData = await refreshToken();
+          // If refresh successful, retry the original request
+          if (refreshData?.data?.accessToken) {
+            originalRequest.headers['Authorization'] = `Bearer ${refreshData.data.accessToken}`;
+            return api(originalRequest);
+          }
+          return Promise.reject(error);
+        } catch (refreshError) {
+          // If refresh fails, log out
+          await logout();
+          return Promise.reject(refreshError);
+        }
+      }
+      
+      return Promise.reject(error);
+    }
+  );
+
   // Initialize auth state on app load
   useEffect(() => {
     const checkAuthStatus = async () => {
@@ -34,14 +140,29 @@ export const AuthProvider = ({ children }) => {
             refreshToken: storedRefreshToken
           });
           
+          // Set the authorization header before attempting the profile request
+          api.defaults.headers.common['Authorization'] = `Bearer ${storedAccessToken}`;
+          
           // Attempt to get user profile with the tokens
-          await getUserProfile();
+          try {
+            await getUserProfile();
+          } catch (profileError) {
+            // If profile fetch fails, try to refresh the token
+            if (profileError.response?.status === 401) {
+              await refreshToken();
+            } else {
+              throw profileError;
+            }
+          }
         } else {
-          // Try to refresh using HTTP cookies as fallback
-          await refreshToken();
+          // No tokens in localStorage, try cookies as fallback
+          try {
+            await refreshToken();
+          } catch (refreshError) {
+            // No valid authentication, remain logged out
+            console.log("No valid authentication found");
+          }
         }
-        
-        setLoading(false);
       } catch (err) {
         console.error("Auth check failed:", err);
         // Clear any invalid tokens
@@ -49,65 +170,13 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('refreshToken');
         setUser(null);
         setTokens({ accessToken: null, refreshToken: null });
+      } finally {
         setLoading(false);
       }
     };
 
     checkAuthStatus();
   }, []);
-
-  // Update authorization header whenever tokens change
-  useEffect(() => {
-    if (tokens.accessToken) {
-      api.defaults.headers.common['Authorization'] = `Bearer ${tokens.accessToken}`;
-    } else {
-      delete api.defaults.headers.common['Authorization'];
-    }
-  }, [tokens.accessToken]);
-
-  // Axios instance with credentials
-  const api = axios.create({
-    baseURL: API_URL,
-    withCredentials: true,
-    headers: {
-      'Content-Type': 'application/json',
-    }
-  });
-
-  // Interceptor to handle token refresh
-  api.interceptors.response.use(
-    (response) => response,
-    async (error) => {
-      const originalRequest = error.config;
-      
-      if (error.response?.status === 401 && 
-          !originalRequest._retry &&
-          !originalRequest.url?.includes('refresh-token')) {
-        originalRequest._retry = true;
-        
-        try {
-          await refreshToken();
-          return api(originalRequest);
-        } catch (refreshError) {
-          logout();
-          return Promise.reject(refreshError);
-        }
-      }
-      
-      return Promise.reject(error);
-    }
-  );
-
-  // Save tokens to local storage
-  const saveTokens = (accessToken, refreshToken) => {
-    if (accessToken) localStorage.setItem('accessToken', accessToken);
-    if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
-    
-    setTokens({
-      accessToken: accessToken || tokens.accessToken,
-      refreshToken: refreshToken || tokens.refreshToken
-    });
-  };
 
   // User registration
   const register = async (userData) => {
@@ -117,8 +186,8 @@ export const AuthProvider = ({ children }) => {
       
       const response = await api.post('/users/register', userData);
       
-      if (response.data?.data?.user) {
-        setUser(response.data.data.user);
+      if (response.data?.data) {
+        setUser(response.data.data);
       }
       
       setLoading(false);
@@ -140,7 +209,9 @@ export const AuthProvider = ({ children }) => {
       const response = await api.post('/users/login', { mobile, password });
       
       // Save received user data
-      setUser(response.data.data.user);
+      if (response.data?.data?.user) {
+        setUser(response.data.data.user);
+      }
       
       // Save tokens both in state and localStorage
       const { accessToken, refreshToken } = response.data.data;
@@ -156,55 +227,20 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Refresh token
-  const refreshToken = async () => {
-    try {
-      // Include stored refresh token in request if available
-      const storedRefreshToken = localStorage.getItem('refreshToken');
-      
-      const response = await api.post('/users/refresh-token', {
-        refreshToken: storedRefreshToken
-      });
-      
-      if (response.data?.data?.user) {
-        setUser(response.data.data.user);
-      }
-      
-      // Save new tokens
-      if (response.data?.data?.accessToken && response.data?.data?.refreshToken) {
-        saveTokens(response.data.data.accessToken, response.data.data.refreshToken);
-      }
-      
-      return response.data;
-    } catch (err) {
-      // Clear user and tokens on refresh failure
-      setUser(null);
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      setTokens({ accessToken: null, refreshToken: null });
-      throw err;
-    }
-  };
-
-  // Get user profile
-  const getUserProfile = async () => {
-    try {
-      const response = await api.get('/users/profile');
-      setUser(response.data.data.user);
-      return response.data;
-    } catch (err) {
-      console.error("Failed to fetch user profile:", err);
-      throw err;
-    }
-  };
-
   // User logout
   const logout = async () => {
     try {
       setLoading(true);
       
-      // Call logout API
-      await api.post('/users/logout');
+      // Only call logout API if we have an accessToken
+      if (tokens.accessToken) {
+        try {
+          await api.post('/users/logout');
+        } catch (apiError) {
+          console.error("Logout API error:", apiError);
+          // Continue with local logout even if API fails
+        }
+      }
       
       // Clear user state and tokens
       setUser(null);
@@ -240,6 +276,7 @@ export const AuthProvider = ({ children }) => {
     tokens,
     register,
     login,
+    getUserProfile,
     logout,
     refreshToken,
     clearError,
