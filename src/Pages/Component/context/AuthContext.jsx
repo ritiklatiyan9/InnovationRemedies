@@ -5,30 +5,65 @@ import axios from 'axios';
 const AuthContext = createContext(null);
 
 // Base API URL
-const API_URL = 'https://innovation-backend.vercel.app/api/v1';
+const API_URL = 'http://localhost:8000/api/v1';
 
 // Create the Auth Provider component
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [tokens, setTokens] = useState({
+    accessToken: localStorage.getItem('accessToken') || null,
+    refreshToken: localStorage.getItem('refreshToken') || null
+  });
 
   // Initialize auth state on app load
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
         setLoading(true);
-        await refreshToken();
+        
+        // Check if we have tokens in localStorage
+        const storedAccessToken = localStorage.getItem('accessToken');
+        const storedRefreshToken = localStorage.getItem('refreshToken');
+        
+        if (storedAccessToken && storedRefreshToken) {
+          // Update tokens state
+          setTokens({
+            accessToken: storedAccessToken,
+            refreshToken: storedRefreshToken
+          });
+          
+          // Attempt to get user profile with the tokens
+          await getUserProfile();
+        } else {
+          // Try to refresh using HTTP cookies as fallback
+          await refreshToken();
+        }
+        
         setLoading(false);
       } catch (err) {
         console.error("Auth check failed:", err);
+        // Clear any invalid tokens
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
         setUser(null);
+        setTokens({ accessToken: null, refreshToken: null });
         setLoading(false);
       }
     };
 
     checkAuthStatus();
   }, []);
+
+  // Update authorization header whenever tokens change
+  useEffect(() => {
+    if (tokens.accessToken) {
+      api.defaults.headers.common['Authorization'] = `Bearer ${tokens.accessToken}`;
+    } else {
+      delete api.defaults.headers.common['Authorization'];
+    }
+  }, [tokens.accessToken]);
 
   // Axios instance with credentials
   const api = axios.create({
@@ -63,6 +98,17 @@ export const AuthProvider = ({ children }) => {
     }
   );
 
+  // Save tokens to local storage
+  const saveTokens = (accessToken, refreshToken) => {
+    if (accessToken) localStorage.setItem('accessToken', accessToken);
+    if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
+    
+    setTokens({
+      accessToken: accessToken || tokens.accessToken,
+      refreshToken: refreshToken || tokens.refreshToken
+    });
+  };
+
   // User registration
   const register = async (userData) => {
     try {
@@ -93,7 +139,12 @@ export const AuthProvider = ({ children }) => {
       
       const response = await api.post('/users/login', { mobile, password });
       
+      // Save received user data
       setUser(response.data.data.user);
+      
+      // Save tokens both in state and localStorage
+      const { accessToken, refreshToken } = response.data.data;
+      saveTokens(accessToken, refreshToken);
       
       setLoading(false);
       return response.data;
@@ -108,26 +159,39 @@ export const AuthProvider = ({ children }) => {
   // Refresh token
   const refreshToken = async () => {
     try {
-      const response = await api.post('/users/refresh-token');
+      // Include stored refresh token in request if available
+      const storedRefreshToken = localStorage.getItem('refreshToken');
+      
+      const response = await api.post('/users/refresh-token', {
+        refreshToken: storedRefreshToken
+      });
       
       if (response.data?.data?.user) {
         setUser(response.data.data.user);
-      } else if (response.data?.data?.accessToken) {
-        await getUserProfile();
+      }
+      
+      // Save new tokens
+      if (response.data?.data?.accessToken && response.data?.data?.refreshToken) {
+        saveTokens(response.data.data.accessToken, response.data.data.refreshToken);
       }
       
       return response.data;
     } catch (err) {
+      // Clear user and tokens on refresh failure
       setUser(null);
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      setTokens({ accessToken: null, refreshToken: null });
       throw err;
     }
   };
 
-  // Get user profile (assuming this exists or can be added)
+  // Get user profile
   const getUserProfile = async () => {
     try {
       const response = await api.get('/users/profile');
       setUser(response.data.data.user);
+      return response.data;
     } catch (err) {
       console.error("Failed to fetch user profile:", err);
       throw err;
@@ -138,12 +202,26 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       setLoading(true);
+      
+      // Call logout API
       await api.post('/users/logout');
+      
+      // Clear user state and tokens
       setUser(null);
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      setTokens({ accessToken: null, refreshToken: null });
+      
       setLoading(false);
     } catch (err) {
       console.error("Logout error:", err);
+      
+      // Even if API fails, clear local state
       setUser(null);
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      setTokens({ accessToken: null, refreshToken: null });
+      
       setLoading(false);
     }
   };
@@ -159,6 +237,7 @@ export const AuthProvider = ({ children }) => {
     loading,
     error,
     isAuthenticated: !!user,
+    tokens,
     register,
     login,
     logout,
