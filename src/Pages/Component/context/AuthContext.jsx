@@ -5,7 +5,7 @@ import axios from 'axios';
 const AuthContext = createContext(null);
 
 // Base API URL
-const API_URL = 'http://localhost:8000/api/v1';
+const API_URL = 'https://innovation-backend.vercel.app/api/v1';
 
 // Create the Auth Provider component
 export const AuthProvider = ({ children }) => {
