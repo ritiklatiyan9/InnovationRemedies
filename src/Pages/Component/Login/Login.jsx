@@ -8,6 +8,9 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { motion } from 'framer-motion';
+import { useAuth } from '../context/AuthContext'; // Import our auth hook
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast'; // Optional for notifications
 
 const OTPInput = ({ length, value, onChange }) => {
   const inputsRef = useRef([]);
@@ -57,11 +60,15 @@ const OTPInput = ({ length, value, onChange }) => {
 };
 
 export default function AuthForm() {
-  // Login states
+  // Use our auth context
+  const { login, register, error, loading, isAuthenticated, clearError } = useAuth();
+  const navigate = useNavigate();
 
+  // Login states
   const [loginMobile, setLoginMobile] = useState(Array(10).fill(''));
   const [loginPassword, setLoginPassword] = useState('');
   const [showLoginPassword, setShowLoginPassword] = useState(false);
+  
   // Register states
   const [mobile, setMobile] = useState('');
   const [password, setPassword] = useState('');
@@ -71,28 +78,71 @@ export default function AuthForm() {
 
   const [activeTab, setActiveTab] = useState("login");
   const [isAnimating, setIsAnimating] = useState(false);
+  const [formError, setFormError] = useState('');
 
+  // Clear any form errors when changing tabs
   useEffect(() => {
     setIsAnimating(true);
+    setFormError('');
+    clearError();
     const timer = setTimeout(() => setIsAnimating(false), 500);
     return () => clearTimeout(timer);
   }, [activeTab]);
 
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
+
   const [rememberMe, setRememberMe] = useState(false);
 
-  const handleLoginSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    const mobileNumber = loginMobile.join('');
-    console.log("Login attempt:", { mobile: mobileNumber, password: loginPassword, rememberMe });
+    try {
+      setFormError('');
+      const mobileNumber = loginMobile.join('');
+      
+      if (mobileNumber.length !== 10) {
+        setFormError('Please enter a valid 10-digit mobile number');
+        return;
+      }
+      
+      await login(mobileNumber, loginPassword);
+      // Success notification
+      toast.success('Login successful!');
+      navigate('/');
+    } catch (error) {
+      setFormError(error.message || 'Login failed. Please try again.');
+      toast.error(error.message || 'Login failed');
+    }
   };
   
-  const handleRegisterSubmit = (e) => {
+  const handleRegisterSubmit = async (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
-      alert("Passwords do not match!");
-      return;
+    try {
+      setFormError('');
+      
+      if (password !== confirmPassword) {
+        setFormError('Passwords do not match!');
+        return;
+      }
+      
+      await register({
+        mobile,
+        password,
+        confirmPassword,
+        role: 'user'
+      });
+      
+      // Success notification
+      toast.success('Registration successful!');
+      setActiveTab('login');
+    } catch (error) {
+      setFormError(error.message || 'Registration failed. Please try again.');
+      toast.error(error.message || 'Registration failed');
     }
-    console.log("Register attempt:", { mobile, password });
   };
 
   const toggleLoginPasswordVisibility = () => setShowLoginPassword(!showLoginPassword);
@@ -135,6 +185,13 @@ export default function AuthForm() {
                 Register
               </TabsTrigger>
             </TabsList>
+
+            {/* Error message display */}
+            {(formError || error) && (
+              <div className="bg-red-50 text-red-500 p-3 rounded-lg mb-4 text-sm">
+                {formError || error}
+              </div>
+            )}
 
             {/* Login Form */}
             <TabsContent value="login" className="mt-0">
@@ -232,8 +289,12 @@ export default function AuthForm() {
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.2, type: "spring", stiffness: 300, damping: 24 }}
                   >
-                    <Button type="submit" className="w-full bg-[#8DAA91] hover:bg-[#7c9981] text-white h-12 rounded-full text-base font-semibold mt-6 shadow-md transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5">
-                      Login
+                    <Button 
+                      type="submit" 
+                      className="w-full bg-[#8DAA91] hover:bg-[#7c9981] text-white h-12 rounded-full text-base font-semibold mt-6 shadow-md transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5"
+                      disabled={loading}
+                    >
+                      {loading ? 'Logging in...' : 'Login'}
                     </Button>
                   </motion.div>
                 </CardContent>
@@ -376,8 +437,12 @@ export default function AuthForm() {
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.2, type: "spring", stiffness: 300, damping: 24 }}
                   >
-                    <Button type="submit" className="w-full bg-[#8DAA91] hover:bg-[#7c9981] text-white h-12 rounded-full text-base font-semibold mt-6 shadow-md transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5">
-                      Register
+                    <Button 
+                      type="submit" 
+                      className="w-full bg-[#8DAA91] hover:bg-[#7c9981] text-white h-12 rounded-full text-base font-semibold mt-6 shadow-md transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5"
+                      disabled={loading}
+                    >
+                      {loading ? 'Registering...' : 'Register'}
                     </Button>
                   </motion.div>
                 </CardContent>
@@ -428,4 +493,4 @@ export default function AuthForm() {
       </Card>
     </div>
   );
-}
+} 

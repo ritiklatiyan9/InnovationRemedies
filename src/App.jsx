@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { Toaster } from 'react-hot-toast';
+
+// Auth Context Provider
+import { AuthProvider } from './Pages/Component/context/AuthContext';
+import ProtectedRoute from './Pages/SinglePages/ProtectedRoute';
 
 // Page & Component Imports
 import ScrollToTop from './Pages/SinglePages/ScrollToTop';
@@ -16,9 +21,9 @@ import About from './Pages/Component/About/About';
 import Preloader from './Pages/Component/Preloader/Preloader';
 import Login from './Pages/Component/Login/Login';
 
-// Chat Components - Using our enhanced versions
+// Chat Components
 import ChatIcon from './Pages/Component/Chat/ChatIcon';
-import ChatModal from './Pages/SinglePages/AiAssistant'; // Make sure this points to our new file
+import ChatModal from './Pages/SinglePages/AiAssistant';
 
 import './fonts.css';
 
@@ -112,37 +117,51 @@ function App() {
         </script>
       </Helmet>
 
-      {/* Preloader */}
-      {loading && <Preloader setLoading={setLoading} />}
+      {/* Wrap entire app with AuthProvider */}
+      <AuthProvider>
+        {/* Toast notifications */}
+        <Toaster position="top-right" />
 
-      {/* Main Application */}
-      {!loading && (
-        <Router>
-          <ScrollToTop />
-          <Header />
-          
-          <main className="pt-16 min-h-screen">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/products" element={<ListProducts />} />
-              <Route path="/product/:id" element={<ProductDetailPage />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/store" element={<Store />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </main>
-          
-          <Footer />
-          
-          {/* Floating Chat Components - Updated */}
-          <ChatIcon onClick={() => setIsChatOpen(true)} isOpen={isChatOpen} />
-          <ChatModal  isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
-        </Router>
-      )}
+        {/* Preloader */}
+        {loading && <Preloader setLoading={setLoading} />}
+
+        {/* Main Application */}
+        {!loading && (
+          <Router>
+            <ScrollToTop />
+            <Header />
+            
+            <main className="pt-16 min-h-screen">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/products" element={<ListProducts />} />
+                
+                {/* Public routes */}
+                <Route path="/login" element={<Login />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
+                
+                {/* Protected routes */}
+                <Route element={<ProtectedRoute />}>
+                  <Route path="/product/:id" element={<ProductDetailPage />} />
+                  <Route path="/store" element={<Store />} />
+                  {/* Add other protected routes here */}
+                </Route>
+                
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </main>
+            
+            <Footer />
+            
+            {/* Floating Chat Components */}
+            <ChatIcon onClick={() => setIsChatOpen(true)} isOpen={isChatOpen} />
+            <ChatModal isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
+          </Router>
+        )}
+      </AuthProvider>
     </HelmetProvider>
   );
 }
 
-export default App;
+export default App; 
