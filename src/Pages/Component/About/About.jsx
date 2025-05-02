@@ -1,6 +1,8 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import Video from './Video';    
+
 import {
     Eye, Target, Users, Trophy,
     Briefcase, Lightbulb, Star,
@@ -223,77 +225,7 @@ export default function EnhancedAboutUs() {
             <FlowBackground />
 
             {/* Hero Section */}
-            <motion.section
-                className="relative overflow-hidden py-24 md:py-40 z-10"
-                initial="hidden"
-                animate="visible"
-                variants={fadeIn}
-            >
-                {/* Decorative Shapes (optional enhancement) */}
-                 <motion.div
-                    className="absolute top-10 left-10 w-32 h-32 bg-emerald-200 rounded-full opacity-30 filter blur-xl"
-                    animate={{ scale: [1, 1.1, 1], x: [0, 10, 0] }}
-                    transition={{ duration: 8, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
-                />
-                 <motion.div
-                    className="absolute bottom-20 right-20 w-40 h-40 bg-blue-200 rounded-lg opacity-30 filter blur-xl transform rotate-45"
-                     animate={{ scale: [1, 0.9, 1], y: [0, -10, 0] }}
-                     transition={{ duration: 10, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
-                />
-
-                <div className="container mx-auto px-4 sm:px-6 relative z-10">
-                    <div className="max-w-3xl mx-auto text-center">
-                        <motion.h1
-                            className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.2 }}
-                        >
-                            Shaping the Future of{' '}
-                            <span className="bg-gradient-to-r from-emerald-500 to-teal-400 text-transparent bg-clip-text">
-                                Veterinary Innovation
-                            </span>
-                        </motion.h1>
-                        <motion.p
-                            className="text-lg md:text-xl text-gray-600 mb-8"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.4 }}
-                        >
-                            Empowering veterinary professionals through cutting-edge technology solutions that enhance animal care worldwide.
-                        </motion.p>
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.6 }}
-                        >
-                            <Button size="lg" className="bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-3 rounded-full flex items-center mx-auto shadow-lg hover:shadow-emerald-300/50 transition-all duration-300 transform hover:scale-105">
-                                <span>Explore Our Story</span>
-                                <ArrowRight className="ml-2" size={20} />
-                            </Button>
-                        </motion.div>
-                    </div>
-                </div>
-
-                {/* Wavy divider - Replaced static SVG */}
-                 <div className="absolute bottom-0 left-0 w-full h-24 md:h-32">
-                    <svg viewBox="0 0 1440 150" preserveAspectRatio="none" className="w-full h-full">
-                        <defs>
-                            <linearGradient id="waveGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
-                                <stop offset="100%" stopColor="#f0fdfa" stopOpacity="1" />
-                            </linearGradient>
-                        </defs>
-                        <motion.path
-                            fill="url(#waveGrad)"
-                            d="M0,50 C360,150 1080, -50 1440,50 L1440,150 L0,150 Z"
-                            initial={{ pathLength: 0, opacity: 0 }}
-                             animate={{ pathLength: 1, opacity: 1 }}
-                             transition={{ duration: 1.5, delay: 0.5 }}
-                        />
-                    </svg>
-                </div>
-            </motion.section>
+         <Video />
 
              <FlowDivider className="fill-emerald-100"/>
 

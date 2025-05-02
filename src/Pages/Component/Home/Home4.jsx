@@ -2,6 +2,7 @@ import React from 'react';
 import bgImage from '../../../assets/Video/bg3.jpg'; // ← Adjust path if needed
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import twelveone from '../../../assets/Images/twelveone.png'; // ← Adjust path if needed
 import { ChevronRight, Users, MessageSquare, Volume2, BrainCircuit } from 'lucide-react';
 
 // Define positions more explicitly for clarity
@@ -70,61 +71,7 @@ const Home4 = () => {
         {/* Right Column: Orbit Graphic - Enhanced sizing and animation */}
         <div className="md:w-1/2 flex items-center justify-center mt-12 md:mt-0">
           {/* Orbit Container - Adjusted responsive sizing */}
-          <div className="relative
-                          w-72 h-72
-                          sm:w-96 sm:h-96
-                          md:w-[450px] md:h-[450px]
-                          lg:w-[550px] lg:h-[550px]">
-            {/* Orbits - Adjusted colors, added subtle animation */}
-            <div className="absolute inset-0 border-2 border-purple-400/40 dark:border-purple-600/50 rounded-full animate-spin-slow"></div>
-            <div className="absolute inset-[20%] border border-purple-400/30 dark:border-purple-600/40 rounded-full animate-spin-medium"></div>
-            <div className="absolute inset-[40%] border-2 border-purple-400/40 dark:border-purple-600/50 rounded-full animate-spin-slow-reverse"></div>
-
-            {/* Center Stats - Enhanced text contrast */}
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-              <p className="text-5xl sm:text-6xl md:text-7xl font-bold text-purple-100 dark:text-purple-200 drop-shadow-lg">
-                25,000+
-              </p>
-              <p className="text-xl sm:text-2xl text-purple-200 dark:text-purple-300/80 mt-1">
-                Customers
-              </p>
-            </div>
-
-            {/* Orbiting Elements (Avatars & Icons) */}
-            {orbitElements.map((el, i) => (
-              <div
-                key={i}
-                className={`
-                  absolute
-                  ${el.top}
-                  ${el.left}
-                  ${el.transform || ''}
-                  ${el.sizeClass}
-                  flex items-center justify-center
-                  animate-float // Add floating animation
-                `}
-                style={{ animationDelay: `${i * 150}ms` }} // Stagger animation start
-              >
-                {el.type === 'avatar' ? (
-                  <Avatar className="w-full h-full border-2 border-pink-300/70 shadow-lg shadow-pink-500/40">
-                    <AvatarImage src={el.src} alt={el.alt} />
-                    <AvatarFallback>{el.alt.slice(-2).trim()}</AvatarFallback>
-                  </Avatar>
-                ) : (
-                  <div
-                    className={`
-                      p-2.5 rounded-lg text-white flex items-center justify-center
-                      ${iconColorMap[el.color] || ''}
-                      shadow-lg backdrop-blur-sm w-full h-full
-                    `}
-                    title={el.label} // Tooltip for accessibility
-                  >
-                    <el.Icon className="w-5/6 h-5/6" /> {/* Scale icon within container */}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+        <img src={twelveone} alt="" />
         </div>
       </div>
     </div>

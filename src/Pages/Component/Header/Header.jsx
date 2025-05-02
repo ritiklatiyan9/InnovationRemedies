@@ -1,245 +1,347 @@
- // src/Pages/Component/Header/Header.jsx
- import React, { useState } from 'react';
- import { Link, NavLink, useNavigate } from 'react-router-dom';
- import { Home, ShoppingBag, Book, Users, Mail, Menu, ChevronRight, LogOut, User } from 'lucide-react';
- import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
- import { 
-   DropdownMenu, 
-   DropdownMenuContent, 
-   DropdownMenuItem, 
-   DropdownMenuLabel, 
-   DropdownMenuSeparator, 
-   DropdownMenuTrigger 
- } from '@/components/ui/dropdown-menu';
- import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
- import { Button } from '@/components/ui/button';
- import { useAuth } from '../context/AuthContext';
- import { toast } from 'react-hot-toast';
- import Logo from '../../../assets/Images/logo.png';
- 
- const navItems = [
-   { to: '/',    label: 'Home',        icon: <Home />,         color: '#f43f5e' },
-   { to: '/products', label: 'Products',    icon: <ShoppingBag />,  color: '#3b82f6' },
-   { to: '/store',    label: 'Information', icon: <Book />,         color: '#10b981' },
-   { to: '/about',    label: 'About Us',    icon: <Users />,        color: '#f59e0b' },
-   { to: '/contact',  label: 'Contact',     icon: <Mail />,         color: '#6366f1' },
- ];
- 
- export default function Header() {
-   const { user, isAuthenticated, logout } = useAuth();
-   const [isOpen, setIsOpen] = useState(false);
-   const navigate = useNavigate();
-   const iconClass = "h-5 w-5";
- 
-   // Get user initials for avatar fallback
-   const getUserInitials = () => {
-     if (!user) return 'GU'; // Guest User
-     
-     const mobile = user.mobile || '';
-     if (mobile.length >= 2) return mobile.substring(0, 2).toUpperCase();
-     return 'U'; // Default User
-   };
- 
-   const handleLogout = async () => {
-     try {
-       await logout();
-       toast.success('Logged out successfully');
-       navigate('/');
-     } catch (error) {
-       toast.error('Failed to logout');
-     }
-   };
- 
-   return (
-     <header className="fixed top-0 inset-x-0 z-50 bg-sky-100/90 backdrop-blur-sm border-b border-zinc-300/50 py-2 sm:py-3 shadow-lg">
-       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
-         {/* Logo */}
-         <Link to="/" className="flex-shrink-0">
-           <img src={Logo} alt="App Logo" className="h-10 sm:h-12 w-auto rounded-xl object-cover" />
-         </Link>
- 
-         {/* Desktop Nav */}
-         <nav className="hidden md:flex flex-grow justify-center">
-           <ul className="flex space-x-2 bg-white/60 px-3 py-1.5 rounded-full shadow-inner border border-zinc-200/50">
-             {navItems.map(item => (
-               <li key={item.to}>
-                 <NavLink
-                   to={item.to}
-                   className={({ isActive }) =>
-                     `flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition duration-200 ${
-                       isActive
-                         ? "bg-white shadow-sm"
-                         : "text-gray-600 hover:text-gray-900 hover:bg-sky-50/50"
-                     }`
-                   }
-                   style={({ isActive }) => ({ color: isActive ? item.color : undefined })}
-                 >
-                   {React.cloneElement(item.icon, { className: iconClass })}
-                   <span>{item.label}</span>
-                 </NavLink>
-               </li>
-             ))}
-           </ul>
-         </nav>
- 
-         {/* Actions & Mobile Menu */}
-         <div className="flex items-center space-x-2">
-           {/* User Menu or Login Button (desktop) */}
-           <div className="hidden md:block">
-             {isAuthenticated ? (
-               <DropdownMenu>
-                 <DropdownMenuTrigger asChild>
-                   <Button variant="ghost" className="rounded-full p-0 h-10 w-10 overflow-hidden">
-                     <Avatar className="h-10 w-10 border-2 border-white shadow-sm">
-                       <AvatarImage src={user?.coverImage || ""} alt={user?.username || "User"} />
-                       <AvatarFallback className="bg-gradient-to-br from-sky-400 to-blue-500 text-white">
-                         {getUserInitials()}
-                       </AvatarFallback>
-                     </Avatar>
-                   </Button>
-                 </DropdownMenuTrigger>
-                 <DropdownMenuContent align="end" className="w-56">
-                   <DropdownMenuLabel>
-                     <div className="flex flex-col space-y-1">
-                       <p className="text-sm font-medium">
-                         {user?.username || "User"}
-                       </p>
-                       <p className="text-xs text-gray-500">
-                         {user?.mobile || ""}
-                       </p>
-                     </div>
-                   </DropdownMenuLabel>
-                   <DropdownMenuSeparator />
-                   <DropdownMenuItem asChild>
-                     <Link to="/profile" className="flex items-center cursor-pointer">
-                       <User className="mr-2 h-4 w-4" />
-                       <span>Profile</span>
-                     </Link>
-                   </DropdownMenuItem>
-                   <DropdownMenuItem onClick={handleLogout} className="text-red-500 focus:text-red-500 cursor-pointer">
-                     <LogOut className="mr-2 h-4 w-4" />
-                     <span>Logout</span>
-                   </DropdownMenuItem>
-                 </DropdownMenuContent>
-               </DropdownMenu>
-             ) : (
-               <Link to="/login">
-                 <Button className="rounded-full bg-green-500 hover:bg-green-600">
-                   Login
-                 </Button>
-               </Link>
-             )}
-           </div>
- 
-           {/* Mobile menu */}
-           <div className="md:hidden">
-             <Sheet open={isOpen} onOpenChange={setIsOpen}>
-               <SheetTrigger asChild>
-                 <button
-                   className="p-2 rounded-full hover:bg-sky-200/60 focus:outline-none"
-                   aria-label="Open menu"
-                 >
-                   <Menu className="h-6 w-6 text-sky-600" />
-                 </button>
-               </SheetTrigger>
- 
-               <SheetContent side="right" className="w-64 sm:w-72 bg-gradient-to-b from-white to-sky-50 shadow-xl flex flex-col">
-                 {/* Profile header */}
-                 <div className="p-5 border-b border-gray-100 flex items-center gap-4">
-                   {isAuthenticated ? (
-                     <>
-                       <Avatar className="h-12 w-12 rounded-full border-2 border-white object-cover shadow-md">
-                         <AvatarImage src={user?.coverImage || ""} alt="Profile" />
-                         <AvatarFallback className="bg-gradient-to-br from-sky-400 to-blue-500 text-white">
-                           {getUserInitials()}
-                         </AvatarFallback>
-                       </Avatar>
-                       <div>
-                         <p className="font-medium">{user?.username || "User"}</p>
-                         <p className="text-xs text-gray-500">{user?.mobile || ""}</p>
-                       </div>
-                     </>
-                   ) : (
-                     <>
-                       <div className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center">
-                         <User className="h-6 w-6 text-gray-500" />
-                       </div>
-                       <p className="font-medium">Guest</p>
-                     </>
-                   )}
-                 </div>
- 
-                 {/* Nav links */}
-                 <nav className="px-4 py-3 overflow-y-auto flex-grow">
-                   <div className="mb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                     Navigation
-                   </div>
-                   <ul className="space-y-1.5">
-                     {navItems.map(item => (
-                       <li key={item.to}>
-                         <NavLink
-                           to={item.to}
-                           onClick={() => setIsOpen(false)}
-                           className={({ isActive }) =>
-                             `flex items-center justify-between p-3 rounded-lg transition duration-200 ${
-                               isActive
-                                 ? "font-semibold bg-white shadow-sm"
-                                 : "text-gray-700 hover:bg-white/70 hover:text-gray-900"
-                             }`
-                           }
-                           style={({ isActive }) => ({ color: isActive ? item.color : undefined })}
-                         >
-                           <div className="flex items-center gap-3">
-                             <div className="p-2 rounded-md bg-gray-100 group-hover:bg-gray-200 transition-colors">
-                               {React.cloneElement(item.icon, { className: iconClass })}
-                             </div>
-                             <span className="text-sm">{item.label}</span>
-                           </div>
-                           {({ isActive }) =>
-                             isActive && (
-                               <div className="flex items-center gap-1">
-                                 <span className="h-2 w-2 rounded-full" style={{ backgroundColor: item.color }} />
-                                 <ChevronRight className="h-4 w-4 opacity-60" />
-                               </div>
-                             )
-                           }
-                         </NavLink>
-                       </li>
-                     ))}
-                   </ul>
- 
-                   <div className="mt-6 mb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                     Account
-                   </div>
-                 </nav>
- 
-                 {/* Bottom login/logout */}
-                 <div className="p-4 border-t border-gray-100 bg-white/50">
-                   {isAuthenticated ? (
-                     <button 
-                       onClick={() => {
-                         handleLogout();
-                         setIsOpen(false);
-                       }}
-                       className="w-full text-left flex items-center gap-3 p-3 rounded-lg hover:bg-red-50 text-red-600 text-sm transition"
-                     >
-                       <LogOut className="h-5 w-5" />
-                       Logout
-                     </button>
-                   ) : (
-                     <Link to="/login" onClick={() => setIsOpen(false)}>
-                       <button className="w-full text-left flex items-center gap-3 p-3 rounded-lg hover:bg-green-50 text-green-600 text-sm transition">
-                         <User className="h-5 w-5" />
-                         Login
-                       </button>
-                     </Link>
-                   )}
-                 </div>
-               </SheetContent>
-             </Sheet>
-           </div>
-         </div>
-       </div>
-     </header>
-   );
- } 
+// src/Pages/Component/Header/Header.jsx
+import React, { useState } from 'react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Home, ShoppingBag, Book, Users, Mail, Menu, LogOut, User, ChevronRight, Settings } from 'lucide-react';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetFooter } from '@/components/ui/sheet';
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  navigationMenuTriggerStyle,
+} from '@/components/ui/navigation-menu';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { useAuth } from '../context/AuthContext'; // Adjust path if necessary
+import { toast } from 'react-hot-toast';
+import Logo from '../../../assets/Images/logo.png'; // Ensure this path is correct
+import { cn } from '@/lib/utils'; // Adjust path if necessary
+
+// --- Configuration ---
+const navItems = [
+  { to: '/', label: 'Home', icon: Home, color: 'text-rose-500' },
+  { to: '/products', label: 'Products', icon: ShoppingBag, color: 'text-blue-500' },
+  { to: '/store', label: 'Information', icon: Book, color: 'text-emerald-500' },
+  { to: '/about', label: 'About Us', icon: Users, color: 'text-amber-500' },
+  { to: '/contact', label: 'Contact', icon: Mail, color: 'text-indigo-500' },
+];
+
+// --- Helper Function ---
+const getUserInitials = (user) => {
+  if (!user) return 'GU'; // Guest User
+  if (user.username) {
+    const names = user.username.split(' ');
+    if (names.length > 1) {
+      return (names[0][0] + names[names.length - 1][0]).toUpperCase();
+    }
+    return names[0].substring(0, 2).toUpperCase();
+  }
+  if (user.mobile && user.mobile.length >= 2) {
+    // Example: Use first and last digit if desired, or just first two
+    // return user.mobile[0] + user.mobile[user.mobile.length - 1];
+    return user.mobile.substring(0, 2).toUpperCase();
+  }
+  return 'U'; // Default User
+};
+
+
+// --- Component ---
+export default function Header() {
+  const { user, isAuthenticated, logout } = useAuth();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const iconSize = "h-5 w-5"; // Consistent icon size
+
+  const handleLogout = async () => {
+    try {
+      // Assuming logout() is async; if not, remove await
+      await logout(); // Make sure your logout function handles async correctly if needed
+      toast.success('Logged out successfully');
+      navigate('/');
+      setIsMobileMenuOpen(false); // Close mobile menu on logout
+    } catch (error) {
+      toast.error(error?.message || 'Failed to logout'); // Show specific error message if available
+      console.error("Logout error:", error);
+    }
+  };
+
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
+
+  // --- Render ---
+  return (
+    <header className="fixed top-0 inset-x-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/40 shadow-sm">
+      <div className="container mx-auto h-16 flex items-center justify-between px-4 sm:px-6 lg:px-8">
+        {/* Logo */}
+        <Link to="/" className="flex-shrink-0" onClick={closeMobileMenu}>
+          <img src={Logo} alt="App Logo" className="h-10 w-auto object-contain" />
+        </Link>
+
+        {/* Desktop Navigation */}
+        <NavigationMenu className="hidden lg:flex flex-grow justify-center">
+          <NavigationMenuList className="bg-muted/60 px-3 py-1.5 rounded-full shadow-inner border border-border/30">
+            {navItems.map((item) => (
+              <NavigationMenuItem key={item.to}>
+                {/* Use NavLink directly here for better active state handling */}
+                <NavLink to={item.to} legacyBehavior passHref>
+                  <NavigationMenuLink
+                    className={cn(
+                      navigationMenuTriggerStyle(),
+                      "bg-transparent hover:bg-accent/70 data-[active]:bg-background data-[active]:shadow-sm text-sm h-9"
+                    )}
+                  >
+                    <item.icon aria-hidden="true" className={cn(iconSize, item.color, "mr-1.5")} />
+                    {item.label}
+                  </NavigationMenuLink>
+                </NavLink>
+              </NavigationMenuItem>
+            ))}
+          </NavigationMenuList>
+        </NavigationMenu>
+
+        {/* Actions (User Menu / Login Button) & Mobile Menu Trigger */}
+        <div className="flex items-center space-x-3">
+          {/* User Menu or Login Button (Desktop) */}
+          <div className="hidden lg:block">
+            {isAuthenticated ? (
+              <UserDropdown user={user} onLogout={handleLogout} />
+            ) : (
+              <Button asChild size="sm" className="rounded-full bg-primary hover:bg-primary/90">
+                <Link to="/login">Login</Link>
+              </Button>
+            )}
+          </div>
+
+          {/* Mobile Menu Trigger */}
+          <div className="lg:hidden">
+            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="rounded-full" aria-label="Open menu">
+                  <Menu className="h-6 w-6 text-foreground/80" />
+                </Button>
+              </SheetTrigger>
+              <MobileSheetContent
+                isAuthenticated={isAuthenticated}
+                user={user}
+                onLogout={handleLogout}
+                onClose={closeMobileMenu} // Pass closeMobileMenu as onClose
+              />
+            </Sheet>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+// --- Sub Components ---
+
+// User Dropdown (for Desktop)
+function UserDropdown({ user, onLogout }) {
+  const initials = getUserInitials(user);
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0">
+          <Avatar className="h-10 w-10 border-2 border-border/20">
+             {/* Ensure AvatarImage src is handled correctly if user?.coverImage can be null/undefined */}
+            <AvatarImage src={user?.coverImage || undefined} alt={user?.username || "User avatar"} />
+            <AvatarFallback className="bg-gradient-to-br from-primary/70 to-primary/40 text-primary-foreground font-semibold">
+              {initials}
+            </AvatarFallback>
+          </Avatar>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56" align="end" forceMount>
+        <DropdownMenuLabel className="font-normal">
+          <div className="flex flex-col space-y-1">
+            <p className="text-sm font-medium leading-none">
+              {user?.username || "Welcome!"}
+            </p>
+            {user?.mobile && (
+              <p className="text-xs leading-none text-muted-foreground">
+                {user.mobile}
+              </p>
+            )}
+          </div>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+           {/* Use Link component for navigation */}
+           <Link to="/profile" className="cursor-pointer w-full flex items-center"> {/* Ensure link takes full width */}
+             <User className="mr-2 h-4 w-4" />
+             <span>Profile</span>
+           </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild disabled>
+          {/* Disabled example */}
+          <span className="cursor-not-allowed opacity-50 w-full flex items-center">
+            <Settings className="mr-2 h-4 w-4" />
+            <span>Settings</span>
+          </span>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={onLogout} className="text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer w-full flex items-center"> {/* Ensure full width */}
+          <LogOut className="mr-2 h-4 w-4" />
+          <span>Logout</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+// Mobile Sheet Content
+function MobileSheetContent({ isAuthenticated, user, onLogout, onClose }) {
+  const iconSize = "h-5 w-5";
+  const initials = getUserInitials(user);
+
+  return (
+    <SheetContent side="right" className="w-full max-w-xs sm:max-w-sm p-0 flex flex-col bg-gradient-to-b from-background via-background to-muted/30">
+      <SheetHeader className="p-4 border-b border-border/30">
+        <SheetTitle className="flex items-center gap-3 text-left"> {/* Added text-left */}
+          {isAuthenticated ? (
+            <>
+              <Avatar className="h-10 w-10 border">
+                <AvatarImage src={user?.coverImage || undefined} alt="User avatar" />
+                <AvatarFallback className="bg-gradient-to-br from-primary/70 to-primary/40 text-primary-foreground">
+                    {initials}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <p className="text-sm font-medium">{user?.username || "User"}</p>
+                <p className="text-xs text-muted-foreground">{user?.mobile || ""}</p>
+              </div>
+            </>
+          ) : (
+            <>
+              <Avatar className="h-10 w-10 border bg-muted">
+                  <AvatarFallback>
+                      <User className="h-5 w-5 text-muted-foreground" />
+                  </AvatarFallback>
+              </Avatar>
+              <p className="text-sm font-medium">Guest Menu</p>
+            </>
+          )}
+        </SheetTitle>
+      </SheetHeader>
+
+      {/* Navigation Links */}
+      <nav className="flex-grow p-4 overflow-y-auto">
+        <div className="mb-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+          Navigation
+        </div>
+        <ul className="space-y-1.5">
+          {navItems.map((item) => (
+            <li key={item.to}>
+              <NavLink
+                to={item.to}
+                onClick={onClose} // Close sheet on link click
+                // Use className function to style the NavLink based on active state
+                className={({ isActive }) =>
+                  cn(
+                    "flex items-center justify-between p-2.5 rounded-md text-sm font-medium transition-colors duration-150 group w-full", // Ensure link takes full width
+                    isActive
+                      ? "bg-primary/10 shadow-sm text-primary" // Enhanced active style
+                      : "text-foreground/80 hover:bg-muted/80 hover:text-foreground" // Default style
+                  )
+                }
+              >
+                {/* FIXED: Use function-as-children correctly */}
+                {({ isActive }) => (
+                  <> {/* Wrap children in a Fragment */}
+                    {/* Icon and Label */}
+                    <div className="flex items-center gap-3">
+                       <item.icon aria-hidden="true" className={cn(
+                         iconSize,
+                         isActive ? item.color : "opacity-80 group-hover:opacity-100", // Use active color or default
+                         "transition-colors"
+                       )} />
+                      <span className={isActive ? "font-semibold" : ""}>{item.label}</span>
+                    </div>
+
+                    {/* Conditional Active Indicator */}
+                    {isActive && (
+                      <ChevronRight className={cn("h-4 w-4 opacity-70", item.color)} />
+                    )}
+                  </>
+                )}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+
+         {/* Account Section (if logged in) */}
+         {isAuthenticated && (
+             <>
+                <div className="mt-6 mb-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                   Account
+                </div>
+                <ul className="space-y-1.5">
+                    <li>
+                       <NavLink
+                         to="/profile"
+                         onClick={onClose} // Close sheet on link click
+                         className={({ isActive }) =>
+                            cn(
+                             "flex items-center gap-3 p-2.5 rounded-md text-sm font-medium transition-colors duration-150 group w-full", // Ensure full width
+                             isActive
+                               ? "bg-muted shadow-sm text-foreground font-semibold" // Active style
+                               : "text-foreground/80 hover:bg-muted/80 hover:text-foreground" // Default style
+                           )
+                         }
+                       >
+                           <User className={cn(iconSize, "opacity-70 group-hover:opacity-100")} />
+                           Profile
+                       </NavLink>
+                   </li>
+                   {/* Add other account links like settings here if needed */}
+                   {/* Example:
+                   <li>
+                       <NavLink
+                         to="/settings" // Example path
+                         onClick={onClose}
+                         className={({ isActive }) => cn(...) }
+                       >
+                           <Settings className={cn(iconSize, ...)} />
+                           Settings
+                       </NavLink>
+                   </li>
+                   */}
+                </ul>
+             </>
+         )}
+      </nav>
+
+      {/* Footer Actions (Login/Logout) */}
+      <SheetFooter className="p-4 border-t border-border/30 bg-background/50 mt-auto"> {/* Added mt-auto to push footer down */}
+        {isAuthenticated ? (
+          <Button
+            variant="ghost"
+            onClick={() => {
+              onLogout(); // Call the logout function passed down
+              // onClose(); // Logout function likely already closes menu via state change/navigate
+            }}
+            className="w-full justify-start text-red-600 hover:bg-red-50 hover:text-red-600 gap-3"
+          >
+            <LogOut className="h-5 w-5" />
+            Logout
+          </Button>
+        ) : (
+          <Button asChild variant="default" className="w-full gap-3 bg-primary hover:bg-primary/90" onClick={onClose}>
+            <Link to="/login">
+              <User className="h-5 w-5" /> {/* Maybe Login icon? */}
+              Login / Sign Up
+            </Link>
+          </Button>
+        )}
+      </SheetFooter>
+    </SheetContent>
+  );
+}

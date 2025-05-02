@@ -1,6 +1,6 @@
 import React from 'react';
 import { Bot } from 'lucide-react';
-import ai from '../../../assets/Images/ai.png';
+import ai from '../../../assets/Images/ailogo.png';
 
 const ChatIcon = ({ onClick, isOpen }) => {
   return (
