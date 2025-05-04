@@ -16,6 +16,18 @@
     font-style: normal;
   }
 
+
+  
+@font-face {
+  font-family: "Oregon LDO";
+  src: url("../fonts/oregon.woff2") format("woff2"),
+    url("../fonts/oregon.ttf") format("trueType");
+
+  font-weight: 600;
+  font-style: normal;
+}
+  
+
   @font-face {
     font-family: "Josefin Sans";
     src: url("../fonts/SF.woff2") format("woff2"),

@@ -2,8 +2,228 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Bot, Send, Loader, User } from 'lucide-react';
 
+// --- Google Gemini API Configuration ---
+// WARNING: Hardcoding API keys in frontend code is insecure!
+// This is done only because specifically requested. Do NOT do this in production.
+// Consider using a backend proxy or environment variables with proper build setup.
+const GEMINI_API_KEY = 'AIzaSyABoTniJg4qQCJBFC6w6pBl7s5LyhMyPt0'; // Your API Key
+const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+// --- Embedded Product Information ---
+// This text will be provided to the Gemini API as context.
+const PRODUCT_CONTEXT = `
+Product Name: RESOLUTION-KIT Powder
+Composition (per 500 GM): Omega 3 & 6 (Fatty Acid): 500 mg CH. Copper Sulphate: 18 gm CH. Zinc Sulphate: 44 gm CH. Magnese Chloride: 14.5 gm CH. Chromium Sulphate: 1500 mg Selenium: 22 mg Potassium Iodate (Iodine): 340 mg Sodium Acid Phosphate: 96.626 gm Dicalcium Phosphate: 315 gm Cobalt Sulphate: 500 mg Ferrous Sulphate (Iron): 500 mg Vitamin A: 1.60 gm (about 50 Lac IU) Vitamin D3: 0.40 gm (about 05 Lac IU) Vitamin E: 2000 mg (about 30 Lac IU) Herbals: q.s.
+Additional Components: Omega 3 & 6, Trace Minerals, Phosphorus, Potassium Iodate, DCP, Vitamin AD₃E, RS Heat Kit
+Recommended Dosage (Cattle/Buffalo/Heifer): For 1st 15 Days: Resolution Powder 25 gm /Day After 16 Days: Start Resolution Powder 25 gm + 1 Strip of RS Heat Kit For Next 5 Days
+Available Pack: Resolution Powder 500 gm + RS Heat Kit
+Additional Text: सर इसका मतलब रीसोल्यूशन किट बांझपन के इलाज के लिए सम्पूर्ण समाधान है। (Translation: Sir, this means Resolution Kit is a complete solution for the treatment of infertility.)
+
+Product Name: R3-Vet ULTRA BOLUS
+Each Uncoated Bolus Contains: Cyproheptadine Hcl: 25 mg Live Yeast Culture: 4 mg Live Lactobacillus Sporogenes: 40 million Thiamine Hcl. (B1): 250 mg Pyridoxine Hcl (B6): 250 mg Methylcobalamin: 2500 mcg Excipients: q.s.
+Indications: Anorexia Liver Disorder Anaemia & Convalescence Period Adjuvant to antibiotic/Anthelmintic therapy Nervine Disorder
+For Appetite or Anorexia: Cyproheptadine Hcl: histamine antagonist with appetite stimulating effects Live yeast culture + Live Lactobacillus Sporogenes: Probiotics supplementation stabilizes gut flora (which gets destroyed during Antibiotic treatment) and improves fermentation capacities of the Rumen.
+For Weakness & Loss of Milk Production: Thiamine HCL (B1): plays an important role in control of the "satiety center," one common symptom of Thiamine deficiency is a loss of Appetite. Pyridoxine Hcl (B6): converts proteins, fats & carbohydrates to glucose. The Vitamins manage energy.
+For Neuronal Disorder: Methylcobalamin: is an active form of vitamin B12. Methylcobalamin is important for the brain & nerves, and for the production of red blood cells.
+Dosage: In Large Animal: 1 bolus BD for two days In Small Animal: 1/2 bolus BD for two days
+Available Pack: 1 X 1 Bolus
+
+RS-Kit - Product Information
+Combikit Contents: Component A: One Tablet of Clomiphene Citrate, I.P. 300mg. Component A - Each uncoated Tablet contains: Clomiphene Citrate Component B: Two Tablets of Copper Sulphate Component B - Each uncoated tablet contains: Copper Sulphate (Anhydrous) B.P. 750mg.
+Indications - Anovulatory Estrus & Anoestrus: Condition: Anovulatory Estrus Condition: Anoestrus
+Mechanism of Action (Simplified): Hypothalamus (Brain) -> Release of GnRH GnRH -> Stimulation of Pituitary Gland Pituitary Gland -> FSH Pituitary Gland -> LH FSH & LH -> Ovulation
+Related Conditions/Outcomes: Delayed Puberty Delayed Ovulation Cystic Ovarian Degeneration Early Embryonic Death
+Product Packaging: Pack Size: 5 Combikit
+Product Type: Combikit of Clomiphene Citrate & Copper Sulphate Tablets
+Brand Name: RS-Kit
+Category: FERTILITY KIT
+Usage Restriction: For Veterinary use only
+
+Product Name: INNOLIV-DS
+Form: LIQUID
+Features & Benefits: Improves Liver Health & Functions Improves Appetite, FCR & Growth Rate Helps in Better Feed intake and Nutrient Metabolism Prevents Fatty Liver Syndrome Protects Liver from various Toxins Improves Immune System Provides Optimum Growth, FCR & Protein Synthesis Provide Balanced Energy
+Key Ingredient: With Silymarine
+Available Pack Sizes: 500 ml, 1 Litre, 5 Litre
+Description: A Unique combination of Liver Boosting and Appetite Stimulant Herbs with Liver Extract, Amino Acids & Vitamin B Complex
+COMPOSITION (Each 100 ml. Contains): D.L. methionine: 5000 mg. I-Lysine HCL: 3000 mg. Vitamin B₁: 125 mg. Vitamin B₂: 200 mg. Vitamin B₃: 1250 mg. Vitamin B₆: 150 mg. Silybum marianum: 900 mg. Andrographis paniculata: 1000 mg. Phyllanthus niruri: 1000 mg. Solanum nigrum: 1000 mg. Ocimum sanctum: 1000 mg. Azadirachta indica: 1000 mg. Tinospora cordifolia: 1200 mg. Betaine: 50 mg. Liver Extract: 150 mg. Choline Chloride: 3000 mg. Calcium Lactate: 1000 mg. Aqua: q.s.
+Dosage: Large Animals: 80-100 ml daily Small Animals: 30-50 ml daily Layers: 15-20 ml daily/100 birds Broilers: 10-15 ml daily/100 birds Or as directed by Veterinary & Poultry Consultant
+
+Product Name: GLUCODYNA - 40 Advance
+Each Litre Contains: Propylene Glycol: 400 ml Purified Honey: 100 ml Bioactive Chromium: 1800 mcg Magnesium Sulphate: 1000 mg Niacin: 10 gm Olive Oil: 20 gm Calcium Phosphate: 50 gm Aswagandha Extract: 10 ml Glycerine: 300 ml Vitamin C: 5000 mcg Silymarin: 5000 mg Purified Water: q.s.
+Benefits: Helps in prevention of NEB & Ketosis Prevents harmful effects of NEB on Uterus Helps bring animal back to feed & milk production in case of sudden drop in milk production along with low feed intake Improves post calving health & production
+Dosage: 200 ml twice daily for two days followed by 100 ml daily for two days
+Presentation: 1 Litre
+
+Calf Shakti Advance
+Key Ingredients: DHA, Aloevera, Flex Oil, Methylcobalamin, Iron, Folic Acid, Niacin, Vitamin A, Vitamin D3, Vitamin E, Zinc, Cobalt, Vitamin H (Biotin), Selenium, Energy Value
+Benefits:
+•	काफ शक्ति बछड़ो, भेड़ो व बकरो का वजन बढ़ाने के लिये लाभ दायक है। (Calf Shakti is beneficial for increasing the weight of calves, sheep, and goats.)
+•	काफ शक्ति छोटे जानवरों में पाई जाने वाली मिट्टी खाना, लकड़ी खाना, कपड़ा खाना आदि) खाने की आदतों को रोकता है। (Calf Shakti prevents the habit of eating soil, wood, cloth, etc. found in small animals.)
+•	काफ शक्ति छोटे जानवरों में तेजी से वजन बढ़ाता है। (Calf Shakti increases weight rapidly in small animals.)
+•	काफ शक्ति छोटे जानवरों में समय पर यौन तक पहुंचने व गर्भधारण की क्षमता में सुधार करता है। (Calf Shakti improves timely attainment of puberty and conception ability in small animals.)
+•	काफ शक्ति छोटे जानवरों के लिए संपूर्ण स्वास्थ्य पोषण है। (Calf Shakti is complete health nutrition for small animals.)
+•	काफ शक्ति छोटे जानवरों में विटामिन की कमी और कुपोषण को रोकता है। (Calf Shakti prevents vitamin deficiency and malnutrition in small animals.)
+•	काफ शक्ति छोटे जानवरों में पाचन, चयापचय, प्रतिरक्षा आदि सहित विभिन्न प्रकार के होने वाले तनाव को सहने में सहायक है। (Calf Shakti helps small animals withstand various types of stress including digestion, metabolism, immunity, etc.)
+•	काफ शक्ति छोटे जानवरों के समग्र स्वास्थ्य में लाभ पहुंचाने में सहायक है। (Calf Shakti is helpful in providing benefits to the overall health of small animals.)
+•	Note: छोटे जानवरों में optimum स्वास्थ्य को प्राप्त करने के लिये काफ शक्ति + रेगुलर पाउडर का उपयोग करे। (Note: To achieve optimum health in small animals, use Calf Shakti + Regular Powder.)
+Indications:
+•	After Cropping in Pet.
+•	After Dehorning in Calf.
+•	Faster Recovery After Illness.
+•	After Deworming.
+•	Weakness & debilitating conditions in small Animals
+•	Neuronal Disorder like lameness & improper gait
+Dosage: CALVES : 20 ML/DAILY SHEEP & GOAT : 20 ML/DAILY DOGS : 1 ML/5 KG.DAILY LAMBS : 5ML/DAILY
+Available Pack: 200 ml (with 10 ml Measuring Cap)
+
+Product Name: Weightboost
+Form: Powder
+Indication: Early Lactation - Underperformance
+Weightboost Contains: Daily boost of extra energy, Protein, By Pass Fat Glucose with minerals, Vitamins & Probiotics.
+Result: Energy, Proteins, Glucose Mineral, Vitamin Crunch
+Symptoms Associated with Underperformance: Negative energy balance - Weakness, Lethargy, Lipolysis - Adipose tissues mobilization Ketosis - Low/Selective feed intake, Sluggishness Body wasting : about 0.5 Kg - 1 Kg per day Hypogalactia, low production than last year Body condition deteriorates
+Benefits: Helps overcome energy deficiency Helps correct hypoglycaemia Helps remove weakness, sluggishness Improves feed intake Helps restore milk production Helps animal recover quickly
+Dosage: Large Animals: 100 gm per day Small Animals: 25 gm per day
+Available In: 3 Kg
+
+INNOLACT Gel ADVANCE
+Advantages:
+•	Prevention of milk fever
+•	Fulfilling the urgent calcium requirement immediately after parturition
+•	Increased milk production
+•	Improve liver functions
+•	Provide balance energy
+Note: Specially formulated calcium paste is water soluble & high palatable. It gets quickly absorbed & can rise calcium serum blood level within minutes of oral administration. Advantage of molasses base & Dextrose provides instant energy.
+Dosage: To Prevent milk fever: Give 250 gm at the first sign of calving & give another 250 gm 6 to 12 hours post calving, repeat every 12 hours as needed. Or as directed by the Veterinarian. A post calving dose of Innolact Gel Advance is very beneficial.
+Available Pack: 500 gm
+
+INNOLACT AD₃ - Product Information
+Nutritional Value (Per 100 ml): Nutrient: Calcium INNOLACT AD₃ Value: 1700 mg Other Calcium Supplement Value: 1700 mg
+Nutrient: Phosphorus INNOLACT AD₃ Value: 850 mg Other Calcium Supplement Value: 850 mg
+Nutrient: Vitamin D3 INNOLACT AD₃ Value: 8000 IU Other Calcium Supplement Value: 8000 IU
+Nutrient: Vitamin B12 INNOLACT AD₃ Value: 200 mcg Other Calcium Supplement Value: 150 mcg
+Nutrient: Carbohydrate INNOLACT AD₃ Value: 28000 mg Other Calcium Supplement Value: 28000 mg
+Nutrient: Vitamin A INNOLACT AD₃ Value: 45000 IU Other Calcium Supplement Value: Nil
+Nutrient: Vitamin E INNOLACT AD₃ Value: 300 mg Other Calcium Supplement Value: Nil
+Nutrient: Zinc INNOLACT AD₃ Value: 200 mg Other Calcium Supplement Value: Nil
+Nutrient: Leptadenia reticulata (Jivanti) INNOLACT AD₃ Value: 1000 mg Other Calcium Supplement Value: Nil
+Nutrient: Asparagus racemosus (Shatavari) INNOLACT AD₃ Value: 1000 mg Other Calcium Supplement Value: Nil
+Nutrient: Piper longum (long pepper) INNOLACT AD₃ Value: 400 mg Other Calcium Supplement Value: Nil
+Key Advantages of INNOLACT AD₃: Advantage: More Calcium Advantage: More Phosphorus Advantage: More Vitamin B12 Advantage: Additional Vitamin A Advantage: Additional Vitamin E Advantage: Additional Vitamin H (implied but not explicitly in the table) Advantage: More Carbohydrates (40,000 mg / 100 ml mentioned separately) Advantage: Herbal Galactogogues (with Jivanti and Shatavari) Advantage: Contains Dextrose
+Tagline: ENSURE HIGHER MILK PRODUCTION
+Available Pack Size: 5 Ltr.
+
+INNOLACT AD₃ Gold - Product Information
+Composition (per 100 ml): Calcium: 4000 mg Phosphorous: 2000 mg Vitamin D₃: 12000 IU Vitamin B₁₂: 100 mcg Vitamin A: 45000 IU Vitamin E: 150000 IU Shatavari: 1000 mg Jivanti: 1000 mg Piper longum: 400 mg Zinc: 1500 mg Copper: 500 mg Chromium: 200 ppm Silymarin: 450 mg Carbohydrate: 25000 mg Dextrose: 20% Aqua: to 100 ml
+Key Ingredients (with visual representation): Jivanti (Leptadenia reticulata) Shatavari (Asparagus racemosus) Pippali (Piper longum)
+Dosage: Large Animal: 200 ml daily Small Animal: 20 ml daily
+Available Pack Sizes: 1 Litre & 5 Litre
+
+INNOLACT AD₃ SUPER - Product Information
+Composition (per 100 ml): Calcium: 6200 mg Phosphorous: 3100 mg Vitamin D₃: 16000 IU Vitamin B₁₂: 200 mcg Vitamin A: 45000 IU Vitamin E: 150000 IU Vitamin H (Biotin): 20 mg Shatavari: 1000 mg Jivanti: 1000 mg Piper longum: 400 mg Chelated Zinc: 1500 mg Chelated Copper: 500 mg Chelated Chromium: 200 ppm Carbohydrate: 25000 mg Dextrose: 25% Aqua: to 100 ml
+Key Ingredients (with visual representation): Jivanti (Leptadenia reticulata) Shatavari (Asparagus racemosus) Pippali (Piper longum)
+Dosage: Large Animal: 100 ml daily Small Animal: 20 ml daily
+Available Pack Sizes: 1 Litre & 5 Litre
+Tagline: ENSURE HIGHER MILK PRODUCTION
+
+Product Combination: Weightboost Powder + Ayngrow Bolus
+Purpose: Prepare Animal for Next Lactation
+Benefit of Combination: Helps weight gain & udder development
+Dosage: 100 gm Weightboost powder for 30 days + One bolus Ayngrow for 40 days
+
+Ayngrow Bolus - Product Information
+Composition (Each Bolus contains): Vitamin A: 5,00,000 IU Vitamin D3: 1,00,000 IU Vitamin E: 600 mg Vitamin H (Biotin): 20,000 mcg Vitamin B12: 300 mcg Chelated Copper: 1000 mcg Chelated Zinc: 500 mcg Selenium: 300 mcg Silymarine: 500 mg Trisodium Citrate: 5 gm
+Advantages: Advantage of Zinc & Copper with MHA Advantage of Double power Vit. A & H
+Zn & Cu MHA: Zn helps in formation of teat keratin layer useful for maintaining healthy teat barrier. Zn and Cu MHA are antioxidant nutrients which help in masking the effects of free radicals.
+Slogan: Say... No .. to Teat Cracks
+Tagline: For Improved Therapeutic Outcome
+
+Innocef-3 Injection
+Presentation: Ceftriaxone 3 gm / Vial
+Key Features: Effective against a wide range of Gram-ve & Gram+ve Bacteria Advantage of Once Daily Dosing
+Indications: Respiratory Tract Infections (Pneumonia) Bone & Joint Infections Post-operative Infections Urogenital Tract Infections (Cystitis, Metritis) Skin & Soft Tissue Infections
+Dosage: 10mg / kg body weight Daily for 3-5 days by I.M. or I.V. route, on the basis of ceftriaxone content.
+Tagline: Effectively Treats Infections
+For: I.M./I.V. Use Only For: Veterinary Use Only
+
+BECTROHIT Injection Vet
+Presentation: 4.5 gm
+Trusted Choice with Proven Safety and Efficacy
+Key Features: Broad Spectrum Bactericidal, Ideal in Mixed Infection Attains High Concentration in Soft Tissue Infections Compared to Penicillin Safe in Lactating and Young Animals
+Recommendations: Mastitis H.S. and Pneumonia Leptospirosis Cystitis and Nephritis Secondary Bacterial Infections
+Composition (Each Vial contains): Amoxycillin and Cloxacillin in 1:1 ratio
+Dosage: Live Stock: 6-10 mg/kg bwt. Daily for 3-5 days by IM/IV Route
+Available Pack: 4.5 gm
+For: I.M./I.V. Use Only For: Veterinary Use Only
+
+BECTROHIT-FORT Injection
+Presentation: 3 / 4.5 gm Inj. (Amoxycillin 2 gm + Sulbactam 1 gm) / 3 gm vial (Amoxycillin 3 gm + Sulbactam 1.5 gm) / 4.5 gm vial
+Category: Amoxycillin & Sulbactam
+Indication: In Resistant Infections
+Key Benefits: Significantly decreases the bacterial count in resistant infections Reduces the somatic cell count by 10 times in case of E. coli and S. aureus mastitis
+Indications (Visual): Resistant Mastitis Respiratory Tract Infections Post operative Infections
+Dosage: 7-10 mg / kg body weight by I.V. or I. M. route once or twice daily for 3-5 days
+Available Pack: 3 gm & 4.5 gm
+Tagline: Excellent Combination to Combat Resistant Infections
+For Veterinary Use Only
+
+INNOCEFF - TAZO - Product Information
+Product Name: INNOCEFF - TAZO
+Components:
+•	Ceftriaxone: 500 mg
+•	Tazobactam: 62.50 mg
+Indications:
+•	Respiratory Tract Infections
+•	Urinary Tract Infections
+•	Joint Infections
+•	Surgical Prophylaxis
+•	Intra-abdominal Infections
+•	Meningitis
+Dosage:
+•	15-25 mg/kg body weight
+•	Daily for 3-5 days by IM/IV route
+Key Features:
+•	Low resistance against the majority of pathogens
+•	Potent Beta-Lactamase inhibitor
+•	Wider distribution in tissues and body
+•	Better safety profile in young and pregnant animals
+Available: 562.50 mg combipacks with sterile disposable syringe, needle, and WFI
+
+URO+CENTA ADVANCE
+Most Common Problems Faced After Parturition:
+•	Retention of Placenta (ROP)
+•	Accumulation of Lochial Fluids
+•	Increased risk of Uterine infections
+•	Improper Uterine Involution
+Key Ingredients and Their Benefits:
+•	Iron: Enriched with Iron & treat the Anemic Condition
+•	Shatavari: Cures inflammation and moistens dry tissues of the reproductive organs
+•	Azadirachta indica: Beneficial in post-delivery care as it helps bring back structure and function of the uterus after delivery
+•	Ashwagandha: Very efficacious for toning up the uterus
+Tagline: A Potent Ecobolic and Uterine Tonic
+
+Makkhi Soap
+Purpose: For Effective Control of Ticks, Fleas & Mites
+Composition: Permethrin 5% Cetrimide 1% Aloevera 1% Soap noodles q.s.
+Key Features: For External use only Very effective against Fleas, Fly & Ticks
+Slogan (Hindi): जिसने भी मक्खी साबुन को लगाया ! मक्खी चीचड़ी किलनी का किया सफाया !! (Translation: Whoever used Makkhi Soap! Eliminated flies, ticks, and mites!!)
+Available Pack: 75 gms
+
+Makkhi Advance Soap
+Purpose: For Effective Control of Ticks, Fleas & Mites
+Composition: Permethrin 8% Cetrimide 1% Aloevera 1% Soap noodle q.s.
+Key Features: For External use only Very effective against Fleas, Fly & Ticks
+Slogan (Hindi): जिसने भी मक्खी साबुन को लगाया ! मक्खी चीचड़ी किलनी का किया सफाया !! (Translation: Whoever used Makkhi Soap! Eliminated flies, ticks, and mites!!)
+Available Pack: 75 gms
+
+Medinn-Enro Injection
+Active Ingredient: Enrofloxacin IP 100 mg./ML
+Indications and Clinical Uses: Gastrointestinal Infection Respiratory Tract Infection Urinary Tract Infection Soft Tissues And Skin Infection Infection Caused By Wide Spectrum
+Dosages: 1 ML Each Kg Body Weight or As Directed By The Veterinarian
+Available Pack: 30 ML & 100 ML
+`;
+
 // --- Embedded CSS for Loader and Sparkle ---
-// Usually, this would go in a separate CSS file, but embedding for single-file example.
 const AiAssistantStyles = () => (
   <style>{`
     /* Shimmer animation for loading bars */
@@ -14,33 +234,11 @@ const AiAssistantStyles = () => (
 
     /* Base style for the loading bars */
     .loading-shimmer-bar {
-      /* --- ADJUST GRADIENT COLORS if needed --- */
       background: linear-gradient(90deg, #fde8f0, #fbcfe8, #f9a8d4, #fbcfe8, #fde8f0);
       background-size: 200% 100%; /* Gradient wider than bar */
       animation: shimmer 1.8s linear infinite;
       border-radius: 9999px; /* rounded-full */
       height: 0.625rem; /* h-2.5 */
-    }
-
-    /* Animation for the sparkle icon */
-    @keyframes sparkle-pulse {
-      0%, 100% { transform: scale(1); opacity: 0.8; }
-      50% { transform: scale(1.1); opacity: 1; }
-    }
-
-    /* Style for the sparkle icon (using emoji via ::before) */
-    .sparkle-icon::before {
-      content: '✨'; /* Unicode sparkle emoji */
-      display: inline-block;
-      animation: sparkle-pulse 1.5s ease-in-out infinite;
-      /* --- ADJUST COLOR if needed --- */
-      color: #f9a8d4; /* Match a gradient color */
-      position: absolute;
-      /* --- Fine-tune positioning --- */
-      top: -0.5rem;  /* -top-2 */
-      left: -0.75rem; /* -left-3 */
-      font-size: 1.25rem; /* text-xl */
-      z-index: 10; /* Ensure it's visible */
     }
 
     /* Ensure smooth scrolling */
@@ -66,57 +264,6 @@ const AiAssistantStyles = () => (
   `}</style>
 );
 // --- End Embedded CSS ---
-
-
-// --- Chat Service (Uses Fetch API) ---
-const chatService = {
-  sendMessage: async (query) => {
-    try {
-      console.log(`Sending query to backend: ${query}`); // Log outgoing query
-      const response = await fetch('https://innovation-backend.vercel.app/api/v1/chat/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query }),
-      });
-
-      // Log raw response status
-      console.log(`Response status: ${response.status}`);
-
-      if (!response.ok) {
-        let errorData = { message: `Server error: ${response.status}` };
-        try {
-            errorData = await response.json(); // Try to parse error details from backend
-            console.error('Parsed error response:', errorData);
-        } catch (parseError) {
-            console.error('Could not parse error response body:', parseError);
-            const textResponse = await response.text(); // Get raw text if JSON fails
-            console.error('Raw error response text:', textResponse);
-            errorData.message = textResponse || errorData.message; // Use raw text if available
-        }
-        throw new Error(errorData.message || `Server error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log('Received data from backend:', data); // Log successful response data
-
-      if (data.success && data.data?.answer) {
-        // Success case - return only the answer, ignore sources here
-        return { answer: data.data.answer };
-      } else {
-        // Handle cases where backend response format is unexpected but request was 'ok'
-        console.warn('Unexpected API response format:', data);
-        throw new Error(data.message || 'Invalid response format from AI service');
-      }
-    } catch (error) {
-      // Catch fetch errors (network issues) or errors thrown above
-      console.error('AI Chat Service Error:', error);
-      // Ensure the error passed up has a message property
-      throw new Error(error.message || 'An unknown network or server error occurred.');
-    }
-  },
-};
-// --- End Chat Service ---
-
 
 // --- Helper Function: Format Time ---
 const formatTime = (date) => {
@@ -156,7 +303,6 @@ const ChatMessage = ({ message, isTyping }) => {
       {/* Bot Icon (only for bot messages) */}
       {!isUser && (
         <div className="flex-shrink-0 h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center mr-2 self-start mt-1 relative">
-           {/* Removed sparkle icon from here as it wasn't explicitly requested in the updated version */}
            <Bot size={16} className="text-indigo-600" />
         </div>
       )}
@@ -176,27 +322,23 @@ const ChatMessage = ({ message, isTyping }) => {
         {/* === GEMINI-STYLE LOADING INDICATOR === */}
         {isTyping ? (
           <div className="flex flex-col space-y-1.5 w-48" aria-label="AI is typing"> {/* Fixed width for bars */}
-            {/* Bar 1 (Uses CSS class for gradient/animation) */}
             <div
               className="loading-shimmer-bar"
-              style={{ width: '85%', animationDelay: '0s' }} // Shorter width, no delay
+              style={{ width: '85%', animationDelay: '0s' }}
             ></div>
-            {/* Bar 2 */}
             <div
               className="loading-shimmer-bar"
-              style={{ width: '100%', animationDelay: '0.2s' }} // Full width, slight delay
+              style={{ width: '100%', animationDelay: '0.2s' }}
             ></div>
-            {/* Bar 3 */}
             <div
               className="loading-shimmer-bar"
-              style={{ width: '70%', animationDelay: '0.4s' }} // Shortest width, more delay
+              style={{ width: '70%', animationDelay: '0.4s' }}
             ></div>
           </div>
         ) : (
           /* === REGULAR MESSAGE CONTENT === */
           <>
             {formatMessageText(message.text)}
-            {/* --- SOURCE DISPLAY REMOVED --- */}
             {/* Timestamp */}
             <div className={`text-xs mt-1.5 opacity-75 text-right ${
                 isUser ? 'text-blue-100' : message.isError ? 'text-red-500 font-medium' : 'text-gray-500'
@@ -225,7 +367,7 @@ export default function AiAssistant({ isOpen, onClose }) {
   // State variables
   const [messages, setMessages] = useState([
     // Initial welcome message
-    { id: 1, sender: 'bot', text: 'Hello! I can help you find information from your documents. What would you like to know?', timestamp: new Date() }
+    { id: Date.now(), sender: 'bot', text: 'Hello! Ask me anything about the products listed.', timestamp: new Date() }
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false); // Controls loader visibility
@@ -234,20 +376,122 @@ export default function AiAssistant({ isOpen, onClose }) {
 
   // Effect to scroll to the latest message
   useEffect(() => {
-    // Small delay helps ensure the DOM has updated before scrolling
     const timer = setTimeout(() => {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
     return () => clearTimeout(timer); // Cleanup timer
   }, [messages, isTyping]); // Re-run when messages or typing status change
 
+  // --- Function to call Gemini API ---
+  const callGeminiAPI = async (query) => {
+    console.log("Sending query to Gemini:", query);
+
+    // Construct the prompt: instruction + context + query
+    const prompt = `You are a helpful assistant for veterinary products.
+    Answer the following user query based *only* on the information provided below.
+    Do not use any external knowledge or make assumptions.
+    If the answer cannot be found in the provided information, clearly state that the information is not available in the provided text.
+
+    --- START OF PROVIDED INFORMATION ---
+    ${PRODUCT_CONTEXT}
+    --- END OF PROVIDED INFORMATION ---
+
+    User Query: ${query}`;
+
+    const requestBody = {
+      contents: [{
+        parts: [{
+          text: prompt
+        }]
+      }],
+      // Optional: Add safety settings if needed
+      // safetySettings: [
+      //   { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
+      //   { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
+      // ],
+      // Optional: Configure generation parameters
+      // generationConfig: {
+      //   temperature: 0.7,
+      //   topK: 40,
+      //   topP: 0.95,
+      //   maxOutputTokens: 1024,
+      // }
+    };
+
+    try {
+      const response = await fetch(GEMINI_API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      console.log("Gemini API Response Status:", response.status);
+
+      if (!response.ok) {
+        let errorData = { message: `API Error: ${response.status} ${response.statusText}` };
+        try {
+            const errorJson = await response.json();
+            console.error('Gemini API Error Response:', errorJson);
+            errorData.message = errorJson?.error?.message || errorData.message;
+        } catch (parseError) {
+            console.error('Could not parse Gemini error response body:', parseError);
+            const textResponse = await response.text();
+            console.error('Raw Gemini error response text:', textResponse);
+            errorData.message = textResponse || errorData.message;
+        }
+        throw new Error(errorData.message);
+      }
+
+      const data = await response.json();
+      console.log("Gemini API Response Data:", data);
+
+      // --- Extract text safely from the response ---
+      // Check if candidates exist and have content and parts
+      if (data.candidates && data.candidates.length > 0 &&
+          data.candidates[0].content && data.candidates[0].content.parts &&
+          data.candidates[0].content.parts.length > 0 &&
+          data.candidates[0].content.parts[0].text) {
+            // Check finish reason - might be blocked due to safety etc.
+            const finishReason = data.candidates[0].finishReason;
+            if (finishReason && finishReason !== "STOP") {
+                 console.warn(`Gemini generation finished due to ${finishReason}`);
+                 // You might want to return a specific message here
+                 if (finishReason === "SAFETY") {
+                     return "I cannot provide an answer due to safety restrictions.";
+                 }
+                 if (finishReason === "MAX_TOKENS") {
+                    return data.candidates[0].content.parts[0].text + " ... (response truncated)";
+                 }
+                 // Handle other reasons if needed
+            }
+            return data.candidates[0].content.parts[0].text; // Success case
+      } else {
+        // Handle cases where response structure is unexpected or content is missing/blocked
+        console.warn('Unexpected Gemini API response format or no content:', data);
+        // Check for prompt feedback (e.g., blocked prompt)
+        if (data.promptFeedback?.blockReason) {
+            console.error(`Prompt blocked due to ${data.promptFeedback.blockReason}`);
+            return `I couldn't process the request because the prompt was blocked (${data.promptFeedback.blockReason}).`;
+        }
+        throw new Error('Invalid response format or empty content from AI service');
+      }
+
+    } catch (error) {
+      console.error('Gemini API Call Error:', error);
+      // Ensure the error passed up has a message property
+      throw new Error(error.message || 'An unknown network or API error occurred.');
+    }
+  };
+  // --- End Gemini API Call Function ---
+
   // Function to handle sending a message
   const handleSendMessage = async (e) => {
-    // Allow calling without event (e.g., for retry)
-    if (e) e.preventDefault();
+    if (e) e.preventDefault(); // Allow calling without event (e.g., for retry)
 
     const textToSend = inputValue.trim();
-    if (!textToSend) return; // Don't send empty messages
+    if (!textToSend) return;
 
     const userMessage = {
       id: Date.now(),
@@ -256,76 +500,67 @@ export default function AiAssistant({ isOpen, onClose }) {
       timestamp: new Date()
     };
 
-    // Add user message to state and clear input field
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
-    setIsTyping(true); // Show the loader
-    setError(null); // Clear any previous errors
+    setIsTyping(true);
+    setError(null);
 
     try {
-      // Call the backend API
-      const result = await chatService.sendMessage(userMessage.text);
+      // Call the Gemini API directly
+      const answer = await callGeminiAPI(userMessage.text);
 
-      // Create the bot's response message
       const botMessage = {
         id: Date.now() + 1, // Ensure unique ID
         sender: 'bot',
-        text: result.answer,
+        text: answer, // Use the answer from Gemini
         timestamp: new Date(),
-        // Sources are no longer expected or used here
       };
-      // Add bot's response to state
       setMessages(prev => [...prev, botMessage]);
 
     } catch (err) {
-      // Handle errors from the chat service
       const errorMessageText = err.message || 'An unexpected error occurred.';
-      setError(errorMessageText); // Store error message to display the retry UI
+      setError(errorMessageText); // Store error message for retry UI
 
-      // Create an error message to display within the chat flow
       const errorMessage = {
-        id: Date.now() + 1, // Ensure unique ID
+        id: Date.now() + 1,
         sender: 'bot',
         text: `Sorry, I encountered an error: ${errorMessageText}`,
         timestamp: new Date(),
-        isError: true // Mark for specific styling
+        isError: true
       };
-      // Add error message to state
       setMessages(prev => [...prev, errorMessage]);
 
     } finally {
-      // Hide the loader regardless of success or error
-      setIsTyping(false);
+      setIsTyping(false); // Hide loader
     }
   };
 
   // Function to handle retrying the last message
   const handleRetry = () => {
-    setError(null); // Clear the error display UI
-
-    // Find the last message sent *by the user*
+    setError(null);
     const lastUserMessage = [...messages].slice().reverse().find(m => m.sender === 'user');
 
     if (lastUserMessage) {
       console.log('Retrying query:', lastUserMessage.text);
 
-      // Remove the preceding error message from the bot before retrying
-      setMessages(prev => prev.filter(m => !(m.sender === 'bot' && m.isError)));
+      // Remove the preceding error message(s) from the bot before retrying
+      // Find the index of the last user message
+      const lastUserMsgIndex = messages.findIndex(m => m.id === lastUserMessage.id);
+      // Filter out any error messages *after* the last user message
+      const messagesBeforeRetry = messages.slice(0, lastUserMsgIndex + 1)
+                                       .concat(messages.slice(lastUserMsgIndex + 1).filter(m => !(m.sender === 'bot' && m.isError)));
 
-      // Set the input value to the last message and trigger send
-      // Need to ensure state updates before calling handleSendMessage again
-      // Use a small timeout or useEffect based approach if direct call causes issues
-      setInputValue(lastUserMessage.text); // Set input value first
+      setMessages(messagesBeforeRetry);
 
-      // Use a microtask (or short timeout) to ensure inputValue state is updated
-      // before handleSendMessage reads it.
+      // Set input value and call send (using Promise to ensure state update)
+      setInputValue(lastUserMessage.text);
       Promise.resolve().then(() => {
          handleSendMessage(); // Call without event object
       });
 
     } else {
         console.warn("Could not find the last user message to retry.");
-        alert("Could not find the last message to retry."); // User feedback
+        alert("Could not find the last message to retry.");
     }
   };
 
@@ -337,27 +572,27 @@ export default function AiAssistant({ isOpen, onClose }) {
       {/* Inject the CSS styles defined above */}
       <AiAssistantStyles />
 
-      {/* Main Chat Window Container with Framer Motion Animation */}
+      {/* Main Chat Window Container */}
       <motion.div
-        // Animation properties for slide-in/out
-        initial={{ x: "100%", opacity: 0.8 }} // Start off-screen right, slightly transparent
-        animate={{ x: 0, opacity: 1 }}       // Animate to position 0 (on-screen), fully opaque
-        exit={{ x: "100%", opacity: 0.8 }}      // Animate off-screen right on close
-        transition={{ type: 'spring', stiffness: 320, damping: 35 }} // Spring physics
-        // Styling for the chat window
+        initial={{ x: "100%", opacity: 0.8 }}
+        animate={{ x: 0, opacity: 1 }}
+        exit={{ x: "100%", opacity: 0.8 }}
+        transition={{ type: 'spring', stiffness: 320, damping: 35 }}
         className="fixed bottom-4 right-4 z-[1000] w-[calc(100%-2rem)] max-w-md h-[calc(100vh-5rem)] max-h-[650px] bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col border border-gray-200/50"
-        aria-modal="true" // Indicate it's a modal dialog
+        aria-modal="true"
         role="dialog"
         aria-labelledby="ai-assistant-header"
       >
-        {/* Header Section */}
+        {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-3 px-4 flex items-center justify-between flex-shrink-0 shadow-sm">
           <div className="flex items-center space-x-2">
             <Bot size={20} />
-            <h2 id="ai-assistant-header" className="font-semibold text-base">AI Assistant</h2>
+            <h2 id="ai-assistant-header" className="font-semibold text-base">Innovation Remedies AI</h2>
+            {/* Warning Icon for Insecure Key */}
+          
           </div>
           <button
-            onClick={onClose} // Close button action
+            onClick={onClose}
             className="text-white rounded-full p-1.5 -mr-1 hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/50 transition-colors"
             aria-label="Close AI Assistant"
           >
@@ -369,17 +604,14 @@ export default function AiAssistant({ isOpen, onClose }) {
 
         {/* Messages Display Area */}
         <div className="flex-grow overflow-y-auto p-4 space-y-1 bg-slate-50 smooth-scroll ai-message-area">
-          {/* Map through messages and render ChatMessage component */}
           {messages.map((message) => (
-            <ChatMessage key={message.id} message={message} isTyping={false} /> // Render actual messages
+            <ChatMessage key={message.id} message={message} isTyping={false} />
           ))}
-          {/* Conditionally render the typing indicator via ChatMessage */}
           {isTyping && (
              <ChatMessage key="typing-indicator" message={{ id: 'typing', sender: 'bot', timestamp: new Date() }} isTyping={true} />
           )}
-          {/* Display Error and Retry Button */}
           {error && !isTyping && (
-            <motion.div // Animate error appearance
+            <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               className="flex justify-center pt-2 pb-1"
@@ -398,7 +630,6 @@ export default function AiAssistant({ isOpen, onClose }) {
               </div>
             </motion.div>
           )}
-          {/* Invisible div to ensure scrolling goes to the very bottom */}
           <div ref={messagesEndRef} style={{ height: '1px' }} />
         </div>
 
@@ -409,29 +640,26 @@ export default function AiAssistant({ isOpen, onClose }) {
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              placeholder="Ask about your documents..."
+              placeholder="Ask about the products..."
               className="flex-grow py-2 px-4 text-sm rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50/80 disabled:opacity-60 transition-all"
-              disabled={isTyping} // Disable input while AI is typing
+              disabled={isTyping}
               aria-label="Type your message"
-              required // Make input required for form submission
+              required
             />
             <button
               type="submit"
-              disabled={isTyping || !inputValue.trim()} // Disable if typing or input is empty/whitespace
+              disabled={isTyping || !inputValue.trim()}
               className="bg-blue-600 text-white rounded-full p-2 hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 flex-shrink-0 w-9 h-9 flex items-center justify-center"
               aria-label="Send message"
             >
-              {/* Show loading spinner or send icon */}
               {isTyping ? <Loader size={18} className="animate-spin" /> : <Send size={18} />}
             </button>
           </div>
-          {/* Optional small print footer */}
-          <div className="text-xs text-gray-400 mt-2 text-center px-2">
-            Powered by Your AI. Results may require verification.
-          </div>
+           {/* Security Note Footer */}
+           
         </form>
       </motion.div>
     </>
   );
 }
-// --- End AiAssistant Component ---git branch -M main
+// --- End AiAssistant Component ---

@@ -13,6 +13,12 @@ import twelveone from "../../../assets/Images/twelveone.png"; // Ensure this pat
 import { FlipWords } from "../../../components/ui/flips-words"; // Ensure this path is correct
 import { PawPrint, HeartPulse, Activity } from "lucide-react";
 
+
+
+const customStyle = {
+  fontFamily: "Oregon LDO, sans-serif",
+  fontWeight: "400",
+}
 const VetWellbeingDashboard = () => {
   const words = ["World", "Care", "Family", "Health"];
 
@@ -156,6 +162,7 @@ const VetWellbeingDashboard = () => {
 
             {/* Main Headline - Bolder, Clearer */}
             <h1
+            style={customStyle}
               className="
     text-4xl sm:text-6xl lg:text-7xl
     font-extrabold tracking-tight leading-tight

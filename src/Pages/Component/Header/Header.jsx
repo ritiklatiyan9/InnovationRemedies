@@ -1,7 +1,7 @@
 // src/Pages/Component/Header/Header.jsx
 import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { Home, ShoppingBag, Book, Users, Mail, Menu, LogOut, User, ChevronRight, Settings } from 'lucide-react';
+import { Home, ShoppingBag, Book, Users, Mail, Menu, LogOut, User, ChevronRight, Settings, ShoppingBagIcon } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetFooter } from '@/components/ui/sheet';
 import {
   NavigationMenu,
@@ -31,7 +31,8 @@ const navItems = [
   { to: '/products', label: 'Products', icon: ShoppingBag, color: 'text-blue-500' },
   { to: '/store', label: 'Information', icon: Book, color: 'text-emerald-500' },
   { to: '/about', label: 'About Us', icon: Users, color: 'text-amber-500' },
-  { to: '/contact', label: 'Contact', icon: Mail, color: 'text-indigo-500' },
+  { to: '/contact', label: 'Contact', icon: Mail, color: 'text-indigo-500' }, 
+  { to: '/cart', label: 'MyCart', icon: ShoppingBagIcon, color: 'text-indigo-500' }, 
 ];
 
 // --- Helper Function ---
