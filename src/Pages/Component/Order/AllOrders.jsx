@@ -21,23 +21,18 @@ import { format } from 'date-fns';
 
 // Component for the order status tracking
 const OrderTracker = ({ status }) => {
-  // Define all possible statuses in order
   const allStatuses = ['pending', 'processing', 'shipped', 'delivered'];
-  
-  // Find the index of the current status
   const currentIndex = allStatuses.indexOf(status);
   
   return (
     <div className="w-full my-4">
       <div className="flex items-center justify-between">
         {allStatuses.map((step, index) => {
-          // Determine if this step is active, completed, or upcoming
           const isActive = index === currentIndex;
           const isCompleted = index < currentIndex;
           
           return (
             <React.Fragment key={step}>
-              {/* Status dot */}
               <div className="flex flex-col items-center">
                 <div
                   className={`w-6 h-6 rounded-full flex items-center justify-center ${
@@ -57,8 +52,6 @@ const OrderTracker = ({ status }) => {
                   {step}
                 </span>
               </div>
-              
-              {/* Connecting line (except after the last item) */}
               {index < allStatuses.length - 1 && (
                 <div className="flex-1 mx-2 h-0.5 relative">
                   <div className="absolute inset-0 bg-gray-200"></div>
@@ -79,6 +72,45 @@ const OrderTracker = ({ status }) => {
             </React.Fragment>
           );
         })}
+      </div>
+    </div>
+  );
+};
+
+// Skeleton component for loading state
+const SkeletonOrderCard = () => {
+  return (
+    <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 animate-pulse">
+      <div className="bg-gray-50 px-6 py-4 border-b border-gray-100">
+        <div className="flex justify-between">
+          <div className="h-4 bg-gray-200 rounded w-24"></div>
+          <div className="h-4 bg-gray-200 rounded w-32"></div>
+        </div>
+      </div>
+      <div className="p-6">
+        <div className="flex gap-4">
+          <div className="w-20 h-20 bg-gray-200 rounded-md"></div>
+          <div className="flex-grow">
+            <div className="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
+            <div className="h-4 bg-gray-200 rounded w-1/2 mb-3"></div>
+            <div className="flex gap-2">
+              <div className="h-6 bg-gray-200 rounded-full w-20"></div>
+              <div className="h-6 bg-gray-200 rounded-full w-24"></div>
+              <div className="h-6 bg-gray-200 rounded-full w-28"></div>
+            </div>
+          </div>
+        </div>
+        <div className="mt-6">
+          <div className="flex justify-between">
+            <div className="h-2 bg-gray-200 rounded w-1/4"></div>
+            <div className="h-2 bg-gray-200 rounded w-1/4"></div>
+            <div className="h-2 bg-gray-200 rounded w-1/4"></div>
+          </div>
+        </div>
+        <div className="mt-4 pt-4 border-t">
+          <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
+          <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+        </div>
       </div>
     </div>
   );
@@ -117,7 +149,6 @@ const OrderCard = ({ order, refreshOrders }) => {
   
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 transition-all hover:shadow-lg">
-      {/* Header */}
       <div className="bg-gray-50 px-6 py-4 border-b border-gray-100">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
           <div>
@@ -135,15 +166,11 @@ const OrderCard = ({ order, refreshOrders }) => {
           </div>
         </div>
       </div>
-      
-      {/* Content */}
       <div className="p-6">
-        {/* Item details */}
         <div className="flex gap-4">
           <div className="w-20 h-20 bg-gray-50 rounded-md border flex items-center justify-center flex-shrink-0">
             <Package className="w-10 h-10 text-blue-400" />
           </div>
-          
           <div className="flex-grow">
             <h3 className="font-semibold text-gray-900 text-lg">{order.itemnName}</h3>
             <div className="flex items-center mt-1 text-gray-600">
@@ -151,8 +178,6 @@ const OrderCard = ({ order, refreshOrders }) => {
               <span className="mx-2 text-gray-300">•</span>
               <span className="text-lg font-bold text-blue-600">{formatCurrency(order.totalAmount)}</span>
             </div>
-            
-            {/* Order status badges */}
             <div className="flex flex-wrap gap-2 mt-3">
               <span className={`px-3 py-1 rounded-full text-xs font-medium inline-flex items-center border ${getBadgeStyle(order.status)}`}>
                 <Clock className="w-3 h-3 mr-1" />
@@ -169,8 +194,6 @@ const OrderCard = ({ order, refreshOrders }) => {
               </span>
             </div>
           </div>
-          
-          {/* Expected delivery */}
           <div className="hidden md:block text-right flex-shrink-0">
             <p className="text-xs text-gray-500 font-medium">EXPECTED DELIVERY</p>
             <p className="text-sm font-semibold mt-1 text-gray-800">
@@ -184,15 +207,11 @@ const OrderCard = ({ order, refreshOrders }) => {
             </button>
           </div>
         </div>
-        
-        {/* Progress tracker - only show for non-cancelled orders */}
         {order.status !== 'cancelled' && (
           <div className="mt-6">
             <OrderTracker status={order.status} />
           </div>
         )}
-        
-        {/* Shipping details and actions */}
         <div className="mt-4 pt-4 border-t flex flex-col sm:flex-row justify-between">
           <div className="text-sm text-gray-600">
             <div className="flex items-center mb-1">
@@ -208,9 +227,7 @@ const OrderCard = ({ order, refreshOrders }) => {
               <span>{order.shippingAddress || '123 Main St, City, State, 12345'}</span>
             </div>
           </div>
-          
           <div className="mt-4 sm:mt-0 flex items-center">
-            {/* Only show cancel button if order is not cancelled or delivered */}
             {order.status !== 'cancelled' && order.status !== 'delivered' && (
               <button
                 className="px-4 py-2 bg-red-50 text-red-600 border border-red-200 rounded-md hover:bg-red-100 transition-colors text-sm font-medium"
@@ -218,7 +235,7 @@ const OrderCard = ({ order, refreshOrders }) => {
                   if (window.confirm('Are you sure you want to cancel this order?')) {
                     try {
                       await api.patch(`/orders/${order.orderId}/cancel`);
-                      refreshOrders(); // Refresh the orders list
+                      refreshOrders();
                     } catch (err) {
                       console.error("Failed to cancel order:", err);
                       alert("Failed to cancel order. " + (err.response?.data?.message || err.message));
@@ -229,8 +246,6 @@ const OrderCard = ({ order, refreshOrders }) => {
                 <XCircle className="w-4 h-4 inline mr-1" /> Cancel Order
               </button>
             )}
-            
-            {/* Show view details button for mobile */}
             <button 
               className="md:hidden ml-2 px-4 py-2 bg-blue-50 text-blue-600 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors text-sm font-medium"
               onClick={() => navigate(`/orders/${order.orderId}`)}
@@ -273,11 +288,13 @@ function MyOrdersPage() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gray-50">
-        <div className="text-center p-8 rounded-lg bg-white shadow-sm border border-gray-100 max-w-md">
-          <Loader2 className="h-12 w-12 animate-spin text-blue-500 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-800 mb-2">Loading Your Orders</h3>
-          <p className="text-gray-500">Please wait while we fetch your order history...</p>
+      <div className="bg-gray-50 min-h-screen py-8 px-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="space-y-6">
+            {[...Array(3)].map((_, index) => (
+              <SkeletonOrderCard key={index} />
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -311,11 +328,9 @@ function MyOrdersPage() {
     );
   }
 
-  // Render orders or empty state
   return (
     <div className="bg-gray-50 min-h-screen py-8 px-4">
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-2xl font-bold text-gray-900">My Orders</h1>
           <button
@@ -325,8 +340,6 @@ function MyOrdersPage() {
             <ShoppingCart className="h-4 w-4 mr-2" /> Continue Shopping
           </button>
         </div>
-        
-        {/* Orders list */}
         {orders.length > 0 ? (
           <div className="space-y-6">
             {orders.map(order => (
@@ -355,4 +368,4 @@ function MyOrdersPage() {
   );
 }
 
-export default MyOrdersPage;
+export default MyOrdersPage;  

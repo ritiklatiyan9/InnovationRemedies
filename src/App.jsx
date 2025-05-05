@@ -12,10 +12,12 @@ import ProtectedRoute from './Pages/SinglePages/ProtectedRoute'; // Adjust path 
 import ScrollToTop from './Pages/SinglePages/ScrollToTop';
 import Header from './Pages/Component/Header/Header';
 import ListProducts from './Pages/Component/Products/ListProducts';
+import AdminManageOrder from './Pages/Component/Order/AdminManageOrder';
 import ProductDetailPage from './Pages/Component/Products/ProductsDetails';
 import Home from './Pages/Component/Home/Home';
 import NotFound from './Pages/SinglePages/NotFound';
 import Footer from './Pages/Component/Footer/Footer';
+import OrderDetailsPage from './Pages/Component/Order/OrderDetails';
 import Contact from './Pages/SinglePages/Contact';
 import Store from './Pages/Component/Store/Store';
 import About from './Pages/Component/About/About';
@@ -125,7 +127,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
-             
+                <Route path="/store" element={<Store />} />
                 {/* Example using slug for product detail */}
                 <Route path="/product/:id" element={<ProductDetailPage />} />
                 {/* You could also use a slug: <Route path="/product/:slug" element={<ProductDetailPage />} /> */}
@@ -136,9 +138,10 @@ function App() {
                 <Route element={<ProtectedRoute />}>
                   {/* Ensure these components exist and paths are correct */}
                   <Route path="/order-confirmation/:orderId" element={<OrderConfirmationPage />} />
-                  <Route path="/store" element={<Store />} />
+                  <Route path="/admin/orders" element={<AdminManageOrder />} />
                   <Route path="/cart" element={<MyOrdersPage />} />
-
+                  <Route path="/orders" element={<MyOrdersPage />} />
+                  <Route path="/orders/:orderId" element={<OrderDetailsPage />} />
                   {/* Add other protected routes like /my-orders, /profile etc. */}
                   {/* <Route path="/my-orders" element={<MyOrdersPage />} /> */}
                 </Route>

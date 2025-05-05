@@ -117,7 +117,7 @@ export default function AuthForm() {
       return;
     }
     try {
-      await register({ mobile: registerMobile, password: registerPassword, role: 'user' });
+      await register({ mobile: registerMobile, password: registerPassword, confirmPassword : confirmPassword, });
       toast.success('Registration successful! Please login.');
       setActiveTab('login'); // Switch to login automatically
     } catch (err) {

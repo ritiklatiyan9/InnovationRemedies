@@ -35,6 +35,11 @@ export const AuthProvider = ({ children }) => {
     }
   }, [tokens.accessToken]);
 
+  // Get authorization header - NEW UTILITY FUNCTION
+  const getAuthHeader = () => {
+    return tokens.accessToken ? { 'Authorization': `Bearer ${tokens.accessToken}` } : {};
+  };
+
   // Save tokens to local storage
   const saveTokens = (accessToken, refreshToken) => {
     if (accessToken) localStorage.setItem('accessToken', accessToken);
@@ -273,6 +278,7 @@ export const AuthProvider = ({ children }) => {
     loading,
     error,
     isAuthenticated: !!user,
+    token: tokens.accessToken, // ADDED: Direct token access
     tokens,
     register,
     login,
@@ -280,6 +286,7 @@ export const AuthProvider = ({ children }) => {
     logout,
     refreshToken,
     clearError,
+    getAuthHeader, // ADDED: Utility function for auth headers
     api
   };
 
@@ -299,4 +306,4 @@ export const useAuth = () => {
   return context;
 };
 
-export default AuthContext;
+export default AuthContext; 

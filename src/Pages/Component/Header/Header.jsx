@@ -1,7 +1,7 @@
 // src/Pages/Component/Header/Header.jsx
 import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { Home, ShoppingBag, Book, Users, Mail, Menu, LogOut, User, ChevronRight, Settings, ShoppingBagIcon } from 'lucide-react';
+import { Home, ShoppingBag, Book, Users, Mail, Menu, LogOut, User, ChevronRight, Settings, ShoppingBagIcon, Package } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetFooter } from '@/components/ui/sheet';
 import {
   NavigationMenu,
@@ -35,6 +35,15 @@ const navItems = [
   { to: '/cart', label: 'MyCart', icon: ShoppingBagIcon, color: 'text-indigo-500' }, 
 ];
 
+// Admin-specific navigation item
+const adminNavItem = { 
+  to: '/admin/orders', 
+  label: 'Manage Orders', 
+  icon: Package, 
+  color: 'text-purple-500',
+  adminOnly: true
+};
+
 // --- Helper Function ---
 const getUserInitials = (user) => {
   if (!user) return 'GU'; // Guest User
@@ -46,13 +55,10 @@ const getUserInitials = (user) => {
     return names[0].substring(0, 2).toUpperCase();
   }
   if (user.mobile && user.mobile.length >= 2) {
-    // Example: Use first and last digit if desired, or just first two
-    // return user.mobile[0] + user.mobile[user.mobile.length - 1];
     return user.mobile.substring(0, 2).toUpperCase();
   }
   return 'U'; // Default User
 };
-
 
 // --- Component ---
 export default function Header() {
@@ -60,6 +66,17 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const iconSize = "h-5 w-5"; // Consistent icon size
+  
+  // Check if user has admin role
+  const isAdmin = user?.role === 'Admin';
+
+  // Get all navigation items, including admin-specific items if user is an admin
+  const getAllNavItems = () => {
+    if (isAdmin) {
+      return [...navItems, adminNavItem];
+    }
+    return navItems;
+  };
 
   const handleLogout = async () => {
     try {
@@ -88,20 +105,18 @@ export default function Header() {
         {/* Desktop Navigation */}
         <NavigationMenu className="hidden lg:flex flex-grow justify-center">
           <NavigationMenuList className="bg-muted/60 px-3 py-1.5 rounded-full shadow-inner border border-border/30">
-            {navItems.map((item) => (
+            {getAllNavItems().map((item) => (
               <NavigationMenuItem key={item.to}>
-                {/* Use NavLink directly here for better active state handling */}
-                <NavLink to={item.to} legacyBehavior passHref>
-                  <NavigationMenuLink
-                    className={cn(
-                      navigationMenuTriggerStyle(),
-                      "bg-transparent hover:bg-accent/70 data-[active]:bg-background data-[active]:shadow-sm text-sm h-9"
-                    )}
-                  >
+                {/* Fix: Use regular NavigationMenuLink component with Link */}
+                <Link to={item.to}>
+                  <div className={cn(
+                    navigationMenuTriggerStyle(),
+                    "bg-transparent hover:bg-accent/70 data-[active]:bg-background data-[active]:shadow-sm text-sm h-9"
+                  )}>
                     <item.icon aria-hidden="true" className={cn(iconSize, item.color, "mr-1.5")} />
                     {item.label}
-                  </NavigationMenuLink>
-                </NavLink>
+                  </div>
+                </Link>
               </NavigationMenuItem>
             ))}
           </NavigationMenuList>
@@ -132,7 +147,9 @@ export default function Header() {
                 isAuthenticated={isAuthenticated}
                 user={user}
                 onLogout={handleLogout}
-                onClose={closeMobileMenu} // Pass closeMobileMenu as onClose
+                onClose={closeMobileMenu}
+                isAdmin={isAdmin}
+                navItems={getAllNavItems()}
               />
             </Sheet>
           </div>
@@ -147,6 +164,8 @@ export default function Header() {
 // User Dropdown (for Desktop)
 function UserDropdown({ user, onLogout }) {
   const initials = getUserInitials(user);
+  const isAdmin = user?.role === 'Admin';
+  
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -169,6 +188,11 @@ function UserDropdown({ user, onLogout }) {
             {user?.mobile && (
               <p className="text-xs leading-none text-muted-foreground">
                 {user.mobile}
+                {user.role && (
+                  <span className={`ml-1 ${user.role === 'Admin' ? 'text-purple-500 font-semibold' : ''}`}>
+                    • {user.role}
+                  </span>
+                )}
               </p>
             )}
           </div>
@@ -176,11 +200,22 @@ function UserDropdown({ user, onLogout }) {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
            {/* Use Link component for navigation */}
-           <Link to="/profile" className="cursor-pointer w-full flex items-center"> {/* Ensure link takes full width */}
+           <Link to="/profile" className="cursor-pointer w-full flex items-center"> 
              <User className="mr-2 h-4 w-4" />
              <span>Profile</span>
            </Link>
         </DropdownMenuItem>
+        
+        {/* Admin-specific menu item */}
+        {isAdmin && (
+          <DropdownMenuItem asChild>
+            <Link to="/admin/orders" className="cursor-pointer w-full flex items-center">
+              <Package className="mr-2 h-4 w-4 text-purple-500" />
+              <span>Manage Orders</span>
+            </Link>
+          </DropdownMenuItem>
+        )}
+        
         <DropdownMenuItem asChild disabled>
           {/* Disabled example */}
           <span className="cursor-not-allowed opacity-50 w-full flex items-center">
@@ -189,7 +224,7 @@ function UserDropdown({ user, onLogout }) {
           </span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={onLogout} className="text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer w-full flex items-center"> {/* Ensure full width */}
+        <DropdownMenuItem onClick={onLogout} className="text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer w-full flex items-center">
           <LogOut className="mr-2 h-4 w-4" />
           <span>Logout</span>
         </DropdownMenuItem>
@@ -199,14 +234,14 @@ function UserDropdown({ user, onLogout }) {
 }
 
 // Mobile Sheet Content
-function MobileSheetContent({ isAuthenticated, user, onLogout, onClose }) {
+function MobileSheetContent({ isAuthenticated, user, onLogout, onClose, isAdmin, navItems }) {
   const iconSize = "h-5 w-5";
   const initials = getUserInitials(user);
 
   return (
     <SheetContent side="right" className="w-full max-w-xs sm:max-w-sm p-0 flex flex-col bg-gradient-to-b from-background via-background to-muted/30">
       <SheetHeader className="p-4 border-b border-border/30">
-        <SheetTitle className="flex items-center gap-3 text-left"> {/* Added text-left */}
+        <SheetTitle className="flex items-center gap-3 text-left">
           {isAuthenticated ? (
             <>
               <Avatar className="h-10 w-10 border">
@@ -217,7 +252,14 @@ function MobileSheetContent({ isAuthenticated, user, onLogout, onClose }) {
               </Avatar>
               <div>
                 <p className="text-sm font-medium">{user?.username || "User"}</p>
-                <p className="text-xs text-muted-foreground">{user?.mobile || ""}</p>
+                <p className="text-xs text-muted-foreground">
+                  {user?.mobile || ""}
+                  {user?.role && (
+                    <span className={`ml-1 ${user?.role === 'Admin' ? 'text-purple-500 font-semibold' : ''}`}>
+                      • {user.role}
+                    </span>
+                  )}
+                </p>
               </div>
             </>
           ) : (
@@ -243,25 +285,23 @@ function MobileSheetContent({ isAuthenticated, user, onLogout, onClose }) {
             <li key={item.to}>
               <NavLink
                 to={item.to}
-                onClick={onClose} // Close sheet on link click
-                // Use className function to style the NavLink based on active state
+                onClick={onClose}
                 className={({ isActive }) =>
                   cn(
-                    "flex items-center justify-between p-2.5 rounded-md text-sm font-medium transition-colors duration-150 group w-full", // Ensure link takes full width
+                    "flex items-center justify-between p-2.5 rounded-md text-sm font-medium transition-colors duration-150 group w-full",
                     isActive
-                      ? "bg-primary/10 shadow-sm text-primary" // Enhanced active style
-                      : "text-foreground/80 hover:bg-muted/80 hover:text-foreground" // Default style
+                      ? "bg-primary/10 shadow-sm text-primary"
+                      : "text-foreground/80 hover:bg-muted/80 hover:text-foreground"
                   )
                 }
               >
-                {/* FIXED: Use function-as-children correctly */}
                 {({ isActive }) => (
-                  <> {/* Wrap children in a Fragment */}
+                  <>
                     {/* Icon and Label */}
                     <div className="flex items-center gap-3">
                        <item.icon aria-hidden="true" className={cn(
                          iconSize,
-                         isActive ? item.color : "opacity-80 group-hover:opacity-100", // Use active color or default
+                         isActive ? item.color : "opacity-80 group-hover:opacity-100",
                          "transition-colors"
                        )} />
                       <span className={isActive ? "font-semibold" : ""}>{item.label}</span>
@@ -288,13 +328,13 @@ function MobileSheetContent({ isAuthenticated, user, onLogout, onClose }) {
                     <li>
                        <NavLink
                          to="/profile"
-                         onClick={onClose} // Close sheet on link click
+                         onClick={onClose}
                          className={({ isActive }) =>
                             cn(
-                             "flex items-center gap-3 p-2.5 rounded-md text-sm font-medium transition-colors duration-150 group w-full", // Ensure full width
+                             "flex items-center gap-3 p-2.5 rounded-md text-sm font-medium transition-colors duration-150 group w-full",
                              isActive
-                               ? "bg-muted shadow-sm text-foreground font-semibold" // Active style
-                               : "text-foreground/80 hover:bg-muted/80 hover:text-foreground" // Default style
+                               ? "bg-muted shadow-sm text-foreground font-semibold"
+                               : "text-foreground/80 hover:bg-muted/80 hover:text-foreground"
                            )
                          }
                        >
@@ -302,32 +342,18 @@ function MobileSheetContent({ isAuthenticated, user, onLogout, onClose }) {
                            Profile
                        </NavLink>
                    </li>
-                   {/* Add other account links like settings here if needed */}
-                   {/* Example:
-                   <li>
-                       <NavLink
-                         to="/settings" // Example path
-                         onClick={onClose}
-                         className={({ isActive }) => cn(...) }
-                       >
-                           <Settings className={cn(iconSize, ...)} />
-                           Settings
-                       </NavLink>
-                   </li>
-                   */}
                 </ul>
              </>
          )}
       </nav>
 
       {/* Footer Actions (Login/Logout) */}
-      <SheetFooter className="p-4 border-t border-border/30 bg-background/50 mt-auto"> {/* Added mt-auto to push footer down */}
+      <SheetFooter className="p-4 border-t border-border/30 bg-background/50 mt-auto">
         {isAuthenticated ? (
           <Button
             variant="ghost"
             onClick={() => {
-              onLogout(); // Call the logout function passed down
-              // onClose(); // Logout function likely already closes menu via state change/navigate
+              onLogout();
             }}
             className="w-full justify-start text-red-600 hover:bg-red-50 hover:text-red-600 gap-3"
           >
@@ -337,7 +363,7 @@ function MobileSheetContent({ isAuthenticated, user, onLogout, onClose }) {
         ) : (
           <Button asChild variant="default" className="w-full gap-3 bg-primary hover:bg-primary/90" onClick={onClose}>
             <Link to="/login">
-              <User className="h-5 w-5" /> {/* Maybe Login icon? */}
+              <User className="h-5 w-5" />
               Login / Sign Up
             </Link>
           </Button>
