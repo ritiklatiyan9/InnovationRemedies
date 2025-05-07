@@ -6,8 +6,9 @@ import Home3 from "./Home3";
 import Home4 from "./Home4";
 import Home6 from "./Home6";
 import Home7 from "./Home7";
+import Home8 from "./Home8";
 import Products from "../Products/ListProducts";
-import videoSourceUrl from "../../../assets/Video/bg7.mp4"; // Ensure this path is correct
+import videoSourceUrl from "../../../assets/Video/bg8.mp4"; // Ensure this path is correct
 import logo from "../../../assets/Images/logo.png"; // Ensure this path is correct
 import twelveone from "../../../assets/Images/twelveone.png"; // Ensure this path is correct
 import { FlipWords } from "../../../components/ui/flips-words"; // Ensure this path is correct
@@ -17,6 +18,8 @@ const customStyle = {
   fontFamily: "Oregon LDO, sans-serif",
   fontWeight: "400",
 };
+
+
 
 const VetWellbeingDashboard = () => {
   const words = ["World", "Care", "Family", "Health"];
@@ -145,7 +148,7 @@ const VetWellbeingDashboard = () => {
         {/* Content Layer */}
         <div className="relative z-10 container mx-auto px-6 lg:px-8 flex flex-col md:flex-row items-center gap-8 md:gap-12">
           {/* LEFT COLUMN (Text Content) */}
-          <div className="w-full md:w-3/5 lg:w-1/2 text-center md:text-left pt-16 md:pt-0">
+          <div className="w-full md:w-3/5 lg:w-1/2 text-center md:text-left  mb-6 md:pt-0">
             {/* Optional: Subtle Icon/Logo Above Title */}
             <div className="mb-5 flex justify-center md:justify-start opacity-90">
               <div className="p-2 bg-gradient-to-br from-cyan-600 to-blue-700 rounded-full shadow-lg">
@@ -157,7 +160,7 @@ const VetWellbeingDashboard = () => {
             <h1
               style={customStyle}
               className="
-                text-4xl sm:text-6xl lg:text-7xl
+                text-5xl sm:text-6xl lg:text-7xl
                 font-extrabold tracking-tight leading-tight
                 mb-4 drop-shadow-lg
                 bg-gradient-to-r from-teal-100 via-teal-200 to-green-400/80
@@ -215,18 +218,20 @@ const VetWellbeingDashboard = () => {
         </div>
       </section>
 
-      <Home7 />
+     
+      <Home8 />
       {/* --- OTHER SECTIONS --- */}
-      <div className="py-16 md:py-20 lg:py-24 bg-white">
+      <div >
         <Home2 />
       </div>
-      <div className="md:py-8">
+      <Home7 />
+      <div className="">
         <Home3 />
       </div>
-      <div className="md:py-8">
+      <div className="">
         <Home4 />
       </div>
-      <div className="md:py-8">
+      <div className="">
         <Home6 />
       </div>
     </div>

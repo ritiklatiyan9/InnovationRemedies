@@ -120,7 +120,7 @@ function App() {
             <ScrollToTop />
             <Header />
 
-            <main className="pt-16 md:pt-20 min-h-screen"> {/* Adjusted padding */}
+            <main className="pt-16 md:pt-16 min-h-screen"> {/* Adjusted padding */}
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/products" element={<ListProducts />} />

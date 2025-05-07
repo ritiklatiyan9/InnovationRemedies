@@ -1005,7 +1005,7 @@ const AdminManageOrder = () => {
                 <TabsTrigger value="delivered" className="text-xs px-3 py-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-md">Delivered</TabsTrigger>
                 <TabsTrigger value="cancelled" className="text-xs px-3 py-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-md">Cancelled</TabsTrigger>
               </TabsList>
-              <div className="relative flex-grow md:flex-grow-0">
+              <div className="relative flex-grow mt-8  md:flex-grow-0">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
                   type="search"

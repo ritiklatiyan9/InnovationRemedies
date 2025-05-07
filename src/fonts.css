@@ -27,6 +27,15 @@
   font-style: normal;
 }
   
+@font-face {
+  font-family: "Busorama";
+  src: url("../fonts/busorama.woff2") format("woff2"),
+    url("../fonts/busorama.ttf") format("trueType");
+
+  font-weight: 400;
+  font-style: normal;
+}
+  
 
   @font-face {
     font-family: "Josefin Sans";

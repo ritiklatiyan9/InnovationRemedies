@@ -179,24 +179,7 @@ const CommunityShowcase = () => {
         </div>
 
         {/* Central Content with improved mobile styling */}
-        <div className="relative z-30 flex flex-col items-center text-center max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto px-4 sm:px-6  transform transition-all duration-500">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 text-blue-900 dark:text-blue-100 leading-tight">
-
-            <span  style={{
-        fontFamily: '"SF Pro Text Semibold", system-ui, sans-serif',
-        fontWeight: 600,
-      }} className="mt-1 sm:mt-2 inline-block bg-gradient-to-r from-blue-600 to-indigo-900 bg-clip-text text-transparent">
-              Our Products
-            </span>
-
-          </h1>
-
-
-          <button className="px-6 sm:px-8 py-2.5 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full text-base sm:text-lg font-medium shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-blue-500/30 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-            Explore Products
-          </button>
-        </div>
-
+       
         {/* Scroll Down Indicator with improved positioning */}
         <div className="absolute bottom-4 sm:bottom-8 lg:bottom-12 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center">
           <div className="text-blue-600 dark:text-blue-400 animate-bounce p-1.5 sm:p-2 bg-white/30 dark:bg-black/30 backdrop-blur-md rounded-full">

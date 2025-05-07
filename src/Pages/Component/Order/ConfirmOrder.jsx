@@ -187,7 +187,7 @@ useEffect(() => {
                             <Link to="/products">Continue Shopping</Link>
                         </Button>
                         <Button asChild variant="outline" size="lg">
-                            <Link to="/my-orders">View All My Orders</Link>
+                            <Link to="/orders">View All My Orders</Link>
                         </Button>
                     </CardFooter>
                 </Card>

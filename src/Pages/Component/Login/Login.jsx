@@ -294,18 +294,7 @@ export default function AuthForm() {
           </div>
 
           {/* Footer with Social Login */}
-          <CardFooter className="flex flex-col space-y-3 sm:space-y-4 pt-4 sm:pt-5 pb-5 sm:pb-6 px-4 sm:px-6 border-t border-border/50 bg-muted/30"> {/* Subtle background for footer */}
-            <div className="relative w-full flex items-center justify-center my-1">
-              <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-border/60" /></div>
-              <div className="relative bg-muted/30 px-3 text-xs uppercase text-muted-foreground">Or continue with</div>
-            </div>
-            <div className="w-full">
-              <Button variant="outline" className="w-full h-11 rounded-md border border-input hover:bg-accent/50 text-sm font-medium flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-sm focus-visible:ring-offset-0"> {/* Removed ring offset for outline button */}
-                <GoogleIcon className="h-5 w-5" /> Google
-              </Button>
-              {/* Add onClick handler for Google login here */}
-            </div>
-          </CardFooter>
+        
         </Card>
       </motion.div>
     </div>

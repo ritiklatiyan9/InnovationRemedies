@@ -17,12 +17,17 @@ import {
   Send         // Icon for Newsletter button
 } from 'lucide-react';
 import logo from '../../../assets/Images/logo.png'; // Ensure this path is correct
+const customStyle2 = {
+  fontFamily: "Oregon LDO, sans-serif",
+  fontWeight: "200",
+};
 
 function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
     <footer 
+      style={customStyle2} // Apply custom font style
       className="bg-slate-50 border-t border-slate-200 pt-16 pb-12" // Lighter bg, more padding
     >
       <div className="container mx-auto px-6">
