@@ -3,10 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { format } from 'date-fns';
 import { toast } from 'react-hot-toast';
-import { 
-  Loader2, 
+import {
+  Loader2,
   AlertTriangle,
-  Package, 
+  Package,
   ArrowLeft,
   ShoppingCart,
   Clock,
@@ -18,57 +18,59 @@ import {
   MapPin,
   User,
   Phone,
-  Receipt,
-  DollarSign,
-  ReceiptText,
-  Home
+  ReceiptText, // Using this for Order Summary/Details
+  Home,
+  Info,
+  // ExternalLink // If you had an actual tracking link
 } from 'lucide-react';
 
-// Order Tracker component from your MyOrdersPage
+// --- Order Tracker Component (from your MyOrdersPage) ---
+// Ensure this component is defined here or imported correctly
 const OrderTracker = ({ status }) => {
   const allStatuses = ['pending', 'processing', 'shipped', 'delivered'];
   const currentIndex = allStatuses.indexOf(status);
-  
+
   return (
     <div className="w-full my-4">
       <div className="flex items-center justify-between">
         {allStatuses.map((step, index) => {
           const isActive = index === currentIndex;
           const isCompleted = index < currentIndex;
-          
+
           return (
             <React.Fragment key={step}>
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center text-center"> {/* Added text-center for better alignment */}
                 <div
-                  className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                  className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 ease-in-out ${
                     isActive
-                      ? 'bg-green-500 animate-pulse'
+                      ? 'bg-green-500 ring-4 ring-green-200 animate-pulse' // Enhanced active state
                       : isCompleted
                       ? 'bg-green-500'
-                      : 'bg-gray-200'
+                      : 'bg-gray-300' // Slightly darker inactive
                   }`}
                 >
                   {isCompleted && <CheckCircle className="w-4 h-4 text-white" />}
+                  {isActive && <Clock className="w-4 h-4 text-white" />} {/* Icon for active step */}
                 </div>
-                <span className={`mt-2 text-xs capitalize ${
-                  isActive ? 'font-bold text-green-600' : 
-                  isCompleted ? 'text-green-600' : 'text-gray-400'
+                <span className={`mt-2 text-xs capitalize font-medium ${ // Uniform font-medium
+                  isActive ? 'text-green-600' :
+                  isCompleted ? 'text-green-600' : 'text-gray-500' // Consistent inactive color
                 }`}>
                   {step}
                 </span>
               </div>
               {index < allStatuses.length - 1 && (
-                <div className="flex-1 mx-2 h-0.5 relative">
-                  <div className="absolute inset-0 bg-gray-200"></div>
+                <div className="flex-1 mx-2 h-1 relative"> {/* Slightly thicker line */}
+                  <div className="absolute inset-0 bg-gray-300 rounded-full"></div>
                   {isCompleted && (
-                    <div 
-                      className="absolute inset-y-0 left-0 bg-green-500" 
+                    <div
+                      className="absolute inset-y-0 left-0 bg-green-500 rounded-full"
                       style={{ width: '100%' }}
                     ></div>
                   )}
-                  {isActive && (
-                    <div 
-                      className="absolute inset-y-0 left-0 bg-green-500" 
+                  {isActive && ( // Partial fill for active connecting line
+                    <div
+                      className="absolute inset-y-0 left-0 bg-green-500 rounded-l-full"
                       style={{ width: '50%' }}
                     ></div>
                   )}
@@ -82,26 +84,32 @@ const OrderTracker = ({ status }) => {
   );
 };
 
+
 const OrderDetailsPage = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
-  const { api, getAuthHeader, user } = useAuth();
+  const { api, user } = useAuth();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const isAdmin = user?.role === 'Aadmin';
+  const [isCancelling, setIsCancelling] = useState(false); // For cancel button loading state
 
-  // Function to get the correct orders path based on user role
+  const isAdmin = user?.role === 'Admin';
+
   const getOrdersPath = () => {
+    // Adjust these paths to your actual routes
     return isAdmin ? '/admin/orders' : '/orders';
   };
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
-      if (!orderId) return;
+      if (!orderId) {
+        setError("Order ID is missing from the URL.");
+        setLoading(false);
+        return;
+      }
       setLoading(true);
       setError(null);
-      
       try {
         const response = await api.get(`/orders/${orderId}`);
         setOrder(response.data.data);
@@ -109,6 +117,9 @@ const OrderDetailsPage = () => {
         console.error("Failed to fetch order details:", err);
         const message = err.response?.data?.message || err.message || "Could not load order details.";
         setError(message);
+        if (err.response?.status === 404) {
+            setOrder(null); // Ensure 'Order Not Found' UI shows
+        }
       } finally {
         setLoading(false);
       }
@@ -118,223 +129,332 @@ const OrderDetailsPage = () => {
   }, [orderId, api]);
 
   const formatCurrency = (amount) => {
+    if (typeof amount !== 'number' || isNaN(amount)) return 'N/A';
     return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(amount);
   };
 
-  const getStatusColor = (status) => {
+  const getStatusSemanticColor = (status) => {
     switch(status) {
-      case 'delivered': return 'text-green-500';
-      case 'shipped': return 'text-blue-500';
-      case 'processing': return 'text-amber-500';
-      case 'pending': return 'text-gray-500';
-      case 'cancelled': return 'text-red-500';
-      default: return 'text-gray-500';
-    }
-  };
-
-  const getBadgeStyle = (status) => {
-    switch(status) {
-      case 'delivered': return 'bg-green-100 text-green-800 border-green-200';
-      case 'shipped': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'processing': return 'bg-amber-100 text-amber-800 border-amber-200';
-      case 'pending': return 'bg-gray-100 text-gray-800 border-gray-200';
-      case 'cancelled': return 'bg-red-100 text-red-800 border-red-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'delivered': return { text: 'text-green-600', bg: 'bg-green-50', border: 'border-green-300', iconFill: 'fill-green-500' };
+      case 'shipped': return { text: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-300', iconFill: 'fill-blue-500' };
+      case 'processing': return { text: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-300', iconFill: 'fill-amber-500' };
+      case 'pending': return { text: 'text-gray-600', bg: 'bg-gray-100', border: 'border-gray-300', iconFill: 'fill-gray-500' };
+      case 'cancelled': return { text: 'text-red-600', bg: 'bg-red-50', border: 'border-red-300', iconFill: 'fill-red-500' };
+      default: return { text: 'text-gray-600', bg: 'bg-gray-100', border: 'border-gray-300', iconFill: 'fill-gray-500' };
     }
   };
 
   const handleCancelOrder = async () => {
-    if (!order) return;
+    if (!order || !order.orderId || isCancelling) return;
     
-    if (window.confirm('Are you sure you want to cancel this order?')) {
+    if (window.confirm('Are you sure you want to cancel this order? This action cannot be undone.')) {
+      setIsCancelling(true);
+      const toastId = toast.loading("Cancelling order...");
       try {
-        setLoading(true);
-        await api.patch(`/orders/${orderId}/cancel`);
-        
-        // Refresh order data
-        const response = await api.get(`/orders/${orderId}`);
+        await api.patch(`/orders/${order.orderId}/cancel`);
+        const response = await api.get(`/orders/${order.orderId}`); // Re-fetch to get updated order
         setOrder(response.data.data);
-        toast.success('Order cancelled successfully');
+        toast.success('Order cancelled successfully.', { id: toastId });
       } catch (err) {
         console.error("Failed to cancel order:", err);
-        toast.error(err.response?.data?.message || err.message || "Failed to cancel order");
+        toast.error(err.response?.data?.message || "Failed to cancel order.", { id: toastId });
       } finally {
-        setLoading(false);
+        setIsCancelling(false);
       }
     }
   };
 
+  // --- Reusable UI Components ---
+  const InfoBlock = ({ icon, title, children, className = "" }) => (
+    <div className={`p-6 ${className}`}>
+      <div className="flex items-center mb-4"> {/* Increased margin bottom */}
+        {React.cloneElement(icon, { className: "w-7 h-7 text-blue-600 mr-3 flex-shrink-0" })} {/* Slightly larger icon */}
+        <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
+      </div>
+      <div className="text-gray-700 space-y-2 text-sm leading-relaxed"> {/* Increased space and leading */}
+        {children}
+      </div>
+    </div>
+  );
+  
+  const ItemDetailCard = ({ itemName, quantity, totalAmountForItem, imageUrl }) => {
+    const unitPrice = (quantity > 0 && totalAmountForItem) ? totalAmountForItem / quantity : 0;
+    return (
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-200">
+        <div className="w-24 h-24 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+          {imageUrl ? (
+            <img src={imageUrl} alt={itemName} className="w-full h-full object-cover" />
+          ) : (
+            <Package className="w-12 h-12 text-blue-400" />
+          )}
+        </div>
+        <div className="flex-grow min-w-0"> {/* Added min-w-0 for flex text truncation if needed */}
+          <h4 className="font-semibold text-gray-900 text-md sm:text-lg leading-tight truncate" title={itemName}>
+            {itemName || "Item Name Not Available"}
+          </h4>
+          <p className="text-sm text-gray-500 mt-1">Quantity: {quantity || 0}</p>
+          {unitPrice > 0 && (
+             <p className="text-sm text-gray-500 mt-0.5 sm:hidden"> {/* Show on mobile, hide on sm+ */}
+                {formatCurrency(unitPrice)} each
+             </p>
+          )}
+        </div>
+        <div className="text-left sm:text-right flex-shrink-0 ml-0 sm:ml-4 mt-2 sm:mt-0">
+          <p className="text-md sm:text-lg font-bold text-gray-900">{formatCurrency(totalAmountForItem)}</p>
+          {unitPrice > 0 && (
+            <p className="text-xs text-gray-500 hidden sm:block"> {/* Hide on mobile, show on sm+ */}
+              ({formatCurrency(unitPrice)} each)
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  // --- Loading State ---
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
-        <Loader2 className="h-12 w-12 text-blue-500 animate-spin mb-4" />
-        <h2 className="text-xl font-semibold text-gray-700">Loading order details...</h2>
+      <div className="min-h-screen bg-gray-100 py-12 px-4 flex flex-col items-center justify-center">
+        <Loader2 className="h-16 w-16 text-blue-600 animate-spin mb-6" />
+        <h2 className="text-2xl font-semibold text-gray-700">Loading Order Details</h2>
+        <p className="text-gray-500 mt-2">Please wait while we fetch the information...</p>
       </div>
     );
   }
 
-  if (error) {
+  // --- Error State (General Error if Order Data couldn't be fetched at all) ---
+  if (error && !order) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
-        <div className="bg-white rounded-lg shadow-md border border-red-100 p-8 w-full max-w-2xl">
-          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-red-50 mx-auto mb-6">
-            <AlertTriangle className="h-8 w-8 text-red-500" />
-          </div>
-          <h3 className="text-2xl font-semibold text-center text-gray-800 mb-4">Error Loading Order</h3>
-          <p className="text-center text-gray-600 mb-8">{error}</p>
-          <div className="flex justify-center space-x-4">
+      <div className="min-h-screen bg-gray-100 py-12 px-4 flex flex-col items-center justify-center text-center">
+        <div className="bg-white rounded-xl shadow-xl p-8 sm:p-12 w-full max-w-lg">
+          <AlertTriangle className="h-16 w-16 text-red-500 mx-auto mb-6" />
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-3">Oops! Something went wrong.</h2>
+          <p className="text-gray-600 mb-8 text-sm sm:text-base">{error}</p>
+          <div className="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4">
             <button 
               onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+              className="w-full sm:w-auto px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm flex items-center justify-center"
             >
-              Try Again
+              <Home className="w-4 h-4 mr-2" /> Try Again
             </button>
             <button 
               onClick={() => navigate(getOrdersPath())}
-              className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
+              className="w-full sm:w-auto px-6 py-3 bg-gray-200 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium text-sm flex items-center justify-center"
             >
-              Back to My Orders
+              <ArrowLeft className="w-4 h-4 mr-2" /> Back to Orders
             </button>
           </div>
         </div>
       </div>
     );
   }
-
+  
+  // --- Order Not Found State ---
   if (!order) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
-        <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-2xl">
-          <Package className="h-16 w-16 text-gray-300 mx-auto mb-6" />
-          <h3 className="text-2xl font-semibold text-center text-gray-800 mb-4">Order Not Found</h3>
-          <p className="text-center text-gray-600 mb-8">We couldn't find the order you're looking for.</p>
-          <div className="flex justify-center">
-            <button 
-              onClick={() => navigate(getOrdersPath())}
-              className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" /> Back to My Orders
-            </button>
-          </div>
+      <div className="min-h-screen bg-gray-100 py-12 px-4 flex flex-col items-center justify-center text-center">
+        <div className="bg-white rounded-xl shadow-xl p-8 sm:p-12 w-full max-w-lg">
+          <Package className="h-16 w-16 text-gray-400 mx-auto mb-6" />
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-3">Order Not Found</h2>
+          <p className="text-gray-600 mb-8 text-sm sm:text-base">
+            We couldn't find an order with ID: <span className="font-semibold">{orderId}</span>. 
+            It might have been removed or the ID is incorrect.
+          </p>
+          <button 
+            onClick={() => navigate(getOrdersPath())}
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm flex items-center justify-center mx-auto"
+          >
+            <ArrowLeft className="h-4 h-4 mr-2" /> Back to My Orders
+          </button>
         </div>
       </div>
     );
   }
+  
+  const statusColors = getStatusSemanticColor(order.status);
 
+  // --- Main Content ---
   return (
-    <div className="bg-gray-50 min-h-screen py-8 px-4">
-      <div className="max-w-4xl mx-auto">
-        {/* Navigation section */}
-        <div className="mb-8">
-          <div className="flex flex-wrap gap-3 items-center text-sm text-gray-500">
-            <button 
-              onClick={() => navigate('/')}
-              className="flex items-center hover:text-blue-600 transition-colors"
-            >
-              <Home className="w-4 h-4 mr-1" /> Home
-            </button>
-            <span>/</span>
-            <button 
-              onClick={() => navigate(getOrdersPath())}
-              className="flex items-center hover:text-blue-600 transition-colors"
-            >
-              <ShoppingCart className="w-4 h-4 mr-1" /> My Orders
-            </button>
-            <span>/</span>
-            <span className="font-medium text-gray-700">Order #{order.orderId.substring(4, 12)}</span>
-          </div>
+    <div className="bg-gray-100 min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto"> {/* Increased max-width */}
+        
+        {/* Breadcrumb Navigation */}
+        <div className="mb-6">
+          <nav className="flex" aria-label="Breadcrumb">
+            <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+              <li className="inline-flex items-center">
+                <button
+                  onClick={() => navigate('/')}
+                  className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors"
+                >
+                  <Home className="w-4 h-4 me-2.5" /> Home
+                </button>
+              </li>
+              <li>
+                <div className="flex items-center">
+                  <svg className="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4"/></svg>
+                  <button
+                    onClick={() => navigate(getOrdersPath())}
+                    className="ms-1 text-sm font-medium text-gray-500 hover:text-blue-600 md:ms-2 transition-colors"
+                  >
+                    <ShoppingCart className="w-4 h-4 me-1.5 inline-block align-text-bottom" /> My Orders
+                  </button>
+                </div>
+              </li>
+              <li aria-current="page">
+                <div className="flex items-center">
+                  <svg className="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4"/></svg>
+                  <span className="ms-1 text-sm font-semibold text-gray-700 md:ms-2">
+                    Order <span className="font-mono">#{order.orderId ? order.orderId.substring(0, 17) + (order.orderId.length > 17 ? '...' : '') : 'N/A'}</span>
+                  </span>
+                </div>
+              </li>
+            </ol>
+          </nav>
         </div>
 
-        {/* Order header section */}
-        <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 mb-6">
-          <div className="p-6 border-b border-gray-100">
-            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+        {/* Main Order Details Card */}
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200/80">
+          {/* Order Header */}
+          <div className="p-6 border-b border-gray-200 bg-gray-50">
+            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
               <div>
-                <h1 className="text-2xl font-bold text-gray-900 mb-1">Order Details</h1>
-                <p className="text-gray-500 text-sm">
-                  Placed on {format(new Date(order.createdAt), 'MMMM dd, yyyy')} at {format(new Date(order.createdAt), 'h:mm a')}
+                <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+                  Order <span className={`font-mono ${statusColors.text}`}>{order.orderId}</span>
+                </h1>
+                <p className="text-sm text-gray-500 mt-1">
+                  Placed on: <span className="font-medium text-gray-700">{format(new Date(order.createdAt), 'MMMM dd, yyyy, h:mm a')}</span>
                 </p>
               </div>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex items-center gap-3 flex-shrink-0">
                 <button 
                   onClick={() => navigate(getOrdersPath())}
-                  className="inline-flex items-center px-4 py-2 bg-gray-100 border border-gray-200 rounded-md text-gray-700 hover:bg-gray-200 transition-colors text-sm font-medium"
+                  className="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors text-sm font-medium shadow-sm"
                 >
-                  <ArrowLeft className="w-4 h-4 mr-2" /> Back to Orders
+                  <ArrowLeft className="w-4 h-4 mr-2" /> Orders
                 </button>
                 {(order.status !== 'cancelled' && order.status !== 'delivered') && (
                   <button 
                     onClick={handleCancelOrder}
-                    className="inline-flex items-center px-4 py-2 bg-red-50 text-red-600 border border-red-200 rounded-md hover:bg-red-100 transition-colors text-sm font-medium"
+                    disabled={isCancelling}
+                    className="inline-flex items-center px-4 py-2 bg-red-600 text-white border border-red-700 rounded-lg hover:bg-red-700 transition-colors text-sm font-medium shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    <XCircle className="w-4 h-4 mr-2" /> Cancel Order
+                    {isCancelling ? <Loader2 className="w-4 h-4 mr-2 animate-spin"/> : <XCircle className="w-4 h-4 mr-2" />}
+                    Cancel Order
                   </button>
                 )}
               </div>
             </div>
           </div>
 
-          {/* Status section */}
-          <div className="p-6 bg-blue-50 border-b border-blue-100">
-            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+          {/* Status & Tracker Section */}
+          <div className={`p-6 border-b border-gray-200 ${statusColors.bg}`}>
+            <div className="flex flex-col md:flex-row justify-between md:items-start gap-x-6 gap-y-4">
               <div>
-                <h2 className="font-semibold text-gray-700 mb-1">Order Status</h2>
+                <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Order Status</h2>
                 <div className="flex items-center">
-                  <span className={`text-lg font-bold ${getStatusColor(order.status)}`}>
-                    {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                  </span>
-                  {order.status === 'cancelled' ? (
-                    <span className="ml-3 px-3 py-1 rounded-full text-xs font-medium inline-flex items-center border bg-red-100 text-red-800 border-red-200">
-                      <XCircle className="w-3 h-3 mr-1" /> Cancelled
+                    <span className={`text-2xl font-bold capitalize ${statusColors.text}`}>
+                        {order.status}
                     </span>
-                  ) : order.status === 'delivered' ? (
-                    <span className="ml-3 px-3 py-1 rounded-full text-xs font-medium inline-flex items-center border bg-green-100 text-green-800 border-green-200">
-                      <CheckCircle className="w-3 h-3 mr-1" /> Completed
-                    </span>
-                  ) : (
-                    <span className="ml-3 px-3 py-1 rounded-full text-xs font-medium inline-flex items-center border bg-blue-100 text-blue-800 border-blue-200">
-                      <Clock className="w-3 h-3 mr-1" /> In Progress
-                    </span>
-                  )}
+                    {order.status === 'delivered' && <CheckCircle className={`inline-block w-6 h-6 ml-2 ${statusColors.text}`} />}
+                    {order.status === 'cancelled' && <XCircle className={`inline-block w-6 h-6 ml-2 ${statusColors.text}`} />}
+                    {order.status === 'shipped' && <Truck className={`inline-block w-6 h-6 ml-2 ${statusColors.text}`} />}
+                    {['pending', 'processing'].includes(order.status) && <Clock className={`inline-block w-6 h-6 ml-2 ${statusColors.text}`} />}
                 </div>
               </div>
-              <div className="text-right">
-                <h2 className="font-semibold text-gray-700 mb-1">Expected Delivery</h2>
-                <p className="text-lg font-bold text-gray-800">
-                  {format(new Date(order.expectedDelivery), 'MMMM dd, yyyy')}
-                </p>
-              </div>
+              {order.status !== 'cancelled' && (
+                <div className="text-left md:text-right">
+                  <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Expected Delivery</h2>
+                  <p className="text-xl font-semibold text-gray-800">
+                    {format(new Date(order.expectedDelivery), 'MMMM dd, yyyy')}
+                  </p>
+                </div>
+              )}
             </div>
-
-            {/* Order tracker */}
             {order.status !== 'cancelled' && (
-              <div className="mt-6">
+              <div className="mt-6 pt-2">
                 <OrderTracker status={order.status} />
               </div>
             )}
+            {order.status === 'cancelled' && (
+                <p className={`mt-4 ${statusColors.text} text-sm flex items-start p-3 rounded-md bg-white border ${statusColors.border}`}>
+                    <Info className="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" />
+                    <span>This order has been cancelled. If you have any questions or this was a mistake, please contact our support team.</span>
+                </p>
+            )}
+          </div>
+          
+          {/* Item Details Section */}
+          <div className="p-6 border-b border-gray-200">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                <Package className="w-6 h-6 mr-2 text-blue-600"/> Item(s) in Your Order
+            </h2>
+            {/* In a real scenario with multiple items, you would map over order.items here */}
+            <ItemDetailCard 
+              itemName={order.itemnName} 
+              quantity={order.itemsQuantity} 
+              totalAmountForItem={order.totalAmount} // Assuming totalAmount is for this single item type
+              // imageUrl={order.itemImageUrl || 'https://via.placeholder.com/150'} // Example placeholder image
+            />
+          </div>
+          
+          {/* Shipping, Payment & Summary Section (Two Columns on Desktop) */}
+          <div className="grid grid-cols-1 md:grid-cols-5">
+            <div className="md:col-span-3 md:border-r border-gray-200">
+                <InfoBlock icon={<MapPin />} title="Shipping Address"> {/* Changed icon */}
+                    <p><strong className="font-medium text-gray-900">Recipient:</strong> {order.shippingName}</p>
+                    <p><strong className="font-medium text-gray-900">Address:</strong> {order.shippingAddress}</p>
+                    <p><strong className="font-medium text-gray-900">Contact:</strong> {order.shippingMobile}</p>
+                </InfoBlock>
+            </div>
+            <div className="md:col-span-2 bg-gray-50/50"> {/* Slight bg tint for payment section */}
+                <InfoBlock icon={<ReceiptText />} title="Payment & Summary"> {/* Changed icon */}
+                    <p><strong className="font-medium text-gray-900">Payment Method:</strong> 
+                        <span className="capitalize ml-1">
+                            {order.paymentMethod === 'cod' ? 'Cash on Delivery' : 
+                             order.paymentMethod === 'upi' ? 'UPI' : 
+                             order.paymentMethod ? order.paymentMethod.replace(/_/g, ' ') : 'N/A'}
+                        </span>
+                    </p>
+                    <div className="mt-6 pt-4 border-t border-gray-200 space-y-2">
+                        <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Order Summary</h4>
+                        <div className="flex justify-between items-center text-sm">
+                            <span className="text-gray-600">Subtotal:</span>
+                            <span className="font-medium text-gray-800">{formatCurrency(order.totalAmount)}</span>
+                        </div>
+                        <div className="flex justify-between items-center text-sm">
+                            <span className="text-gray-600">Shipping & Handling:</span>
+                            <span className="font-medium text-gray-800">{formatCurrency(0)}</span> {/* Placeholder */}
+                        </div>
+                        {/* Add discounts or taxes here if applicable */}
+                        <div className="flex justify-between items-center text-lg font-bold text-gray-900 pt-2 border-t border-gray-200 mt-2">
+                            <span>Grand Total:</span>
+                            <span>{formatCurrency(order.totalAmount)}</span>
+                        </div>
+                    </div>
+                </InfoBlock>
+            </div>
           </div>
 
-          {/* Rest of the order sections remain unchanged */}
-          {/* ... */}
-
-          {/* Support section */}
-          <div className="mt-8 p-6 bg-blue-50 rounded-lg border border-blue-100">
-            <h2 className="font-semibold text-gray-900 mb-3">Need Help With Your Order?</h2>
-            <p className="text-gray-600 mb-4">
-              If you have any questions or concerns about your order, our customer support team is here to help.
+          {/* Support Section */}
+          <div className="p-6 bg-gray-50 border-t border-gray-200 text-center sm:text-left">
+            <h2 className="text-lg font-semibold text-gray-800 mb-2">Need Help With Your Order?</h2>
+            <p className="text-sm text-gray-600 mb-4 max-w-2xl mx-auto sm:mx-0">
+              If you have any questions, concerns, or need to make changes to your order (if applicable), 
+              our customer support team is ready to assist you.
             </p>
-            <div className="flex flex-wrap gap-3">
-              <button className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm font-medium">
+            <div className="flex flex-col sm:flex-row justify-start gap-3">
+              <button 
+                onClick={() => toast.success("Contact Support feature coming soon!", {icon: '📞'})}
+                className="inline-flex items-center justify-center px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium shadow-sm"
+              >
                 Contact Support
               </button>
-              <button className="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors text-sm font-medium">
-                Track Delivery
-              </button>
               <button 
-                onClick={() => navigate(getOrdersPath())}
-                className="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors text-sm font-medium"
+                onClick={() => toast.info("Navigating to FAQ page... (Not implemented)", {icon: '❓'})}
+                className="inline-flex items-center justify-center px-5 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium shadow-sm"
               >
-                View All Orders
+                View FAQs
               </button>
             </div>
           </div>

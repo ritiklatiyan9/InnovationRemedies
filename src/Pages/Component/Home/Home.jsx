@@ -1,4 +1,3 @@
-// src/components/VetWellbeingDashboard.jsx
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
@@ -6,6 +5,7 @@ import Home2 from "./Home2";
 import Home3 from "./Home3";
 import Home4 from "./Home4";
 import Home6 from "./Home6";
+import Home7 from "./Home7";
 import Products from "../Products/ListProducts";
 import videoSourceUrl from "../../../assets/Video/bg7.mp4"; // Ensure this path is correct
 import logo from "../../../assets/Images/logo.png"; // Ensure this path is correct
@@ -13,12 +13,11 @@ import twelveone from "../../../assets/Images/twelveone.png"; // Ensure this pat
 import { FlipWords } from "../../../components/ui/flips-words"; // Ensure this path is correct
 import { PawPrint, HeartPulse, Activity } from "lucide-react";
 
-
-
 const customStyle = {
   fontFamily: "Oregon LDO, sans-serif",
   fontWeight: "400",
-}
+};
+
 const VetWellbeingDashboard = () => {
   const words = ["World", "Care", "Family", "Health"];
 
@@ -38,22 +37,17 @@ const VetWellbeingDashboard = () => {
     },
   };
 
-  // --- SEO & Domain Config (Looks good, retained from original) ---
+  // --- SEO & Domain Config ---
   const domain = "https://www.innovationremedies.com"; // Replace with your actual domain
   const canonicalUrl = `${domain}/`;
   const ogImageUrl = `${domain}${logo}`;
 
   return (
-    // Consider setting the default font in tailwind.config.js for consistency
-    // e.g., fontFamily: { sans: ['"SF Pro Text"', 'system-ui', 'sans-serif'], ... }
     <div className="w-full text-gray-800 font-sans">
-      {" "}
-      {/* Use Tailwind font class */}
       <Helmet>
-        {/* --- SEO Meta Tags (No change needed here, looks good) --- */}
+        {/* --- SEO Meta Tags --- */}
         <title>
-          Innovation Remedies | Leading Veterinary Solutions in Meerut & Delhi
-          NCR
+          Innovation Remedies | Leading Veterinary Solutions in Meerut & Delhi NCR
         </title>
         <meta
           name="description"
@@ -88,8 +82,7 @@ const VetWellbeingDashboard = () => {
           content="Advanced veterinary products for animal health and wellness in Meerut & Delhi NCR by Innovation Remedies."
         />
         <meta name="twitter:image" content={ogImageUrl} />
-        {/* <meta name="twitter:site" content="@YourTwitterHandle" /> */}{" "}
-        {/* Add actual handle */}
+        {/* <meta name="twitter:site" content="@YourTwitterHandle" /> */} {/* Add actual handle */}
         <meta name="geo.region" content="IN-UP" />
         <meta name="geo.placename" content="Meerut" />
         <meta name="geo.position" content="28.9803;77.7039" />
@@ -137,16 +130,16 @@ const VetWellbeingDashboard = () => {
         {/* Video Background Layer */}
         <div className="absolute inset-0 z-0">
           <video
-            className="absolute top-0 left-0 w-full h-full object-cover filter brightness-[0.8] contrast-1a00" // Slightly darker brightness
+            className="absolute top-0 left-0 w-full h-full object-cover filter brightness-[0.8] contrast-100"
             src={videoSourceUrl}
             autoPlay
             loop
             muted
-            playsInline // Essential for mobile
-            preload="auto" // Good practice
+            playsInline
+            preload="auto"
           />
-          {/* Darker Overlay */}
-          <div className="absolute inset-0 bg-black/60" />
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/20" />
         </div>
 
         {/* Content Layer */}
@@ -162,32 +155,25 @@ const VetWellbeingDashboard = () => {
 
             {/* Main Headline - Bolder, Clearer */}
             <h1
-            style={customStyle}
+              style={customStyle}
               className="
-    text-4xl sm:text-6xl lg:text-7xl
-    font-extrabold tracking-tight leading-tight
-    mb-4 drop-shadow-lg
-
-    bg-gradient-to-r       /* horizontal gradient */
-    from-teal-100           /* start color */
-    via-teal-200            /* mid-point (optional) */
-    to-green-400/80             /* end color */
-    bg-clip-text            /* clip the bg to the text */
-    text-transparent        /* make the text fill transparent */
-  "
+                text-4xl sm:text-6xl lg:text-7xl
+                font-extrabold tracking-tight leading-tight
+                mb-4 drop-shadow-lg
+                bg-gradient-to-r from-teal-100 via-teal-200 to-green-400/80
+                bg-clip-text text-transparent
+              "
             >
-              Innovation Remedies Life Science 
+              Innovation Remedies Life Science
             </h1>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-6 text-gray-200 drop-shadow-md">
-             
-              
+              {/* Empty h2, possibly for spacing or future content */}
             </h2>
             {/* Sub-headline with FlipWords */}
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-6 text-gray-200 drop-shadow-md">
               Advancing Animal{" "}
               <FlipWords words={words} className="text-white font-semibold" />{" "}
-              {/* Ensure FlipWords style matches */}
             </h2>
 
             {/* Descriptive Paragraph */}
@@ -226,39 +212,22 @@ const VetWellbeingDashboard = () => {
               </div>
             </div>
           </div>
-
-      
         </div>
       </section>
+
+      <Home7 />
       {/* --- OTHER SECTIONS --- */}
-      {/* Added consistent vertical padding for separation */}
       <div className="py-16 md:py-20 lg:py-24 bg-white">
-        {/* Optional: Wrap subsequent sections in a container if they don't manage their own max-width/padding */}
-        {/* <div className="container mx-auto px-4 sm:px-6 lg:px-8"> */}
         <Home2 />
-        {/* </div> */}
       </div>
-      <div className="md:py-8 ">
-        {" "}
-        {/* Alternate background for visual rhythm */}
-        {/* <div className="container mx-auto px-4 sm:px-6 lg:px-8"> */}
+      <div className="md:py-8">
         <Home3 />
-        {/* </div> */}
       </div>
       <div className="md:py-8">
-        {/* <div className="container mx-auto px-4 sm:px-6 lg:px-8"> */}
         <Home4 />
-        {/* </div> */}
       </div>
       <div className="md:py-8">
-        {/* <div className="container mx-auto px-4 sm:px-6 lg:px-8"> */}
-        <Products />
-        {/* </div> */}
-      </div>
-      <div className="md:py-8">
-        {/* <div className="container mx-auto px-4 sm:px-6 lg:px-8"> */}
         <Home6 />
-        {/* </div> */}
       </div>
     </div>
   );
