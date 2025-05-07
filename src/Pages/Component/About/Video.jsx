@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
-import bg4 from '../../../assets/Video/bg4.mp4';
+import bg4 from '../../../assets/Video/bg11.mp4';
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -19,7 +19,7 @@ export default function HeroSectionWithVideoBG() {
     >
       {/* Background video (dimmed) */}
       <video
-        className="absolute inset-0 w-full h-full object-cover brightness-50"
+        className="absolute inset-0 w-full h-full object-cover brightness-125"
         src={bg4}
         poster="/videos/your-video-poster.jpg"
         autoPlay

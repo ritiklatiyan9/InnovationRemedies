@@ -12,9 +12,10 @@ import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 
 // --- Enhanced SVG Icons with improved animations ---
 const customStyle = {
-    fontFamily: "Oregon LDO, sans-serif",
-    fontWeight: "400",
-  }
+  fontFamily: "Oregon LDO, sans-serif",
+  fontWeight: "400",
+};
+
 const VisionIcon = () => (
   <motion.svg
     width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -211,9 +212,16 @@ export default function EnhancedAboutUs() {
     }
   ];
 
+  // Stats data
+  const stats = [
+    { value: "50+", label: "Countries", icon: <Users className="mx-auto mb-3 text-blue-500" size={32} /> },
+    { value: "1M+", label: "Pets Helped", icon: <Heart className="mx-auto mb-3 text-rose-500" size={32} /> },
+    { value: "94%", label: "Diagnostic Accuracy", icon: <Target className="mx-auto mb-3 text-emerald-500" size={32} /> },
+    { value: "5,000+", label: "Veterinary Partners", icon: <Award className="mx-auto mb-3 text-amber-500" size={32} /> }
+  ];
+
   return (
     <div
-      
       className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-emerald-50 font-sans text-gray-800 overflow-hidden relative"
       style={customStyle}
       id="about-us-page"
@@ -231,7 +239,7 @@ export default function EnhancedAboutUs() {
         {/* Video Background */}
         <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/30 to-blue-500/30 mix-blend-overlay z-10"></div>
-          <div className="absolute inset-0 bg-black/40 z-10"></div>
+          <div className="absolute inset-0 bg-black/50 z-10"></div>
           <Video className="absolute inset-0 w-full h-full object-cover" />
         </div>
         
@@ -246,10 +254,16 @@ export default function EnhancedAboutUs() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              Transforming Pet Healthcare
+              Transforming Healthcare
             </motion.h1>
-          
-           
+            <motion.p
+              className="text-xl md:text-2xl text-white mt-4 max-w-3xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              Revolutionizing animal healthcare with AI-powered diagnostic tools and telemedicine platforms.
+            </motion.p>
           </motion.div>
         </div>
       </motion.section>
@@ -274,31 +288,15 @@ export default function EnhancedAboutUs() {
                 variants={fadeInScale}
                 whileHover={{ scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 100 }}
-                className="p-8 rounded-2xl bg-gradient-to-br from-emerald-50 to-emerald-100 shadow-sm"
+                className="p-8 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 shadow-sm relative overflow-hidden"
               >
-                <div className="flex items-center mb-4">
-                  <VisionIcon />
-                  <h2 className="text-2xl md:text-3xl font-bold ml-4 text-gray-800">Our Vision</h2>
-                </div>
-                <p className="text-gray-700 leading-relaxed text-lg">
-                  To revolutionize veterinary medicine through intelligent technology integration,
-                  creating a world where every animal receives optimal care through innovative solutions.
-                </p>
-              </motion.div>
-
-              <motion.div 
-                variants={fadeInScale}
-                whileHover={{ scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 100 }}
-                className="p-8 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 shadow-sm"
-              >
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-transparent opacity-30"></div>
                 <div className="flex items-center mb-4">
                   <MissionIcon />
                   <h2 className="text-2xl md:text-3xl font-bold ml-4 text-gray-800">Our Mission</h2>
                 </div>
                 <p className="text-gray-700 leading-relaxed text-lg">
-                  Develop AI-powered diagnostic tools and telemedicine platforms that empower veterinary
-                  professionals to deliver faster, more accurate care across 50+ countries.
+                  Revolutionize animal healthcare with AI-powered diagnostic tools and telemedicine platforms designed specifically for veterinary professionals. Our innovative solutions enable faster, more accurate diagnoses and remote consultations, helping veterinarians deliver high-quality care anytime, anywhere. Trusted in over 50 countries, our technology leverages advanced machine learning and real-time data analytics to support decision-making, reduce diagnostic errors, and streamline workflows.
                 </p>
               </motion.div>
             </motion.div>
@@ -362,11 +360,11 @@ export default function EnhancedAboutUs() {
                   hidden: { opacity: 0, y: 50 },
                   visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, delay: index * 0.1 } }
                 }}
-                whileHover={{ y: -10 }}
+                whileHover={{ y: -10, scale: 1.02, boxShadow: "0 10px 20px rgba(0,0,0,0.1)" }}
                 transition={{ type: "spring", stiffness: 200 }}
               >
-                <Card className="bg-white p-6 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 h-full flex flex-col text-center border-t-4 border-blue-400">
-                  <div className="w-32 h-32 mx-auto mb-6 rounded-full overflow-hidden ring-4 ring-blue-100 ring-offset-2 shadow-md transform hover:scale-105 transition-all duration-300">
+                <Card className="bg-white p-6 rounded-xl overflow-hidden shadow-lg transition-all duration-300 h-full flex flex-col text-center border-t-4 border-blue-400">
+                  <div className="w-32 h-32 mx-auto mb-6 rounded-full overflow-hidden ring-4 ring-blue-100 ring-offset-2 shadow-md transform transition-all duration-300 hover:scale-105">
                     <img src={member.avatar} alt={member.name} className="w-full h-full object-cover" loading="lazy"/>
                   </div>
                   <h3 className="font-bold text-xl mb-1 text-gray-800">{member.name}</h3>
@@ -427,10 +425,12 @@ export default function EnhancedAboutUs() {
                   variants={{
                     hidden: { 
                       opacity: 0, 
+                      scale: 0.9,
                       x: isEven ? -50 : 50 
                     },
                     visible: { 
                       opacity: 1, 
+                      scale: 1,
                       x: 0,
                       transition: { 
                         type: "spring", 
@@ -538,7 +538,7 @@ export default function EnhancedAboutUs() {
         </div>
       </section>
 
-      {/* Stats Section - New */}
+      {/* Stats Section */}
       <motion.section
         className="py-16 bg-gradient-to-br from-emerald-50 to-blue-50 relative z-10"
         initial="hidden"
@@ -548,12 +548,7 @@ export default function EnhancedAboutUs() {
       >
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            {[
-              { value: "50+", label: "Countries", icon: <Users className="mx-auto mb-3 text-blue-500" size={32} /> },
-              { value: "1M+", label: "Pets Helped", icon: <Heart className="mx-auto mb-3 text-rose-500" size={32} /> },
-              { value: "94%", label: "Diagnostic Accuracy", icon: <Target className="mx-auto mb-3 text-emerald-500" size={32} /> },
-              { value: "5,000+", label: "Veterinary Partners", icon: <Award className="mx-auto mb-3 text-amber-500" size={32} /> }
-            ].map((stat, index) => (
+            {stats.map((stat, index) => (
               <motion.div
                 key={index}
                 className="p-6 rounded-xl bg-white shadow-md"
@@ -592,7 +587,7 @@ export default function EnhancedAboutUs() {
         </div>
       </motion.section>
 
-      {/* CTA Section - Enhanced */}
+      {/* CTA Section */}
       <section className="relative py-24 md:py-32 z-10 overflow-hidden">
         {/* Animated Gradient Background */}
         <motion.div
@@ -646,14 +641,28 @@ export default function EnhancedAboutUs() {
             >
               Ready to Transform Your Veterinary Practice?
             </motion.h2>
-           
-
-           
+            <motion.p
+              className="text-xl text-white mb-8"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+            >
+              Join thousands of veterinary professionals already using our AI-powered solutions.
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.6, duration: 0.8 }}
+            >
+              <Button size="lg" className="bg-white text-emerald-600 hover:bg-emerald-50 font-semibold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
+                Get Started <ArrowRight className="ml-2" />
+              </Button>
+            </motion.div>
           </motion.div>
         </div>
       </section>
-
-    
     </div>
   );
 }

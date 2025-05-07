@@ -8,7 +8,7 @@ import logo from '../../assets/Images/logo.png'; // Ensure this is hosted public
 const ProfileGraphicPlaceholder = () => (
   <div className="flex-1 w-full overflow-hidden">
     <img
-      src="https://imageio.forbes.com/specials-images/imageserve/732357367/0x0.jpg?format=jpg&height=900&width=1600&fit=bounds"
+      src="https://www.stitchtools.com/assets/images/contact/contact-banner.jpg"
       alt="Happy customer graphic - Innovation Remedies Contact"
       className="h-full w-full object-cover"
     />
