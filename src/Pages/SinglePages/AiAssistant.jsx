@@ -1,16 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Bot, Send, Loader, User } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 
 // --- Google Gemini API Configuration ---
-// WARNING: Hardcoding API keys in frontend code is insecure!
-// This is done only because specifically requested. Do NOT do this in production.
-// Consider using a backend proxy or environment variables with proper build setup.
-const GEMINI_API_KEY = 'AIzaSyABoTniJg4qQCJBFC6w6pBl7s5LyhMyPt0'; // Your API Key
+const GEMINI_API_KEY = 'AIzaSyABoTniJg4qQCJBFC6w6pBl7s5LyhMyPt0';
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 // --- Embedded Product Information ---
-// This text will be provided to the Gemini API as context.
 const PRODUCT_CONTEXT = `
 Product Name: RESOLUTION-KIT Powder
 Composition (per 500 GM): Omega 3 & 6 (Fatty Acid): 500 mg CH. Copper Sulphate: 18 gm CH. Zinc Sulphate: 44 gm CH. Magnese Chloride: 14.5 gm CH. Chromium Sulphate: 1500 mg Selenium: 22 mg Potassium Iodate (Iodine): 340 mg Sodium Acid Phosphate: 96.626 gm Dicalcium Phosphate: 315 gm Cobalt Sulphate: 500 mg Ferrous Sulphate (Iron): 500 mg Vitamin A: 1.60 gm (about 50 Lac IU) Vitamin D3: 0.40 gm (about 05 Lac IU) Vitamin E: 2000 mg (about 30 Lac IU) Herbals: q.s.
@@ -223,134 +220,100 @@ Dosages: 1 ML Each Kg Body Weight or As Directed By The Veterinarian
 Available Pack: 30 ML & 100 ML
 `;
 
-// --- Embedded CSS for Loader and Sparkle ---
+// --- Embedded CSS ---
 const AiAssistantStyles = () => (
   <style>{`
-    /* Shimmer animation for loading bars */
     @keyframes shimmer {
       0% { background-position: 100% 0; }
       100% { background-position: -100% 0; }
     }
-
-    /* Base style for the loading bars */
     .loading-shimmer-bar {
       background: linear-gradient(90deg, #fde8f0, #fbcfe8, #f9a8d4, #fbcfe8, #fde8f0);
-      background-size: 200% 100%; /* Gradient wider than bar */
+      background-size: 200% 100%;
       animation: shimmer 1.8s linear infinite;
-      border-radius: 9999px; /* rounded-full */
-      height: 0.625rem; /* h-2.5 */
+      border-radius: 9999px;
+      height: 0.625rem;
     }
-
-    /* Ensure smooth scrolling */
     .smooth-scroll {
-        scroll-behavior: smooth;
+      scroll-behavior: smooth;
     }
-
-    /* Basic scrollbar styling (optional) */
     .ai-message-area::-webkit-scrollbar {
-        width: 6px;
+      width: 6px;
     }
     .ai-message-area::-webkit-scrollbar-track {
-        background: #f1f5f9; /* bg-slate-100 */
-        border-radius: 3px;
+      background: #f1f5f9;
+      border-radius: 3px;
     }
     .ai-message-area::-webkit-scrollbar-thumb {
-        background: #cbd5e1; /* bg-slate-300 */
-        border-radius: 3px;
+      background: #cbd5e1;
+      border-radius: 3px;
     }
     .ai-message-area::-webkit-scrollbar-thumb:hover {
-        background: #94a3b8; /* bg-slate-400 */
+      background: #94a3b8;
     }
   `}</style>
 );
-// --- End Embedded CSS ---
 
 // --- Helper Function: Format Time ---
 const formatTime = (date) => {
   if (!(date instanceof Date) || isNaN(date)) {
-     return '--:--'; // Fallback for invalid date
+    return '--:--';
   }
   return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 };
-// --- End Helper Function ---
-
 
 // --- ChatMessage Component ---
-// Renders individual messages (user, bot, error) or the typing indicator
 const ChatMessage = ({ message, isTyping }) => {
   const isUser = message.sender === 'user';
 
-  // Helper to format message text with line breaks
-  const formatMessageText = (text) => {
-    // Ensure text is a string before splitting
-    const safeText = typeof text === 'string' ? text : '';
-    return safeText.split('\n').map((line, i) => (
-      <React.Fragment key={i}>
-        {line}
-        {i < safeText.split('\n').length - 1 && <br />}
-      </React.Fragment>
-    ));
-  };
-
   return (
-    // Animate message entry
     <motion.div
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
       className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4 w-full`}
     >
-      {/* Bot Icon (only for bot messages) */}
       {!isUser && (
         <div className="flex-shrink-0 h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center mr-2 self-start mt-1 relative">
-           <Bot size={16} className="text-indigo-600" />
+          <Bot size={16} className="text-indigo-600" />
         </div>
       )}
-
-      {/* Message Bubble or Loader */}
       <div
         className={`max-w-[85%] relative rounded-lg shadow-sm ${
           isUser
-            ? 'bg-blue-500 text-white px-4 py-2' // User style
+            ? 'bg-blue-500 text-white px-4 py-2'
             : message.isError
-            ? 'bg-red-50 text-red-800 border border-red-200 px-4 py-2' // Error style
+            ? 'bg-red-50 text-red-800 border border-red-200 px-4 py-2'
             : isTyping
-            ? 'p-3 bg-transparent border-none shadow-none' // Loader container style (no background/border)
-            : 'bg-white border border-gray-200 text-gray-800 px-4 py-2' // Default bot style
+            ? 'p-3 bg-transparent border-none shadow-none'
+            : 'bg-white border border-gray-200 text-gray-800 px-4 py-2'
         }`}
       >
-        {/* === GEMINI-STYLE LOADING INDICATOR === */}
         {isTyping ? (
-          <div className="flex flex-col space-y-1.5 w-48" aria-label="AI is typing"> {/* Fixed width for bars */}
-            <div
-              className="loading-shimmer-bar"
-              style={{ width: '85%', animationDelay: '0s' }}
-            ></div>
-            <div
-              className="loading-shimmer-bar"
-              style={{ width: '100%', animationDelay: '0.2s' }}
-            ></div>
-            <div
-              className="loading-shimmer-bar"
-              style={{ width: '70%', animationDelay: '0.4s' }}
-            ></div>
+          <div className="flex flex-col space-y-1.5 w-48" aria-label="AI is typing">
+            <div className="loading-shimmer-bar" style={{ width: '85%', animationDelay: '0s' }}></div>
+            <div className="loading-shimmer-bar" style={{ width: '100%', animationDelay: '0.2s' }}></div>
+            <div className="loading-shimmer-bar" style={{ width: '70%', animationDelay: '0.4s' }}></div>
           </div>
         ) : (
-          /* === REGULAR MESSAGE CONTENT === */
           <>
-            {formatMessageText(message.text)}
-            {/* Timestamp */}
-            <div className={`text-xs mt-1.5 opacity-75 text-right ${
+            <div className="prose prose-sm max-w-none">
+              {isUser ? (
+                <p>{message.text}</p>
+              ) : (
+                <ReactMarkdown>{message.text}</ReactMarkdown>
+              )}
+            </div>
+            <div
+              className={`text-xs mt-1.5 opacity-75 text-right ${
                 isUser ? 'text-blue-100' : message.isError ? 'text-red-500 font-medium' : 'text-gray-500'
-              }`
-            }>
+              }`}
+            >
               {formatTime(message.timestamp)}
             </div>
           </>
         )}
-      </div> {/* End Message Bubble / Loader */}
-
-      {/* User Icon (only for user messages) */}
+      </div>
       {isUser && (
         <div className="flex-shrink-0 h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center ml-2 self-start mt-1">
           <User size={16} className="text-blue-600" />
@@ -359,63 +322,45 @@ const ChatMessage = ({ message, isTyping }) => {
     </motion.div>
   );
 };
-// --- End ChatMessage Component ---
-
 
 // --- Main AiAssistant Component ---
 export default function AiAssistant({ isOpen, onClose }) {
-  // State variables
   const [messages, setMessages] = useState([
-    // Initial welcome message
     { id: Date.now(), sender: 'bot', text: 'Hello! Ask me anything about the products listed.', timestamp: new Date() }
   ]);
   const [inputValue, setInputValue] = useState('');
-  const [isTyping, setIsTyping] = useState(false); // Controls loader visibility
-  const [error, setError] = useState(null); // Stores error messages for display
-  const messagesEndRef = useRef(null); // Ref for scrolling to bottom
+  const [isTyping, setIsTyping] = useState(false);
+  const [error, setError] = useState(null);
+  const messagesEndRef = useRef(null);
 
-  // Effect to scroll to the latest message
   useEffect(() => {
     const timer = setTimeout(() => {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
-    return () => clearTimeout(timer); // Cleanup timer
-  }, [messages, isTyping]); // Re-run when messages or typing status change
+    return () => clearTimeout(timer);
+  }, [messages, isTyping]);
 
-  // --- Function to call Gemini API ---
   const callGeminiAPI = async (query) => {
-    console.log("Sending query to Gemini:", query);
+    console.log('Sending query to Gemini:', query);
 
-    // Construct the prompt: instruction + context + query
-    const prompt = `You are a helpful assistant for veterinary products.
-    Answer the following user query based *only* on the information provided below.
-    Do not use any external knowledge or make assumptions.
-    If the answer cannot be found in the provided information, clearly state that the information is not available in the provided text.
+    const prompt = `You are a helpful assistant for veterinary products. The user might ask questions in Hinglish, which is a mix of Hindi and English. Try to understand and respond accordingly, but base your answers only on the information provided below. Do not use any external knowledge or make assumptions. If the answer cannot be found in the provided information, clearly state that the information is not available in the provided text. Please format your response using Markdown for better readability, including headings, lists, and emphasis where appropriate.
 
-    --- START OF PROVIDED INFORMATION ---
-    ${PRODUCT_CONTEXT}
-    --- END OF PROVIDED INFORMATION ---
+--- START OF PROVIDED INFORMATION ---
+${PRODUCT_CONTEXT}
+--- END OF PROVIDED INFORMATION ---
 
-    User Query: ${query}`;
+User Query: ${query}`;
 
     const requestBody = {
-      contents: [{
-        parts: [{
-          text: prompt
-        }]
-      }],
-      // Optional: Add safety settings if needed
-      // safetySettings: [
-      //   { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
-      //   { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
-      // ],
-      // Optional: Configure generation parameters
-      // generationConfig: {
-      //   temperature: 0.7,
-      //   topK: 40,
-      //   topP: 0.95,
-      //   maxOutputTokens: 1024,
-      // }
+      contents: [
+        {
+          parts: [
+            {
+              text: prompt,
+            },
+          ],
+        },
+      ],
     };
 
     try {
@@ -427,68 +372,51 @@ export default function AiAssistant({ isOpen, onClose }) {
         body: JSON.stringify(requestBody),
       });
 
-      console.log("Gemini API Response Status:", response.status);
-
       if (!response.ok) {
         let errorData = { message: `API Error: ${response.status} ${response.statusText}` };
         try {
-            const errorJson = await response.json();
-            console.error('Gemini API Error Response:', errorJson);
-            errorData.message = errorJson?.error?.message || errorData.message;
+          const errorJson = await response.json();
+          errorData.message = errorJson?.error?.message || errorData.message;
         } catch (parseError) {
-            console.error('Could not parse Gemini error response body:', parseError);
-            const textResponse = await response.text();
-            console.error('Raw Gemini error response text:', textResponse);
-            errorData.message = textResponse || errorData.message;
+          const textResponse = await response.text();
+          errorData.message = textResponse || errorData.message;
         }
         throw new Error(errorData.message);
       }
 
       const data = await response.json();
-      console.log("Gemini API Response Data:", data);
 
-      // --- Extract text safely from the response ---
-      // Check if candidates exist and have content and parts
-      if (data.candidates && data.candidates.length > 0 &&
-          data.candidates[0].content && data.candidates[0].content.parts &&
-          data.candidates[0].content.parts.length > 0 &&
-          data.candidates[0].content.parts[0].text) {
-            // Check finish reason - might be blocked due to safety etc.
-            const finishReason = data.candidates[0].finishReason;
-            if (finishReason && finishReason !== "STOP") {
-                 console.warn(`Gemini generation finished due to ${finishReason}`);
-                 // You might want to return a specific message here
-                 if (finishReason === "SAFETY") {
-                     return "I cannot provide an answer due to safety restrictions.";
-                 }
-                 if (finishReason === "MAX_TOKENS") {
-                    return data.candidates[0].content.parts[0].text + " ... (response truncated)";
-                 }
-                 // Handle other reasons if needed
-            }
-            return data.candidates[0].content.parts[0].text; // Success case
+      if (
+        data.candidates &&
+        data.candidates.length > 0 &&
+        data.candidates[0].content &&
+        data.candidates[0].content.parts &&
+        data.candidates[0].content.parts.length > 0 &&
+        data.candidates[0].content.parts[0].text
+      ) {
+        const finishReason = data.candidates[0].finishReason;
+        if (finishReason && finishReason !== 'STOP') {
+          if (finishReason === 'SAFETY') {
+            return 'I cannot provide an answer due to safety restrictions.';
+          }
+          if (finishReason === 'MAX_TOKENS') {
+            return data.candidates[0].content.parts[0].text + ' ... (response truncated)';
+          }
+        }
+        return data.candidates[0].content.parts[0].text;
       } else {
-        // Handle cases where response structure is unexpected or content is missing/blocked
-        console.warn('Unexpected Gemini API response format or no content:', data);
-        // Check for prompt feedback (e.g., blocked prompt)
         if (data.promptFeedback?.blockReason) {
-            console.error(`Prompt blocked due to ${data.promptFeedback.blockReason}`);
-            return `I couldn't process the request because the prompt was blocked (${data.promptFeedback.blockReason}).`;
+          return `I couldn't process the request because the prompt was blocked (${data.promptFeedback.blockReason}).`;
         }
         throw new Error('Invalid response format or empty content from AI service');
       }
-
     } catch (error) {
-      console.error('Gemini API Call Error:', error);
-      // Ensure the error passed up has a message property
       throw new Error(error.message || 'An unknown network or API error occurred.');
     }
   };
-  // --- End Gemini API Call Function ---
 
-  // Function to handle sending a message
   const handleSendMessage = async (e) => {
-    if (e) e.preventDefault(); // Allow calling without event (e.g., for retry)
+    if (e) e.preventDefault();
 
     const textToSend = inputValue.trim();
     if (!textToSend) return;
@@ -497,99 +425,81 @@ export default function AiAssistant({ isOpen, onClose }) {
       id: Date.now(),
       sender: 'user',
       text: textToSend,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInputValue('');
     setIsTyping(true);
     setError(null);
 
     try {
-      // Call the Gemini API directly
       const answer = await callGeminiAPI(userMessage.text);
 
       const botMessage = {
-        id: Date.now() + 1, // Ensure unique ID
+        id: Date.now() + 1,
         sender: 'bot',
-        text: answer, // Use the answer from Gemini
+        text: answer,
         timestamp: new Date(),
       };
-      setMessages(prev => [...prev, botMessage]);
-
+      setMessages((prev) => [...prev, botMessage]);
     } catch (err) {
       const errorMessageText = err.message || 'An unexpected error occurred.';
-      setError(errorMessageText); // Store error message for retry UI
+      setError(errorMessageText);
 
       const errorMessage = {
         id: Date.now() + 1,
         sender: 'bot',
         text: `Sorry, I encountered an error: ${errorMessageText}`,
         timestamp: new Date(),
-        isError: true
+        isError: true,
       };
-      setMessages(prev => [...prev, errorMessage]);
-
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
-      setIsTyping(false); // Hide loader
+      setIsTyping(false);
     }
   };
 
-  // Function to handle retrying the last message
   const handleRetry = () => {
     setError(null);
-    const lastUserMessage = [...messages].slice().reverse().find(m => m.sender === 'user');
+    const lastUserMessage = [...messages].slice().reverse().find((m) => m.sender === 'user');
 
     if (lastUserMessage) {
       console.log('Retrying query:', lastUserMessage.text);
 
-      // Remove the preceding error message(s) from the bot before retrying
-      // Find the index of the last user message
-      const lastUserMsgIndex = messages.findIndex(m => m.id === lastUserMessage.id);
-      // Filter out any error messages *after* the last user message
-      const messagesBeforeRetry = messages.slice(0, lastUserMsgIndex + 1)
-                                       .concat(messages.slice(lastUserMsgIndex + 1).filter(m => !(m.sender === 'bot' && m.isError)));
+      const lastUserMsgIndex = messages.findIndex((m) => m.id === lastUserMessage.id);
+      const messagesBeforeRetry = messages
+        .slice(0, lastUserMsgIndex + 1)
+        .concat(messages.slice(lastUserMsgIndex + 1).filter((m) => !(m.sender === 'bot' && m.isError)));
 
       setMessages(messagesBeforeRetry);
-
-      // Set input value and call send (using Promise to ensure state update)
       setInputValue(lastUserMessage.text);
-      Promise.resolve().then(() => {
-         handleSendMessage(); // Call without event object
-      });
-
+      Promise.resolve().then(() => handleSendMessage());
     } else {
-        console.warn("Could not find the last user message to retry.");
-        alert("Could not find the last message to retry.");
+      console.warn('Could not find the last user message to retry.');
+      alert('Could not find the last message to retry.');
     }
   };
 
-  // Render nothing if the chat window is not open
   if (!isOpen) return null;
 
   return (
     <>
-      {/* Inject the CSS styles defined above */}
       <AiAssistantStyles />
-
-      {/* Main Chat Window Container */}
       <motion.div
-        initial={{ x: "100%", opacity: 0.8 }}
+        initial={{ x: '100%', opacity: 0.8 }}
         animate={{ x: 0, opacity: 1 }}
-        exit={{ x: "100%", opacity: 0.8 }}
+        exit={{ x: '100%', opacity: 0.8 }}
         transition={{ type: 'spring', stiffness: 320, damping: 35 }}
         className="fixed bottom-4 right-4 z-[1000] w-[calc(100%-2rem)] max-w-md h-[calc(100vh-5rem)] max-h-[650px] bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col border border-gray-200/50"
         aria-modal="true"
         role="dialog"
         aria-labelledby="ai-assistant-header"
       >
-        {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-3 px-4 flex items-center justify-between flex-shrink-0 shadow-sm">
           <div className="flex items-center space-x-2">
             <Bot size={20} />
             <h2 id="ai-assistant-header" className="font-semibold text-base">Innovation Remedies AI</h2>
-            {/* Warning Icon for Insecure Key */}
-          
           </div>
           <button
             onClick={onClose}
@@ -601,30 +511,19 @@ export default function AiAssistant({ isOpen, onClose }) {
             </svg>
           </button>
         </div>
-
-        {/* Messages Display Area */}
         <div className="flex-grow overflow-y-auto p-4 space-y-1 bg-slate-50 smooth-scroll ai-message-area">
           {messages.map((message) => (
             <ChatMessage key={message.id} message={message} isTyping={false} />
           ))}
-          {isTyping && (
-             <ChatMessage key="typing-indicator" message={{ id: 'typing', sender: 'bot', timestamp: new Date() }} isTyping={true} />
-          )}
+          {isTyping && <ChatMessage key="typing-indicator" message={{ id: 'typing', sender: 'bot', timestamp: new Date() }} isTyping={true} />}
           {error && !isTyping && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex justify-center pt-2 pb-1"
-            >
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex justify-center pt-2 pb-1">
               <div className="bg-red-100 border border-red-300 text-red-800 rounded-lg px-3.5 py-2 text-sm flex items-center gap-3 shadow-sm w-full max-w-sm mx-auto">
-                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 flex-shrink-0">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
-                 </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 flex-shrink-0">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                </svg>
                 <span className="flex-grow leading-snug">{error}</span>
-                <button
-                  onClick={handleRetry}
-                  className="ml-auto text-red-800 underline font-medium text-sm hover:text-red-600 flex-shrink-0 focus:outline-none focus:ring-1 focus:ring-red-400 rounded px-1"
-                >
+                <button onClick={handleRetry} className="ml-auto text-red-800 underline font-medium text-sm hover:text-red-600 flex-shrink-0 focus:outline-none focus:ring-1 focus:ring-red-400 rounded px-1">
                   Retry
                 </button>
               </div>
@@ -632,8 +531,6 @@ export default function AiAssistant({ isOpen, onClose }) {
           )}
           <div ref={messagesEndRef} style={{ height: '1px' }} />
         </div>
-
-        {/* Input Form Area */}
         <form onSubmit={handleSendMessage} className="border-t border-gray-200/80 p-3 bg-white flex-shrink-0">
           <div className="flex items-center gap-2">
             <input
@@ -655,11 +552,8 @@ export default function AiAssistant({ isOpen, onClose }) {
               {isTyping ? <Loader size={18} className="animate-spin" /> : <Send size={18} />}
             </button>
           </div>
-           {/* Security Note Footer */}
-           
         </form>
       </motion.div>
     </>
   );
 }
-// --- End AiAssistant Component ---
