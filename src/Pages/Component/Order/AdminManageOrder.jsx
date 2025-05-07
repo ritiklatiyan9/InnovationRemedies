@@ -240,7 +240,7 @@ const AdminManageOrder = () => {
     try {
       if (!token) throw new Error("Authentication token is missing. Please log in again.");
       const headers = getAuthHeader();
-      const response = await fetch('http://localhost:8000/api/v1/orders/admin/orders', { headers });
+      const response = await fetch('https://innovation-backend.vercel.app/api/v1/orders/admin/orders', { headers });
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -338,7 +338,7 @@ const AdminManageOrder = () => {
     try {
       if (!token) throw new Error("Authentication token missing.");
       const headers = { ...getAuthHeader(), 'Content-Type': 'application/json' };
-      const response = await fetch(`http://localhost:8000/api/v1/orders/admin/orders/${orderId}/status`, {
+      const response = await fetch(`https://innovation-backend.vercel.app/api/v1/orders/admin/orders/${orderId}/status`, {
         method: 'PATCH',
         headers,
         body: JSON.stringify({ status: newStatus }),
@@ -380,7 +380,7 @@ const AdminManageOrder = () => {
     try {
       if (!token) throw new Error("Authentication token missing.");
       const headers = getAuthHeader();
-      const response = await fetch(`http://localhost:8000/api/v1/orders/admin/orders/${cancelOrderId}/cancel`, {
+      const response = await fetch(`https://innovation-backend.vercel.app/api/v1/orders/admin/orders/${cancelOrderId}/cancel`, {
         method: 'PATCH',
         headers,
       });
