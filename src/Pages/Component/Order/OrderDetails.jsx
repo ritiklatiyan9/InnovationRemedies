@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { format } from 'date-fns';
@@ -18,15 +18,13 @@ import {
   MapPin,
   User,
   Phone,
-  ReceiptText, // Using this for Order Summary/Details
+  ReceiptText,
   Home,
   Info,
-  // ExternalLink // If you had an actual tracking link
 } from 'lucide-react';
 
 // --- Order Tracker Component (from your MyOrdersPage) ---
-// Ensure this component is defined here or imported correctly
-const OrderTracker = ({ status }) => {
+const OrderTracker = React.memo(({ status }) => {
   const allStatuses = ['pending', 'processing', 'shipped', 'delivered'];
   const currentIndex = allStatuses.indexOf(status);
 
@@ -39,28 +37,28 @@ const OrderTracker = ({ status }) => {
 
           return (
             <React.Fragment key={step}>
-              <div className="flex flex-col items-center text-center"> {/* Added text-center for better alignment */}
+              <div className="flex flex-col items-center text-center">
                 <div
                   className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 ease-in-out ${
                     isActive
-                      ? 'bg-green-500 ring-4 ring-green-200 animate-pulse' // Enhanced active state
+                      ? 'bg-green-500 ring-4 ring-green-200 animate-pulse'
                       : isCompleted
                       ? 'bg-green-500'
-                      : 'bg-gray-300' // Slightly darker inactive
+                      : 'bg-gray-300'
                   }`}
                 >
                   {isCompleted && <CheckCircle className="w-4 h-4 text-white" />}
-                  {isActive && <Clock className="w-4 h-4 text-white" />} {/* Icon for active step */}
+                  {isActive && <Clock className="w-4 h-4 text-white" />}
                 </div>
-                <span className={`mt-2 text-xs capitalize font-medium ${ // Uniform font-medium
+                <span className={`mt-2 text-xs capitalize font-medium ${
                   isActive ? 'text-green-600' :
-                  isCompleted ? 'text-green-600' : 'text-gray-500' // Consistent inactive color
+                  isCompleted ? 'text-green-600' : 'text-gray-500'
                 }`}>
                   {step}
                 </span>
               </div>
               {index < allStatuses.length - 1 && (
-                <div className="flex-1 mx-2 h-1 relative"> {/* Slightly thicker line */}
+                <div className="flex-1 mx-2 h-1 relative">
                   <div className="absolute inset-0 bg-gray-300 rounded-full"></div>
                   {isCompleted && (
                     <div
@@ -68,7 +66,7 @@ const OrderTracker = ({ status }) => {
                       style={{ width: '100%' }}
                     ></div>
                   )}
-                  {isActive && ( // Partial fill for active connecting line
+                  {isActive && (
                     <div
                       className="absolute inset-y-0 left-0 bg-green-500 rounded-l-full"
                       style={{ width: '50%' }}
@@ -82,58 +80,87 @@ const OrderTracker = ({ status }) => {
       </div>
     </div>
   );
-};
+});
 
+// Memoized InfoBlock Component
+const InfoBlock = React.memo(({ icon, title, children, className = "" }) => (
+  <div className={`p-6 ${className}`}>
+    <div className="flex items-center mb-4">
+      {React.cloneElement(icon, { className: "w-7 h-7 text-blue-600 mr-3 flex-shrink-0" })}
+      <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
+    </div>
+    <div className="text-gray-700 space-y-2 text-sm leading-relaxed">
+      {children}
+    </div>
+  </div>
+));
+
+// Memoized ItemDetailCard Component
+const ItemDetailCard = React.memo(({ itemName, quantity, totalAmountForItem, imageUrl, formatCurrency }) => {
+  const unitPrice = (quantity > 0 && totalAmountForItem) ? totalAmountForItem / quantity : 0;
+  return (
+    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-200">
+      <div className="w-24 h-24 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+        {imageUrl ? (
+          <img src={imageUrl} alt={itemName} className="w-full h-full object-cover" />
+        ) : (
+          <Package className="w-12 h-12 text-blue-400" />
+        )}
+      </div>
+      <div className="flex-grow min-w-0">
+        <h4 className="font-semibold text-gray-900 text-md sm:text-lg leading-tight truncate" title={itemName}>
+          {itemName || "Item Name Not Available"}
+        </h4>
+        <p className="text-sm text-gray-500 mt-1">Quantity: {quantity || 0}</p>
+        {unitPrice > 0 && (
+           <p className="text-sm text-gray-500 mt-0.5 sm:hidden">
+              {formatCurrency(unitPrice)} each
+           </p>
+        )}
+      </div>
+      <div className="text-left sm:text-right flex-shrink-0 ml-0 sm:ml-4 mt-2 sm:mt-0">
+        <p className="text-md sm:text-lg font-bold text-gray-900">{formatCurrency(totalAmountForItem)}</p>
+        {unitPrice > 0 && (
+          <p className="text-xs text-gray-500 hidden sm:block">
+            ({formatCurrency(unitPrice)} each)
+          </p>
+        )}
+      </div>
+    </div>
+  );
+});
 
 const OrderDetailsPage = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
-  const { api, user } = useAuth();
+  const { api, user, token, refreshToken } = useAuth();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isCancelling, setIsCancelling] = useState(false); // For cancel button loading state
+  const [isCancelling, setIsCancelling] = useState(false);
+  
+  // Create a ref to track mounted state
+  const isMounted = useRef(true);
+  
+  // Used to prevent duplicate API calls
+  const fetchInProgress = useRef(false);
+  
+  // Track authorization retries
+  const authRetries = useRef(0);
+  const MAX_AUTH_RETRIES = 2;
 
-  const isAdmin = user?.role === 'Admin';
+  const isAdmin = useMemo(() => user?.role === 'Admin', [user]);
 
-  const getOrdersPath = () => {
-    // Adjust these paths to your actual routes
+  const getOrdersPath = useCallback(() => {
     return isAdmin ? '/admin/orders' : '/orders';
-  };
+  }, [isAdmin]);
 
-  useEffect(() => {
-    const fetchOrderDetails = async () => {
-      if (!orderId) {
-        setError("Order ID is missing from the URL.");
-        setLoading(false);
-        return;
-      }
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await api.get(`/orders/${orderId}`);
-        setOrder(response.data.data);
-      } catch (err) {
-        console.error("Failed to fetch order details:", err);
-        const message = err.response?.data?.message || err.message || "Could not load order details.";
-        setError(message);
-        if (err.response?.status === 404) {
-            setOrder(null); // Ensure 'Order Not Found' UI shows
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchOrderDetails();
-  }, [orderId, api]);
-
-  const formatCurrency = (amount) => {
+  const formatCurrency = useCallback((amount) => {
     if (typeof amount !== 'number' || isNaN(amount)) return 'N/A';
     return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(amount);
-  };
+  }, []);
 
-  const getStatusSemanticColor = (status) => {
+  const getStatusSemanticColor = useCallback((status) => {
     switch(status) {
       case 'delivered': return { text: 'text-green-600', bg: 'bg-green-50', border: 'border-green-300', iconFill: 'fill-green-500' };
       case 'shipped': return { text: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-300', iconFill: 'fill-blue-500' };
@@ -142,9 +169,100 @@ const OrderDetailsPage = () => {
       case 'cancelled': return { text: 'text-red-600', bg: 'bg-red-50', border: 'border-red-300', iconFill: 'fill-red-500' };
       default: return { text: 'text-gray-600', bg: 'bg-gray-100', border: 'border-gray-300', iconFill: 'fill-gray-500' };
     }
-  };
+  }, []);
 
-  const handleCancelOrder = async () => {
+  // Memoize the fetch function
+  const fetchOrderDetails = useCallback(async (skipAuthCheck = false) => {
+    // If no orderId or component unmounted, don't proceed
+    if (!orderId || !isMounted.current) return;
+    
+    // Prevent duplicate fetch calls
+    if (fetchInProgress.current) return;
+    fetchInProgress.current = true;
+    
+    // Check for auth retry limit
+    if (!skipAuthCheck && authRetries.current >= MAX_AUTH_RETRIES) {
+      console.error("Max auth retries reached, aborting");
+      setError("Authentication error. Please try logging in again.");
+      setLoading(false);
+      fetchInProgress.current = false;
+      return;
+    }
+    
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const response = await api.get(`/orders/${orderId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}` // Explicitly set current token
+        }
+      });
+      
+      if (isMounted.current) {
+        setOrder(response.data.data);
+        // Reset auth retries counter on success
+        authRetries.current = 0;
+      }
+    } catch (err) {
+      console.error("Failed to fetch order details:", err);
+      
+      if (!isMounted.current) return;
+      
+      const message = err.response?.data?.message || err.message || "Could not load order details.";
+      
+      // Handle specific error cases
+      if (err.response?.status === 401) {
+        // Increment auth retry counter
+        authRetries.current += 1;
+        console.log(`Auth retry ${authRetries.current}/${MAX_AUTH_RETRIES}`);
+        
+        try {
+          // Try to refresh token manually
+          await refreshToken();
+          // Retry fetch after token refresh (with skip flag to avoid infinite loops)
+          fetchInProgress.current = false;
+          fetchOrderDetails(true);
+          return; // Early return to avoid setting error state
+        } catch (refreshErr) {
+          setError("Session expired. Please log in again.");
+        }
+      } else if (err.response?.status === 404) {
+        setError("Order not found.");
+        setOrder(null);
+      } else {
+        setError(message);
+      }
+    } finally {
+      if (isMounted.current) {
+        setLoading(false);
+      }
+      fetchInProgress.current = false;
+    }
+  }, [orderId, api, token, refreshToken]);
+
+  // Clean up effect to set mounted state when component unmounts
+  useEffect(() => {
+    isMounted.current = true;
+    // Reset state variables on mount
+    setLoading(true);
+    setError(null);
+    setOrder(null);
+    
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
+  // Fetch order details once when component mounts or token changes
+  useEffect(() => {
+    // Only fetch if we have a token
+    if (token) {
+      fetchOrderDetails();
+    }
+  }, [fetchOrderDetails, token, orderId]);
+
+  const handleCancelOrder = useCallback(async () => {
     if (!order || !order.orderId || isCancelling) return;
     
     if (window.confirm('Are you sure you want to cancel this order? This action cannot be undone.')) {
@@ -152,64 +270,27 @@ const OrderDetailsPage = () => {
       const toastId = toast.loading("Cancelling order...");
       try {
         await api.patch(`/orders/${order.orderId}/cancel`);
-        const response = await api.get(`/orders/${order.orderId}`); // Re-fetch to get updated order
-        setOrder(response.data.data);
-        toast.success('Order cancelled successfully.', { id: toastId });
+        
+        // Re-fetch order details instead of making another API call
+        const response = await api.get(`/orders/${order.orderId}`);
+        
+        if (isMounted.current) {
+          setOrder(response.data.data);
+          toast.success('Order cancelled successfully.', { id: toastId });
+        }
       } catch (err) {
         console.error("Failed to cancel order:", err);
-        toast.error(err.response?.data?.message || "Failed to cancel order.", { id: toastId });
+        
+        if (isMounted.current) {
+          toast.error(err.response?.data?.message || "Failed to cancel order.", { id: toastId });
+        }
       } finally {
-        setIsCancelling(false);
+        if (isMounted.current) {
+          setIsCancelling(false);
+        }
       }
     }
-  };
-
-  // --- Reusable UI Components ---
-  const InfoBlock = ({ icon, title, children, className = "" }) => (
-    <div className={`p-6 ${className}`}>
-      <div className="flex items-center mb-4"> {/* Increased margin bottom */}
-        {React.cloneElement(icon, { className: "w-7 h-7 text-blue-600 mr-3 flex-shrink-0" })} {/* Slightly larger icon */}
-        <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
-      </div>
-      <div className="text-gray-700 space-y-2 text-sm leading-relaxed"> {/* Increased space and leading */}
-        {children}
-      </div>
-    </div>
-  );
-  
-  const ItemDetailCard = ({ itemName, quantity, totalAmountForItem, imageUrl }) => {
-    const unitPrice = (quantity > 0 && totalAmountForItem) ? totalAmountForItem / quantity : 0;
-    return (
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-200">
-        <div className="w-24 h-24 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
-          {imageUrl ? (
-            <img src={imageUrl} alt={itemName} className="w-full h-full object-cover" />
-          ) : (
-            <Package className="w-12 h-12 text-blue-400" />
-          )}
-        </div>
-        <div className="flex-grow min-w-0"> {/* Added min-w-0 for flex text truncation if needed */}
-          <h4 className="font-semibold text-gray-900 text-md sm:text-lg leading-tight truncate" title={itemName}>
-            {itemName || "Item Name Not Available"}
-          </h4>
-          <p className="text-sm text-gray-500 mt-1">Quantity: {quantity || 0}</p>
-          {unitPrice > 0 && (
-             <p className="text-sm text-gray-500 mt-0.5 sm:hidden"> {/* Show on mobile, hide on sm+ */}
-                {formatCurrency(unitPrice)} each
-             </p>
-          )}
-        </div>
-        <div className="text-left sm:text-right flex-shrink-0 ml-0 sm:ml-4 mt-2 sm:mt-0">
-          <p className="text-md sm:text-lg font-bold text-gray-900">{formatCurrency(totalAmountForItem)}</p>
-          {unitPrice > 0 && (
-            <p className="text-xs text-gray-500 hidden sm:block"> {/* Hide on mobile, show on sm+ */}
-              ({formatCurrency(unitPrice)} each)
-            </p>
-          )}
-        </div>
-      </div>
-    );
-  };
+  }, [order, isCancelling, api]);
 
   // --- Loading State ---
   if (loading) {
@@ -232,7 +313,10 @@ const OrderDetailsPage = () => {
           <p className="text-gray-600 mb-8 text-sm sm:text-base">{error}</p>
           <div className="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4">
             <button 
-              onClick={() => window.location.reload()}
+              onClick={() => {
+                authRetries.current = 0;
+                fetchOrderDetails();
+              }}
               className="w-full sm:w-auto px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm flex items-center justify-center"
             >
               <Home className="w-4 h-4 mr-2" /> Try Again
@@ -276,7 +360,7 @@ const OrderDetailsPage = () => {
   // --- Main Content ---
   return (
     <div className="bg-gray-100 min-h-screen py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-5xl mx-auto"> {/* Increased max-width */}
+      <div className="max-w-5xl mx-auto">
         
         {/* Breadcrumb Navigation */}
         <div className="mb-6">
@@ -389,26 +473,25 @@ const OrderDetailsPage = () => {
             <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                 <Package className="w-6 h-6 mr-2 text-blue-600"/> Item(s) in Your Order
             </h2>
-            {/* In a real scenario with multiple items, you would map over order.items here */}
             <ItemDetailCard 
               itemName={order.itemnName} 
               quantity={order.itemsQuantity} 
-              totalAmountForItem={order.totalAmount} // Assuming totalAmount is for this single item type
-              // imageUrl={order.itemImageUrl || 'https://via.placeholder.com/150'} // Example placeholder image
+              totalAmountForItem={order.totalAmount}
+              formatCurrency={formatCurrency}
             />
           </div>
           
           {/* Shipping, Payment & Summary Section (Two Columns on Desktop) */}
           <div className="grid grid-cols-1 md:grid-cols-5">
             <div className="md:col-span-3 md:border-r border-gray-200">
-                <InfoBlock icon={<MapPin />} title="Shipping Address"> {/* Changed icon */}
+                <InfoBlock icon={<MapPin />} title="Shipping Address">
                     <p><strong className="font-medium text-gray-900">Recipient:</strong> {order.shippingName}</p>
                     <p><strong className="font-medium text-gray-900">Address:</strong> {order.shippingAddress}</p>
                     <p><strong className="font-medium text-gray-900">Contact:</strong> {order.shippingMobile}</p>
                 </InfoBlock>
             </div>
-            <div className="md:col-span-2 bg-gray-50/50"> {/* Slight bg tint for payment section */}
-                <InfoBlock icon={<ReceiptText />} title="Payment & Summary"> {/* Changed icon */}
+            <div className="md:col-span-2 bg-gray-50/50">
+                <InfoBlock icon={<ReceiptText />} title="Payment & Summary">
                     <p><strong className="font-medium text-gray-900">Payment Method:</strong> 
                         <span className="capitalize ml-1">
                             {order.paymentMethod === 'cod' ? 'Cash on Delivery' : 
@@ -424,9 +507,8 @@ const OrderDetailsPage = () => {
                         </div>
                         <div className="flex justify-between items-center text-sm">
                             <span className="text-gray-600">Shipping & Handling:</span>
-                            <span className="font-medium text-gray-800">{formatCurrency(0)}</span> {/* Placeholder */}
+                            <span className="font-medium text-gray-800">{formatCurrency(0)}</span>
                         </div>
-                        {/* Add discounts or taxes here if applicable */}
                         <div className="flex justify-between items-center text-lg font-bold text-gray-900 pt-2 border-t border-gray-200 mt-2">
                             <span>Grand Total:</span>
                             <span>{formatCurrency(order.totalAmount)}</span>
