@@ -59,16 +59,10 @@ const HeroSection = () => {
               size="lg"
               className="bg-blue-600 hover:bg-blue-700 text-white px-8 text-base rounded-full shadow-md hover:shadow-lg transition-all duration-300"
             >
+                  <PlayCircle className="mr-2 h-5 w-5 text-white transition-colors group-hover:text-blue-700" />
               Learn More
             </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="bg-white text-blue-600 border-transparent hover:bg-slate-100 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900/50 px-6 text-base rounded-full group flex items-center shadow-md hover:shadow-lg transition-all duration-300"
-            >
-              <PlayCircle className="mr-2 h-5 w-5 text-blue-600 transition-colors group-hover:text-blue-700" />
-              View Video
-            </Button>
+          
           </div>
         </div>
       </div>
