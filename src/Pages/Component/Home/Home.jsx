@@ -150,10 +150,10 @@ function Home() {
               className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight mb-4 drop-shadow-lg bg-gradient-to-r from-gray-100 via-blue-50 to-slate-200 bg-clip-text text-transparent"
             >
               <span className="block text-5xl md:text-8xl lg:text-9xl bg-gradient-to-r from-blue-100 via-slate-50 to-indigo-200 bg-clip-text text-transparent" style={dolceAmyaraStyle}>
-                Innovation Remedies
+                Innovation 
               </span>
-              <span className="block whitespace-nowrap text-xl md:text-4xl mt-2 text-slate-300 font-light">
-                Life Science Pvt. Ltd.
+              <span className="block whitespace-nowrap text-2xl md:text-6xl mt-2 text-slate-300 font-light">
+              Remedies  Life Science Pvt. Ltd.
               </span>
             </h1>
 
