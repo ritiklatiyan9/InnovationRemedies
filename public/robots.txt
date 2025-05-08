@@ -1,0 +1,14 @@
+# public/robots.txt
+User-agent: *
+Allow: /
+
+# Disallow paths you don't want indexed.
+# Examples (adjust to your needs):
+Disallow: /admin/
+Disallow: /cart
+Disallow: /login # If login page has no unique content value for searchers
+Disallow: /order-confirmation/ # Note the trailing slash for directories/paths
+Disallow: /orders # If user-specific orders pages shouldn't be indexed
+
+# Add your sitemap location (REPLACE with your actual domain)
+Sitemap: https://www.innovationremedies.com/sitemap.xml

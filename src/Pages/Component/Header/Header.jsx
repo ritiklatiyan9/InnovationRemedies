@@ -6,7 +6,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetFooter
 import {
   NavigationMenu,
   NavigationMenuItem,
-  NavigationMenuLink,
+  // NavigationMenuLink, // Not directly used if Link is wrapped
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
@@ -21,7 +21,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '../context/AuthContext'; // Adjust path if necessary
-import { toast } from 'react-hot-toast';
+import { toast } from 'react-hot-toast'; // Assuming you are using react-hot-toast
 import Logo from '../../../assets/Images/logo.png'; // Ensure this path is correct
 import { cn } from '@/lib/utils'; // Adjust path if necessary
 
@@ -29,17 +29,17 @@ import { cn } from '@/lib/utils'; // Adjust path if necessary
 const navItems = [
   { to: '/', label: 'Home', icon: Home, color: 'text-rose-500' },
   { to: '/products', label: 'Products', icon: ShoppingBag, color: 'text-blue-500' },
-  { to: '/store', label: 'Information', icon: Book, color: 'text-emerald-500' },
+  { to: '/store', label: 'Information', icon: Book, color: 'text-emerald-500' }, // 'Store' is your 'Information' page
   { to: '/about', label: 'About Us', icon: Users, color: 'text-amber-500' },
-  { to: '/contact', label: 'Contact', icon: Mail, color: 'text-indigo-500' }, 
-  { to: '/cart', label: 'MyCart', icon: ShoppingBagIcon, color: 'text-indigo-500' }, 
+  { to: '/contact', label: 'Contact', icon: Mail, color: 'text-indigo-500' },
+  { to: '/cart', label: 'MyCart', icon: ShoppingBagIcon, color: 'text-indigo-500' },
 ];
 
 // Admin-specific navigation item
-const adminNavItem = { 
-  to: '/admin/orders', 
-  label: 'Manage Orders', 
-  icon: Package, 
+const adminNavItem = {
+  to: '/admin/orders',
+  label: 'Manage Orders',
+  icon: Package,
   color: 'text-purple-500',
   adminOnly: true
 };
@@ -66,27 +66,28 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const iconSize = "h-5 w-5"; // Consistent icon size
-  
+
   // Check if user has admin role
   const isAdmin = user?.role === 'Admin';
 
   // Get all navigation items, including admin-specific items if user is an admin
   const getAllNavItems = () => {
+    // Filter out admin-only items if not admin
+    const baseNavItems = navItems.filter(item => !item.adminOnly);
     if (isAdmin) {
-      return [...navItems, adminNavItem];
+      return [...baseNavItems, adminNavItem];
     }
-    return navItems;
+    return baseNavItems;
   };
 
   const handleLogout = async () => {
     try {
-      // Assuming logout() is async; if not, remove await
-      await logout(); // Make sure your logout function handles async correctly if needed
+      await logout();
       toast.success('Logged out successfully');
       navigate('/');
       setIsMobileMenuOpen(false); // Close mobile menu on logout
     } catch (error) {
-      toast.error(error?.message || 'Failed to logout'); // Show specific error message if available
+      toast.error(error?.message || 'Failed to logout');
       console.error("Logout error:", error);
     }
   };
@@ -98,8 +99,17 @@ export default function Header() {
     <header className="fixed top-0 inset-x-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/40 shadow-sm">
       <div className="container mx-auto h-16 flex items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <Link to="/" className="flex-shrink-0" onClick={closeMobileMenu}>
-          <img src={Logo} alt="App Logo" className="h-10 w-auto object-contain" />
+        <Link
+            to="/"
+            className="flex-shrink-0"
+            onClick={closeMobileMenu}
+            aria-label="Innovation Remedies Home" // SEO & Accessibility: Aria-label for logo link
+        >
+          <img
+            src={Logo}
+            alt="Innovation Remedies Company Logo" // SEO & Accessibility: Descriptive alt text
+            className="h-10 w-auto object-contain"
+          />
         </Link>
 
         {/* Desktop Navigation */}
@@ -107,16 +117,17 @@ export default function Header() {
           <NavigationMenuList className="bg-muted/60 px-3 py-1.5 rounded-full shadow-inner border border-border/30">
             {getAllNavItems().map((item) => (
               <NavigationMenuItem key={item.to}>
-                {/* Fix: Use regular NavigationMenuLink component with Link */}
-                <Link to={item.to}>
-                  <div className={cn(
+                <NavLink // Using NavLink for active styling if needed, or Link
+                  to={item.to}
+                  className={({ isActive }) => cn(
                     navigationMenuTriggerStyle(),
-                    "bg-transparent hover:bg-accent/70 data-[active]:bg-background data-[active]:shadow-sm text-sm h-9"
-                  )}>
-                    <item.icon aria-hidden="true" className={cn(iconSize, item.color, "mr-1.5")} />
-                    {item.label}
-                  </div>
-                </Link>
+                    "bg-transparent hover:bg-accent/70 data-[active]:bg-background data-[active]:shadow-sm text-sm h-9",
+                    isActive ? "bg-background shadow-sm font-semibold" : "" // Example active style
+                  )}
+                >
+                  <item.icon aria-hidden="true" className={cn(iconSize, item.color, "mr-1.5")} />
+                  {item.label}
+                </NavLink>
               </NavigationMenuItem>
             ))}
           </NavigationMenuList>
@@ -148,8 +159,8 @@ export default function Header() {
                 user={user}
                 onLogout={handleLogout}
                 onClose={closeMobileMenu}
-                isAdmin={isAdmin}
-                navItems={getAllNavItems()}
+                isAdmin={isAdmin} // Pass isAdmin to MobileSheetContent
+                navItems={getAllNavItems()} // Pass all items (filtered by admin status)
               />
             </Sheet>
           </div>
@@ -165,13 +176,12 @@ export default function Header() {
 function UserDropdown({ user, onLogout }) {
   const initials = getUserInitials(user);
   const isAdmin = user?.role === 'Admin';
-  
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0">
           <Avatar className="h-10 w-10 border-2 border-border/20">
-             {/* Ensure AvatarImage src is handled correctly if user?.coverImage can be null/undefined */}
             <AvatarImage src={user?.coverImage || undefined} alt={user?.username || "User avatar"} />
             <AvatarFallback className="bg-gradient-to-br from-primary/70 to-primary/40 text-primary-foreground font-semibold">
               {initials}
@@ -199,14 +209,12 @@ function UserDropdown({ user, onLogout }) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-           {/* Use Link component for navigation */}
-           <Link to="/profile" className="cursor-pointer w-full flex items-center"> 
+           <Link to="/profile" className="cursor-pointer w-full flex items-center">
              <User className="mr-2 h-4 w-4" />
              <span>Profile</span>
            </Link>
         </DropdownMenuItem>
-        
-        {/* Admin-specific menu item */}
+
         {isAdmin && (
           <DropdownMenuItem asChild>
             <Link to="/admin/orders" className="cursor-pointer w-full flex items-center">
@@ -215,9 +223,8 @@ function UserDropdown({ user, onLogout }) {
             </Link>
           </DropdownMenuItem>
         )}
-        
+
         <DropdownMenuItem asChild disabled>
-          {/* Disabled example */}
           <span className="cursor-not-allowed opacity-50 w-full flex items-center">
             <Settings className="mr-2 h-4 w-4" />
             <span>Settings</span>
@@ -234,7 +241,7 @@ function UserDropdown({ user, onLogout }) {
 }
 
 // Mobile Sheet Content
-function MobileSheetContent({ isAuthenticated, user, onLogout, onClose, isAdmin, navItems }) {
+function MobileSheetContent({ isAuthenticated, user, onLogout, onClose, navItems }) { // Removed isAdmin prop as navItems is already filtered
   const iconSize = "h-5 w-5";
   const initials = getUserInitials(user);
 
@@ -275,7 +282,6 @@ function MobileSheetContent({ isAuthenticated, user, onLogout, onClose, isAdmin,
         </SheetTitle>
       </SheetHeader>
 
-      {/* Navigation Links */}
       <nav className="flex-grow p-4 overflow-y-auto">
         <div className="mb-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
           Navigation
@@ -297,7 +303,6 @@ function MobileSheetContent({ isAuthenticated, user, onLogout, onClose, isAdmin,
               >
                 {({ isActive }) => (
                   <>
-                    {/* Icon and Label */}
                     <div className="flex items-center gap-3">
                        <item.icon aria-hidden="true" className={cn(
                          iconSize,
@@ -306,8 +311,6 @@ function MobileSheetContent({ isAuthenticated, user, onLogout, onClose, isAdmin,
                        )} />
                       <span className={isActive ? "font-semibold" : ""}>{item.label}</span>
                     </div>
-
-                    {/* Conditional Active Indicator */}
                     {isActive && (
                       <ChevronRight className={cn("h-4 w-4 opacity-70", item.color)} />
                     )}
@@ -318,7 +321,6 @@ function MobileSheetContent({ isAuthenticated, user, onLogout, onClose, isAdmin,
           ))}
         </ul>
 
-         {/* Account Section (if logged in) */}
          {isAuthenticated && (
              <>
                 <div className="mt-6 mb-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
@@ -347,13 +349,12 @@ function MobileSheetContent({ isAuthenticated, user, onLogout, onClose, isAdmin,
          )}
       </nav>
 
-      {/* Footer Actions (Login/Logout) */}
       <SheetFooter className="p-4 border-t border-border/30 bg-background/50 mt-auto">
         {isAuthenticated ? (
           <Button
             variant="ghost"
             onClick={() => {
-              onLogout();
+              onLogout(); // onClose is already called within handleLogout if successful
             }}
             className="w-full justify-start text-red-600 hover:bg-red-50 hover:text-red-600 gap-3"
           >

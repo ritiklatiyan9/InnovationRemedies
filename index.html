@@ -2,13 +2,23 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <!-- your new favicon links: -->
-    <link rel="icon" type="image/svg+xml" href="/logo.png" />
-   
+    <!-- Ensure logo.png is in your public folder -->
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <!-- Optional: Add more favicon sizes for better device compatibility -->
+    <!--
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Fallback title - React Helmet will override this for specific pages -->
     <title>Innovation Remedies</title>
+    <!-- Fallback description - React Helmet will override this -->
+    <meta name="description" content="Innovation Remedies offers high-quality veterinary products and solutions for the health and wellbeing of all animals." />
   </head>
   <body>
+    <noscript>You need to enable JavaScript to run this app for the best experience.</noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
