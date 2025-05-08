@@ -1,11 +1,11 @@
 // src/components/HeroSection.jsx
 import { Button } from "@/components/ui/button"; // Adjust path if necessary
 import { PlayCircle, ChevronRight } from "lucide-react"; // BookKey and FaResearchgate were unused
-import videoUrl from "../../../assets/Video/bg9.mp4"; // Adjust path if necessary
-const customStyle = {
-    fontFamily: "Oregon LDO, sans-serif",
-    fontWeight: "400",
-  }
+import videoUrl from "../../../assets/Video/bg10.mp4"; // Adjust path if necessary
+const customStyle2 = {
+  fontFamily: "Libreville-Free, sans-serif",
+  fontWeight: "400",
+};
 
 
   
@@ -18,7 +18,7 @@ const HeroSection = () => {
 
   return (
     <section
-    style={customStyle}
+    style={customStyle2}
     className="relative w-full overflow-hidden h-screen">
       {/* Background Video */}
       <div className="absolute inset-0 z-0">

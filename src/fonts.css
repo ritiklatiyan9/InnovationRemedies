@@ -17,15 +17,7 @@
   }
 
 
-  
-@font-face {
-  font-family: "Oregon LDO";
-  src: url("../fonts/oregon.woff2") format("woff2"),
-    url("../fonts/oregon.ttf") format("trueType");
 
-  font-weight: 600;
-  font-style: normal;
-}
   
 @font-face {
   font-family: "Busorama";
@@ -54,4 +46,11 @@
     font-weight: 600;
     font-style: normal;
   }
-  
+
+
+  @font-face {
+    font-family: "Dolce-Amyara";
+    src: url("./assets/fonts/DOLCEANDAMYARAPERSONALUSE-YZJDY.TTF") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }

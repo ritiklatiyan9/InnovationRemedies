@@ -1,5 +1,5 @@
 import React from "react";
-import veterinaryVideoUrl from "../../../assets/Video/bg10.mp4"; // Ensure this path is correct
+import veterinaryVideoUrl from "../../../assets/Video/bg8.mp4"; // Ensure this path is correct
 // ensure it's correctly imported/linked in your project's HTML or CSS.
 
 const customStyle = {

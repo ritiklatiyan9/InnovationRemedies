@@ -10,11 +10,7 @@ import {
 } from 'lucide-react';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 
-// --- Enhanced SVG Icons with improved animations ---
-const customStyle = {
-  fontFamily: "Oregon LDO, sans-serif",
-  fontWeight: "400",
-};
+
 
 const VisionIcon = () => (
   <motion.svg

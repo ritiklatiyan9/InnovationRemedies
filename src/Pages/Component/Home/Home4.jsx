@@ -2,7 +2,7 @@ import React from 'react';
 import bgImage from '../../../assets/Video/bg3.jpg'; // ← Adjust path if needed
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import twelveone from '../../../assets/Images/twelveone.png'; // ← Adjust path if needed
+import twelveone from '../../../assets/Video/bg14.png'; // ← Adjust path if needed
 import { ChevronRight, Users, MessageSquare, Volume2, BrainCircuit } from 'lucide-react';
 
 // Define positions more explicitly for clarity

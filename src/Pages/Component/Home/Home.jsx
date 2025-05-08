@@ -7,19 +7,23 @@ import Home4 from "./Home4";
 import Home6 from "./Home6";
 import Home7 from "./Home7";
 import Home8 from "./Home8";
-import Products from "../Products/ListProducts";
-import videoSourceUrl from "../../../assets/Video/bg8.mp4"; // Ensure this path is correct
+// import Products from "../Products/ListProducts"; // Assuming not used in this snippet, commented out
+import videoSourceUrl from "../../../assets/Video/bg9.mp4"; // Ensure this path is correct
 import logo from "../../../assets/Images/logo.png"; // Ensure this path is correct
-import twelveone from "../../../assets/Images/twelveone.png"; // Ensure this path is correct
+// import twelveone from "../../../assets/Images/twelveone.png"; // Assuming not used in this snippet, commented out
 import { FlipWords } from "../../../components/ui/flips-words"; // Ensure this path is correct
 import { PawPrint, HeartPulse, Activity } from "lucide-react";
 
-const customStyle = {
-  fontFamily: "Oregon LDO, sans-serif",
+const customStyle2 = {
+  fontFamily: "Libreville-Free, sans-serif",
   fontWeight: "400",
 };
 
-
+// Define the style for the "Dolce & Amyara" font
+const dolceAmyaraStyle = {
+  fontFamily: "'Dolce & Amyara Personal Use', serif", // Use the exact font name, quoted if it has spaces. Added a generic serif fallback.
+  fontWeight: "normal", // The font in the image preview appears to be normal weight. Adjust if needed.
+};
 
 const VetWellbeingDashboard = () => {
   const words = ["World", "Care", "Family", "Health"];
@@ -50,7 +54,8 @@ const VetWellbeingDashboard = () => {
       <Helmet>
         {/* --- SEO Meta Tags --- */}
         <title>
-          Innovation Remedies | Leading Veterinary Solutions in Meerut & Delhi NCR
+          Innovation Remedies | Leading Veterinary Solutions in Meerut & Delhi
+          NCR
         </title>
         <meta
           name="description"
@@ -85,7 +90,8 @@ const VetWellbeingDashboard = () => {
           content="Advanced veterinary products for animal health and wellness in Meerut & Delhi NCR by Innovation Remedies."
         />
         <meta name="twitter:image" content={ogImageUrl} />
-        {/* <meta name="twitter:site" content="@YourTwitterHandle" /> */} {/* Add actual handle */}
+        {/* <meta name="twitter:site" content="@YourTwitterHandle" /> */}{" "}
+        {/* Add actual handle */}
         <meta name="geo.region" content="IN-UP" />
         <meta name="geo.placename" content="Meerut" />
         <meta name="geo.position" content="28.9803;77.7039" />
@@ -148,7 +154,7 @@ const VetWellbeingDashboard = () => {
         {/* Content Layer */}
         <div className="relative z-10 container mx-auto px-6 lg:px-8 flex flex-col md:flex-row items-center gap-8 md:gap-12">
           {/* LEFT COLUMN (Text Content) */}
-          <div className="w-full md:w-3/5 lg:w-1/2 text-center md:text-left  mb-6 md:pt-0">
+          <div className="w-full md:w-3/5 lg:w-2/3 text-center md:text-left  mb-6 md:pt-0">
             {/* Optional: Subtle Icon/Logo Above Title */}
             <div className="mb-5 flex justify-center md:justify-start opacity-90">
               <div className="p-2 bg-gradient-to-br from-cyan-600 to-blue-700 rounded-full shadow-lg">
@@ -158,17 +164,27 @@ const VetWellbeingDashboard = () => {
 
             {/* Main Headline - Bolder, Clearer */}
             <h1
-              style={customStyle}
-              className="
-                text-5xl sm:text-6xl lg:text-7xl
-                font-extrabold tracking-tight leading-tight
-                mb-4 drop-shadow-lg
-                bg-gradient-to-r from-teal-100 via-teal-200 to-green-400/80
-                bg-clip-text text-transparent
-              "
-            >
-              Innovation Remedies Life Science
-            </h1>
+  style={customStyle2} // Applies Libreville-Free and fontWeight 400 as a base to the H1
+  className="
+    text-5xl sm:text-6xl lg:text-6xl
+    font-extrabold tracking-tight leading-tight
+    mb-4 drop-shadow-lg
+    bg-gradient-to-r from-gray-100 via-blue-50 to-slate-200
+    bg-clip-text text-transparent
+  "
+>
+  <span 
+    className="block text-9xl
+    bg-gradient-to-r from-blue-100 via-slate-50 to-indigo-200
+    bg-clip-text text-transparent" 
+    style={dolceAmyaraStyle}
+  >
+    Innovation
+  </span>
+  <span className="block whitespace-nowrap">
+    Remedies Life Science Pvt. Ltd.
+  </span>
+</h1>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-6 text-gray-200 drop-shadow-md">
               {/* Empty h2, possibly for spacing or future content */}
@@ -218,10 +234,9 @@ const VetWellbeingDashboard = () => {
         </div>
       </section>
 
-     
       <Home8 />
       {/* --- OTHER SECTIONS --- */}
-      <div >
+      <div>
         <Home2 />
       </div>
       <Home7 />
