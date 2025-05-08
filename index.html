@@ -2,15 +2,23 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <!-- Ensure logo.png is in your public folder -->
+
+    <!-- Main Favicon (ensure logo.png is in /public) -->
     <link rel="icon" type="image/png" href="/logo.png" />
-    <!-- Optional: Add more favicon sizes for better device compatibility -->
-    <!--
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-    -->
+
+    <!-- Apple Touch Icon (good for iOS devices) -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">  <!-- Create a 180x180px version named apple-touch-icon.png in /public -->
+
+    <!-- Other Favicon Sizes (for various platforms) -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"> <!-- Create a 32x32px version named favicon-32x32.png in /public -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"> <!-- Create a 16x16px version named favicon-16x16.png in /public -->
+
+    <!-- Web App Manifest (for PWAs and more control, optional but good) -->
+    <link rel="manifest" href="/site.webmanifest"> <!-- Create site.webmanifest in /public -->
+
+    <!-- Theme Color (for browser UI theming, optional) -->
+    <!-- <meta name="theme-color" content="#ffffff"> -->
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Fallback title - React Helmet will override this for specific pages -->
     <title>Innovation Remedies</title>

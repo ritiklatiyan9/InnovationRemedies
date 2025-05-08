@@ -2,42 +2,56 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.innovationremedies.com/</loc>
-    <lastmod>2024-07-29</lastmod> {/* YYYY-MM-DD */}
+    <lastmod>2024-07-30</lastmod> {/* YYYY-MM-DD - Update when homepage changes significantly */}
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.innovationremedies.com/products</loc>
-    <lastmod>2024-07-29</lastmod>
+    <lastmod>2024-07-30</lastmod> {/* Update when product listings change */}
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.innovationremedies.com/store</loc> {/* Or /information if that's the actual path */}
-    <lastmod>2024-07-29</lastmod>
+    <loc>https://www.innovationremedies.com/store</loc> {/* Your 'Information' page */}
+    <lastmod>2024-07-30</lastmod> {/* Update when this page changes */}
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.innovationremedies.com/about</loc>
-    <lastmod>2024-07-20</lastmod>
+    <lastmod>2024-07-30</lastmod> {/* Update when About Us changes */}
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.innovationremedies.com/contact</loc>
-    <lastmod>2024-07-20</lastmod>
+    <lastmod>2024-07-30</lastmod> {/* Update when Contact Us changes */}
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  <!--
-  ADD ALL YOUR INDIVIDUAL PRODUCT PAGE URLS HERE
-  Example:
+
+  <!-- CRITICAL: ADD ALL YOUR INDIVIDUAL PRODUCT PAGE URLS HERE -->
+  <!-- If you have many products, this section should be dynamically generated. -->
+  <!-- Example for a few product pages: -->
   <url>
-    <loc>https://www.innovationremedies.com/product/your-product-slug-or-id</loc>
-    <lastmod>2024-07-29</lastmod>
+    <loc>https://www.innovationremedies.com/product/product-alpha-detail</loc>
+    <lastmod>2024-07-30</lastmod> {/* Date this specific product page was last updated */}
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-  -->
+  <url>
+    <loc>https://www.innovationremedies.com/product/product-beta-plus</loc>
+    <lastmod>2024-07-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.innovationremedies.com/product/another-product-xyz</loc>
+    <lastmod>2024-07-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- ... more product pages ... -->
+
 </urlset>

@@ -10,5 +10,5 @@ Disallow: /login # If login page has no unique content value for searchers
 Disallow: /order-confirmation/ # Note the trailing slash for directories/paths
 Disallow: /orders # If user-specific orders pages shouldn't be indexed
 
-# Add your sitemap location (REPLACE with your actual domain)
+# Add your sitemap location
 Sitemap: https://www.innovationremedies.com/sitemap.xml

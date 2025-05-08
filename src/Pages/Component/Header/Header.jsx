@@ -2,14 +2,13 @@
 import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Home, ShoppingBag, Book, Users, Mail, Menu, LogOut, User, ChevronRight, Settings, ShoppingBagIcon, Package } from 'lucide-react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetFooter } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetFooter } from '@/components/ui/sheet'; // Assuming path is correct
 import {
   NavigationMenu,
   NavigationMenuItem,
-  // NavigationMenuLink, // Not directly used if Link is wrapped
   NavigationMenuList,
   navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu';
+} from '@/components/ui/navigation-menu'; // Assuming path is correct
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,25 +16,24 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
+} from '@/components/ui/dropdown-menu'; // Assuming path is correct
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'; // Assuming path is correct
+import { Button } from '@/components/ui/button'; // Assuming path is correct
 import { useAuth } from '../context/AuthContext'; // Adjust path if necessary
-import { toast } from 'react-hot-toast'; // Assuming you are using react-hot-toast
-import Logo from '../../../assets/Images/logo.png'; // Ensure this path is correct
+import { toast } from 'react-hot-toast';
+import BrandLogo from '../../../assets/Images/logo.png'; // Path to your logo in src/assets
 import { cn } from '@/lib/utils'; // Adjust path if necessary
 
 // --- Configuration ---
 const navItems = [
   { to: '/', label: 'Home', icon: Home, color: 'text-rose-500' },
   { to: '/products', label: 'Products', icon: ShoppingBag, color: 'text-blue-500' },
-  { to: '/store', label: 'Information', icon: Book, color: 'text-emerald-500' }, // 'Store' is your 'Information' page
+  { to: '/store', label: 'Information', icon: Book, color: 'text-emerald-500' },
   { to: '/about', label: 'About Us', icon: Users, color: 'text-amber-500' },
   { to: '/contact', label: 'Contact', icon: Mail, color: 'text-indigo-500' },
   { to: '/cart', label: 'MyCart', icon: ShoppingBagIcon, color: 'text-indigo-500' },
 ];
 
-// Admin-specific navigation item
 const adminNavItem = {
   to: '/admin/orders',
   label: 'Manage Orders',
@@ -46,18 +44,14 @@ const adminNavItem = {
 
 // --- Helper Function ---
 const getUserInitials = (user) => {
-  if (!user) return 'GU'; // Guest User
+  if (!user) return 'GU';
   if (user.username) {
     const names = user.username.split(' ');
-    if (names.length > 1) {
-      return (names[0][0] + names[names.length - 1][0]).toUpperCase();
-    }
+    if (names.length > 1) return (names[0][0] + names[names.length - 1][0]).toUpperCase();
     return names[0].substring(0, 2).toUpperCase();
   }
-  if (user.mobile && user.mobile.length >= 2) {
-    return user.mobile.substring(0, 2).toUpperCase();
-  }
-  return 'U'; // Default User
+  if (user.mobile && user.mobile.length >= 2) return user.mobile.substring(0, 2).toUpperCase();
+  return 'U';
 };
 
 // --- Component ---
@@ -65,18 +59,12 @@ export default function Header() {
   const { user, isAuthenticated, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const iconSize = "h-5 w-5"; // Consistent icon size
-
-  // Check if user has admin role
+  const iconSize = "h-5 w-5";
   const isAdmin = user?.role === 'Admin';
 
-  // Get all navigation items, including admin-specific items if user is an admin
   const getAllNavItems = () => {
-    // Filter out admin-only items if not admin
     const baseNavItems = navItems.filter(item => !item.adminOnly);
-    if (isAdmin) {
-      return [...baseNavItems, adminNavItem];
-    }
+    if (isAdmin) return [...baseNavItems, adminNavItem];
     return baseNavItems;
   };
 
@@ -85,7 +73,7 @@ export default function Header() {
       await logout();
       toast.success('Logged out successfully');
       navigate('/');
-      setIsMobileMenuOpen(false); // Close mobile menu on logout
+      setIsMobileMenuOpen(false);
     } catch (error) {
       toast.error(error?.message || 'Failed to logout');
       console.error("Logout error:", error);
@@ -94,35 +82,32 @@ export default function Header() {
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
-  // --- Render ---
   return (
     <header className="fixed top-0 inset-x-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/40 shadow-sm">
       <div className="container mx-auto h-16 flex items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Logo */}
         <Link
             to="/"
             className="flex-shrink-0"
             onClick={closeMobileMenu}
-            aria-label="Innovation Remedies Home" // SEO & Accessibility: Aria-label for logo link
+            aria-label="Innovation Remedies Home"
         >
           <img
-            src={Logo}
-            alt="Innovation Remedies Company Logo" // SEO & Accessibility: Descriptive alt text
+            src={BrandLogo}
+            alt="Innovation Remedies Company Logo"
             className="h-10 w-auto object-contain"
           />
         </Link>
 
-        {/* Desktop Navigation */}
         <NavigationMenu className="hidden lg:flex flex-grow justify-center">
           <NavigationMenuList className="bg-muted/60 px-3 py-1.5 rounded-full shadow-inner border border-border/30">
             {getAllNavItems().map((item) => (
               <NavigationMenuItem key={item.to}>
-                <NavLink // Using NavLink for active styling if needed, or Link
+                <NavLink
                   to={item.to}
                   className={({ isActive }) => cn(
                     navigationMenuTriggerStyle(),
                     "bg-transparent hover:bg-accent/70 data-[active]:bg-background data-[active]:shadow-sm text-sm h-9",
-                    isActive ? "bg-background shadow-sm font-semibold" : "" // Example active style
+                    isActive ? "bg-background shadow-sm font-semibold" : ""
                   )}
                 >
                   <item.icon aria-hidden="true" className={cn(iconSize, item.color, "mr-1.5")} />
@@ -133,9 +118,7 @@ export default function Header() {
           </NavigationMenuList>
         </NavigationMenu>
 
-        {/* Actions (User Menu / Login Button) & Mobile Menu Trigger */}
         <div className="flex items-center space-x-3">
-          {/* User Menu or Login Button (Desktop) */}
           <div className="hidden lg:block">
             {isAuthenticated ? (
               <UserDropdown user={user} onLogout={handleLogout} />
@@ -145,8 +128,6 @@ export default function Header() {
               </Button>
             )}
           </div>
-
-          {/* Mobile Menu Trigger */}
           <div className="lg:hidden">
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
@@ -159,8 +140,7 @@ export default function Header() {
                 user={user}
                 onLogout={handleLogout}
                 onClose={closeMobileMenu}
-                isAdmin={isAdmin} // Pass isAdmin to MobileSheetContent
-                navItems={getAllNavItems()} // Pass all items (filtered by admin status)
+                navItems={getAllNavItems()}
               />
             </Sheet>
           </div>
@@ -172,11 +152,9 @@ export default function Header() {
 
 // --- Sub Components ---
 
-// User Dropdown (for Desktop)
 function UserDropdown({ user, onLogout }) {
   const initials = getUserInitials(user);
   const isAdmin = user?.role === 'Admin';
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -192,29 +170,22 @@ function UserDropdown({ user, onLogout }) {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">
-              {user?.username || "Welcome!"}
-            </p>
+            <p className="text-sm font-medium leading-none">{user?.username || "Welcome!"}</p>
             {user?.mobile && (
               <p className="text-xs leading-none text-muted-foreground">
                 {user.mobile}
-                {user.role && (
-                  <span className={`ml-1 ${user.role === 'Admin' ? 'text-purple-500 font-semibold' : ''}`}>
-                    • {user.role}
-                  </span>
-                )}
+                {user.role && (<span className={`ml-1 ${user.role === 'Admin' ? 'text-purple-500 font-semibold' : ''}`}>• {user.role}</span>)}
               </p>
             )}
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-           <Link to="/profile" className="cursor-pointer w-full flex items-center">
-             <User className="mr-2 h-4 w-4" />
-             <span>Profile</span>
-           </Link>
+          <Link to="/profile" className="cursor-pointer w-full flex items-center">
+            <User className="mr-2 h-4 w-4" />
+            <span>Profile</span>
+          </Link>
         </DropdownMenuItem>
-
         {isAdmin && (
           <DropdownMenuItem asChild>
             <Link to="/admin/orders" className="cursor-pointer w-full flex items-center">
@@ -223,7 +194,6 @@ function UserDropdown({ user, onLogout }) {
             </Link>
           </DropdownMenuItem>
         )}
-
         <DropdownMenuItem asChild disabled>
           <span className="cursor-not-allowed opacity-50 w-full flex items-center">
             <Settings className="mr-2 h-4 w-4" />
@@ -240,11 +210,9 @@ function UserDropdown({ user, onLogout }) {
   );
 }
 
-// Mobile Sheet Content
-function MobileSheetContent({ isAuthenticated, user, onLogout, onClose, navItems }) { // Removed isAdmin prop as navItems is already filtered
+function MobileSheetContent({ isAuthenticated, user, onLogout, onClose, navItems }) {
   const iconSize = "h-5 w-5";
   const initials = getUserInitials(user);
-
   return (
     <SheetContent side="right" className="w-full max-w-xs sm:max-w-sm p-0 flex flex-col bg-gradient-to-b from-background via-background to-muted/30">
       <SheetHeader className="p-4 border-b border-border/30">
@@ -301,7 +269,7 @@ function MobileSheetContent({ isAuthenticated, user, onLogout, onClose, navItems
                   )
                 }
               >
-                {({ isActive }) => (
+                {({ isActive }) => ( // This function receives isActive as an argument
                   <>
                     <div className="flex items-center gap-3">
                        <item.icon aria-hidden="true" className={cn(
@@ -353,9 +321,7 @@ function MobileSheetContent({ isAuthenticated, user, onLogout, onClose, navItems
         {isAuthenticated ? (
           <Button
             variant="ghost"
-            onClick={() => {
-              onLogout(); // onClose is already called within handleLogout if successful
-            }}
+            onClick={onLogout} // Corrected: onLogout already handles closing the menu via navigate
             className="w-full justify-start text-red-600 hover:bg-red-50 hover:text-red-600 gap-3"
           >
             <LogOut className="h-5 w-5" />
