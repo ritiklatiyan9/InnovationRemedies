@@ -174,14 +174,14 @@ const VetWellbeingDashboard = () => {
   "
 >
   <span 
-    className="block text-9xl
+    className="block text-5xl md:text-9xl
     bg-gradient-to-r from-blue-100 via-slate-50 to-indigo-200
     bg-clip-text text-transparent" 
     style={dolceAmyaraStyle}
   >
     Innovation
   </span>
-  <span className="block whitespace-nowrap">
+  <span className="block whitespace-nowrap text-2xl">
     Remedies Life Science Pvt. Ltd.
   </span>
 </h1>
