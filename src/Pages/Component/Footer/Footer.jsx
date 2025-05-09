@@ -1,178 +1,156 @@
 // src/components/Footer.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  Linkedin, 
-  Twitter, 
-  Instagram, 
-  Mail, 
-  MapPin, 
+import {
+  Linkedin,
+  Twitter,
+  Instagram,
+  Mail,
+  MapPin,
   Phone,
-  Info,        // Icon for About Us
-  Package,     // Icon for Products
-  Cog,         // Icon for Services
-  Shield,      // Icon for Privacy
-  FileText,    // Icon for Terms
-  HelpCircle,  // Icon for FAQ
-  Send         // Icon for Newsletter button
+  Send,
+  ArrowRight // For link hover effect
 } from 'lucide-react';
 import logo from '../../../assets/Images/logo.png'; // Ensure this path is correct
-const customStyle2 = {
-  fontFamily: "Oregon LDO, sans-serif",
-  fontWeight: "200",
-};
+
+// Assuming Oregon LDO is loaded via CSS @font-face or a global stylesheet
+const customFontFamily = "Oregon LDO, sans-serif";
 
 function Footer() {
   const currentYear = new Date().getFullYear();
 
-  return (
-    <footer 
-      style={customStyle2} // Apply custom font style
-      className="bg-slate-50 border-t border-slate-200 pt-16 pb-12" // Lighter bg, more padding
-    >
-      <div className="container mx-auto px-6">
-        {/* Main content */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10 mb-12"> {/* Added lg:grid-cols-4 for flexibility */}
+  const linkStyle = "text-slate-600 hover:text-emerald-700 transition-colors duration-300 group text-sm";
+  const iconLinkStyle = "inline-flex items-center " + linkStyle;
 
-          {/* Brand & Social Column */}
-          <div className="lg:col-span-1"> {/* Adjusted span */}
-            <img 
-              src={logo} 
-              className="h-14 w-auto mb-4" // Slightly smaller logo
-              alt="Innovation Remedies" 
-            />
-            <h3 className="text-lg font-semibold mb-2 text-slate-800">
-              Innovation Remedies
-            </h3>
-            <p className="text-slate-600 text-sm mb-5">
-              Enhancing animal health through innovative solutions.
-            </p>
-            {/* Social Media Icons */}
-            <div className="flex space-x-3">
-              <a
-                href="#" // Replace with actual links
-                aria-label="LinkedIn"
-                className="w-9 h-9 rounded-full bg-slate-100 hover:bg-emerald-100 flex items-center justify-center text-slate-500 hover:text-emerald-600 transition-all duration-300 transform hover:scale-110"
+  return (
+    <footer
+      className="bg-slate-100 border-t border-slate-200 text-slate-700"
+      style={{ fontFamily: "system-ui, sans-serif" }} // Fallback system font for body
+    >
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+
+        {/* Top Section: Brand, Tagline, Social */}
+        <div className="py-12 md:py-16 text-center md:text-left border-b border-slate-200">
+          <div className="md:flex md:items-center md:justify-between">
+            <div className="mb-8 md:mb-0">
+              <Link to="/" className="inline-block mb-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-sm">
+                <img
+                  src={logo}
+                  className="h-16 w-auto mx-auto md:mx-0"
+                  alt="Innovation Remedies Logo"
+                />
+              </Link>
+              <h2
+                className="text-2xl md:text-3xl text-slate-800"
+                style={{ fontFamily: customFontFamily, fontWeight: 'normal' }}
               >
-                <Linkedin size={18} />
-              </a>
-              <a
-                href="#" // Replace with actual links
-                aria-label="Twitter"
-                className="w-9 h-9 rounded-full bg-slate-100 hover:bg-emerald-100 flex items-center justify-center text-slate-500 hover:text-emerald-600 transition-all duration-300 transform hover:scale-110"
-              >
-                <Twitter size={18} />
-              </a>
-              <a
-                href="#" // Replace with actual links
-                aria-label="Instagram"
-                className="w-9 h-9 rounded-full bg-slate-100 hover:bg-emerald-100 flex items-center justify-center text-slate-500 hover:text-emerald-600 transition-all duration-300 transform hover:scale-110"
-              >
-                <Instagram size={18} />
-              </a>
+                Innovation Remedies Life Science Pvt. Ltd.
+              </h2>
+              <p className="mt-1 text-sm text-slate-500 max-w-md mx-auto md:mx-0">
+                Enhancing animal health through innovative solutions, dedicated to quality and care.
+              </p>
+            </div>
+
+            <div className="flex justify-center md:justify-start space-x-3">
+              {[
+               
+              ].map(({ href, label, Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  className="w-10 h-10 rounded-lg bg-white hover:bg-emerald-500 text-slate-500 hover:text-white flex items-center justify-center transition-all duration-300 shadow-sm hover:shadow-md border border-slate-200 transform hover:scale-105"
+                >
+                  <Icon size={20} />
+                </a>
+              ))}
             </div>
           </div>
+        </div>
 
-          {/* Quick Links Column */}
-          <div className="lg:col-span-1"> {/* Adjusted span */}
-            <h4 className="text-base font-semibold text-slate-800 mb-4">Explore</h4>
+        {/* Middle Section: Links & Contact */}
+        <div className="py-10 md:py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
+          <div>
+            <h3
+              className="text-lg text-slate-800 mb-4"
+              style={{ fontFamily: customFontFamily, fontWeight: 'normal' }}
+            >
+              Quick Links
+            </h3>
             <ul className="space-y-2.5">
-              <li>
-                <Link to="/about" className="text-slate-600 hover:text-emerald-600 text-sm flex items-center group transition-colors duration-200">
-                  <Info size={16} className="mr-2 text-emerald-500 group-hover:text-emerald-700 transition-colors duration-200 flex-shrink-0" />
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link to="/products" className="text-slate-600 hover:text-emerald-600 text-sm flex items-center group transition-colors duration-200">
-                  <Package size={16} className="mr-2 text-emerald-500 group-hover:text-emerald-700 transition-colors duration-200 flex-shrink-0" />
-                  Products
-                </Link>
-              </li>
-              <li>
-                <Link to="/services" className="text-slate-600 hover:text-emerald-600 text-sm flex items-center group transition-colors duration-200">
-                  <Cog size={16} className="mr-2 text-emerald-500 group-hover:text-emerald-700 transition-colors duration-200 flex-shrink-0" />
-                  Services
-                </Link>
-              </li>
+              <li><Link to="/about" className={linkStyle}>About Us</Link></li>
+              <li><Link to="/products" className={linkStyle}>Our Products</Link></li>
+              <li><Link to="/store" className={linkStyle}>Information Hub</Link></li>
+              <li><Link to="/contact" className={linkStyle}>Contact</Link></li>
             </ul>
           </div>
 
-          {/* Legal & Help Column */}
-          <div className="lg:col-span-1"> {/* Adjusted span */}
-             <h4 className="text-base font-semibold text-slate-800 mb-4">Support</h4>
-            <ul className="space-y-2.5">
-              <li>
-                <Link to="/privacy" className="text-slate-600 hover:text-emerald-600 text-sm flex items-center group transition-colors duration-200">
-                  <Shield size={16} className="mr-2 text-blue-500 group-hover:text-blue-700 transition-colors duration-200 flex-shrink-0" />
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link to="/terms" className="text-slate-600 hover:text-emerald-600 text-sm flex items-center group transition-colors duration-200">
-                  <FileText size={16} className="mr-2 text-blue-500 group-hover:text-blue-700 transition-colors duration-200 flex-shrink-0" />
-                  Terms of Service
-                </Link>
-              </li>
-              <li>
-                <Link to="/faq" className="text-slate-600 hover:text-emerald-600 text-sm flex items-center group transition-colors duration-200">
-                  <HelpCircle size={16} className="mr-2 text-blue-500 group-hover:text-blue-700 transition-colors duration-200 flex-shrink-0" />
-                  FAQ
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Contact & Newsletter Column */}
-          <div className="lg:col-span-1"> {/* Adjusted span */}
-            <h4 className="text-base font-semibold text-slate-800 mb-4">Get in Touch</h4>
-            <ul className="space-y-3 mb-5">
+          <div>
+            <h3
+              className="text-lg text-slate-800 mb-4"
+              style={{ fontFamily: customFontFamily, fontWeight: 'normal' }}
+            >
+              Contact Us
+            </h3>
+            <ul className="space-y-3">
               <li className="flex items-start">
-                <MapPin size={16} className="text-emerald-500 mt-0.5 mr-2.5 flex-shrink-0" />
-                <span className="text-slate-600 text-sm">
-                 638/101, Ganga Nagar, Meerut, Uttar Pradesh 250001
+                <MapPin size={18} className="text-emerald-600 mr-3 mt-0.5 flex-shrink-0" />
+                <span className="text-sm text-slate-600 leading-relaxed">
+                  638/101, Ganga Nagar, Meerut, Uttar Pradesh 250001
                 </span>
               </li>
-              <li className="flex items-center">
-                <Phone size={16} className="text-emerald-500 mr-2.5 flex-shrink-0" />
-                <a href="tel:+15551234567" className="text-slate-600 hover:text-emerald-600 text-sm transition-colors duration-200">
-                +91 9412702900
+              <li>
+                <a href="tel:+919412702900" className={iconLinkStyle}>
+                  <Phone size={16} className="text-emerald-600 mr-3 flex-shrink-0" />
+                  +91 9412702900
                 </a>
               </li>
-              <li className="flex items-center">
-                <Mail size={16} className="text-emerald-500 mr-2.5 flex-shrink-0" />
-                <a href="mailto:info@innovationremedies.com" className="text-slate-600 hover:text-emerald-600 text-sm transition-colors duration-200">
+              <li>
+                <a href="mailto:innovationremedies@gmail.com" className={iconLinkStyle}>
+                  <Mail size={16} className="text-emerald-600 mr-3 flex-shrink-0" />
                   innovationremedies@gmail.com
                 </a>
               </li>
             </ul>
+          </div>
 
-            {/* Enhanced Newsletter Signup */}
-            <h5 className="text-sm font-medium text-slate-700 mb-2">Stay Updated</h5>
-            <form className="flex items-center">
-              <label htmlFor="footer-email" className="sr-only">Email for newsletter</label>
+          {/* Newsletter Section - More Prominent */}
+          <div className="sm:col-span-2 lg:col-span-1 bg-white p-6 rounded-xl shadow-lg border border-emerald-200">
+            <h3
+              className="text-xl text-emerald-700 mb-3 text-center"
+              style={{ fontFamily: customFontFamily, fontWeight: 'normal' }}
+            >
+              Stay Updated
+            </h3>
+            <p className="text-sm text-slate-500 mb-4 text-center">
+              Get the latest news and special offers directly to your inbox.
+            </p>
+            <form className="flex flex-col space-y-3">
+              <label htmlFor="footer-email-alt" className="sr-only">Email for newsletter</label>
               <input
-                id="footer-email"
+                id="footer-email-alt"
                 type="email"
                 required
-                placeholder="Your email"
-                className="px-3 py-2 text-sm bg-white border border-slate-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 flex-grow transition-shadow duration-200"
+                placeholder="Enter your email address"
+                className="px-4 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 placeholder-slate-400"
               />
               <button
                 type="submit"
-                aria-label="Subscribe to newsletter"
-                className="bg-emerald-500 hover:bg-emerald-600 text-white p-2.5 rounded-r-md transition-colors duration-200 flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-emerald-500" // Increased padding for better icon visibility
+                className="bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 px-4 rounded-md text-sm font-medium transition-colors duration-300 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 group"
               >
-                <Send size={18} /> 
+                Subscribe <Send size={16} className="ml-2 transform group-hover:translate-x-1 transition-transform duration-300" />
               </button>
             </form>
           </div>
         </div>
 
-        {/* Copyright */}
-        <div className="border-t border-slate-200 pt-8 mt-8">
-          <p className="text-sm text-slate-500 text-center">
-            © {currentYear} <Link to="/" className="font-medium text-slate-700 hover:text-emerald-600 transition-colors duration-200">Innovation Remedies</Link>. All rights reserved.
+        {/* Copyright Section */}
+        <div className="py-8 border-t border-slate-200 text-center">
+          <p className="text-xs text-slate-500">
+            © {currentYear} <Link to="/" className="font-medium text-emerald-700 hover:underline">Innovation Remedies Life Science Pvt. Ltd.</Link>. All Rights Reserved.
+          </p>
+          <p className="text-xs text-slate-400 mt-1">
+            Designed with care.
           </p>
         </div>
       </div>
