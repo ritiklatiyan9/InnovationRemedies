@@ -10,7 +10,10 @@ import {
 } from 'lucide-react';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 
-
+const customStyle = {
+  fontFamily: "SF Pro Text Regular, sans-serif",
+  fontWeight: "400",
+};
 
 const VisionIcon = () => (
   <motion.svg
