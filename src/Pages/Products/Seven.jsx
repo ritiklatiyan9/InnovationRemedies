@@ -1,7 +1,7 @@
 import React from 'react';
 import { ChevronRight, Package, PillBottle, TrendingUp } from 'lucide-react';
 
-import ayngrowBolus40Image from '../../assets/Images/ayngrow.jpg'; // Main product image
+import ayngrowBolus40Image from '../../assets/Images/twentyone.jpg'; // Main product image
 
 // --- Product Data (keeping as is) ---
 const ayngrowBolusData = {

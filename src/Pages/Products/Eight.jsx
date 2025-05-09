@@ -3,7 +3,7 @@ import { CheckCircle, XCircle, ShieldAlert, Box } from 'lucide-react'; // XCircl
 
 // --- IMPORT YOUR IMAGES ---
 import makkhiSoapBoxImage from '../../assets/Images/seventeen.png'; // Product image
-import innovationRemediesLogo from '../../assets/Images/IRL-Makkhi-Photoroom.png'; // Optional logo
+import innovationRemediesLogo from '../../assets/Images/beast.png'; // Optional logo
 
 // --- Product Data (keeping as is) ---
 const makkhiAdvanceSoapData = {

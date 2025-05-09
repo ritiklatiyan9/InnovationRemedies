@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChevronRight } from 'lucide-react';
-import imgf from '../../assets/Images/Calfshakti-Photoroom.png'; // Actual image for the product
+import imgf from '../../assets/Images/thirteen.png'; // Actual image for the product
 
 // Data (keeping as is, it's well-structured)
 const calfShaktiData = {
