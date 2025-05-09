@@ -130,19 +130,19 @@ function Footer() {
               <li className="flex items-start">
                 <MapPin size={16} className="text-emerald-500 mt-0.5 mr-2.5 flex-shrink-0" />
                 <span className="text-slate-600 text-sm">
-                  Sharadhapuri Phase 1, Near Kankar Khera Bypass, Meerut
+                 638/101, Ganga Nagar, Meerut, Uttar Pradesh 250001
                 </span>
               </li>
               <li className="flex items-center">
                 <Phone size={16} className="text-emerald-500 mr-2.5 flex-shrink-0" />
                 <a href="tel:+15551234567" className="text-slate-600 hover:text-emerald-600 text-sm transition-colors duration-200">
-                  +1 (555) 123-4567
+                +91 9412702900
                 </a>
               </li>
               <li className="flex items-center">
                 <Mail size={16} className="text-emerald-500 mr-2.5 flex-shrink-0" />
                 <a href="mailto:info@innovationremedies.com" className="text-slate-600 hover:text-emerald-600 text-sm transition-colors duration-200">
-                  info@innovationremedies.com
+                  innovationremedies@gmail.com
                 </a>
               </li>
             </ul>

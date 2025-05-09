@@ -65,7 +65,7 @@ function ProductCard({ id, name, description, price, imageUrl, gradientFrom = DE
   
   const gradientClasses = `bg-gradient-to-br ${gradientFrom} ${gradientTo}`;
   
-  const handleCardClick = () => navigate(`/product/${id}`);
+  const handleCardClick = () => navigate(`/product/${id}`); // Ensure your routes are set up for /product/:id
   const imgSrc = typeof imageUrl === 'string' ? imageUrl : imageUrl.src;
 
   return (
@@ -83,7 +83,6 @@ function ProductCard({ id, name, description, price, imageUrl, gradientFrom = DE
             alt={`${name} - Animal Health Product`}
             className="object-contain w-full h-full max-h-[180px] sm:max-h-[220px] drop-shadow-xl transition-transform duration-300 ease-out group-hover:scale-110"
             loading="lazy"
-            // layoutId={`product-image-${id}`} // For shared element transitions
           />
         </div>
         <CardContent className="p-5 pt-3 bg-white/70 backdrop-blur-sm rounded-b-2xl flex flex-col flex-grow text-left space-y-2.5">
@@ -120,24 +119,46 @@ function ProductCard({ id, name, description, price, imageUrl, gradientFrom = DE
   );
 }
 
+
 function ListProducts() {
   const domain = "https://www.innovationremedies.com";
   const canonicalUrl = `${domain}/products`;
   
   const ogImageSrc = typeof logo === 'string' ? logo : (logo && logo.src);
-  const ogImageUrl = ogImageSrc ? `${domain}${ogImageSrc.startsWith('/') ? '' : '/'}${ogImageSrc}` : `${domain}/placeholder-logo.png`;
+  // Ensure ogImageUrl always has a full path, even if logo is undefined
+  const ogImageUrl = ogImageSrc 
+    ? `${domain}${ogImageSrc.startsWith('/') ? ogImageSrc : `/${ogImageSrc}`}` 
+    : `${domain}/default-logo.png`; // Provide a fallback default logo URL
 
-  const productsForSeo = productsData.map(product => ({
-    ...product,
-    resolvedImageUrl: `${domain}/assets/Images/${product.imageFileName}`, // Adjust if your asset path differs
-  }));
+  // Construct full image URLs for products
+  const productsForSeo = productsData.map(product => {
+    // Make sure imageFileName exists and construct the URL
+    const imageFileName = product.imageFileName || 'default-product-image.png'; // Fallback image
+    // Check if imageUrl is already a full path or needs to be constructed
+    let resolvedImageUrl;
+    if (typeof product.imageUrl === 'string' && product.imageUrl.startsWith('http')) {
+        resolvedImageUrl = product.imageUrl;
+    } else {
+        // Assuming images are in /assets/Images/ relative to the domain root
+        resolvedImageUrl = `${domain}/assets/Images/${imageFileName}`;
+    }
+    
+    return {
+      ...product,
+      resolvedImageUrl: resolvedImageUrl,
+    };
+  });
+
+  // Define a generic future date for priceValidUntil
+  const priceValidUntilDate = new Date();
+  priceValidUntilDate.setFullYear(priceValidUntilDate.getFullYear() + 1); // Valid for 1 year from now
+  const priceValidUntilString = priceValidUntilDate.toISOString().split('T')[0]; // YYYY-MM-DD format
 
   return (
     <div className="bg-slate-50 min-h-screen font-sans text-slate-800">
       <Helmet>
         <title>Animal Health Solutions | Innovation Remedies</title>
         <meta name="description" content="Discover top-tier veterinary products and supplements from Innovation Remedies. Serving Meerut & Delhi NCR for optimal animal health and performance."/>
-        {/* ... other meta tags from previous version ... */}
         <link rel="canonical" href={canonicalUrl} />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="robots" content="index, follow" />
@@ -151,18 +172,20 @@ function ListProducts() {
         <meta name="twitter:title" content="Animal Health Solutions | Innovation Remedies" />
         <meta name="twitter:description" content="Discover top-tier veterinary products and supplements from Innovation Remedies. Serving Meerut & Delhi NCR for optimal animal health and performance." />
         <meta name="twitter:image" content={ogImageUrl} />
-        <meta name="twitter:site" content="@YourTwitterHandle" />
+        {/* <meta name="twitter:site" content="@YourTwitterHandle" />  Update with your actual handle */}
         <meta name="geo.region" content="IN-UP" />
         <meta name="geo.placename" content="Meerut" />
         <meta name="geo.position" content="28.9803;77.7039" />
         <meta name="ICBM" content="28.9803, 77.7039" />
+        
+        {/* Schema for the WebPage itself (this product listing page) */}
         <script type="application/ld+json">
           {`
             {
               "@context": "https://schema.org",
               "@type": "WebPage",
-              "name": "Animal Health Products",
-              "description": "Innovation Remedies offers premium veterinary products for animal health, immunity, and wellness in Meerut, Delhi NCR.",
+              "name": "Animal Health Products Listing",
+              "description": "Browse and discover Innovation Remedies' premium veterinary products for animal health, immunity, and wellness in Meerut, Delhi NCR.",
               "url": "${canonicalUrl}",
               "breadcrumb": {
                 "@type": "BreadcrumbList",
@@ -174,6 +197,8 @@ function ListProducts() {
             }
           `}
         </script>
+        
+        {/* Schema for your Local Business */}
         <script type="application/ld+json">
           {`
             {
@@ -182,19 +207,25 @@ function ListProducts() {
               "name": "Innovation Remedies",
               "address": {
                 "@type": "PostalAddress",
-                "streetAddress": "123 Health Lane", "addressLocality": "Meerut",
-                "addressRegion": "Uttar Pradesh", "postalCode": "250001", "addressCountry": "IN"
+                "streetAddress": "Kila Parikshitgarh", "addressLocality": "Meerut",
+                "addressRegion": "Uttar Pradesh", "postalCode": "250406", "addressCountry": "IN"
               },
-              "telephone": "+91-1234567890",
+              "telephone": "+91-9412702900", // Example, use your actual number
               "email": "info@innovationremedies.com",
               "url": "${domain}",
               "image": "${ogImageUrl}",
-              "sameAs": ["https://www.facebook.com/yourpage", "https://www.instagram.com/yourpage"],
+              "priceRange": "₹₹", // Example price range
+              "sameAs": [ // Add your social media profiles
+                "https://www.facebook.com/yourpage", 
+                "https://www.instagram.com/yourpage"
+              ],
               "openingHours": "Mo-Su 09:00-18:00",
               "description": "Innovation Remedies provides advanced veterinary solutions for animal health, wellness, and activity across Meerut, Delhi NCR."
             }
           `}
         </script>
+
+        {/* Schema for EACH Product */}
         {productsForSeo.map(product => (
           <script key={product.id} type="application/ld+json">
             {`
@@ -205,25 +236,89 @@ function ListProducts() {
                 "description": "${product.description.replace(/"/g, '\\"')}",
                 "image": "${product.resolvedImageUrl}",
                 "sku": "${product.id}",
-                "mpn": "${product.id}",
-                "brand": { "@type": "Brand", "name": "Innovation Remedies" },
+                "mpn": "${product.id}", /* Manufacturer Part Number, can be same as SKU if you don't have a separate one */
+                "brand": {
+                  "@type": "Brand",
+                  "name": "Innovation Remedies"
+                },
                 "offers": {
                   "@type": "Offer",
                   "priceCurrency": "INR",
                   "price": "${product.price.toFixed(2)}",
-                  "availability": "https://schema.org/InStock",
-                  "url": "${domain}/product/${product.id}",
-                  "seller": { "@type": "Organization", "name": "Innovation Remedies" }
+                  "availability": "https://schema.org/InStock", /* Or OutOfStock, PreOrder, etc. */
+                  "url": "${domain}/product/${product.id}", /* Link to the INDIVIDUAL product page */
+                  "seller": {
+                    "@type": "Organization",
+                    "name": "Innovation Remedies"
+                  },
+                  "priceValidUntil": "${priceValidUntilString}", /* ADDED */
+                  "hasMerchantReturnPolicy": { /* ADDED */
+                    "@type": "MerchantReturnPolicy",
+                    "url": "${domain}/return-policy", /* CREATE THIS PAGE! */
+                    "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+                    "merchantReturnDays": 30, /* Example: 30-day return window */
+                    "returnMethod": "https://schema.org/ReturnByMail",
+                    "returnFees": "https://schema.org/FreeReturn" /* Or RestockingFees, ReturnShippingFees */
+                  },
+                  "shippingDetails": { /* ADDED */
+                    "@type": "OfferShippingDetails",
+                    "shippingRate": {
+                      "@type": "MonetaryAmount",
+                      "value": "50.00", /* Example shipping cost */
+                      "currency": "INR"
+                    },
+                    "shippingDestination": {
+                      "@type": "DefinedRegion",
+                      "addressCountry": "IN" /* Ships to India */
+                    },
+                    "deliveryTime": {
+                      "@type": "ShippingDeliveryTime",
+                      "handlingTime": {
+                        "@type": "QuantitativeValue",
+                        "minValue": 0,
+                        "maxValue": 1,
+                        "unitCode": "DAY" /* 0-1 day handling time */
+                      },
+                      "transitTime": {
+                        "@type": "QuantitativeValue",
+                        "minValue": 3,
+                        "maxValue": 7,
+                        "unitCode": "DAY" /* 3-7 days transit time */
+                      }
+                    }
+                  }
                 }
+                /* --- IMPORTANT: Review and Rating --- */
+                /* Only add aggregateRating and review if you have a REAL review system. */
+                /* DO NOT ADD FAKE REVIEWS. It's better to omit these if you don't have them. */
+                /*
+                ,"aggregateRating": {
+                  "@type": "AggregateRating",
+                  "ratingValue": "4.5", // Example: If you had an average rating
+                  "reviewCount": "15"    // Example: If you had 15 reviews
+                },
+                "review": [ // Example of how individual reviews would look
+                  {
+                    "@type": "Review",
+                    "author": {"@type": "Person", "name": "Happy Customer"},
+                    "datePublished": "2025-01-15",
+                    "reviewBody": "This product is great for my animals!",
+                    "reviewRating": {
+                      "@type": "Rating",
+                      "ratingValue": "5"
+                    }
+                  }
+                ]
+                */
               }
             `}
           </script>
         ))}
       </Helmet>
 
+      {/* ... rest of your JSX for the page layout ... */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
-       
-
+        {/* Header section for filters and sorting - simplified for brevity */}
         <div className="sticky top-0 z-10 py-4 bg-slate-50/80 backdrop-blur-md mb-8 rounded-xl shadow-sm">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 px-4">
             <div className="flex flex-wrap gap-2 items-center">
@@ -280,11 +375,9 @@ function ListProducts() {
               Dedicated to Animal Wellness
             </h2>
             <p className="text-lg text-slate-600 leading-relaxed">
-              At Innovation Remedies, we're committed to advancing animal health through scientifically-backed veterinary solutions. Our products are trusted by professionals in Meerut, Delhi NCR, and beyond.
+              At Innovation Remedies, we're committed to advancing animal health through scientifically-backed veterinary solutions. Our products are trusted by professionals in India .
             </p>
-            <Button size="lg" className="mt-8 bg-green-500 hover:bg-green-600 text-white rounded-lg shadow-lg">
-              Learn More About Us
-            </Button>
+           
           </div>
         </section>
       </div>

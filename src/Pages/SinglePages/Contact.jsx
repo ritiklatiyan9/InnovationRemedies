@@ -38,14 +38,14 @@ const ContactPage = () => {
       {/* SEO Meta Tags */}
       <Helmet>
         {/* 🔍 SEO Basics */}
-        <title>Contact Innovation Remedies | Veterinary Solutions in Meerut, Delhi NCR</title>
+        <title>Contact Innovation Remedies | Veterinary Solutions in India</title>
         <meta
           name="description"
-          content="Get in touch with Innovation Remedies for advanced veterinary products in Meerut, Delhi NCR. We respond within 24 hours."
+          content="Get in touch with Innovation Remedies for advanced veterinary products in India. We respond within 24 hours."
         />
         <meta
           name="keywords"
-          content="Innovation Remedies contact, veterinary care Meerut, animal health products Delhi NCR, pet wellness contact, vet supplies in Uttar Pradesh"
+          content="Innovation Remedies contact, veterinary care , pet wellness contact, vet supplies in Uttar Pradesh"
         />
 
         {/* 🔗 Canonical URL */}
@@ -56,8 +56,8 @@ const ContactPage = () => {
         <meta name="robots" content="index, follow" />
 
         {/* 🌐 Open Graph (Social Media) */}
-        <meta property="og:title" content="Contact Innovation Remedies | Veterinary Solutions in Meerut, Delhi NCR" />
-        <meta property="og:description" content="Get in touch with Innovation Remedies for advanced veterinary products in Meerut, Delhi NCR." />
+        <meta property="og:title" content="Contact Innovation Remedies | Veterinary Solutions in India" />
+        <meta property="og:description" content="Get in touch with Innovation Remedies for advanced veterinary products in India" />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content={ogImageUrl} />
         <meta property="og:type" content="website" />
@@ -65,8 +65,8 @@ const ContactPage = () => {
 
         {/* 🐦 Twitter Cards */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Contact Innovation Remedies | Veterinary Solutions in Meerut, Delhi NCR" />
-        <meta name="twitter:description" content="Get in touch with Innovation Remedies for advanced veterinary products in Meerut, Delhi NCR." />
+        <meta name="twitter:title" content="Contact Innovation Remedies | Veterinary Solutions in India" />
+        <meta name="twitter:description" content="Get in touch with Innovation Remedies for advanced veterinary products in India" />
         <meta name="twitter:image" content={ogImageUrl} />
         <meta name="twitter:site" content="@innovationremedies" />
 
@@ -85,21 +85,21 @@ const ContactPage = () => {
               "name": "Innovation Remedies",
               "address": {
                 "@type": "PostalAddress",
-                "streetAddress": "123 Health Lane",
+                "streetAddress": "ganga Nagar",
                 "addressLocality": "Meerut",
                 "addressRegion": "Uttar Pradesh",
                 "postalCode": "250001",
                 "addressCountry": "IN"
               },
-              "telephone": "+91-1234567890",
-              "email": "info@innovationremedies.com",
+              "
+              "email": "innovationremedies@gmail.com",
               "url": "${domain}",
               "sameAs": [
-                "https://www.facebook.com/innovationremedies",
+                "https://www.facebook.com/profile.php?id=61575431486434",
                 "https://www.instagram.com/innovationremedies"
               ],
               "openingHours": "Mo-Su 09:00-18:00",
-              "description": "Innovation Remedies provides advanced veterinary solutions for animal health, wellness, and activity across Meerut, Delhi NCR."
+              "description": "Innovation Remedies provides advanced veterinary solutions for animal health, wellness, and activity across India."
             }
           `}
         </script>
@@ -229,10 +229,10 @@ const ContactPage = () => {
           </form>
 
           <div className="text-sm text-gray-600 border-t pt-4 mt-4">
-            <p><strong>Visit Us:</strong> 123 Health Lane, Meerut, Uttar Pradesh 250001</p>
-            <p><strong>Email:</strong> info@innovationremedies.com</p>
-            <p><strong>Phone:</strong> +91-1234567890</p>
-            <p className="text-green-600 font-medium">Serving Meerut, Delhi NCR & surrounding regions</p>
+            <p><strong>Visit Us:</strong> 638/101, Ganga Nagar, Meerut, Uttar Pradesh 250001</p>
+            <p><strong>Email:</strong> innovationremedies@gmail.com</p>
+            <p><strong>Phone:</strong> +91-9412702900</p>
+            
           </div>
         </div>
       </div>

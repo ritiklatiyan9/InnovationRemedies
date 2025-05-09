@@ -158,7 +158,7 @@ const CommunityShowcase = () => {
       {/* Showcase Section with improved responsiveness */}
       <div
         ref={animationRef}
-        className="relative flex flex-col items-center justify-center min-h-[60vh] sm:min-h-screen w-full overflow-hidden py-8 sm:py-12 lg:py-20 bg-gradient-to-br from-green-100 via-white to-indigo-300 dark:from-blue-950/40 dark:via-gray-900 dark:to-indigo-950/40"
+        className="relative flex flex-col items-center justify-center min-h-[45vh] sm:min-h-screen w-full overflow-hidden py-8 sm:py-12 lg:py-20 bg-gradient-to-br from-green-100 via-white to-indigo-300 dark:from-blue-950/40 dark:via-gray-900 dark:to-indigo-950/40"
       >
         {/* Top scrolling strip - adjusted positioning for mobile */}
         <div className="absolute top-10 sm:top-16 lg:top-32 w-full z-10">
