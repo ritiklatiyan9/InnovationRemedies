@@ -1,10 +1,7 @@
-// src/Pages/Component/Products/ProductsDetails.jsx
-// (Assuming this is the correct path for ProductDetailPage.jsx)
-
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom"; // Added Link
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Helmet, HelmetProvider } from 'react-helmet-async'; // IMPORT HELMET
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -14,7 +11,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogClose, // Removed DialogTrigger as it's used via asChild
+  DialogClose,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -41,197 +38,12 @@ import {
   PackageMinus,
 } from "lucide-react";
 import { toast } from "sonner";
-import { useAuth } from "../context/AuthContext";
-import R3 from "../../../assets/Images/R3.png";
-import nine from "../../../assets/Images/nine.png";
-import eight from "../../../assets/Images/eight.png";
-import thirteen from "../../../assets/Images/thirteen.png";
-import fourteen from "../../../assets/Images/fourteen.png";
-import fifteen from "../../../assets/Images/fifteen.png";
-import sixteen from "../../../assets/Images/sixteen.png";
-import seventeen from "../../../assets/Images/seventeen.png";
-import eighteen from "../../../assets/Images/eighteen.png";
-import nineteen from "../../../assets/Images/nineteen.png";
-// Assuming NotFound is correctly imported if product not found
-// import NotFound from '../../SinglePages/NotFound';
+import { useAuth } from "../context/AuthContext"; // Assuming correct path
 
-const products = [
-  {
-    id: "668cf86512695a391340d1d5",
-    slug: "r3-vet-ultra-bonus",
-    name: "R3-Vet : Ultra Bonus (1 pcs)",
-    description: "Limited fruity collection designed for optimal animal health and wellness.",
-    longDescription: "R3-Vet Ultra Bonus is our premium formulation that combines essential nutrients and vitamins in a tasty fruity flavor that animals love. Supports immune system, coat health, and overall vitality.",
-    price: 142.0,
-    imageUrl: R3, 
-    imageFileName: 'R3.png', 
-    rating: 4.7,
-    reviewCount: 156,
-    stock: 15,
-    features: [
-      "Premium quality ingredients",
-      "Fruity flavor animals love",
-      "Supports immune system",
-      "Promotes healthy coat",
-    ],
-    minOrderQty: 5,
-    color: "#FF6B6B",
-  },
-  {
-    id: "668cf86512695a391340d1d6",
-    slug: "mood-pills",
-    name: "AYNGROW (1 pcs)",
-    description: "Limited fruity collection for balanced mood and growth support.",
-    longDescription: "AYNGROW is specifically formulated to promote healthy growth patterns while supporting balanced mood in animals. The fruity flavor ensures easy administration and acceptance.",
-    price: 142.0,
-    imageUrl: nine,
-    imageFileName: 'nine.png',
-    rating: 4.5,
-    reviewCount: 89,
-    stock: 23,
-    features: [
-      "Growth support formula",
-      "Mood balancing ingredients",
-      "Fruity flavor for easy administration",
-      "Veterinarian recommended",
-    ],
-    minOrderQty: 10,
-    color: "#4ECDC4",
-  },
-  {
-    id: "668cf86512695a391340d1d7",
-    slug: "uti-dont-think-so",
-    name: "Badda-H (1 pcs)",
-    description: "Limited fruity collection targeting urinary tract health.",
-    longDescription: "Badda-H provides comprehensive support for urinary tract health with its specialized formula. The fruity flavor makes it palatable and easy to administer.",
-    price: 142.0,
-    imageUrl: eight,
-    imageFileName: 'eight.png',
-    rating: 4.8,
-    reviewCount: 112,
-    stock: 18,
-    features: [
-      "Urinary tract support",
-      "pH balancing formula",
-      "Easy administration",
-      "Fast-acting relief",
-    ],
-    minOrderQty: 5,
-    color: "#FF9F1C",
-  },
-  {
-    id: "668cf86512695a391340d1d8",
-    slug: "bye-bye-bloat",
-    name: "CalfShakti Advanced (1 pcs)",
-    description: "Enhances muscle development in calves.",
-    longDescription: "CalfShakti Advanced is designed to support robust muscle development and overall health in growing calves, ensuring they reach their full potential.",
-    price: 412.0,
-    imageUrl: thirteen,
-    imageFileName: 'thirteen.png',
-    rating: 4.6,
-    reviewCount: 78,
-    stock: 4,
-    features: ["Muscle development support", "Enhanced growth", "Improved feed conversion"],
-    minOrderQty: 5,
-    color: "#6A0572",
-  },
-  {
-    id: "668cf86512695a391340d1d9",
-    slug: "good-girl-probiotic",
-    name: "IRL Innoliv-DS (1 pcs)",
-    description: "Liver support supplement for animals.",
-    longDescription: "IRL Innoliv-DS is a potent liver support supplement, aiding in detoxification and promoting optimal liver function in animals of all sizes.",
-    price: 412.0,
-    imageUrl: fourteen,
-    imageFileName: 'fourteen.png',
-    rating: 4.9,
-    reviewCount: 135,
-    stock: 9,
-    features: ["Supports liver health", "Aids in detoxification", "Improves digestion"],
-    minOrderQty: 10,
-    color: "#1A535C",
-  },
-  {
-    id: "668cf86512695a391340d1da",
-    slug: "perfect-condition-vitamin",
-    name: "IRL Innoworm-XL (1 pcs)",
-    description: "Parasite control for livestock.",
-    longDescription: "IRL Innoworm-XL offers effective broad-spectrum control against common internal parasites in livestock, ensuring better health and productivity.",
-    price: 412.0,
-    imageUrl: fifteen,
-    imageFileName: 'fifteen.png',
-    rating: 4.7,
-    reviewCount: 91,
-    stock: 14,
-    features: ["Broad-spectrum parasite control", "Easy to administer", "Improves animal well-being"],
-    minOrderQty: 5,
-    color: "#4CB944",
-  },
-  {
-    id: "668cf86512695a391340d1db",
-    slug: "weight-booster",
-    name: "IRL Innoworm Suspension",
-    description: "Nutritional supplement for healthy weight gain.",
-    longDescription: "This suspension is formulated to help animals achieve healthy weight gain through a balanced nutritional profile, ideal for recovery or growth phases.",
-    price: 314.95,
-    imageUrl: sixteen,
-    imageFileName: 'sixteen.png',
-    rating: 4.6,
-    reviewCount: 68,
-    stock: 0,
-    features: ["Promotes healthy weight gain", "Rich in essential nutrients", "Palatable suspension form"],
-    minOrderQty: 10,
-    color: "#F72585",
-  },
-  {
-    id: "668cf86512695a391340d1dc",
-    slug: "makkhi-soap",
-    name: "IRL Makkhi Soap",
-    description: "Insect repellent soap for animal hygiene.",
-    longDescription: "IRL Makkhi Soap provides effective protection against flies and other insects while ensuring gentle cleansing for animal skin and coat.",
-    price: 719.95,
-    imageUrl: seventeen,
-    imageFileName: 'seventeen.png',
-    rating: 4.8,
-    reviewCount: 105,
-    stock: 25,
-    features: ["Effective insect repellent", "Gentle on skin", "Promotes hygiene"],
-    minOrderQty: 5,
-    color: "#3A86FF",
-  },
-  {
-    id: "668cf86512695a391340d1dd",
-    slug: "makkhi-liquid",
-    name: "Makkhi Concentrated Liquid",
-    description: "Concentrated liquid formula for pest control.",
-    longDescription: "A powerful concentrated liquid for controlling a wide range of pests affecting animals and their environment. Dilute as per instructions for best results.",
-    price: 719.95,
-    imageUrl: eighteen,
-    imageFileName: 'eighteen.png',
-    rating: 4.7,
-    reviewCount: 87,
-    stock: 18,
-    features: ["Concentrated formula", "Broad-spectrum pest control", "Economical to use"],
-    minOrderQty: 10,
-    color: "#8338EC",
-  },
-  {
-    id: "668cf86512695a391340d1de",
-    slug: "makkhi-injection",
-    name: "Makkhi Injection",
-    description: "Injectable solution for parasite control.",
-    longDescription: "An injectable solution designed for systemic control of internal and external parasites, administered under veterinary guidance.",
-    price: 179.95,
-    imageUrl: nineteen,
-    imageFileName: 'nineteen.png',
-    rating: 4.9,
-    reviewCount: 93,
-    stock: 7,
-    features: ["Systemic parasite control", "Fast-acting injectable", "Veterinary grade"],
-    minOrderQty: 5,
-    color: "#FB5607",
-  },
-];
+// IMPORT THE SHARED PRODUCT DATA from ListProducts.jsx
+// Make sure ListProducts.jsx exports productsData: `export const productsData = [...]`
+import { productsData } from './ListProducts'; // Or the correct relative path
+
 
 const Badge = ({ children, color = "blue", icon }) => (
   <motion.span
@@ -257,16 +69,21 @@ const QuantitySelector = ({ quantity, onQuantityChange, stock, minOrderQty = 1, 
   );
 };
 
-const ProductRating = ({ rating, reviewCount, showCount = true }) => (
-  <div className="flex items-center">
+const ProductRating = ({ rating, reviewCount, showCount = true }) => {
+  const validRating = typeof rating === 'number' ? rating : 0;
+  const validReviewCount = typeof reviewCount === 'number' ? reviewCount : 0;
+
+  return (
     <div className="flex items-center">
-      {[...Array(5)].map((_, i) => (<Star key={i} size={16} className={`transition-colors ${i < Math.floor(rating) ? "fill-amber-400 text-amber-500" : i < Math.round(rating) ? "fill-amber-200 text-amber-300" : "text-gray-300"}`} />))}
+      <div className="flex items-center">
+        {[...Array(5)].map((_, i) => (<Star key={i} size={16} className={`transition-colors ${i < Math.floor(validRating) ? "fill-amber-400 text-amber-500" : i < Math.round(validRating) ? "fill-amber-200 text-amber-300" : "text-gray-300"}`} />))}
+      </div>
+      <span className="text-amber-600 ml-2 font-medium">{validRating.toFixed(1)}</span>
+      {showCount && validReviewCount > 0 && (<><span className="mx-2 text-gray-300">|</span><span className="text-gray-500 text-sm hover:text-gray-700 cursor-pointer">{validReviewCount} reviews</span></>)}
+      {showCount && validReviewCount === 0 && (<><span className="mx-2 text-gray-300">|</span><span className="text-gray-500 text-sm">No reviews yet</span></>)}
     </div>
-    <span className="text-amber-600 ml-2 font-medium">{rating.toFixed(1)}</span>
-    {showCount && reviewCount > 0 && (<><span className="mx-2 text-gray-300">|</span><span className="text-gray-500 text-sm hover:text-gray-700 cursor-pointer">{reviewCount} reviews</span></>)}
-    {showCount && reviewCount === 0 && (<><span className="mx-2 text-gray-300">|</span><span className="text-gray-500 text-sm">No reviews yet</span></>)}
-  </div>
-);
+  );
+};
 
 const FormField = ({ label, id, type = "text", value, onChange, placeholder, required = true, error }) => {
   const Component = type === "textarea" ? Textarea : Input;
@@ -280,7 +97,7 @@ const FormField = ({ label, id, type = "text", value, onChange, placeholder, req
 };
 
 function ProductDetailPage() {
-  const { id: productIdOrSlug } = useParams();
+  const { id: productIdFromUrl } = useParams();
   const navigate = useNavigate();
   const { user, api, isAuthenticated } = useAuth();
 
@@ -295,19 +112,20 @@ function ProductDetailPage() {
   const [formErrors, setFormErrors] = useState({});
   const [formData, setFormData] = useState({ shippingName: "", shippingMobile: "", shippingAddress: "" });
 
-  const domain = "https://www.innovationremedies.com"; 
+  const domain = "https://www.innovationremedies.com";
 
   useEffect(() => {
-    let foundProduct = products.find((p) => p.id === productIdOrSlug || p.slug === productIdOrSlug);
+    let foundProduct = productsData.find((p) => p.id === productIdFromUrl);
     setProduct(foundProduct);
-  }, [productIdOrSlug]);
+  }, [productIdFromUrl]);
 
   useEffect(() => {
     if (product) {
-      const moq = product.minOrderQty || 1;
-      setQuantity(product.stock > 0 ? Math.max(1, moq) : 1);
+      const moq = product.minQuantity || 1;
+      const stock = product.stock !== undefined ? product.stock : 0;
+      setQuantity(stock > 0 ? Math.max(1, moq) : 1);
       if (isAuthenticated && user) {
-        setFormData({ shippingName: user.name || "", shippingMobile: user.mobile || "", shippingAddress: "" });
+        setFormData({ shippingName: user.name || "", shippingMobile: user.mobile || "", shippingAddress: user.address || "" }); // Pre-fill address if available
       }
     }
   }, [product, isAuthenticated, user]);
@@ -319,24 +137,26 @@ function ProductDetailPage() {
   }, [isModalOpen]);
 
   const getDisplayImageUrl = (p) => {
-    if (!p || !p.imageUrl) return '/default-product-image.png';
-    if (typeof p.imageUrl === 'string') return p.imageUrl;
-    if (typeof p.imageUrl === 'object' && p.imageUrl.src) return p.imageUrl.src;
-    if (p.imageFileName) return `/assets/Images/${p.imageFileName.replace(/^\//, '')}`;
+    if (!p) return '/default-product-image.png';
+    const { imageUrl, imageFileName } = p;
+    if (!imageUrl && !imageFileName) return '/default-product-image.png';
+    if (typeof imageUrl === 'string') return imageUrl;
+    if (typeof imageUrl === 'object' && imageUrl && imageUrl.src) return imageUrl.src;
+    if (imageFileName) return `/assets/Images/${imageFileName.replace(/^\//, '')}`;
     return '/default-product-image.png';
   };
-  
-  const getResolvedSchemaImageUrl = (p) => {
-    const siteDomain = domain; 
-    const defaultImage = `${siteDomain}/default-product-image.png`;
-    if (!p || !p.imageUrl) return defaultImage;
 
+  const getResolvedSchemaImageUrl = (p) => {
+    const siteDomain = domain;
+    const defaultImage = `${siteDomain}/default-product-image.png`;
+    if (!p) return defaultImage;
+    const { imageUrl, imageFileName } = p;
     let imagePath;
-    if (typeof p.imageUrl === 'string') imagePath = p.imageUrl;
-    else if (typeof p.imageUrl === 'object' && p.imageUrl.src) imagePath = p.imageUrl.src;
-    else if (p.imageFileName) imagePath = `/assets/Images/${p.imageFileName.replace(/^\//, '')}`;
+    if (!imageUrl && !imageFileName) return defaultImage;
+    if (typeof imageUrl === 'string') imagePath = imageUrl;
+    else if (typeof imageUrl === 'object' && imageUrl && imageUrl.src) imagePath = imageUrl.src;
+    else if (imageFileName) imagePath = `/assets/Images/${imageFileName.replace(/^\//, '')}`;
     else return defaultImage;
-    
     if (imagePath.startsWith('http')) return imagePath;
     return `${siteDomain}${imagePath.startsWith('/') ? imagePath : `/${imagePath}`}`;
   };
@@ -352,23 +172,42 @@ function ProductDetailPage() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="max-w-md mx-auto bg-white rounded-xl shadow-md p-8">
             <AlertTriangle className="mx-auto h-16 w-16 text-red-400 mb-4" />
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Product Not Found</h2>
-            <p className="text-gray-600 mb-6">We couldn't find the product you're looking for.</p>
+            <p className="text-gray-600 mb-6">We couldn't find the product with ID: {productIdFromUrl}.</p>
             <Button variant="default" size="lg" onClick={() => navigate("/products")} className="w-full"><ArrowLeft size={16} className="mr-2" /> Browse Products</Button>
           </motion.div>
         </div>
       </HelmetProvider>
     );
   }
-  
+
   const resolvedSchemaImageUrl = getResolvedSchemaImageUrl(product);
   const displayImageUrl = getDisplayImageUrl(product);
 
-  const moq = product.minOrderQty || 1;
-  const isOrderable = product.stock > 0 && product.stock >= moq;
-  const stockLessThanMoqButPositive = product.stock > 0 && product.stock < moq;
+  const moq = product.minQuantity || 1;
+  const currentStock = product.stock !== undefined ? product.stock : 0;
+  const isOrderable = currentStock > 0 && currentStock >= moq;
+  const stockLessThanMoqButPositive = currentStock > 0 && currentStock < moq;
+
+  let productDisplayColor = '#4A90E2';
+  if (product.gradientFrom) {
+    const colorName = product.gradientFrom.split('-')[1];
+    const tailwindColorMap = {
+        blue: 'rgba(59, 130, 246, 1)', sky: 'rgba(14, 165, 233, 1)',
+        purple: 'rgba(139, 92, 246, 1)', violet: 'rgba(124, 58, 237, 1)',
+        amber: 'rgba(245, 158, 11, 1)', yellow: 'rgba(234, 179, 8, 1)',
+        teal: 'rgba(20, 184, 166, 1)', cyan: 'rgba(6, 182, 212, 1)',
+        indigo: 'rgba(99, 102, 241, 1)', red: 'rgba(239, 68, 68, 1)',
+        pink: 'rgba(236, 72, 153, 1)', green: 'rgba(34, 197, 94, 1)',
+        emerald: 'rgba(16, 185, 129, 1)', slate: 'rgba(100, 116, 139, 1)'
+    };
+    if (tailwindColorMap[colorName]) {
+        productDisplayColor = tailwindColorMap[colorName];
+    }
+  }
+  const imageBackgroundColor = product.gradientFrom ? `bg-${product.gradientFrom.split('-')[1]}-100` : 'bg-gray-100';
+
 
   const handleQuantityChange = (amount) => {
-    const currentStock = product.stock;
     let newQuantity = quantity + amount;
     if (newQuantity < moq) newQuantity = moq;
     if (newQuantity > currentStock) newQuantity = currentStock;
@@ -378,7 +217,7 @@ function ProductDetailPage() {
   };
 
   const handleAddToCart = () => {
-    if (!isOrderable || product.stock <= 0) return;
+    if (!isOrderable || currentStock <= 0) return;
     toast.success("Added to Cart", { description: `${quantity} x ${product.name}`, action: { label: "View Cart", onClick: () => navigate("/cart") }});
   };
 
@@ -389,12 +228,13 @@ function ProductDetailPage() {
     }
     if (!isOrderable) {
       let desc = "This product is currently out of stock.";
-      if (stockLessThanMoqButPositive) desc = `Available stock (${product.stock}) is less than MOQ (${moq}).`;
+      if (stockLessThanMoqButPositive) desc = `Available stock (${currentStock}) is less than MOQ (${moq}).`;
+      else if (currentStock === 0) desc = `This product is out of stock.`;
       toast.error("Cannot Proceed", { description: desc });
       return;
     }
     setSelectedPaymentMethod("cod"); setOrderError(null); setIsProcessingOrder(false); setCheckoutStep(1); setFormErrors({});
-    setFormData({ shippingName: user?.name || "", shippingMobile: user?.mobile || "", shippingAddress: "" });
+    setFormData({ shippingName: user?.name || "", shippingMobile: user?.mobile || "", shippingAddress: user?.address || "" });
     setIsModalOpen(true);
   };
 
@@ -404,7 +244,7 @@ function ProductDetailPage() {
     if (!formData.shippingMobile.trim()) errors.shippingMobile = "Mobile number is required";
     else if (!/^\d{10}$/.test(formData.shippingMobile.replace(/\s+/g, ''))) errors.shippingMobile = "Valid 10-digit mobile number required";
     if (!formData.shippingAddress.trim()) errors.shippingAddress = "Address is required";
-    else if (formData.shippingAddress.trim().length < 10) errors.shippingAddress = "Complete address required";
+    else if (formData.shippingAddress.trim().length < 10) errors.shippingAddress = "Complete address required (min 10 chars)";
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -416,14 +256,30 @@ function ProductDetailPage() {
     if (selectedPaymentMethod !== "cod") { setOrderError("Only Cash on Delivery is available."); return; }
     setIsProcessingOrder(true); setOrderError(null);
     try {
-      const response = await api.post("/orders", {
-        shippingName: formData.shippingName, shippingMobile: formData.shippingMobile, shippingAddress: formData.shippingAddress,
-        paymentMethod: selectedPaymentMethod, itemnName: product.name, itemsQuantity: quantity, totalAmount: product.price * quantity,
-      });
+      if (!api || typeof api.post !== 'function') {
+        throw new Error("API service is not configured correctly.");
+      }
+      const payload = {
+        shippingName: formData.shippingName,
+        shippingMobile: formData.shippingMobile,
+        shippingAddress: formData.shippingAddress,
+        paymentMethod: selectedPaymentMethod,
+        itemnName: product.name, // CORRECTED: itemnName to match backend
+        itemsQuantity: quantity,
+        totalAmount: parseFloat((product.price * quantity).toFixed(2)), // Ensure totalAmount is a number
+      };
+
+      // Log the payload before sending
+      console.log("Order Payload:", payload);
+
+      const response = await api.post("/orders", payload);
+
       toast.success("Order Placed Successfully!", { description: `Order #${response.data.data.orderId.slice(-6)} confirmed.` });
-      setIsModalOpen(false); navigate(`/order-confirmation/${response.data.data.orderId}`);
+      setIsModalOpen(false);
+      navigate(`/order-confirmation/${response.data.data.orderId}`);
     } catch (error) {
-      const message = error.response?.data?.message || error.message || "An unexpected error occurred.";
+      const message = error.response?.data?.message || error.message || "An unexpected error occurred while placing the order.";
+      console.error("Order creation failed:", error.response?.data || error); // Log detailed error
       setOrderError(message); toast.error("Order Failed", { description: message });
     } finally { setIsProcessingOrder(false); }
   };
@@ -433,8 +289,8 @@ function ProductDetailPage() {
 
   const getPriceValidUntil = () => {
     const date = new Date();
-    date.setFullYear(date.getFullYear() + 1); 
-    return date.toISOString().split('T')[0]; 
+    date.setFullYear(date.getFullYear() + 1);
+    return date.toISOString().split('T')[0];
   };
   const priceValidUntilString = getPriceValidUntil();
 
@@ -442,43 +298,43 @@ function ProductDetailPage() {
     "@context": "https://schema.org",
     "@type": "Product",
     "name": product.name.replace(/"/g, '\\"'),
-    "description": product.description.replace(/"/g, '\\"'), 
-    "image": resolvedSchemaImageUrl, 
-    "sku": product.id, 
-    "mpn": product.id, 
+    "description": product.description.replace(/"/g, '\\"'),
+    "image": resolvedSchemaImageUrl,
+    "sku": product.id,
+    "mpn": product.id,
     "brand": {
       "@type": "Brand",
-      "name": "Innovation Remedies" 
+      "name": "Innovation Remedies"
     },
     "offers": {
       "@type": "Offer",
       "priceCurrency": "INR",
       "price": product.price.toFixed(2),
-      "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-      "url": `${domain}/product/${product.slug || product.id}`, 
+      "availability": currentStock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      "url": `${domain}/product/${product.id}`,
       "seller": {
         "@type": "Organization",
         "name": "Innovation Remedies"
       },
-      "priceValidUntil": priceValidUntilString, 
-      "hasMerchantReturnPolicy": {             
+      "priceValidUntil": priceValidUntilString,
+      "hasMerchantReturnPolicy": {
         "@type": "MerchantReturnPolicy",
-        "url": `${domain}/return-policy`,     
+        "url": `${domain}/return-policy`,
         "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-        "merchantReturnDays": 30,             
-        "returnMethod": "https://schema.org/ReturnByMail", 
-        "returnFees": "https://schema.org/FreeReturn" 
+        "merchantReturnDays": 30,
+        "returnMethod": "https://schema.org/ReturnByMail",
+        "returnFees": "https://schema.org/FreeReturn"
       },
-      "shippingDetails": {                     
+      "shippingDetails": {
         "@type": "OfferShippingDetails",
         "shippingRate": {
           "@type": "MonetaryAmount",
-          "value": "50.00",                   
+          "value": "50.00",
           "currency": "INR"
         },
         "shippingDestination": {
           "@type": "DefinedRegion",
-          "addressCountry": "IN"              
+          "addressCountry": "IN"
         },
         "deliveryTime": {
           "@type": "ShippingDeliveryTime",
@@ -487,8 +343,6 @@ function ProductDetailPage() {
         }
       }
     },
-    // Conditionally add aggregateRating
-    // The ...product.rating part is crucial to ensure it's only added if rating exists
     ...(product.rating && typeof product.rating === 'number' && product.reviewCount && typeof product.reviewCount === 'number' && product.reviewCount > 0 && {
         "aggregateRating": {
             "@type": "AggregateRating",
@@ -496,24 +350,23 @@ function ProductDetailPage() {
             "reviewCount": product.reviewCount
         }
     })
-    // We are intentionally not adding "review": [] if no individual reviews are present.
   };
 
   return (
-    <HelmetProvider> 
+    <HelmetProvider>
       <Helmet>
         <title>{`${product.name} | Innovation Remedies`}</title>
         <meta name="description" content={`Buy ${product.name} - ${product.description}. High-quality veterinary solutions from Innovation Remedies.`} />
-        <link rel="canonical" href={`${domain}/product/${product.slug || product.id}`} />
+        <link rel="canonical" href={`${domain}/product/${product.id}`} />
         <meta property="og:type" content="product" />
         <meta property="og:title" content={`${product.name} | Innovation Remedies`} />
         <meta property="og:description" content={product.description} />
         <meta property="og:image" content={resolvedSchemaImageUrl} />
-        <meta property="og:url" content={`${domain}/product/${product.slug || product.id}`} />
+        <meta property="og:url" content={`${domain}/product/${product.id}`} />
         <meta property="og:site_name" content="Innovation Remedies" />
         <meta property="product:price:amount" content={product.price.toFixed(2)} />
         <meta property="product:price:currency" content="INR" />
-        <meta property="product:availability" content={product.stock > 0 ? "instock" : "oos"} />
+        <meta property="product:availability" content={currentStock > 0 ? "instock" : "oos"} />
         <meta property="product:brand" content="Innovation Remedies" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${product.name} | Innovation Remedies`} />
@@ -526,9 +379,9 @@ function ProductDetailPage() {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 font-sans bg-gray-50 min-h-screen">
         <nav className="flex items-center text-sm mb-6 text-gray-500">
-          <button onClick={() => navigate("/")} className="hover:text-gray-700 transition-colors">Home</button>
+          <Link to="/" className="hover:text-gray-700 transition-colors">Home</Link>
           <ChevronRight size={14} className="mx-2" />
-          <button onClick={() => navigate("/products")} className="hover:text-gray-700 transition-colors">Products</button>
+          <Link to="/products" className="hover:text-gray-700 transition-colors">Products</Link>
           <ChevronRight size={14} className="mx-2" />
           <span className="text-gray-900 font-medium truncate max-w-xs">{product.name}</span>
         </nav>
@@ -536,14 +389,25 @@ function ProductDetailPage() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="flex flex-col lg:flex-row gap-8 md:gap-12">
           <div className="w-full lg:w-2/5">
             <Card className="overflow-hidden border-none shadow-lg rounded-xl bg-white">
-              <div className="p-6 text-center flex justify-center items-center min-h-[300px] md:min-h-[400px]" style={{ backgroundColor: `${product.color}1A` }}>
-                <motion.img key={displayImageUrl} src={displayImageUrl} alt={product.name} className="w-auto h-auto object-contain max-w-full max-h-80" initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.5 }} whileHover={{ scale: 1.05, transition: { duration: 0.2 } }} draggable="false" />
+              <div className={`p-6 text-center flex justify-center items-center min-h-[300px] md:min-h-[400px] ${imageBackgroundColor}`}>
+                <motion.img
+                    key={displayImageUrl}
+                    src={displayImageUrl}
+                    alt={product.name}
+                    className="w-auto h-auto object-contain max-w-full max-h-80"
+                    initial={{ scale: 0.9, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                    whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
+                    draggable="false"
+                    loading="lazy"
+                />
               </div>
               <div className="p-4 bg-white flex flex-wrap justify-center items-center gap-2">
-                {product.stock > 0 ? (<Badge color="#22c55e" icon={<CheckCircle size={12} />}>In Stock</Badge>) : (<Badge color="#ef4444" icon={<AlertTriangle size={12} />}>Out of Stock</Badge>)}
-                {product.stock < 10 && product.stock > 0 && !stockLessThanMoqButPositive && (<Badge color="#f59e0b" icon={<AlertTriangle size={12} />}>Low Stock ({product.stock})</Badge>)}
+                {currentStock > 0 ? (<Badge color="#22c55e" icon={<CheckCircle size={12} />}>In Stock</Badge>) : (<Badge color="#ef4444" icon={<AlertTriangle size={12} />}>Out of Stock</Badge>)}
+                {currentStock < 10 && currentStock > 0 && !stockLessThanMoqButPositive && (<Badge color="#f59e0b" icon={<AlertTriangle size={12} />}>Low Stock ({currentStock})</Badge>)}
                 {stockLessThanMoqButPositive && (<Badge color="#f97316" icon={<PackageMinus size={12} />}>Stock {"<"} MOQ</Badge>)}
-                {product.rating >= 4.8 && (<Badge color="#eab308" icon={<Star size={12} className="fill-current" />}>Top Rated</Badge>)}
+                {product.rating && product.rating >= 4.8 && (<Badge color="#eab308" icon={<Star size={12} className="fill-current" />}>Top Rated</Badge>)}
               </div>
             </Card>
           </div>
@@ -570,17 +434,17 @@ function ProductDetailPage() {
 
               <div className="flex flex-wrap items-center mt-6 gap-3">
                 <span className="text-gray-700 font-medium">Quantity:</span>
-                <QuantitySelector quantity={quantity} onQuantityChange={handleQuantityChange} stock={product.stock} minOrderQty={moq} />
-                {product.stock > 0 ? (<span className="text-sm text-green-600">{product.stock} available</span>) : (<span className="text-sm text-red-600 font-medium">Out of stock</span>)}
+                <QuantitySelector quantity={quantity} onQuantityChange={handleQuantityChange} stock={currentStock} minOrderQty={moq} />
+                {currentStock > 0 ? (<span className="text-sm text-green-600">{currentStock} available</span>) : (<span className="text-sm text-red-600 font-medium">Out of stock</span>)}
               </div>
               {moq > 1 && (<p className="text-xs text-gray-500 mt-1.5 ml-1">Minimum order quantity: {moq}</p>)}
-              {stockLessThanMoqButPositive && (<motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="p-3 bg-yellow-50 border border-yellow-200 rounded-md text-yellow-700 text-sm flex items-start gap-2 mt-4"><AlertTriangle size={18} className="flex-shrink-0 mt-0.5" /><span>Current stock ({product.stock}) is less than MOQ ({moq}). Cannot order.</span></motion.div>)}
-              {product.stock === 0 && (<motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm flex items-start gap-2 mt-4"><AlertTriangle size={18} className="flex-shrink-0 mt-0.5" /><span>This product is out of stock.</span></motion.div>)}
+              {stockLessThanMoqButPositive && (<motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="p-3 bg-yellow-50 border border-yellow-200 rounded-md text-yellow-700 text-sm flex items-start gap-2 mt-4"><AlertTriangle size={18} className="flex-shrink-0 mt-0.5" /><span>Current stock ({currentStock}) is less than MOQ ({moq}). Cannot order.</span></motion.div>)}
+              {currentStock === 0 && (<motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm flex items-start gap-2 mt-4"><AlertTriangle size={18} className="flex-shrink-0 mt-0.5" /><span>This product is out of stock.</span></motion.div>)}
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
-                <Button variant="outline" size="lg" className="text-base flex items-center justify-center gap-2 h-12 shadow-sm hover:shadow" onClick={handleAddToCart} disabled={!isOrderable || product.stock <= 0}><ShoppingCart size={18} /> Add to Cart</Button>
+                <Button variant="outline" size="lg" className="text-base flex items-center justify-center gap-2 h-12 shadow-sm hover:shadow" onClick={handleAddToCart} disabled={!isOrderable || currentStock <= 0}><ShoppingCart size={18} /> Add to Cart</Button>
                 <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-                  <Button asChild variant="default" size="lg" className="text-base text-white h-12 shadow-sm hover:shadow-md transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2" style={isOrderable && product.stock > 0 ? { backgroundColor: product.color, borderColor: product.color } : {}} disabled={!isOrderable || product.stock <= 0} onClick={handleOpenModal}>
+                   <Button asChild variant="default" size="lg" className="text-base text-white h-12 shadow-sm hover:shadow-md transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2" style={isOrderable && currentStock > 0 ? { backgroundColor: productDisplayColor, borderColor: productDisplayColor } : {}} disabled={!isOrderable || currentStock <= 0} onClick={handleOpenModal}>
                     <span>{isAuthenticated ? <UserCheck size={18} /> : <LogIn size={18} />} Buy Now</span>
                   </Button>
                   <DialogContent className="w-full max-w-[95vw] sm:max-w-[520px] p-0 bg-white rounded-xl overflow-y-auto max-h-[90vh] shadow-lg">
@@ -611,17 +475,17 @@ function ProductDetailPage() {
                         </motion.div>
                       )}
                     </AnimatePresence>
-                    <div className="py-4 space-y-4 border-t border-b my-4 mx-4 sm:mx-6 bg-gray-50 rounded-lg shadow-inner">
+                    <div className={`py-4 space-y-4 border-t border-b my-4 mx-4 sm:mx-6 bg-gray-50 rounded-lg shadow-inner`}>
                       <div className="flex items-start space-x-4 p-3">
-                        <motion.div className="w-16 h-16 flex-shrink-0 rounded-md border p-1 flex items-center justify-center" style={{ backgroundColor: `${product.color}1A` }} whileHover={{ scale: 1.05 }}><img src={displayImageUrl} alt={product.name} className="max-w-full max-h-full object-contain" /></motion.div>
-                        <div className="flex-1 min-w-0"><p className="font-medium text-gray-800 truncate">{product.name}</p><p className="text-sm text-gray-500 mt-1">Unit Price: ₹{product.price.toFixed(2)}</p><div className="flex items-center mt-2"><span className="text-xs text-gray-500 mr-2">Qty:</span>{checkoutStep === 1 ? (<QuantitySelector quantity={quantity} onQuantityChange={handleQuantityChange} stock={product.stock} minOrderQty={moq} size="small" />) : (<span className="text-sm font-medium">{quantity}</span>)}</div></div>
+                        <motion.div className={`w-16 h-16 flex-shrink-0 rounded-md border p-1 flex items-center justify-center ${imageBackgroundColor}`} whileHover={{ scale: 1.05 }}><img src={displayImageUrl} alt={product.name} className="max-w-full max-h-full object-contain" /></motion.div>
+                        <div className="flex-1 min-w-0"><p className="font-medium text-gray-800 truncate">{product.name}</p><p className="text-sm text-gray-500 mt-1">Unit Price: ₹{product.price.toFixed(2)}</p><div className="flex items-center mt-2"><span className="text-xs text-gray-500 mr-2">Qty:</span>{checkoutStep === 1 ? (<QuantitySelector quantity={quantity} onQuantityChange={handleQuantityChange} stock={currentStock} minOrderQty={moq} size="small" />) : (<span className="text-sm font-medium">{quantity}</span>)}</div></div>
                         <p className="text-sm font-medium text-gray-800 whitespace-nowrap">₹{(product.price * quantity).toFixed(2)}</p>
                       </div>
                       <div className="flex justify-between items-center text-base font-medium pt-2 px-3"><span className="text-gray-600">Total Amount:</span><span className="text-gray-900 text-lg font-semibold">₹{totalPurchasePrice}</span></div>
                     </div>
                     {orderError && (<motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mx-4 sm:mx-6 p-3 bg-red-50 border border-red-100 rounded-md mb-4 shadow-sm"><p className="text-sm text-red-600 flex items-start"><AlertTriangle size={14} className="mr-1.5 mt-0.5 flex-shrink-0" /><span>{orderError}</span></p></motion.div>)}
                     <DialogFooter className="p-4 sm:p-6 pt-3 bg-gradient-to-t from-gray-50 to-gray-100 flex flex-col sm:flex-row sm:justify-between gap-3 sticky bottom-0 z-10">
-                      {checkoutStep === 1 ? (<><DialogClose asChild><Button type="button" variant="outline" className="w-full sm:w-auto shadow-sm hover:shadow-md transition-shadow" disabled={isProcessingOrder}>Cancel</Button></DialogClose><Button type="button" variant="default" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 shadow-sm hover:shadow-md transition-shadow" onClick={handleNextStep}>Continue to Payment</Button></>) : (<><Button type="button" variant="outline" className="w-full sm:w-auto shadow-sm hover:shadow-md transition-shadow" onClick={handlePrevStep} disabled={isProcessingOrder}>Back</Button><Button type="button" variant="default" className="w-full sm:w-auto text-white flex items-center justify-center gap-2 shadow-sm hover:shadow-md transition-shadow" style={{ backgroundColor: product.color }} onClick={handleConfirmPurchase} disabled={isProcessingOrder}>{isProcessingOrder ? (<><Loader2 size={18} className="animate-spin" /> Processing...</>) : ("Place Order")}</Button></>)}
+                      {checkoutStep === 1 ? (<><DialogClose asChild><Button type="button" variant="outline" className="w-full sm:w-auto shadow-sm hover:shadow-md transition-shadow" disabled={isProcessingOrder}>Cancel</Button></DialogClose><Button type="button" variant="default" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 shadow-sm hover:shadow-md transition-shadow" onClick={handleNextStep}>Continue to Payment</Button></>) : (<><Button type="button" variant="outline" className="w-full sm:w-auto shadow-sm hover:shadow-md transition-shadow" onClick={handlePrevStep} disabled={isProcessingOrder}>Back</Button><Button type="button" variant="default" className="w-full sm:w-auto text-white flex items-center justify-center gap-2 shadow-sm hover:shadow-md transition-shadow" style={{ backgroundColor: productDisplayColor }} onClick={handleConfirmPurchase} disabled={isProcessingOrder}>{isProcessingOrder ? (<><Loader2 size={18} className="animate-spin" /> Processing...</>) : ("Place Order")}</Button></>)}
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>
@@ -639,8 +503,8 @@ function ProductDetailPage() {
                 <div className="border-b border-gray-200"><div className="flex px-1"><button className={`py-3 px-5 text-sm font-medium border-b-2 transition-colors duration-200 ease-in-out focus:outline-none ${activeTab === "description" ? "border-blue-600 text-blue-600" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"}`} onClick={() => setActiveTab("description")}>Description</button><button className={`py-3 px-5 text-sm font-medium border-b-2 transition-colors duration-200 ease-in-out focus:outline-none ${activeTab === "features" ? "border-blue-600 text-blue-600" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"}`} onClick={() => setActiveTab("features")}>Features</button></div></div>
                 <CardContent className="p-6 min-h-[120px] prose prose-sm max-w-none">
                   <AnimatePresence mode="wait">
-                    {activeTab === "description" && <motion.div key="description" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}><p className="text-gray-700 leading-relaxed">{product.longDescription}</p></motion.div>}
-                    {activeTab === "features" && <motion.div key="features" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}><ul className="space-y-2.5 pl-1 list-none">{product.features.map((feature, index) => (<li key={index} className="flex items-start"><CheckCircle size={16} className="mr-2.5 mt-0.5 text-green-500 shrink-0" /><span className="text-gray-700">{feature}</span></li>))}</ul></motion.div>}
+                    {activeTab === "description" && <motion.div key="description" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}><p className="text-gray-700 leading-relaxed">{product.longDescription || product.description}</p></motion.div>}
+                    {activeTab === "features" && <motion.div key="features" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}><ul className="space-y-2.5 pl-1 list-none">{product.features && product.features.length > 0 ? product.features.map((feature, index) => (<li key={index} className="flex items-start"><CheckCircle size={16} className="mr-2.5 mt-0.5 text-green-500 shrink-0" /><span className="text-gray-700">{feature}</span></li>)) : (<li>No specific features listed.</li>)}</ul></motion.div>}
                   </AnimatePresence>
                 </CardContent>
               </Card>

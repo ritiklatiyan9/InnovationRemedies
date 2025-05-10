@@ -8,6 +8,7 @@ import Home4 from "./Home4";
 import Home6 from "./Home6";
 import Home7 from "./Home7";
 import Home8 from "./Home8";
+import logo from "../../../assets/Images/logo.png";
 import videoSourceUrl from "../../../assets/Video/bg9.mp4";
 import { FlipWords } from "../../../components/ui/flips-words";
 import { PawPrint, HeartPulse, Activity } from "lucide-react";
@@ -147,15 +148,15 @@ function Home() {
         <div className="relative z-10 container mx-auto px-6 lg:px-8 flex flex-col md:flex-row items-center gap-8 md:gap-12">
           <div className="w-full md:w-3/5 lg:w-2/3 text-center md:text-left  mb-6 md:pt-0">
             <div className="mb-5 flex justify-center md:justify-start opacity-90">
-              <div className="p-2 bg-gradient-to-br from-cyan-600 to-blue-700 rounded-full shadow-lg">
-                <PawPrint size={28} className="text-white" />
+              <div className="p-2 bg-gradient-to-br from-cyan-100 to-blue-200 rounded-full shadow-lg">
+          <img className="w-16 h-16" src={logo} alt="" />
               </div>
             </div>
             <h1
               style={customStyle2}
               className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight mb-4 drop-shadow-lg bg-gradient-to-r from-gray-100 via-blue-50 to-slate-200 bg-clip-text text-transparent"
             >
-              <span className="block text-5xl md:text-8xl lg:text-8xl bg-gradient-to-r from-blue-200 via-slate-100 to-indigo-200 bg-clip-text text-transparent" style={customStyle}>
+              <span className="block text-4xl md:text-8xl lg:text-8xl bg-gradient-to-r from-blue-200 via-slate-100 to-indigo-200 bg-clip-text text-transparent" style={customStyle}>
                 INNOVATION
               </span>
               <span className="block whitespace-nowrap text-2xl md:text-6xl mt-2 text-slate-300 font-light">

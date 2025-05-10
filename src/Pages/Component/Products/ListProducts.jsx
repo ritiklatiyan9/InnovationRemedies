@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Helmet, HelmetProvider } from 'react-helmet-async'; // Ensured HelmetProvider is here
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button'; 
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Select,
@@ -18,7 +18,7 @@ import {
   ShoppingCart,
   ChevronLeft,
   ChevronRight,
-  Sparkles, 
+  Sparkles,
 } from 'lucide-react';
 
 import R3 from '../../../assets/Images/R3.png';
@@ -43,330 +43,389 @@ import sui from '../../../assets/Images/sui.png';
 import three from '../../../assets/Images/three.png';
 import tenn from '../../../assets/Images/tenn.png';
 import wui from '../../../assets/Images/wui.jpg';
-// UPDATED productsData with rating and reviewCount
 import icj from '../../../assets/Images/ict.jpg';
-const productsData = [
+
+// Export productsData so it can be imported by ProductDetailPage.jsx
+export const productsData = [
   // 1. Resolution kit - 549
-  { 
-    id: 'resolution-kit', 
-    name: 'Resolution Kit', 
-    description: 'Complete resolution kit for veterinary care', 
-    price: 549.00, 
-    imageUrl: twoone, // Replace with actual image
-    imageFileName: 'resolution.png', 
-    gradientFrom: 'from-blue-100', 
-    gradientTo: 'to-blue-50', 
-    minQuantity: 1, 
-    rating: 4.7, 
-    reviewCount: 156 
+  {
+    id: 'resolution-kit',
+    name: 'Resolution Kit',
+    description: 'Complete resolution kit for veterinary care',
+    longDescription: 'Our Resolution Kit offers a comprehensive solution for various veterinary care needs. It includes essential components to aid in quick diagnosis and effective treatment, ensuring animal well-being. Ideal for field veterinarians and clinics.',
+    price: 549.00,
+    imageUrl: twoone,
+    imageFileName: 'resolution.png',
+    gradientFrom: 'from-blue-100',
+    gradientTo: 'to-blue-50',
+    minQuantity: 1,
+    rating: 4.7,
+    reviewCount: 156,
+    stock: 25, // Added stock
+    features: ['Comprehensive care', 'Veterinary grade', 'Easy to use'], // Added features
   },
-  
+
   // 2. Innolact Adj Super 5ut - 1490
-  { 
-    id: 'innolact-adj-super-5ut', 
-    name: 'Innolact AD3', 
-    description: 'Advanced lactation supplement for dairy animals', 
-    price: 1490.00, 
-    imageUrl: twotwo, // Using existing nine.png
-    imageFileName: 'nine.png', 
-    gradientFrom: 'from-purple-100', 
-    gradientTo: 'to-purple-50', 
-    minQuantity: 1, 
-    rating: 4.5, 
-    reviewCount: 89 
+  {
+    id: 'innolact-adj-super-5ut',
+    name: 'Innolact AD3',
+    description: 'Advanced lactation supplement for dairy animals',
+    longDescription: 'Innolact AD3 is an advanced lactation supplement specifically formulated for dairy animals. It enhances milk production, improves milk quality, and supports the overall health of lactating animals. Contains vital vitamins and minerals.',
+    price: 1490.00,
+    imageUrl: twotwo,
+    imageFileName: 'nine.png',
+    gradientFrom: 'from-purple-100',
+    gradientTo: 'to-purple-50',
+    minQuantity: 1,
+    rating: 4.5,
+    reviewCount: 89,
+    stock: 30,
+    features: ['Boosts milk yield', 'Enhances milk quality', 'Supports udder health'],
   },
-  
+
   // 3. Innolact gold 5ut - 1350
-  { 
-    id: 'innolact-gold-5ut', 
-    name: 'Innolact AD3 Gold', 
-    description: 'Premium gold formula for enhanced lactation', 
-    price: 1350.00, 
-    imageUrl: twothree, // Replace with actual image
-    imageFileName: 'gold.png', 
-    gradientFrom: 'from-amber-100', 
-    gradientTo: 'to-amber-50', 
-    minQuantity: 1, 
-    rating: 4.8, 
-    reviewCount: 112 
+  {
+    id: 'innolact-gold-5ut',
+    name: 'Innolact AD3 Gold',
+    description: 'Premium gold formula for enhanced lactation',
+    longDescription: 'Innolact AD3 Gold is our premium formula for superior lactation support. It includes chelated minerals and high-potency vitamins to maximize milk production and maintain animal health during peak lactation periods.',
+    price: 1350.00,
+    imageUrl: twothree,
+    imageFileName: 'gold.png',
+    gradientFrom: 'from-amber-100',
+    gradientTo: 'to-amber-50',
+    minQuantity: 1,
+    rating: 4.8,
+    reviewCount: 112,
+    stock: 15,
+    features: ['Premium formulation', 'Maximized milk production', 'With chelated minerals'],
   },
-  
+
   // 4. Innolact sul - 800
-  { 
-    id: 'innolact-Gel', 
-    name: 'Innolact Gel Advance', 
-    description: 'Sulfur-enhanced lactation supplement', 
-    price: 800.00, 
-    imageUrl:twofive, // Replace with actual image
-    imageFileName: 'sul.png', 
-    gradientFrom: 'from-yellow-100', 
-    gradientTo: 'to-yellow-50', 
-    minQuantity: 1, 
-    rating: 4.6, 
-    reviewCount: 78 
+  {
+    id: 'innolact-Gel',
+    name: 'Innolact Gel Advance',
+    description: 'Sulfur-enhanced lactation supplement',
+    longDescription: 'Innolact Gel Advance is a unique sulfur-enhanced supplement designed to support lactation and improve metabolic functions in dairy animals. The gel form ensures easy administration and quick absorption.',
+    price: 800.00,
+    imageUrl: twofive,
+    imageFileName: 'sul.png',
+    gradientFrom: 'from-yellow-100',
+    gradientTo: 'to-yellow-50',
+    minQuantity: 1,
+    rating: 4.6,
+    reviewCount: 78,
+    stock: 22,
+    features: ['Sulfur-enhanced', 'Easy gel administration', 'Supports metabolic health'],
   },
-  
+
   // 5. Innolact gel Advance 500gm - 380
-  { 
-    id: 'innolact-gel-advance-500', 
-    name: 'Innolact Gel Advance 500gm', 
-    description: 'Advanced gel formula for lactation support', 
-    price: 380.00, 
-    imageUrl: twofour, // Replace with actual image
-    imageFileName: 'gel500.png', 
-    gradientFrom: 'from-teal-100', 
-    gradientTo: 'to-teal-50', 
-    minQuantity: 5, 
-    rating: 4.9, 
-    reviewCount: 135 
+  {
+    id: 'innolact-gel-advance-500',
+    name: 'Innolact Gel Advance 500gm',
+    description: 'Advanced gel formula for lactation support',
+    longDescription: 'This 500gm pack of Innolact Gel Advance provides a convenient supply of our advanced gel formula for consistent lactation support. Ideal for managing multiple animals or for extended use.',
+    price: 380.00,
+    imageUrl: twofour,
+    imageFileName: 'gel500.png',
+    gradientFrom: 'from-teal-100',
+    gradientTo: 'to-teal-50',
+    minQuantity: 5,
+    rating: 4.9,
+    reviewCount: 135,
+    stock: 40,
+    features: ['Advanced gel formula', 'Cost-effective 500gm pack', 'Quick absorption'],
   },
-  
+
 
   // 7. Innolact bolus 40 bolus - 449
-  { 
-    id: 'innolact-bolus-40', 
-    name: 'Innolact Bolus 40 Bolus', 
-    description: 'Lactation support in convenient bolus form', 
-    price: 449.00, 
-    imageUrl: twosix, // Replace with actual image
-    imageFileName: 'bolus.png', 
-    gradientFrom: 'from-indigo-100', 
-    gradientTo: 'to-indigo-50', 
-    minQuantity: 1, 
-    rating: 4.6, 
-    reviewCount: 68 
+  {
+    id: 'innolact-bolus-40',
+    name: 'Innolact Bolus 40 Bolus',
+    description: 'Lactation support in convenient bolus form',
+    longDescription: 'Innolact Bolus offers lactation support in a convenient and easy-to-administer bolus form. Each bolus is packed with essential nutrients to aid milk production and animal health. Pack of 40.',
+    price: 449.00,
+    imageUrl: twosix,
+    imageFileName: 'bolus.png',
+    gradientFrom: 'from-indigo-100',
+    gradientTo: 'to-indigo-50',
+    minQuantity: 1,
+    rating: 4.6,
+    reviewCount: 68,
+    stock: 50,
+    features: ['Convenient bolus form', 'Sustained release', 'Pack of 40'],
   },
-  
+
   // 8. Calfshakti 1ut - 750
-  { 
-    id: 'calfshakti ', 
-    name: 'CalfShakti (1Ltr)', 
-    description: 'Enhanced nutrition for calves', 
-    price: 750.00, 
-    imageUrl: thirteen, // Using existing thirteen.png
-    imageFileName: 'thirteen.png', 
-    gradientFrom: 'from-sky-100', 
-    gradientTo: 'to-sky-50', 
-    minQuantity: 2, 
-    rating: 4.8, 
-    reviewCount: 105 
+  {
+    id: 'calfshakti', // Corrected ID: removed trailing space
+    name: 'CalfShakti (1Ltr)',
+    description: 'Enhanced nutrition for calves',
+    longDescription: 'CalfShakti (1Ltr) provides enhanced nutrition crucial for the healthy growth and development of calves. It supports immune function and helps in achieving optimal weight gain.',
+    price: 750.00,
+    imageUrl: thirteen,
+    imageFileName: 'thirteen.png',
+    gradientFrom: 'from-sky-100',
+    gradientTo: 'to-sky-50',
+    minQuantity: 2,
+    rating: 4.8,
+    reviewCount: 105,
+    stock: 18,
+    features: ['Supports calf growth', 'Boosts immunity', '1 Liter pack'],
   },
-  
+
   // 9. Calfshakti 500ml - 419
-  { 
-    id: 'calfshakti-500ml', 
-    name: 'CalfShakti 500ml', 
-    description: 'Nutrition supplement for young calves', 
-    price: 419.00, 
-    imageUrl: calfshaktimini, // Replace with actual image
-    imageFileName: 'calf500.png', 
-    gradientFrom: 'from-cyan-100', 
-    gradientTo: 'to-cyan-50', 
-    minQuantity: 5, 
-    rating: 4.7, 
-    reviewCount: 87 
+  {
+    id: 'calfshakti-500ml',
+    name: 'CalfShakti 500ml',
+    description: 'Nutrition supplement for young calves',
+    longDescription: 'The 500ml pack of CalfShakti offers a targeted nutrition supplement for young calves, promoting vitality and healthy development during their critical early stages.',
+    price: 419.00,
+    imageUrl: calfshaktimini,
+    imageFileName: 'calf500.png',
+    gradientFrom: 'from-cyan-100',
+    gradientTo: 'to-cyan-50',
+    minQuantity: 5,
+    rating: 4.7,
+    reviewCount: 87,
+    stock: 25,
+    features: ['For young calves', 'Promotes vitality', 'Convenient 500ml size'],
   },
-  
+
   // 10. Badda H 1ut - 1650
-  { 
-    id: 'badda-h-1ut', 
-    name: 'Badda H (1Ltr)', 
-    description: 'Supports urinary tract and digestive health in animals', 
-    price: 1650.00, 
-    imageUrl: eight, // Using existing eight.png
-    imageFileName: 'eight.png', 
-    gradientFrom: 'from-indigo-100', 
-    gradientTo: 'to-indigo-50', 
-    minQuantity: 1, 
-    rating: 4.8, 
-    reviewCount: 112 
+  {
+    id: 'badda-h-1ut',
+    name: 'Badda H (1Ltr)',
+    description: 'Supports urinary tract and digestive health in animals',
+    longDescription: 'Badda H (1Ltr) is formulated to support and maintain urinary tract and digestive health in animals. It aids in preventing common issues and promotes overall systemic balance.',
+    price: 1650.00,
+    imageUrl: eight,
+    imageFileName: 'eight.png',
+    gradientFrom: 'from-indigo-100',
+    gradientTo: 'to-indigo-50',
+    minQuantity: 1,
+    rating: 4.8,
+    reviewCount: 112,
+    stock: 12,
+    features: ['Urinary tract support', 'Digestive health aid', 'Systemic balance'],
   },
-  
+
   // 11. Racer kit - (price not specified)
-  { 
-    id: 'racer-kit', 
-    name: 'Racer Kit', 
-    description: 'Performance enhancement kit for racing animals', 
-    price: 0.00, // Price not specified in list
-    imageUrl: sui, // Replace with actual image
-    imageFileName: 'racer.png', 
-    gradientFrom: 'from-red-100', 
-    gradientTo: 'to-red-50', 
-    minQuantity: 1, 
-    rating: 4.9, 
-    reviewCount: 93 
+  {
+    id: 'racer-kit',
+    name: 'Racer Kit',
+    description: 'Performance enhancement kit for racing animals',
+    longDescription: 'The Racer Kit is a specialized performance enhancement solution for racing animals. It is designed to optimize energy, stamina, and recovery for peak competitive performance. (Price on Request)',
+    price: 0.00,
+    imageUrl: sui,
+    imageFileName: 'racer.png',
+    gradientFrom: 'from-red-100',
+    gradientTo: 'to-red-50',
+    minQuantity: 1,
+    rating: 4.9,
+    reviewCount: 93,
+    stock: 5,
+    features: ['Performance enhancement', 'Optimizes energy & stamina', 'Supports recovery'],
   },
-  
+
   // 12. Innoliv DS 1ut - 325
-  { 
-    id: 'innoliv-ds-1ut', 
-    name: 'Innoliv DS (1Ltr)', 
-    description: 'Advanced liver support supplement for animal vitality', 
-    price: 325.00, 
-    imageUrl: fourteen, // Using existing fourteen.png
-    imageFileName: 'fourteen.png', 
-    gradientFrom: 'from-teal-100', 
-    gradientTo: 'to-teal-50', 
-    minQuantity: 5, 
-    rating: 4.9, 
-    reviewCount: 135 
+  {
+    id: 'innoliv-ds-1ut',
+    name: 'Innoliv DS (1Ltr)',
+    description: 'Advanced liver support supplement for animal vitality',
+    longDescription: 'Innoliv DS (1Ltr) is an advanced liver support supplement that promotes detoxification and enhances overall animal vitality. Essential for maintaining liver health and function.',
+    price: 325.00,
+    imageUrl: fourteen,
+    imageFileName: 'fourteen.png',
+    gradientFrom: 'from-teal-100',
+    gradientTo: 'to-teal-50',
+    minQuantity: 5,
+    rating: 4.9,
+    reviewCount: 135,
+    stock: 35,
+    features: ['Advanced liver support', 'Promotes detoxification', 'Enhances vitality'],
   },
-  
-  // 13. Innoliv sul - 1500
- 
+
   // 14. Urocoenta Advance - 380
-  { 
-    id: 'urocoenta-advance', 
-    name: 'Urocoenta Advance', 
-    description: 'Advanced urinary health supplement', 
-    price: 380.00, 
-    imageUrl: three, // Replace with actual image
-    imageFileName: 'three.png', 
-    gradientFrom: 'from-blue-100', 
-    gradientTo: 'to-blue-50', 
-    minQuantity: 5, 
-    rating: 4.6, 
-    reviewCount: 95 
+  {
+    id: 'urocoenta-advance',
+    name: 'Urocoenta Advance',
+    description: 'Advanced urinary health supplement',
+    longDescription: 'Urocoenta Advance is a cutting-edge supplement for maintaining urinary health in animals. It helps prevent urinary issues and supports healthy kidney function.',
+    price: 380.00,
+    imageUrl: three,
+    imageFileName: 'three.png',
+    gradientFrom: 'from-blue-100',
+    gradientTo: 'to-blue-50',
+    minQuantity: 5,
+    rating: 4.6,
+    reviewCount: 95,
+    stock: 28,
+    features: ['Advanced urinary health', 'Supports kidney function', 'Preventative care'],
   },
-  
+
   // 15. Glucodyna 1ut - 750
-  { 
-    id: 'glucodyna-1ut', 
-    name: 'Glucodyna (1Ltr)', 
-    description: 'Energy and glucose supplement for animals', 
-    price: 750.00, 
-    imageUrl: tenn, // Replace with actual image
-    imageFileName: 'gluco.png', 
-    gradientFrom: 'from-pink-100', 
-    gradientTo: 'to-pink-50', 
-    minQuantity: 1, 
-    rating: 4.8, 
-    reviewCount: 110 
+  {
+    id: 'glucodyna-1ut',
+    name: 'Glucodyna (1Ltr)',
+    description: 'Energy and glucose supplement for animals',
+    longDescription: 'Glucodyna (1Ltr) is a vital energy and glucose supplement for animals, particularly useful during periods of stress, recovery, or high energy demand. Helps maintain blood glucose levels.',
+    price: 750.00,
+    imageUrl: tenn,
+    imageFileName: 'gluco.png',
+    gradientFrom: 'from-pink-100',
+    gradientTo: 'to-pink-50',
+    minQuantity: 1,
+    rating: 4.8,
+    reviewCount: 110,
+    stock: 10,
+    features: ['Instant energy source', 'Maintains glucose levels', 'Aids recovery'],
   },
-  
+
   // 16. R3 Vet Bolus - 250
-  { 
-    id: 'r3-vet-bolus', 
-    name: 'R3 Vet Bolus', 
-    description: 'Premium veterinary supplement for animal health', 
-    price: 250.00, 
-    imageUrl: R3, // Using existing R3.png
-    imageFileName: 'R3.png', 
-    gradientFrom: 'from-pink-100', 
-    gradientTo: 'to-pink-50', 
-    minQuantity: 10, 
-    rating: 4.7, 
-    reviewCount: 156 
+  {
+    id: 'r3-vet-bolus',
+    name: 'R3 Vet Bolus',
+    description: 'Premium veterinary supplement for animal health',
+    longDescription: 'R3 Vet Bolus is a premium multi-purpose veterinary supplement designed to support overall animal health and well-being. Convenient bolus form for easy administration.',
+    price: 250.00,
+    imageUrl: R3,
+    imageFileName: 'R3.png',
+    gradientFrom: 'from-pink-100',
+    gradientTo: 'to-pink-50',
+    minQuantity: 10,
+    rating: 4.7,
+    reviewCount: 156,
+    stock: 60,
+    features: ['Premium supplement', 'Overall animal health', 'Convenient bolus'],
   },
-  
+
   // 17. Innoworm XL 100ml - 150
-  { 
-    id: 'innoworm-xl-100ml', 
-    name: 'Innoworm XL 100ml', 
-    description: 'Effective parasite control for healthier livestock', 
-    price: 150.00, 
-    imageUrl: fifteen, // Using existing fifteen.png
-    imageFileName: 'fifteen.png', 
-    gradientFrom: 'from-green-100', 
-    gradientTo: 'to-green-50', 
-    minQuantity: 10, 
-    rating: 4.7, 
-    reviewCount: 91 
+  {
+    id: 'innoworm-xl-100ml',
+    name: 'Innoworm XL 100ml',
+    description: 'Effective parasite control for healthier livestock',
+    longDescription: 'Innoworm XL (100ml) provides effective and broad-spectrum parasite control for healthier livestock. Helps improve growth rates and overall animal productivity by managing worm infestations.',
+    price: 150.00,
+    imageUrl: fifteen,
+    imageFileName: 'fifteen.png',
+    gradientFrom: 'from-green-100',
+    gradientTo: 'to-green-50',
+    minQuantity: 10,
+    rating: 4.7,
+    reviewCount: 91,
+    stock: 45,
+    features: ['Broad-spectrum dewormer', 'For healthier livestock', '100ml pack'],
   },
-  
+
   // 18. Innoworm 30ml - 45
-  { 
-    id: 'innoworm-30ml', 
-    name: 'Innoworm 30ml', 
-    description: 'Nutritional supplement for healthy weight gain and growth', 
-    price: 45.00, 
-    imageUrl: sixteen, // Using existing sixteen.png
-    imageFileName: 'sixteen.png', 
-    gradientFrom: 'from-amber-100', 
-    gradientTo: 'to-amber-50', 
-    minQuantity: 30, 
-    rating: 4.6, 
-    reviewCount: 68 
+  {
+    id: 'innoworm-30ml',
+    name: 'Innoworm 30ml',
+    description: 'Nutritional supplement for healthy weight gain and growth',
+    longDescription: 'Innoworm 30ml is a nutritional supplement formulated for healthy weight gain and growth in young or recovering animals. Its palatable formula ensures easy acceptance.',
+    price: 45.00,
+    imageUrl: sixteen,
+    imageFileName: 'sixteen.png',
+    gradientFrom: 'from-amber-100',
+    gradientTo: 'to-amber-50',
+    minQuantity: 30,
+    rating: 4.6,
+    reviewCount: 68,
+    stock: 0, // Example out of stock
+    features: ['Supports weight gain', 'Promotes growth', 'Palatable formula'],
   },
-  
+
   // 19. Weight boost 3kg - 1250
-  { 
-    id: 'weight-boost-3kg', 
-    name: 'Weight Boost 3kg', 
-    description: 'Weight gain supplement for livestock', 
-    price: 1250.00, 
-    imageUrl: wui, // Replace with actual image
-    imageFileName: 'weight.png', 
-    gradientFrom: 'from-purple-100', 
-    gradientTo: 'to-purple-50', 
-    minQuantity: 1, 
-    rating: 4.9, 
-    reviewCount: 120 
+  {
+    id: 'weight-boost-3kg',
+    name: 'Weight Boost 3kg',
+    description: 'Weight gain supplement for livestock',
+    longDescription: 'Weight Boost (3kg) is a high-calorie supplement designed to promote significant weight gain in livestock. Ideal for animals needing to build mass or recover condition.',
+    price: 1250.00,
+    imageUrl: wui,
+    imageFileName: 'weight.png',
+    gradientFrom: 'from-purple-100',
+    gradientTo: 'to-purple-50',
+    minQuantity: 1,
+    rating: 4.9,
+    reviewCount: 120,
+    stock: 8,
+    features: ['High-calorie formula', 'Promotes mass gain', '3kg economy pack'],
   },
-  
-  // 20. Zn 15% 100gm - 170
- 
+
   // 22. Makkhi Soap 75gm - 120
-  { 
-    id: 'makkhi-soap-75gm', 
-    name: 'Makkhi Soap 75gm', 
-    description: 'Herbal insect repellent soap for animal hygiene and comfort', 
-    price: 120.00, 
-    imageUrl: seventeen, // Using existing seventeen.png
-    imageFileName: 'seventeen.png', 
-    gradientFrom: 'from-blue-100', 
-    gradientTo: 'to-blue-50', 
-    minQuantity: 20, 
-    rating: 4.8, 
-    reviewCount: 105 
+  {
+    id: 'makkhi-soap-75gm',
+    name: 'Makkhi Soap 75gm',
+    description: 'Herbal insect repellent soap for animal hygiene and comfort',
+    longDescription: 'Makkhi Soap (75gm) is a herbal insect repellent soap that ensures animal hygiene and comfort. It effectively repels flies and other ectoparasites while being gentle on the skin.',
+    price: 120.00,
+    imageUrl: seventeen,
+    imageFileName: 'seventeen.png',
+    gradientFrom: 'from-blue-100',
+    gradientTo: 'to-blue-50',
+    minQuantity: 20,
+    rating: 4.8,
+    reviewCount: 105,
+    stock: 70,
+    features: ['Herbal insect repellent', 'Gentle on skin', 'Promotes hygiene'],
   },
-  
+
   // 23. Makkhi 15ml - 85.90
-  { 
-    id: 'makkhi-15ml', 
-    name: 'Makkhi 15ml', 
-    description: 'Potent concentrated liquid formula for effective pest control', 
-    price: 85.90, 
-    imageUrl: eighteen, // Using existing eighteen.png
-    imageFileName: 'eighteen.png', 
-    gradientFrom: 'from-cyan-100', 
-    gradientTo: 'to-cyan-50', 
-    minQuantity: 10, 
-    rating: 4.7, 
-    reviewCount: 87 
+  {
+    id: 'makkhi-15ml',
+    name: 'Makkhi 15ml',
+    description: 'Potent concentrated liquid formula for effective pest control',
+    longDescription: 'Makkhi 15ml is a potent, concentrated liquid formula for effective control of flies and other pests. Its concentrated nature ensures efficacy even with small doses.',
+    price: 85.90,
+    imageUrl: eighteen,
+    imageFileName: 'eighteen.png',
+    gradientFrom: 'from-cyan-100',
+    gradientTo: 'to-cyan-50',
+    minQuantity: 10,
+    rating: 4.7,
+    reviewCount: 87,
+    stock: 55,
+    features: ['Potent concentrate', 'Effective pest control', 'Economical 15ml pack'],
   },
-  
+
   // 24. Makkhi 6ml - 54.90
-  { 
-    id: 'makkhi-6ml', 
-    name: 'Makkhi 6ml', 
-    description: 'Fast-acting liquid solution for pest control', 
-    price: 54.90, 
-    imageUrl: nineteen, // Using existing nineteen.png
-    imageFileName: 'nineteen.png', 
-    gradientFrom: 'from-violet-100', 
-    gradientTo: 'to-violet-50', 
-    minQuantity: 30, 
-    rating: 4.9, 
-    reviewCount: 93 
+  {
+    id: 'makkhi-6ml',
+    name: 'Makkhi 6ml',
+    description: 'Fast-acting liquid solution for pest control',
+    longDescription: 'This Makkhi 6ml pack offers a fast-acting liquid solution for quick pest control. Ideal for spot treatments or smaller applications where immediate action is needed.',
+    price: 54.90,
+    imageUrl: nineteen,
+    imageFileName: 'nineteen.png',
+    gradientFrom: 'from-violet-100',
+    gradientTo: 'to-violet-50',
+    minQuantity: 30,
+    rating: 4.9,
+    reviewCount: 93,
+    stock: 100,
+    features: ['Fast-acting solution', 'Quick pest knockdown', 'Convenient 6ml size'],
   },
-  
+
   // 25. Innocel Tag330 4.5gm - 415
-  { 
-    id: 'innocel-tag330-4.5gm', 
-    name: 'Innocef Tazo 4.5gm', 
-    description: 'Advanced cellular supplement for animals', 
-    price: 415.00, 
-    imageUrl: icj, // Replace with actual image
-    imageFileName: 'innocel.png', 
-    gradientFrom: 'from-emerald-100', 
-    gradientTo: 'to-emerald-50', 
-    minQuantity: 10, 
-    rating: 4.8, 
-    reviewCount: 85 
+  {
+    id: 'innocel-tag330-4.5gm',
+    name: 'Innocef Tazo 4.5gm',
+    description: 'Advanced cellular supplement for animals',
+    longDescription: 'Innocef Tazo 4.5gm is an advanced injectable antibiotic combination (Ceftriaxone & Tazobactam) for treating severe bacterial infections in animals. Provides broad-spectrum coverage.',
+    price: 415.00,
+    imageUrl: icj,
+    imageFileName: 'innocel.png',
+    gradientFrom: 'from-emerald-100',
+    gradientTo: 'to-emerald-50',
+    minQuantity: 10,
+    rating: 4.8,
+    reviewCount: 85,
+    stock: 20,
+    features: ['Injectable antibiotic', 'Ceftriaxone & Tazobactam', 'Treats severe infections'],
   }
 ];
-
 
 
 const containerVariants = {
@@ -384,9 +443,9 @@ const DEFAULT_GRADIENT_TO = 'to-slate-50';
 
 function ProductCard({ id, name, description, price, imageUrl, gradientFrom = DEFAULT_GRADIENT_FROM, gradientTo = DEFAULT_GRADIENT_TO, minQuantity, rating, reviewCount }) {
   const navigate = useNavigate();
-  
+
   const gradientClasses = `bg-gradient-to-br ${gradientFrom} ${gradientTo}`;
-  
+
   const handleCardClick = () => navigate(`/product/${id}`);
   const imgSrc = typeof imageUrl === 'string' ? imageUrl : imageUrl?.src;
 
@@ -451,11 +510,11 @@ function ProductCard({ id, name, description, price, imageUrl, gradientFrom = DE
 function ListProducts() {
   const domain = "https://www.innovationremedies.com";
   const canonicalUrl = `${domain}/products`;
-  
+
   const ogImageSrc = typeof logo === 'string' ? logo : (logo && logo.src);
-  const ogImageUrl = ogImageSrc 
-    ? `${domain}${ogImageSrc.startsWith('/') ? ogImageSrc : `/${ogImageSrc}`}` 
-    : `${domain}/default-logo.png`; 
+  const ogImageUrl = ogImageSrc
+    ? `${domain}${ogImageSrc.startsWith('/') ? ogImageSrc : `/${ogImageSrc}`}`
+    : `${domain}/default-logo.png`;
 
   const productsForSeo = productsData.map(product => {
     const imageFileName = product.imageFileName || 'default-product-image.png';
@@ -463,12 +522,10 @@ function ListProducts() {
     if (typeof product.imageUrl === 'string' && product.imageUrl.startsWith('http')) {
         resolvedImageUrl = product.imageUrl;
     } else {
-        // Assuming images are in /assets/Images/ relative to the domain root if imageFileName is used as fallback.
-        // Or, if imageUrl is an imported asset, it will be the bundled path.
         let tempPath = typeof product.imageUrl === 'string' ? product.imageUrl : (product.imageUrl?.src || `/assets/Images/${imageFileName}`);
         resolvedImageUrl = tempPath.startsWith('http') ? tempPath : `${domain}${tempPath.startsWith('/') ? tempPath : `/${tempPath}`}`;
     }
-    
+
     return {
       ...product,
       resolvedImageUrl: resolvedImageUrl,
@@ -480,7 +537,7 @@ function ListProducts() {
   const priceValidUntilString = priceValidUntilDate.toISOString().split('T')[0];
 
   return (
-    <HelmetProvider> {/* Added HelmetProvider here */}
+    <HelmetProvider>
       <Helmet>
         <title>Animal Health Solutions | Innovation Remedies</title>
         <meta name="description" content="Discover top-tier veterinary products and supplements from Innovation Remedies. Serving Meerut & Delhi NCR for optimal animal health and performance."/>
@@ -501,7 +558,7 @@ function ListProducts() {
         <meta name="geo.placename" content="Meerut" />
         <meta name="geo.position" content="28.9803;77.7039" />
         <meta name="ICBM" content="28.9803, 77.7039" />
-        
+
         <script type="application/ld+json">
           {`
             {
@@ -520,7 +577,7 @@ function ListProducts() {
             }
           `}
         </script>
-        
+
         <script type="application/ld+json">
           {`
             {
@@ -536,9 +593,9 @@ function ListProducts() {
               "email": "info@innovationremedies.com",
               "url": "${domain}",
               "image": "${ogImageUrl}",
-              "priceRange": "₹₹", 
-              "sameAs": [ 
-                "https://www.facebook.com/yourpage", 
+              "priceRange": "₹₹",
+              "sameAs": [
+                "https://www.facebook.com/yourpage",
                 "https://www.instagram.com/yourpage"
               ],
               "openingHours": "Mo-Su 09:00-18:00",
@@ -555,7 +612,7 @@ function ListProducts() {
             "description": product.description.replace(/"/g, '\\"'),
             "image": product.resolvedImageUrl,
             "sku": product.id,
-            "mpn": product.id, 
+            "mpn": product.id,
             "brand": {
               "@type": "Brand",
               "name": "Innovation Remedies"
@@ -564,31 +621,31 @@ function ListProducts() {
               "@type": "Offer",
               "priceCurrency": "INR",
               "price": product.price.toFixed(2),
-              "availability": "https://schema.org/InStock", 
-              "url": `${domain}/product/${product.id}`, 
+              "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock", // Use stock info
+              "url": `${domain}/product/${product.id}`,
               "seller": {
                 "@type": "Organization",
                 "name": "Innovation Remedies"
               },
-              "priceValidUntil": priceValidUntilString, // Ensured present
-              "hasMerchantReturnPolicy": { 
+              "priceValidUntil": priceValidUntilString,
+              "hasMerchantReturnPolicy": {
                 "@type": "MerchantReturnPolicy",
-                "url": `${domain}/return-policy`, 
+                "url": `${domain}/return-policy`,
                 "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-                "merchantReturnDays": 30, 
+                "merchantReturnDays": 30,
                 "returnMethod": "https://schema.org/ReturnByMail",
-                "returnFees": "https://schema.org/FreeReturn" 
+                "returnFees": "https://schema.org/FreeReturn"
               },
-              "shippingDetails": { 
+              "shippingDetails": {
                 "@type": "OfferShippingDetails",
                 "shippingRate": {
                   "@type": "MonetaryAmount",
-                  "value": "50.00", 
+                  "value": "50.00",
                   "currency": "INR"
                 },
                 "shippingDestination": {
                   "@type": "DefinedRegion",
-                  "addressCountry": "IN" 
+                  "addressCountry": "IN"
                 },
                 "deliveryTime": {
                   "@type": "ShippingDeliveryTime",
@@ -596,20 +653,19 @@ function ListProducts() {
                     "@type": "QuantitativeValue",
                     "minValue": 0,
                     "maxValue": 1,
-                    "unitCode": "DAY" 
+                    "unitCode": "DAY"
                   },
                   "transitTime": {
                     "@type": "QuantitativeValue",
                     "minValue": 3,
                     "maxValue": 7,
-                    "unitCode": "DAY" 
+                    "unitCode": "DAY"
                   }
                 }
               }
             }
           };
 
-          // Conditionally add aggregateRating
           if (product.rating && typeof product.rating === 'number' && product.reviewCount && typeof product.reviewCount === 'number' && product.reviewCount > 0) {
             productSchema.aggregateRating = {
               "@type": "AggregateRating",
@@ -617,7 +673,6 @@ function ListProducts() {
               "reviewCount": product.reviewCount
             };
           }
-          // As discussed, "review" array is omitted as no individual review data is available.
 
           return (
             <script key={product.id} type="application/ld+json">
@@ -657,7 +712,7 @@ function ListProducts() {
               </div>
             </div>
           </div>
-          
+
           <motion.div
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8"
             variants={containerVariants}
