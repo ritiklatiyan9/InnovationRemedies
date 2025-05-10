@@ -16,6 +16,10 @@ const customStyle2 = {
   fontFamily: "Libreville-Free, sans-serif",
   fontWeight: "400",
 };
+const customStyle = {
+  fontFamily: "Moonhouse, sans-serif",
+  fontWeight: "400",
+}
 
 const dolceAmyaraStyle = {
   fontFamily: "'Dolce & Amyara Personal Use', serif",
@@ -151,8 +155,8 @@ function Home() {
               style={customStyle2}
               className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight mb-4 drop-shadow-lg bg-gradient-to-r from-gray-100 via-blue-50 to-slate-200 bg-clip-text text-transparent"
             >
-              <span className="block text-5xl md:text-8xl lg:text-9xl bg-gradient-to-r from-blue-100 via-slate-50 to-indigo-200 bg-clip-text text-transparent" style={dolceAmyaraStyle}>
-                Innovation
+              <span className="block text-5xl md:text-8xl lg:text-8xl bg-gradient-to-r from-blue-200 via-slate-100 to-indigo-200 bg-clip-text text-transparent" style={customStyle}>
+                INNOVATION
               </span>
               <span className="block whitespace-nowrap text-2xl md:text-6xl mt-2 text-slate-300 font-light">
               Remedies Life Science Pvt. Ltd.
@@ -187,11 +191,12 @@ function Home() {
       </section>
 
       <Home8 />
-      <div><Home2 /></div>
+       <div className=""><Home6 /></div>
+     
       <Home7 />
       <div className=""><Home3 /></div>
       <div className=""><Home4 /></div>
-      <div className=""><Home6 /></div>
+      <div><Home2 /></div>
     </div>
   );
 }

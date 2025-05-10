@@ -96,7 +96,7 @@ function Footer() {
               <li className="flex items-start">
                 <MapPin size={18} className="text-emerald-600 mr-3 mt-0.5 flex-shrink-0" />
                 <span className="text-sm text-slate-600 leading-relaxed">
-                  638/101, Ganga Nagar, Meerut, Uttar Pradesh 250001
+                  B-Block , Baba Colony , Burari , North Delhi - 110084
                 </span>
               </li>
               <li>

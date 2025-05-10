@@ -6,6 +6,11 @@ const customStyle = {
   fontFamily: "Oregon LDO, sans-serif", // Custom font style, 'sans-serif' is a fallback
   fontWeight: "400",
 };
+const customStyle2 = {
+  fontFamily: "Moonhouse, sans-serif", // Custom font style, 'sans-serif' is a fallback
+  fontWeight: "400",
+};
+
 
 const HeroSection = () => {
   
@@ -49,8 +54,8 @@ const HeroSection = () => {
         <div className="max-w-xl lg:max-w-2xl"> {/* Constrains the width of the text content */}
         <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-bold text-white leading-tight">
   Thoughtful Handling
-  <br />
-  Expertly <span className="text-sky-400">Developed Solutions</span>
+  <br /> 
+  Expertly <br /> <span style={customStyle2} className="text-sky-400">Developed Solutions</span>
 </h1>
 <p className="mt-4 sm:mt-6 text-base sm:text-lg text-slate-200 max-w-lg">
   Committed to excellence in every step. We treat your products with the utmost care and apply deep technical expertise to deliver innovative, reliable solutions tailored to your needs.

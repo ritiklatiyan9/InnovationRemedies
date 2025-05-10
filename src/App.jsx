@@ -11,7 +11,7 @@ import ScrollToTop from './Pages/SinglePages/ScrollToTop';
 import Header from './Pages/Component/Header/Header';
 import ListProducts from './Pages/Component/Products/ListProducts';
 import AdminManageOrder from './Pages/Component/Order/AdminManageOrder';
-import ProductDetailPage from './Pages/Component/Products/ProductsDetails'; // Corrected path assumption
+import ProductDetailPage from './Pages/Component/Products/ProductsDetails'; 
 import Home from './Pages/Component/Home/Home';
 import NotFound from './Pages/SinglePages/NotFound';
 import Footer from './Pages/Component/Footer/Footer';
@@ -53,13 +53,13 @@ function App() {
       const timer = setTimeout(() => { if (loading) setLoading(false); }, 1500);
       return () => { window.removeEventListener('beforeunload', handleBeforeUnload); clearTimeout(timer); };
     }
-  }, []);
+  }, []); // Removed `loading` from dependency array as it causes re-trigger
 
 
   const siteUrl = 'https://www.innovationremedies.com';
   const siteName = "Innovation Remedies";
   const defaultDescription = `${siteName} is a leading provider of high-quality veterinary products and animal health solutions across India. Discover our innovative range for optimal animal wellness and care.`;
-  const defaultOgImage = `${siteUrl}/logo.png`;
+  const defaultOgImage = `${siteUrl}/logo.png`; // Ensure logo.png is in your public folder or adjust path
 
   const organizationJsonLd = {
     "@context": "https://schema.org",
@@ -86,6 +86,7 @@ function App() {
     },
     "sameAs": [
        "https://www.facebook.com/profile.php?id=61575431486434",
+       // Add other social media links here
     ]
   };
 
@@ -95,10 +96,8 @@ function App() {
     { name: 'Information Hub', url: `${siteUrl}/store` },
     { name: 'About Innovation Remedies', url: `${siteUrl}/about` },
     { name: 'Contact Us', url: `${siteUrl}/contact` },
-    // --- ADD POLICY LINKS FOR SCHEMA (AND FOOTER) ---
     { name: 'Return Policy', url: `${siteUrl}/return-policy` },
     { name: 'Shipping Policy', url: `${siteUrl}/shipping-policy` },
-    // --- END POLICY LINKS ---
   ];
 
   const siteNavigationJsonLd = {
@@ -154,7 +153,7 @@ function App() {
           <Router>
             <ScrollToTop />
             <Header />
-            <main className="pt-16 md:pt-16 min-h-screen">
+            <main className="pt-16 md:pt-16 min-h-screen"> {/* Ensure adequate padding for fixed header */}
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/products" element={<ListProducts />} />
@@ -164,15 +163,13 @@ function App() {
                 <Route path="/store" element={<Store />} />
                 <Route path="/product/:id" element={<ProductDetailPage />} />
 
-                {/* --- NEW POLICY ROUTES --- */}
                 <Route path="/return-policy" element={<ReturnPolicy />} />
                 <Route path="/shipping-policy" element={<ShippingPolicy />} />
-                {/* --- END NEW POLICY ROUTES --- */}
 
                 <Route element={<ProtectedRoute />}>
                   <Route path="/order-confirmation/:orderId" element={<OrderConfirmationPage />} />
                   <Route path="/admin/orders" element={<AdminManageOrder />} />
-                  <Route path="/cart" element={<MyOrdersPage />} />
+                  <Route path="/cart" element={<MyOrdersPage />} /> {/* Assuming cart shows orders or similar */}
                   <Route path="/orders" element={<MyOrdersPage />} />
                   <Route path="/orders/:orderId" element={<OrderDetailsPage />} />
                 </Route>
@@ -180,7 +177,7 @@ function App() {
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>
-            <Footer /> {/* Make sure to add links to these policy pages in your Footer component */}
+            <Footer /> 
             <ChatIcon onClick={() => setIsChatOpen(true)} />
             <ChatModal isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
           </Router>

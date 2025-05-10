@@ -1,3 +1,7 @@
+/* src/index.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -109,31 +113,26 @@
 }
 
 .animated-gradient-bg {
-  /* Define the gradient colors and angles */
-  /* Using soft, light colors here */
   background: linear-gradient(
     -45deg,
-    #e0f7fa, /* Light Cyan */
-    #fce4ec, /* Light Pink */
-    #e1f5fe, /* Light Blue */
-    #fff9c4  /* Light Yellow */
+    #e0f7fa, 
+    #fce4ec, 
+    #e1f5fe, 
+    #fff9c4  
   );
-  /* Make the background HUGE */
   background-size: 400% 400%;
-  /* Apply the animation */
   animation: gradient-flow 15s ease infinite;
 }
 
-/* Define the animation keyframes */
 @keyframes gradient-flow {
   0% {
-    background-position: 0% 50%; /* Start */
+    background-position: 0% 50%;
   }
   50% {
-    background-position: 100% 50%; /* Move to the right */
+    background-position: 100% 50%;
   }
   100% {
-    background-position: 0% 50%; /* Return to start */
+    background-position: 0% 50%;
   }
 }
 
@@ -150,12 +149,10 @@ html.has-scroll-smooth {
   will-change: transform;
 }
 
-/* Animation classes for reveal effects */
 .scroll-reveal {
   will-change: transform, opacity;
 }
 
-/* You can add more custom animations here */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -176,4 +173,36 @@ html.has-scroll-smooth {
   }
 }
 
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
+/* Add these new styles for the INNOVATION logo */
+.innovation-logo-replacement {
+  display: flex; 
+  align-items: center; 
+  font-family: 'Anton', sans-serif; 
+  color: white; /* CHANGED TO WHITE */
+  line-height: 1; 
+  font-weight: 400; 
+  text-transform: uppercase; 
+}
+
+.innovation-logo-part1,
+.innovation-logo-part2 {
+  letter-spacing: -0.02em; 
+}
+
+.innovation-logo-slash {
+  width: 0.18em;  
+  height: 1.05em; 
+  background-color: white; /* CHANGED TO WHITE */
+  transform: skewX(-20deg); 
+  margin-left: 0.05em;  
+  margin-right: 0.05em; 
+}

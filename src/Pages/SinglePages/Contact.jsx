@@ -229,7 +229,7 @@ const ContactPage = () => {
           </form>
 
           <div className="text-sm text-gray-600 border-t pt-4 mt-4">
-            <p><strong>Visit Us:</strong> 638/101, Ganga Nagar, Meerut, Uttar Pradesh 250001</p>
+            <p><strong>Visit Us:</strong>  B-Block , Baba Colony , Burari , North Delhi - 110084</p>
             <p><strong>Email:</strong> innovationremedies@gmail.com</p>
             <p><strong>Phone:</strong> +91-9412702900</p>
             

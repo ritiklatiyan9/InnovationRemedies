@@ -63,8 +63,8 @@ const products = [
     description: "Limited fruity collection designed for optimal animal health and wellness.",
     longDescription: "R3-Vet Ultra Bonus is our premium formulation that combines essential nutrients and vitamins in a tasty fruity flavor that animals love. Supports immune system, coat health, and overall vitality.",
     price: 142.0,
-    imageUrl: R3, // This will be an object if imported like: import R3 from '...';
-    imageFileName: 'R3.png', // Add this for schema if imageUrl is an object
+    imageUrl: R3, 
+    imageFileName: 'R3.png', 
     rating: 4.7,
     reviewCount: 156,
     stock: 15,
@@ -239,7 +239,7 @@ const Badge = ({ children, color = "blue", icon }) => (
     animate={{ scale: 1, opacity: 1 }}
     transition={{ duration: 0.2 }}
     className={`text-xs px-2 py-1 rounded-full font-medium flex items-center whitespace-nowrap`}
-    style={{ backgroundColor: `${color}1A`, color: color }} // Adjusted opacity for color
+    style={{ backgroundColor: `${color}1A`, color: color }}
   >
     {icon && <span className="mr-1">{icon}</span>}
     {children}
@@ -263,7 +263,8 @@ const ProductRating = ({ rating, reviewCount, showCount = true }) => (
       {[...Array(5)].map((_, i) => (<Star key={i} size={16} className={`transition-colors ${i < Math.floor(rating) ? "fill-amber-400 text-amber-500" : i < Math.round(rating) ? "fill-amber-200 text-amber-300" : "text-gray-300"}`} />))}
     </div>
     <span className="text-amber-600 ml-2 font-medium">{rating.toFixed(1)}</span>
-    {showCount && (<><span className="mx-2 text-gray-300">|</span><span className="text-gray-500 text-sm hover:text-gray-700 cursor-pointer">{reviewCount} reviews</span></>)}
+    {showCount && reviewCount > 0 && (<><span className="mx-2 text-gray-300">|</span><span className="text-gray-500 text-sm hover:text-gray-700 cursor-pointer">{reviewCount} reviews</span></>)}
+    {showCount && reviewCount === 0 && (<><span className="mx-2 text-gray-300">|</span><span className="text-gray-500 text-sm">No reviews yet</span></>)}
   </div>
 );
 
@@ -294,7 +295,7 @@ function ProductDetailPage() {
   const [formErrors, setFormErrors] = useState({});
   const [formData, setFormData] = useState({ shippingName: "", shippingMobile: "", shippingAddress: "" });
 
-  const domain = "https://www.innovationremedies.com"; // YOUR SITE DOMAIN
+  const domain = "https://www.innovationremedies.com"; 
 
   useEffect(() => {
     let foundProduct = products.find((p) => p.id === productIdOrSlug || p.slug === productIdOrSlug);
@@ -317,35 +318,28 @@ function ProductDetailPage() {
     }
   }, [isModalOpen]);
 
-  // --- HELPER FOR IMAGE URL FOR SCHEMA & DISPLAY ---
-  const getResolvedImageUrl = (p) => {
-    if (!p) return `${domain}/default-product-image.png`; // Fallback
-    // If imageUrl is an imported object (e.g., from Vite/Webpack)
-    if (typeof p.imageUrl === 'object' && p.imageUrl.src) {
-      return `${domain}${p.imageUrl.src.startsWith('/') ? p.imageUrl.src : `/${p.imageUrl.src}`}`;
-    }
-    // If imageUrl is already a full URL
-    if (typeof p.imageUrl === 'string' && p.imageUrl.startsWith('http')) {
-      return p.imageUrl;
-    }
-    // If imageUrl is a filename or relative path (e.g., "R3.png" or "images/R3.png")
-    // And you have imageFileName, use it. Assume they are in /assets/Images/ in public folder.
-    const imageName = p.imageFileName || (typeof p.imageUrl === 'string' ? p.imageUrl.split('/').pop() : 'default-product-image.png');
-    return `${domain}/assets/Images/${imageName.replace(/^\//, '')}`;
+  const getDisplayImageUrl = (p) => {
+    if (!p || !p.imageUrl) return '/default-product-image.png';
+    if (typeof p.imageUrl === 'string') return p.imageUrl;
+    if (typeof p.imageUrl === 'object' && p.imageUrl.src) return p.imageUrl.src;
+    if (p.imageFileName) return `/assets/Images/${p.imageFileName.replace(/^\//, '')}`;
+    return '/default-product-image.png';
   };
   
-  const getDisplayImageUrl = (p) => {
-    if (!p) return '/default-product-image.png'; // Fallback for display
-    if (typeof p.imageUrl === 'object' && p.imageUrl.src) {
-        return p.imageUrl.src; // Usually already a correct path like /assets/R3.XXXX.png
-    }
-    if (typeof p.imageUrl === 'string' && p.imageUrl.startsWith('http')) {
-        return p.imageUrl;
-    }
-    const imageName = p.imageFileName || (typeof p.imageUrl === 'string' ? p.imageUrl.split('/').pop() : 'default-product-image.png');
-    return `/assets/Images/${imageName.replace(/^\//, '')}`; // Path relative to public folder
-  }
-  // --- END IMAGE URL HELPERS ---
+  const getResolvedSchemaImageUrl = (p) => {
+    const siteDomain = domain; 
+    const defaultImage = `${siteDomain}/default-product-image.png`;
+    if (!p || !p.imageUrl) return defaultImage;
+
+    let imagePath;
+    if (typeof p.imageUrl === 'string') imagePath = p.imageUrl;
+    else if (typeof p.imageUrl === 'object' && p.imageUrl.src) imagePath = p.imageUrl.src;
+    else if (p.imageFileName) imagePath = `/assets/Images/${p.imageFileName.replace(/^\//, '')}`;
+    else return defaultImage;
+    
+    if (imagePath.startsWith('http')) return imagePath;
+    return `${siteDomain}${imagePath.startsWith('/') ? imagePath : `/${imagePath}`}`;
+  };
 
   if (!product) {
     return (
@@ -366,7 +360,7 @@ function ProductDetailPage() {
     );
   }
   
-  const resolvedSchemaImageUrl = getResolvedImageUrl(product);
+  const resolvedSchemaImageUrl = getResolvedSchemaImageUrl(product);
   const displayImageUrl = getDisplayImageUrl(product);
 
   const moq = product.minOrderQty || 1;
@@ -437,11 +431,10 @@ function ProductDetailPage() {
   const totalPurchasePrice = (product.price * quantity).toFixed(2);
   const shimmerAnimation = { hidden: { backgroundPosition: "200% 0" }, visible: { backgroundPosition: "0% 0", transition: { repeat: Infinity, repeatType: "mirror", duration: 1.5, ease: "linear" }}};
 
-  // --- SCHEMA.ORG JSON-LD ---
   const getPriceValidUntil = () => {
     const date = new Date();
-    date.setFullYear(date.getFullYear() + 1); // Valid for 1 year
-    return date.toISOString().split('T')[0]; // YYYY-MM-DD format
+    date.setFullYear(date.getFullYear() + 1); 
+    return date.toISOString().split('T')[0]; 
   };
   const priceValidUntilString = getPriceValidUntil();
 
@@ -449,43 +442,43 @@ function ProductDetailPage() {
     "@context": "https://schema.org",
     "@type": "Product",
     "name": product.name.replace(/"/g, '\\"'),
-    "description": product.description.replace(/"/g, '\\"'), // Use short description for schema
-    "image": resolvedSchemaImageUrl, // Full URL for schema
-    "sku": product.id, // Assuming 'id' is your SKU
-    "mpn": product.id, // Assuming 'id' is also your MPN
+    "description": product.description.replace(/"/g, '\\"'), 
+    "image": resolvedSchemaImageUrl, 
+    "sku": product.id, 
+    "mpn": product.id, 
     "brand": {
       "@type": "Brand",
-      "name": "Innovation Remedies" // Your brand name
+      "name": "Innovation Remedies" 
     },
     "offers": {
       "@type": "Offer",
       "priceCurrency": "INR",
       "price": product.price.toFixed(2),
       "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-      "url": `${domain}/product/${product.slug || product.id}`, // Canonical URL of this product page
+      "url": `${domain}/product/${product.slug || product.id}`, 
       "seller": {
         "@type": "Organization",
         "name": "Innovation Remedies"
       },
-      "priceValidUntil": priceValidUntilString, // ADDED
-      "hasMerchantReturnPolicy": {             // ADDED
+      "priceValidUntil": priceValidUntilString, 
+      "hasMerchantReturnPolicy": {             
         "@type": "MerchantReturnPolicy",
-        "url": `${domain}/return-policy`,     // **CREATE THIS PAGE and link it**
+        "url": `${domain}/return-policy`,     
         "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-        "merchantReturnDays": 30,             // Example: Your return window in days
-        "returnMethod": "https://schema.org/ReturnByMail", // Example
-        "returnFees": "https://schema.org/FreeReturn" // Example: FreeReturn, RestockingFees, ReturnShippingFees
+        "merchantReturnDays": 30,             
+        "returnMethod": "https://schema.org/ReturnByMail", 
+        "returnFees": "https://schema.org/FreeReturn" 
       },
-      "shippingDetails": {                     // ADDED
+      "shippingDetails": {                     
         "@type": "OfferShippingDetails",
         "shippingRate": {
           "@type": "MonetaryAmount",
-          "value": "50.00",                   // Example: Your standard shipping cost, or "0.00" for free
+          "value": "50.00",                   
           "currency": "INR"
         },
         "shippingDestination": {
           "@type": "DefinedRegion",
-          "addressCountry": "IN"              // Ships to India
+          "addressCountry": "IN"              
         },
         "deliveryTime": {
           "@type": "ShippingDeliveryTime",
@@ -494,27 +487,24 @@ function ProductDetailPage() {
         }
       }
     },
-    // --- AGGREGATE RATING ---
-    // Only include if you have genuine rating and reviewCount
-    ...(product.rating && product.reviewCount && product.reviewCount > 0 && {
+    // Conditionally add aggregateRating
+    // The ...product.rating part is crucial to ensure it's only added if rating exists
+    ...(product.rating && typeof product.rating === 'number' && product.reviewCount && typeof product.reviewCount === 'number' && product.reviewCount > 0 && {
         "aggregateRating": {
             "@type": "AggregateRating",
             "ratingValue": product.rating.toFixed(1),
             "reviewCount": product.reviewCount
         }
     })
-    // "review" field is omitted as there's no individual review data in this component.
-    // Do NOT add fake reviews.
+    // We are intentionally not adding "review": [] if no individual reviews are present.
   };
-  // --- END SCHEMA.ORG JSON-LD ---
 
   return (
-    <HelmetProvider> {/* Ensure HelmetProvider is at the root or wrapping this component */}
+    <HelmetProvider> 
       <Helmet>
         <title>{`${product.name} | Innovation Remedies`}</title>
         <meta name="description" content={`Buy ${product.name} - ${product.description}. High-quality veterinary solutions from Innovation Remedies.`} />
         <link rel="canonical" href={`${domain}/product/${product.slug || product.id}`} />
-        {/* Open Graph / Facebook */}
         <meta property="og:type" content="product" />
         <meta property="og:title" content={`${product.name} | Innovation Remedies`} />
         <meta property="og:description" content={product.description} />
@@ -525,12 +515,10 @@ function ProductDetailPage() {
         <meta property="product:price:currency" content="INR" />
         <meta property="product:availability" content={product.stock > 0 ? "instock" : "oos"} />
         <meta property="product:brand" content="Innovation Remedies" />
-        {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${product.name} | Innovation Remedies`} />
         <meta name="twitter:description" content={product.description} />
         <meta name="twitter:image" content={resolvedSchemaImageUrl} />
-        {/* Structured Data */}
         <script type="application/ld+json">
           {JSON.stringify(productJsonLd, null, 2)}
         </script>
@@ -548,7 +536,7 @@ function ProductDetailPage() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="flex flex-col lg:flex-row gap-8 md:gap-12">
           <div className="w-full lg:w-2/5">
             <Card className="overflow-hidden border-none shadow-lg rounded-xl bg-white">
-              <div className="p-6 text-center flex justify-center items-center min-h-[300px] md:min-h-[400px]" style={{ backgroundColor: `${product.color}1A` }}> {/* Adjusted opacity for color */}
+              <div className="p-6 text-center flex justify-center items-center min-h-[300px] md:min-h-[400px]" style={{ backgroundColor: `${product.color}1A` }}>
                 <motion.img key={displayImageUrl} src={displayImageUrl} alt={product.name} className="w-auto h-auto object-contain max-w-full max-h-80" initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.5 }} whileHover={{ scale: 1.05, transition: { duration: 0.2 } }} draggable="false" />
               </div>
               <div className="p-4 bg-white flex flex-wrap justify-center items-center gap-2">

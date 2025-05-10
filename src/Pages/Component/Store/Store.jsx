@@ -343,19 +343,7 @@ const CommunityShowcase = () => {
         </div>
       </div>
       
-      {/* Footer with better mobile spacing */}
-      <footer className="bg-gray-100 dark:bg-gray-900 py-6 sm:py-8 px-3 sm:px-6">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center">
-          <div className="mb-4 sm:mb-0">
-            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">© 2025 Your Company. All rights reserved.</p>
-          </div>
-          <div className="flex flex-col xs:flex-row space-y-2 xs:space-y-0 xs:space-x-4">
-            <a href="#" className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 text-center xs:text-left">Privacy Policy</a>
-            <a href="#" className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 text-center xs:text-left">Terms of Service</a>
-            <a href="#" className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 text-center xs:text-left">Contact Us</a>
-          </div>
-        </div>
-      </footer>
+     
     </div>
   );
 };
