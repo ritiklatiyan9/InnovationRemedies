@@ -147,27 +147,22 @@ export default function EnhancedAboutUs() {
   // Team member data
   const teamMembers = [
     {
-      name: "Arjit Malik",
-      role: "Chief Medical Officer",
+      name: "Mr. Vikas Malik",
+      role: "Managing Director",
       bio: "Veterinarian with 15+ years experience in clinical practice and telemedicine development",
       avatar: "https://images.unsplash.com/photo-1612349317150-e413f6a5f3c8?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80"
     },
     {
-      name: "Ayushi Sharma",
+      name: "Geeta",
       role: "Chief Marketing Officer",
-      bio: "Tech visionary specializing in AI integration for medical diagnostics",
+      bio: "Visionary Expert in  Medical diagnostics",
       avatar: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80"
     },
+  
     {
-      name: "Vineet Kumar",
-      role: "Head of Operations",
-      bio: "Strategic leader managing global expansion across 30+ countries",
-      avatar: "https://images.unsplash.com/photo-1614952105-7b2a7ae3f8ee?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80"
-    },
-    {
-      name: "Rahul Singh",
+      name: "Aryan Malik",
       role: "Lead Market Specialist",
-      bio: "Machine learning expert developing predictive analytics for animal health",
+      bio: "Growing Mindset with 4+ years in veterinary marketing and sales",
       avatar: "https://images.unsplash.com/photo-1599566150168-df1fcf16f1f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80"
     }
   ];
@@ -175,23 +170,23 @@ export default function EnhancedAboutUs() {
   // Timeline milestones
   const milestones = [
     { 
-      year: "2020", 
+      year: "2019", 
       title: "Company Founding", 
-      desc: "Established with a $2M seed round focused on veterinary AI research", 
+      desc: "Established with a  focused on veterinary  research", 
       icon: <Lightbulb className="text-amber-500" />,
       color: "bg-amber-50 border-amber-200"
     },
     { 
       year: "2021", 
       title: "Global Expansion", 
-      desc: "Launched platform in 15 countries across North America and Europe", 
+      desc: "Launched platform in 5+ states across India", 
       icon: <Users className="text-blue-500" />,
       color: "bg-blue-50 border-blue-200"
     },
     { 
       year: "2022", 
-      title: "AI Diagnostic Breakthrough", 
-      desc: "Released first-gen diagnostic tool achieving 94% accuracy in pilot studies", 
+      title: " Diagnostic Breakthrough", 
+      desc: "Released first-gen diagnostic tool achieving 99% accuracy",  
       icon: <Target className="text-emerald-500" />,
       color: "bg-emerald-50 border-emerald-200"
     },
@@ -203,9 +198,9 @@ export default function EnhancedAboutUs() {
       color: "bg-purple-50 border-purple-200"
     },
     { 
-      year: "2024", 
-      title: "Mobile App Launch", 
-      desc: "Released pet owner app with 500K downloads in first month", 
+      year: "2025", 
+      title: "Online Portal Launch", 
+      desc: "Released pet owner website with 2K+ users in first month", 
       icon: <Star className="text-rose-500" />,
       color: "bg-rose-50 border-rose-200"
     }
@@ -213,9 +208,9 @@ export default function EnhancedAboutUs() {
 
   // Stats data
   const stats = [
-    { value: "50+", label: "Countries", icon: <Users className="mx-auto mb-3 text-blue-500" size={32} /> },
+    { value: "5+", label: "States", icon: <Users className="mx-auto mb-3 text-blue-500" size={32} /> },
     { value: "1M+", label: "Pets Helped", icon: <Heart className="mx-auto mb-3 text-rose-500" size={32} /> },
-    { value: "94%", label: "Diagnostic Accuracy", icon: <Target className="mx-auto mb-3 text-emerald-500" size={32} /> },
+    { value: "99%", label: "Diagnostic Accuracy", icon: <Target className="mx-auto mb-3 text-emerald-500" size={32} /> },
     { value: "5,000+", label: "Veterinary Partners", icon: <Award className="mx-auto mb-3 text-amber-500" size={32} /> }
   ];
 
@@ -349,7 +344,7 @@ export default function EnhancedAboutUs() {
           </motion.div>
 
           <motion.div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
             variants={staggerContainer}
           >
             {teamMembers.map((member, index) => (
@@ -371,9 +366,7 @@ export default function EnhancedAboutUs() {
                   <p className="text-gray-600 text-base flex-grow">{member.bio}</p>
                   
                   <div className="mt-6 pt-6 border-t border-gray-100">
-                    <Button variant="ghost" size="sm" className="text-blue-500 hover:text-blue-700 hover:bg-blue-50 rounded-full">
-                      View Profile
-                    </Button>
+                 
                   </div>
                 </Card>
               </motion.div>
@@ -656,7 +649,7 @@ export default function EnhancedAboutUs() {
               transition={{ delay: 0.6, duration: 0.8 }}
             >
               <Button size="lg" className="bg-white text-emerald-600 hover:bg-emerald-50 font-semibold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
-                Get Started <ArrowRight className="ml-2" />
+                Get Started 
               </Button>
             </motion.div>
           </motion.div>

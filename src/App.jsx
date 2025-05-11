@@ -1,6 +1,6 @@
 // src/App.jsx
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { Toaster } from 'sonner';
 
@@ -33,6 +33,43 @@ import ShippingPolicy from './Pages/SinglePages/ShippingPolicy';
 
 import './fonts.css';
 
+// Breadcrumb Component
+const BreadcrumbSchema = ({ items }) => {
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": items.map((item, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": item.name,
+      "item": item.url
+    }))
+  };
+  
+  return (
+    <script type="application/ld+json">
+      {JSON.stringify(breadcrumbJsonLd)}
+    </script>
+  );
+};
+
+// SEO Component for individual routes
+const SEO = ({ title, description, path }) => {
+  const location = useLocation();
+  const siteUrl = 'https://www.innovationremedies.com';
+  const fullUrl = `${siteUrl}${location.pathname}`;
+  
+  return (
+    <Helmet>
+      {title && <title>{title}</title>}
+      {description && <meta name="description" content={description} />}
+      <link rel="canonical" href={fullUrl} />
+      <meta property="og:url" content={fullUrl} />
+      {title && <meta property="og:title" content={title} />}
+      {description && <meta property="og:description" content={description} />}
+    </Helmet>
+  );
+};
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -54,7 +91,6 @@ function App() {
       return () => { window.removeEventListener('beforeunload', handleBeforeUnload); clearTimeout(timer); };
     }
   }, []); // Removed `loading` from dependency array as it causes re-trigger
-
 
   const siteUrl = 'https://www.innovationremedies.com';
   const siteName = "Innovation Remedies";
@@ -113,17 +149,89 @@ function App() {
     }))
   };
 
+  // WebSite schema for searchbox
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "url": siteUrl,
+    "name": siteName,
+    "alternateName": "Innovation Remedies - Veterinary Products India",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": `${siteUrl}/search?q={search_term_string}`
+      },
+      "query-input": "required name=search_term_string"
+    }
+  };
+
+  // LocalBusiness schema for better local SEO
+  const localBusinessJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "VeterinaryService",
+    "name": siteName,
+    "image": defaultOgImage,
+    "url": siteUrl,
+    "telephone": "+919057246900",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "638/101, Ganga Nagar",
+      "addressLocality": "Meerut",
+      "addressRegion": "Uttar Pradesh",
+      "postalCode": "250001",
+      "addressCountry": "IN"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 28.9845,
+      "longitude": 77.7064
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+      ],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "priceRange": "$$",
+    "serviceType": "Veterinary Products and Supplies",
+    "areaServed": {
+      "@type": "Country",
+      "name": "India"
+    }
+  };
+
   return (
     <HelmetProvider>
       <Helmet
         titleTemplate={`%s | ${siteName}`}
-        defaultTitle={`${siteName} - Veterinary Solutions & Animal Health Products India`}
+        defaultTitle={`${siteName} - Premium Veterinary Products & Animal Health Solutions India`}
       >
         <html lang="en-IN" />
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        
+        {/* Canonical URL - will be overridden by individual pages */}
+        <link rel="canonical" href={siteUrl} />
+        
+        {/* Primary Meta Tags */}
         <meta name="description" content={defaultDescription} />
         <meta name="keywords" content={`${siteName}, veterinary products India, animal health India, pet care India, livestock supplements India, animal wellness solutions, veterinary medicine online India, animal pharmaceuticals`} />
+        <meta name="author" content={siteName} />
         
-        <meta property="og:title" content={`${siteName} - Veterinary Solutions & Animal Health Products India`} />
+        {/* Robots meta tags */}
+        <meta name="robots" content="index, follow" />
+        <meta name="googlebot" content="index, follow" />
+        
+        {/* Open Graph Meta Tags */}
+        <meta property="og:title" content={`${siteName} - Premium Veterinary Products & Animal Health Solutions India`} />
         <meta property="og:description" content={defaultDescription} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={siteUrl} />
@@ -133,16 +241,25 @@ function App() {
         <meta property="og:image:height" content="630" />
         <meta property="og:locale" content="en_IN" />
 
+        {/* Twitter Card Meta Tags */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${siteName} - Veterinary Solutions & Animal Health Products India`} />
+        <meta name="twitter:title" content={`${siteName} - Premium Veterinary Products & Animal Health Solutions India`} />
         <meta name="twitter:description" content={defaultDescription} />
         <meta name="twitter:image" content={defaultOgImage} />
+        <meta name="twitter:site" content="@innovationremedies" />
 
+        {/* Structured Data */}
         <script type="application/ld+json">
           {JSON.stringify(organizationJsonLd, null, 2)}
         </script>
         <script type="application/ld+json">
           {JSON.stringify(siteNavigationJsonLd, null, 2)}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify(websiteJsonLd, null, 2)}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify(localBusinessJsonLd, null, 2)}
         </script>
       </Helmet>
 
@@ -155,16 +272,98 @@ function App() {
             <Header />
             <main className="pt-16 md:pt-16 min-h-screen"> {/* Ensure adequate padding for fixed header */}
               <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/products" element={<ListProducts />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/store" element={<Store />} />
-                <Route path="/product/:id" element={<ProductDetailPage />} />
-
-                <Route path="/return-policy" element={<ReturnPolicy />} />
-                <Route path="/shipping-policy" element={<ShippingPolicy />} />
+                <Route 
+                  path="/" 
+                  element={
+                    <>
+                      <SEO 
+                        title="Home - Premium Veterinary Products & Animal Health Solutions"
+                        description="Innovation Remedies offers premium veterinary products, animal health supplements, and livestock care solutions across India. Quality assured animal wellness products."
+                      />
+                      <Home />
+                    </>
+                  } 
+                />
+                <Route 
+                  path="/products" 
+                  element={
+                    <>
+                      <SEO 
+                        title="Products - Veterinary Medicines & Animal Supplements"
+                        description="Explore our comprehensive range of veterinary products, animal health supplements, and livestock care solutions. Quality medicines for pets and farm animals."
+                      />
+                      <ListProducts />
+                    </>
+                  } 
+                />
+                <Route 
+                  path="/login" 
+                  element={<Login />} 
+                />
+                <Route 
+                  path="/about" 
+                  element={
+                    <>
+                      <SEO 
+                        title="About Us - Leading Veterinary Products Company"
+                        description="Learn about Innovation Remedies, a pioneering veterinary products company committed to animal health and wellness across India. Our mission, vision, and values."
+                      />
+                      <About />
+                    </>
+                  } 
+                />
+                <Route 
+                  path="/contact" 
+                  element={
+                    <>
+                      <SEO 
+                        title="Contact Us - Get in Touch with Our Expert Team"
+                        description="Contact Innovation Remedies for quality veterinary products and animal health solutions. Reach our expert support team for product inquiries and assistance."
+                      />
+                      <Contact />
+                    </>
+                  } 
+                />
+                <Route 
+                  path="/store" 
+                  element={
+                    <>
+                      <SEO 
+                        title="Information Hub - Animal Health Resources & Guides"
+                        description="Access valuable resources, guides, and information about animal health, veterinary care, and best practices for pet and livestock management."
+                      />
+                      <Store />
+                    </>
+                  } 
+                />
+                <Route 
+                  path="/product/:id" 
+                  element={<ProductDetailPage />} 
+                />
+                <Route 
+                  path="/return-policy" 
+                  element={
+                    <>
+                      <SEO 
+                        title="Return Policy - Easy Returns & Refunds"
+                        description="Read our return policy for veterinary products. Innovation Remedies ensures customer satisfaction with hassle-free returns and refunds on eligible products."
+                      />
+                      <ReturnPolicy />
+                    </>
+                  } 
+                />
+                <Route 
+                  path="/shipping-policy" 
+                  element={
+                    <>
+                      <SEO 
+                        title="Shipping Policy - Pan-India Delivery"
+                        description="Learn about our shipping policy. Innovation Remedies delivers veterinary products across India with fast, reliable, and secure shipping services."
+                      />
+                      <ShippingPolicy />
+                    </>
+                  } 
+                />
 
                 <Route element={<ProtectedRoute />}>
                   <Route path="/order-confirmation/:orderId" element={<OrderConfirmationPage />} />

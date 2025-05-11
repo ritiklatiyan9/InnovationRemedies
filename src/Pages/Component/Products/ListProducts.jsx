@@ -458,11 +458,13 @@ function ProductCard({ id, name, description, price, imageUrl, gradientFrom = DE
         onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && handleCardClick()}
         className={`group w-full overflow-hidden rounded-2xl border-none shadow-lg hover:shadow-2xl transition-all duration-300 ease-out flex flex-col cursor-pointer ${gradientClasses}`}
       >
-        <div className="relative aspect-square flex items-center justify-center p-4 sm:p-6 overflow-hidden">
+        {/* MODIFIED: Image container with explicit responsive heights */}
+        <div className="relative w-full h-[170px] sm:h-[200px] md:h-[220px] flex items-center justify-center p-2 sm:p-3 overflow-hidden">
           <motion.img
             src={imgSrc}
             alt={`${name} - Animal Health Product`}
-            className="object-contain w-full h-full max-h-[180px] sm:max-h-[220px] drop-shadow-xl transition-transform duration-300 ease-out group-hover:scale-110"
+            // MODIFIED: Image fills container, max-h removed, scale adjusted
+            className="object-contain w-full h-full drop-shadow-xl transition-transform duration-300 ease-out group-hover:scale-105"
             loading="lazy"
           />
         </div>
@@ -714,7 +716,8 @@ function ListProducts() {
           </div>
 
           <motion.div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8"
+            // MODIFIED: Grid layout for responsive columns
+            className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4 lg:gap-8"
             variants={containerVariants}
             initial="hidden"
             animate="visible"

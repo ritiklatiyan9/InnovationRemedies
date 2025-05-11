@@ -7,6 +7,11 @@ const customStyle = {
   fontWeight: "400",
 };
 
+const customStyle2 = {
+  fontFamily: "Moonhouse, sans-serif",
+  fontWeight: "400",
+}
+
 const HeroSection = () => {
   
 
@@ -50,7 +55,7 @@ const HeroSection = () => {
           <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-bold text-white leading-tight">
             Compassionate Care
             <br />
-            For Your <span className="text-sky-400">Beloved Pets</span>
+            For Your <span style={customStyle2} className="text-sky-400 -tracking-tighter">Beloved Pets</span>
           </h1>
           <p className="mt-4 sm:mt-6 text-base sm:text-lg text-slate-200 max-w-lg">
             Dedicated to providing exceptional veterinary services. Our experienced team

@@ -51,9 +51,9 @@ const HeroSection = () => {
           <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-bold text-white leading-tight">
             Research & Verify
             <br />
-            <span className=" text-5xl md:text-7xl" style={customStyle}>Innovation</span> <br /> <span className=" text-xl md:text-4xl">Remedies Life Science Pvt. Ltd.</span> <span style={customStyle} className="text-sky-400">Laboratory</span>
+            <span className=" text-5xl md:text-7xl -tracking-tighter" style={customStyle}>Innovation</span> <br /> <span className=" text-xl md:text-4xl">Remedies Life Science Pvt. Ltd.</span> <span style={customStyle} className="text-sky-400 -tracking-tighter">Laboratory</span>
           </h1>
-          <p className="mt-4 sm:mt-6 text-base sm:text-lg text-slate-200 max-w-lg"> {/* Removed ml-auto */}
+          <p className="mt-4 sm:mt-6 text-base sm:text-lg text-slate-200 max-w-lg -tracking-tighter"> {/* Removed ml-auto */}
             Innovation Remedies is ultramodern laboratory services. Delivering newer
             molecules from our state of the art laboratories
           </p>

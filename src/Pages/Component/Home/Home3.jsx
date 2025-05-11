@@ -9,7 +9,7 @@ import BG_IMAGE_URL from '../../../assets/Video/bg7.jpg'; // <<< REPLACE
 const FreightHero = () => {
   return (
     <div
-      className="relative flex items-center h-[700px] md:h-[800px] w-full bg-cover bg-center text-white overflow-hidden"
+      className="relative flex items-center h-screen md:h-[800px] w-full md:w-full bg-cover bg-center text-white overflow-hidden"
       style={{ backgroundImage: `url(${BG_IMAGE_URL})` }}
     >
       {/* Background Overlay - Adjusted gradient direction */}
@@ -53,7 +53,7 @@ const FreightHero = () => {
         </Card>
 
         {/* Route/Timing Card (Bottom Right) */}
-        <Card className="absolute bottom-10 md:bottom-20 right-4 md:right-10 lg:right-20 w-auto bg-gray-900/80 backdrop-blur-sm border-gray-700 text-white p-4">
+        <Card className="absolute bottom-10 ml-4 md:bottom-20 right-4 md:right-10 lg:right-20 w-auto bg-gray-900/80 backdrop-blur-sm border-gray-700 text-white p-4">
             <CardContent className="p-0 flex items-center space-x-6">
                {/* Origin */}
                <div className="text-center">

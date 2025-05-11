@@ -55,9 +55,9 @@ const HeroSection = () => {
         <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-bold text-white leading-tight">
   Thoughtful Handling
   <br /> 
-  Expertly <br /> <span style={customStyle2} className="text-sky-400">Developed Solutions</span>
+  Expertly <br /> <span style={customStyle2} className="text-sky-400 -tracking-tighter">Developed Solutions</span>
 </h1>
-<p className="mt-4 sm:mt-6 text-base sm:text-lg text-slate-200 max-w-lg">
+<p className="mt-4 sm:mt-6 text-base sm:text-lg text-slate-200 max-w-lg -tracking-tighter">
   Committed to excellence in every step. We treat your products with the utmost care and apply deep technical expertise to deliver innovative, reliable solutions tailored to your needs.
 </p>
 
