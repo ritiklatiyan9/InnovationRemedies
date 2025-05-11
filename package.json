@@ -6,10 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "postbuild": "react-snap",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "generate-sitemap": "node scripts/generate-sitemap.js"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -75,8 +73,7 @@
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.1.2",
     "vue": "^3.5.13",
-    "zod": "^3.24.3",
-    "@rollup/rollup-linux-x64-gnu": "4.9.5"
+    "zod": "^3.24.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
@@ -91,42 +88,7 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
     "postcss": "^8.5.3",
-    "puppeteer": "^24.8.2",
-    "react-snap": "^1.23.0",
     "tailwindcss": "^3.4.17",
-    "vite": "^6.3.5",
-    "vite-plugin-prerender": "^1.0.8",
-    "xmlbuilder2": "^3.1.1"
-  },
-  "reactSnap": {
-    "source": "dist",
-    "destination": "dist",
-    "include": [
-      "/",
-      "/about",
-      "/products",
-      "/contact",
-      "/store",
-      "/return-policy",
-      "/shipping-policy"
-    ],
-    "minify": true,
-    "publicPath": "/",
-    "skipThirdPartyRequests": true,
-    "headless": true,
-    "puppeteerExecutablePath": "/usr/bin/chromium-browser",
-    "puppeteerArgs": ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage", "--disable-accelerated-2d-canvas", "--disable-gpu"],
-    "viewport": {
-      "width": 1440,
-      "height": 900
-    }
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not op_mini all"
-  ],
-  "overrides": {
-    "rollup": "npm:@rollup/wasm-node"
+    "vite": "^6.3.5"
   }
 }

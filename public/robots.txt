@@ -1,42 +1,8 @@
 User-agent: *
 Allow: /
-
-# Allow crawling of CSS and JS files
-Allow: /static/
-Allow: /*.js$
-Allow: /*.css$
-Allow: /*.webp$
-Allow: /*.png$
-Allow: /*.jpg$
-Allow: /*.jpeg$
-Allow: /*.svg$
-
-# Disallow admin and private pages
 Disallow: /admin/
 Disallow: /cart
 Disallow: /login
-Disallow: /order-confirmation/
 Disallow: /orders
 
-# Block API endpoints
-Disallow: /api/
-Disallow: /_next/
-
-# Allow all bots to crawl
-User-agent: Googlebot
-Allow: /
-
-User-agent: Googlebot-Image
-Allow: /
-
-User-agent: AdsBot-Google
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-# Sitemap location
 Sitemap: https://www.innovationremedies.com/sitemap.xml
-
-# Crawl-delay (optional - use if server is slow)
-# Crawl-delay: 1
