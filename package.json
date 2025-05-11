@@ -75,7 +75,8 @@
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.1.2",
     "vue": "^3.5.13",
-    "zod": "^3.24.3"
+    "zod": "^3.24.3",
+    "@rollup/rollup-linux-x64-gnu": "4.9.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
@@ -113,19 +114,19 @@
     "publicPath": "/",
     "skipThirdPartyRequests": true,
     "headless": true,
+    "puppeteerExecutablePath": "/usr/bin/chromium-browser",
+    "puppeteerArgs": ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage", "--disable-accelerated-2d-canvas", "--disable-gpu"],
     "viewport": {
       "width": 1440,
       "height": 900
-    },
-    "minifyHtml": {
-      "collapseWhitespace": true,
-      "removeComments": true
-    },
-    "puppeteerArgs": ["--no-sandbox", "--disable-setuid-sandbox"]
+    }
   },
   "browserslist": [
     ">0.2%",
     "not dead",
     "not op_mini all"
-  ]
+  ],
+  "overrides": {
+    "rollup": "npm:@rollup/wasm-node"
+  }
 }
