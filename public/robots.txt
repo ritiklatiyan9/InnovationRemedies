@@ -3,6 +3,25 @@ Allow: /
 Disallow: /admin/
 Disallow: /cart
 Disallow: /login
-Disallow: /orders
+Disallow: /orders/
+Disallow: /order-confirmation/
+Disallow: *.json$
+Disallow: /*?*
+Allow: /*?q=*
 
+# Optimize crawl rate
+Crawl-delay: 1
+
+# Google specific
+User-agent: Googlebot
+Allow: /
+Disallow: /admin/
+Disallow: /login
+Allow: *.css
+Allow: *.js
+Allow: *.jpg
+Allow: *.png
+Allow: *.webp
+
+# Sitemap location
 Sitemap: https://www.innovationremedies.com/sitemap.xml

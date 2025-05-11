@@ -1,33 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <!-- Homepage -->
   <url>
     <loc>https://www.innovationremedies.com/</loc>
     <lastmod>2025-05-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://www.innovationremedies.com/logo.png</image:loc>
+      <image:title>Innovation Remedies Logo</image:title>
+    </image:image>
   </url>
+  
+  <!-- Main Products Page -->
   <url>
     <loc>https://www.innovationremedies.com/products</loc>
     <lastmod>2025-05-12</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
+  
+  <!-- About Us -->
   <url>
     <loc>https://www.innovationremedies.com/about</loc>
     <lastmod>2025-05-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  
+  <!-- Contact -->
   <url>
     <loc>https://www.innovationremedies.com/contact</loc>
     <lastmod>2025-05-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  
+  <!-- Information Hub -->
   <url>
     <loc>https://www.innovationremedies.com/store</loc>
     <lastmod>2025-05-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
+  
+  <!-- Policy Pages -->
+  <url>
+    <loc>https://www.innovationremedies.com/return-policy</loc>
+    <lastmod>2025-05-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.innovationremedies.com/shipping-policy</loc>
+    <lastmod>2025-05-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <!-- Add individual product pages if you have them -->
+  <!-- Example: -->
+  <!--
+  <url>
+    <loc>https://www.innovationremedies.com/product/veterinary-supplement-1</loc>
+    <lastmod>2025-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://www.innovationremedies.com/images/product-1.jpg</image:loc>
+      <image:title>Veterinary Supplement Product 1</image:title>
+    </image:image>
+  </url>
+  -->
 </urlset>

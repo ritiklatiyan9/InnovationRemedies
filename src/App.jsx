@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { Toaster } from 'sonner';
 
-// Ensure these paths are correct for your project structure
+// Component imports
 import { AuthProvider } from './Pages/Component/context/AuthContext';
 import ProtectedRoute from './Pages/SinglePages/ProtectedRoute';
 import ScrollToTop from './Pages/SinglePages/ScrollToTop';
@@ -26,12 +26,40 @@ import OrderConfirmationPage from './Pages/Component/Order/ConfirmOrder';
 import ChatIcon from './Pages/Component/Chat/ChatIcon';
 import ChatModal from './Pages/SinglePages/AiAssistant';
 
-// --- NEW POLICY PAGE IMPORTS ---
+// Policy pages
 import ReturnPolicy from './Pages/SinglePages/ReturnPolicy';
 import ShippingPolicy from './Pages/SinglePages/ShippingPolicy';
-// --- END NEW POLICY PAGE IMPORTS ---
+
 
 import './fonts.css';
+
+// Helper functions for SEO
+function getPageDescription(url, siteUrl) {
+  const descriptions = {
+    [`${siteUrl}/`]: "Homepage for India's leading veterinary products supplier",
+    [`${siteUrl}/products`]: "Browse our complete catalog of veterinary products and animal health solutions",
+    [`${siteUrl}/store`]: "Access valuable resources and guides for animal health management",
+    [`${siteUrl}/about`]: "Discover our mission, values, and commitment to animal wellness",
+    [`${siteUrl}/contact`]: "Connect with our customer support team for product inquiries",
+    [`${siteUrl}/return-policy`]: "Review our hassle-free return and refund policies",
+    [`${siteUrl}/shipping-policy`]: "Learn about our pan-India shipping services",
+    [`${siteUrl}/faqs`]: "Find answers to frequently asked questions about our products and services",
+    [`${siteUrl}/privacy-policy`]: "Understanding our commitment to protecting your privacy",
+    [`${siteUrl}/terms`]: "Terms and conditions for using our services"
+  };
+  return descriptions[url] || "";
+}
+
+function getPageImage(url, siteUrl, defaultOgImage) {
+  const images = {
+    [`${siteUrl}/`]: `${siteUrl}/images/home-banner.jpg`,
+    [`${siteUrl}/products`]: `${siteUrl}/images/products-banner.jpg`,
+    [`${siteUrl}/about`]: `${siteUrl}/images/about-banner.jpg`,
+    [`${siteUrl}/contact`]: `${siteUrl}/images/contact-banner.jpg`,
+    [`${siteUrl}/store`]: `${siteUrl}/images/store-banner.jpg`,
+  };
+  return images[url] || defaultOgImage;
+}
 
 // Breadcrumb Component
 const BreadcrumbSchema = ({ items }) => {
@@ -90,13 +118,14 @@ function App() {
       const timer = setTimeout(() => { if (loading) setLoading(false); }, 1500);
       return () => { window.removeEventListener('beforeunload', handleBeforeUnload); clearTimeout(timer); };
     }
-  }, []); // Removed `loading` from dependency array as it causes re-trigger
+  }, []);
 
   const siteUrl = 'https://www.innovationremedies.com';
   const siteName = "Innovation Remedies";
   const defaultDescription = `${siteName} is a leading provider of high-quality veterinary products and animal health solutions across India. Discover our innovative range for optimal animal wellness and care.`;
-  const defaultOgImage = `${siteUrl}/logo.png`; // Ensure logo.png is in your public folder or adjust path
+  const defaultOgImage = `${siteUrl}/logo.png`;
 
+  // Enhanced organization schema with sitelinks
   const organizationJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -105,6 +134,13 @@ function App() {
     "url": siteUrl,
     "logo": defaultOgImage,
     "description": `Pioneering animal health, ${siteName} offers a comprehensive range of veterinary products and supplements to customers throughout India.`,
+    "foundingDate": "2020",
+    "founders": [
+      {
+        "@type": "Person",
+        "name": "Founder Name" // Replace with actual founder name
+      }
+    ],
     "contactPoint": {
       "@type": "ContactPoint",
       "telephone": "+919057246900",
@@ -122,7 +158,28 @@ function App() {
     },
     "sameAs": [
        "https://www.facebook.com/profile.php?id=61575431486434",
-       // Add other social media links here
+    ],
+    "potentialAction": [
+      {
+        "@type": "ViewAction",
+        "name": "View Products",
+        "target": `${siteUrl}/products`
+      },
+      {
+        "@type": "ContactAction",
+        "name": "Contact Us",
+        "target": `${siteUrl}/contact`
+      },
+      {
+        "@type": "AboutAction",
+        "name": "About Us",
+        "target": `${siteUrl}/about`
+      },
+      {
+        "@type": "ViewAction",
+        "name": "Information Hub",
+        "target": `${siteUrl}/store`
+      }
     ]
   };
 
@@ -130,12 +187,14 @@ function App() {
     { name: 'Home', url: `${siteUrl}/` },
     { name: 'Our Products', url: `${siteUrl}/products` },
     { name: 'Information Hub', url: `${siteUrl}/store` },
-    { name: 'About Innovation Remedies', url: `${siteUrl}/about` },
+    { name: 'About Us', url: `${siteUrl}/about` },
     { name: 'Contact Us', url: `${siteUrl}/contact` },
     { name: 'Return Policy', url: `${siteUrl}/return-policy` },
     { name: 'Shipping Policy', url: `${siteUrl}/shipping-policy` },
+    { name: 'FAQs', url: `${siteUrl}/faqs` },
   ];
 
+  // Enhanced site navigation schema
   const siteNavigationJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -145,17 +204,28 @@ function App() {
       "@type": "SiteNavigationElement",
       "position": index + 1,
       "name": link.name,
-      "url": link.url
+      "description": getPageDescription(link.url, siteUrl),
+      "url": link.url,
+      "image": getPageImage(link.url, siteUrl, defaultOgImage)
     }))
   };
 
-  // WebSite schema for searchbox
+  // Enhanced website schema with explicit sitelinks
   const websiteJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "url": siteUrl,
     "name": siteName,
     "alternateName": "Innovation Remedies - Veterinary Products India",
+    "description": defaultDescription,
+    "publisher": {
+      "@type": "Organization",
+      "name": siteName,
+      "logo": {
+        "@type": "ImageObject",
+        "url": defaultOgImage
+      }
+    },
     "potentialAction": {
       "@type": "SearchAction",
       "target": {
@@ -163,7 +233,39 @@ function App() {
         "urlTemplate": `${siteUrl}/search?q={search_term_string}`
       },
       "query-input": "required name=search_term_string"
-    }
+    },
+    "hasPart": [
+      {
+        "@type": "WebPage",
+        "name": "Products",
+        "url": `${siteUrl}/products`,
+        "description": "Explore our comprehensive range of veterinary products"
+      },
+      {
+        "@type": "WebPage",
+        "name": "About Us",
+        "url": `${siteUrl}/about`,
+        "description": "Learn about Innovation Remedies"
+      },
+      {
+        "@type": "WebPage",
+        "name": "Contact",
+        "url": `${siteUrl}/contact`,
+        "description": "Get in touch with our expert team"
+      },
+      {
+        "@type": "WebPage",
+        "name": "Information Hub",
+        "url": `${siteUrl}/store`,
+        "description": "Animal health resources and guides"
+      },
+      {
+        "@type": "WebPage",
+        "name": "FAQs",
+        "url": `${siteUrl}/faqs`,
+        "description": "Frequently asked questions about our products"
+      }
+    ]
   };
 
   // LocalBusiness schema for better local SEO
@@ -218,7 +320,6 @@ function App() {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         
-        {/* Canonical URL - will be overridden by individual pages */}
         <link rel="canonical" href={siteUrl} />
         
         {/* Primary Meta Tags */}
@@ -270,7 +371,7 @@ function App() {
           <Router>
             <ScrollToTop />
             <Header />
-            <main className="pt-16 md:pt-16 min-h-screen"> {/* Ensure adequate padding for fixed header */}
+            <main className="pt-16 md:pt-16 min-h-screen">
               <Routes>
                 <Route 
                   path="/" 
@@ -364,11 +465,12 @@ function App() {
                     </>
                   } 
                 />
+            
 
                 <Route element={<ProtectedRoute />}>
                   <Route path="/order-confirmation/:orderId" element={<OrderConfirmationPage />} />
                   <Route path="/admin/orders" element={<AdminManageOrder />} />
-                  <Route path="/cart" element={<MyOrdersPage />} /> {/* Assuming cart shows orders or similar */}
+                  <Route path="/cart" element={<MyOrdersPage />} />
                   <Route path="/orders" element={<MyOrdersPage />} />
                   <Route path="/orders/:orderId" element={<OrderDetailsPage />} />
                 </Route>
