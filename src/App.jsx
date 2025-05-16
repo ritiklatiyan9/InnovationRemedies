@@ -29,6 +29,7 @@ import ChatModal from './Pages/SinglePages/AiAssistant';
 // Policy pages
 import ReturnPolicy from './Pages/SinglePages/ReturnPolicy';
 import ShippingPolicy from './Pages/SinglePages/ShippingPolicy';
+// import CookieConsent from './Pages/SinglePages/Cookie';
 
 
 import './fonts.css';
@@ -481,6 +482,7 @@ function App() {
             <Footer /> 
             <ChatIcon onClick={() => setIsChatOpen(true)} />
             <ChatModal isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
+               {/* <CookieConsent />  */}
           </Router>
         )}
       </AuthProvider>

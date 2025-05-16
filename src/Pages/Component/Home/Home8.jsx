@@ -1,7 +1,7 @@
 // src/components/HeroSection.jsx
 import { Button } from "@/components/ui/button"; // Adjust path if necessary
 import { PlayCircle, ChevronRight } from "lucide-react"; // BookKey and FaResearchgate were unused
-import videoUrl from "../../../assets/Video/bg10.mp4"; // Adjust path if necessary
+import videoUrl from "../../../assets/Video/bg1012.mp4"; // Adjust path if necessary
 const customStyle2 = {
   fontFamily: "Libreville-Free, sans-serif",
   fontWeight: "400",

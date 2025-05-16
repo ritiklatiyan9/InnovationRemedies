@@ -1,14 +1,13 @@
-// src/Pages/Component/Header/Header.jsx
-import React, { useState } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { Home, ShoppingBag, Book, Users, Mail, Menu, LogOut, User, ChevronRight, Settings, ShoppingBagIcon, Package } from 'lucide-react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetFooter } from '@/components/ui/sheet'; // Assuming path is correct
+import React, { useState, useEffect } from 'react';
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { Home, ShoppingBag, Book, Users, Mail, Menu, LogOut, User, 
+         ChevronRight, Settings, ShoppingCart, Package, X } from 'lucide-react';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetFooter } from '@/components/ui/sheet';
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu'; // Assuming path is correct
+} from '@/components/ui/navigation-menu';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,22 +15,23 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'; // Assuming path is correct
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'; // Assuming path is correct
-import { Button } from '@/components/ui/button'; // Assuming path is correct
-import { useAuth } from '../context/AuthContext'; // Adjust path if necessary
+} from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-hot-toast';
-import BrandLogo from '../../../assets/Images/logo.png'; // Path to your logo in src/assets
-import { cn } from '@/lib/utils'; // Adjust path if necessary
+import BrandLogo from '../../../assets/Images/logo.png';
+import { cn } from '@/lib/utils';
 
 // --- Configuration ---
 const navItems = [
-  { to: '/', label: 'Home', icon: Home, color: 'text-rose-500' },
-  { to: '/products', label: 'Products', icon: ShoppingBag, color: 'text-blue-500' },
-  { to: '/store', label: 'Information', icon: Book, color: 'text-emerald-500' },
-  { to: '/about', label: 'About Us', icon: Users, color: 'text-amber-500' },
-  { to: '/contact', label: 'Contact', icon: Mail, color: 'text-indigo-500' },
-  { to: '/cart', label: 'MyCart', icon: ShoppingBagIcon, color: 'text-indigo-500' },
+  { to: '/', label: 'Home', icon: Home, color: 'text-rose-500', bgColor: 'bg-rose-100 dark:bg-rose-500/20' },
+  { to: '/products', label: 'Products', icon: ShoppingBag, color: 'text-blue-500', bgColor: 'bg-blue-100 dark:bg-blue-500/20' },
+  { to: '/store', label: 'Information', icon: Book, color: 'text-emerald-500', bgColor: 'bg-emerald-100 dark:bg-emerald-500/20' },
+  { to: '/about', label: 'About Us', icon: Users, color: 'text-amber-500', bgColor: 'bg-amber-100 dark:bg-amber-500/20' },
+  { to: '/contact', label: 'Contact', icon: Mail, color: 'text-indigo-500', bgColor: 'bg-indigo-100 dark:bg-indigo-500/20' },
+  { to: '/cart', label: 'My Cart', icon: ShoppingCart, color: 'text-red-500', bgColor: 'bg-red-100 dark:bg-red-500/20' },
 ];
 
 const adminNavItem = {
@@ -39,6 +39,7 @@ const adminNavItem = {
   label: 'Manage Orders',
   icon: Package,
   color: 'text-purple-500',
+  bgColor: 'bg-purple-100 dark:bg-purple-500/20',
   adminOnly: true
 };
 
@@ -58,9 +59,41 @@ const getUserInitials = (user) => {
 export default function Header() {
   const { user, isAuthenticated, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
-  const iconSize = "h-5 w-5";
+  const location = useLocation();
   const isAdmin = user?.role === 'Admin';
+  
+  // Cart items count (example)
+  const cartItemsCount = 1;
+
+  // Handle scroll behavior
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Set scrolled state for visual changes
+      setIsScrolled(currentScrollY > 10);
+      
+      if (currentScrollY < 20) {
+        // Always show header at the top of the page
+        setIsVisible(true);
+      } else if (currentScrollY < lastScrollY) {
+        // Scrolling up - show header
+        setIsVisible(true);
+      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        // Scrolling down and not at the top - hide header
+        setIsVisible(false);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
   const getAllNavItems = () => {
     const baseNavItems = navItems.filter(item => !item.adminOnly);
@@ -83,64 +116,120 @@ export default function Header() {
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/40 shadow-sm">
+    <header className={cn(
+      "fixed inset-x-0 z-50 transition-all duration-300 transform",
+      isVisible ? "top-0 translate-y-0" : "-translate-y-full",
+      isScrolled 
+        ? "bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-lg dark:shadow-gray-950/30 border-b border-gray-200 dark:border-gray-800/50" 
+        : "bg-white dark:bg-gray-900 border-b border-transparent",
+    )}>
       <div className="container mx-auto h-16 flex items-center justify-between px-4 sm:px-6 lg:px-8">
+        {/* Logo */}
         <Link
-            to="/"
-            className="flex-shrink-0"
-            onClick={closeMobileMenu}
-            aria-label="Innovation Remedies Home"
+          to="/"
+          className="flex-shrink-0 group relative"
+          onClick={closeMobileMenu}
+          aria-label="Innovation Remedies Home"
         >
           <img
             src={BrandLogo}
             alt="Innovation Remedies Company Logo"
-            className="h-10 w-auto object-contain"
+            className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
           />
+          <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full rounded-full"></span>
         </Link>
 
-        <NavigationMenu className="hidden lg:flex flex-grow justify-center">
-          <NavigationMenuList className="bg-muted/60 px-3 py-1.5 rounded-full shadow-inner border border-border/30">
-            {getAllNavItems().map((item) => (
-              <NavigationMenuItem key={item.to}>
-                <NavLink
-                  to={item.to}
-                  className={({ isActive }) => cn(
-                    navigationMenuTriggerStyle(),
-                    "bg-transparent hover:bg-accent/70 data-[active]:bg-background data-[active]:shadow-sm text-sm h-9",
-                    isActive ? "bg-background shadow-sm font-semibold" : ""
-                  )}
-                >
-                  <item.icon aria-hidden="true" className={cn(iconSize, item.color, "mr-1.5")} />
-                  {item.label}
-                </NavLink>
-              </NavigationMenuItem>
-            ))}
-          </NavigationMenuList>
-        </NavigationMenu>
+        {/* Desktop Navigation */}
+        <div className="hidden lg:block mx-auto">
+          <NavigationMenu>
+            <NavigationMenuList className="flex items-center p-1 bg-gray-100/70 dark:bg-gray-800/50 rounded-full shadow-inner">
+              {getAllNavItems().map((item) => (
+                <NavigationMenuItem key={item.to} className="mx-0.5">
+                  <NavLink
+                    to={item.to}
+                    className={({ isActive }) => cn(
+                      "group flex items-center px-4 py-2 rounded-full text-sm font-medium transition-all duration-200",
+                      isActive 
+                        ? `${item.bgColor} ${item.color} shadow-sm` 
+                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-200/50 dark:hover:bg-gray-700/50"
+                    )}
+                  >
+                    <div className={cn(
+                      "flex items-center justify-center w-7 h-7 rounded-full mr-2",
+                      "transition-colors duration-200",
+                      "group-hover:bg-white dark:group-hover:bg-gray-800"
+                    )}>
+                      <item.icon className={cn(
+                        "h-4 w-4",
+                        item.color
+                      )} />
+                    </div>
+                    {item.label}
+                    
+                    {/* Badge for cart */}
+                    {item.label === 'My Cart' && cartItemsCount > 0 && (
+                      <Badge 
+                        variant="destructive" 
+                        className="ml-2 h-5 min-w-5 px-1.5 flex items-center justify-center"
+                      >
+                        {cartItemsCount}
+                      </Badge>
+                    )}
+                  </NavLink>
+                </NavigationMenuItem>
+              ))}
+            </NavigationMenuList>
+          </NavigationMenu>
+        </div>
 
-        <div className="flex items-center space-x-3">
+        {/* Right section: User & Mobile Menu */}
+        <div className="flex items-center space-x-2">
+          {/* User menu - Desktop */}
           <div className="hidden lg:block">
             {isAuthenticated ? (
               <UserDropdown user={user} onLogout={handleLogout} />
             ) : (
-              <Button asChild size="sm" className="rounded-full bg-primary hover:bg-primary/90">
-                <Link to="/login">Login</Link>
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button 
+                  asChild 
+                  variant="ghost" 
+                  size="sm" 
+                  className="rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+                >
+                  <Link to="/login">Sign in</Link>
+                </Button>
+                <Button 
+                  asChild 
+                  size="sm" 
+                  className="rounded-full bg-primary hover:bg-primary/90"
+                >
+                  <Link to="/register">Register</Link>
+                </Button>
+              </div>
             )}
           </div>
+          
+          {/* Mobile menu button */}
           <div className="lg:hidden">
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full" aria-label="Open menu">
-                  <Menu className="h-6 w-6 text-foreground/80" />
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="rounded-full hover:bg-gray-100 dark:hover:bg-gray-800" 
+                  aria-label="Open menu"
+                >
+                  <Menu className="h-6 w-6 text-gray-700 dark:text-gray-300" />
                 </Button>
               </SheetTrigger>
-              <MobileSheetContent
+              <MobileMenu
                 isAuthenticated={isAuthenticated}
                 user={user}
                 onLogout={handleLogout}
                 onClose={closeMobileMenu}
                 navItems={getAllNavItems()}
+                currentPath={location.pathname}
+                cartItemsCount={cartItemsCount}
               />
             </Sheet>
           </div>
@@ -150,190 +239,254 @@ export default function Header() {
   );
 }
 
-// --- Sub Components ---
-
+// --- User Dropdown Component ---
 function UserDropdown({ user, onLogout }) {
   const initials = getUserInitials(user);
   const isAdmin = user?.role === 'Admin';
+  
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0">
-          <Avatar className="h-10 w-10 border-2 border-border/20">
+        <Button 
+          variant="ghost" 
+          className="relative h-10 w-10 rounded-full p-0 overflow-hidden border-2 border-primary/10 hover:border-primary/30 transition-all duration-200"
+        >
+          <Avatar className="h-10 w-10">
             <AvatarImage src={user?.coverImage || undefined} alt={user?.username || "User avatar"} />
-            <AvatarFallback className="bg-gradient-to-br from-primary/70 to-primary/40 text-primary-foreground font-semibold">
+            <AvatarFallback className="bg-gradient-to-br from-primary to-primary/60 text-white font-semibold">
               {initials}
             </AvatarFallback>
           </Avatar>
+          <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-white dark:border-gray-900"></span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
-        <DropdownMenuLabel className="font-normal">
-          <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{user?.username || "Welcome!"}</p>
+      <DropdownMenuContent className="w-60 p-2 mt-1 rounded-xl overflow-hidden" align="end" forceMount>
+        <div className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-800/70 rounded-lg mb-1">
+          <Avatar className="h-12 w-12 border-2 border-white dark:border-gray-900 shadow-sm">
+            <AvatarImage src={user?.coverImage || undefined} alt={user?.username || "User avatar"} />
+            <AvatarFallback className="bg-gradient-to-br from-primary to-primary/60 text-white font-semibold">
+              {initials}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col">
+            <p className="text-base font-medium leading-none mb-1">{user?.username || "Welcome!"}</p>
             {user?.mobile && (
-              <p className="text-xs leading-none text-muted-foreground">
+              <p className="text-xs text-muted-foreground">
                 {user.mobile}
-                {user.role && (<span className={`ml-1 ${user.role === 'Admin' ? 'text-purple-500 font-semibold' : ''}`}>• {user.role}</span>)}
               </p>
             )}
+            {user?.role && (
+              <Badge 
+                variant={user.role === 'Admin' ? 'outline' : 'secondary'} 
+                className={cn(
+                  "mt-2 text-xs",
+                  user.role === 'Admin' ? "border-purple-500 text-purple-600 bg-purple-50 dark:bg-purple-900/30" : ""
+                )}
+              >
+                {user.role}
+              </Badge>
+            )}
           </div>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link to="/profile" className="cursor-pointer w-full flex items-center">
-            <User className="mr-2 h-4 w-4" />
-            <span>Profile</span>
-          </Link>
-        </DropdownMenuItem>
-        {isAdmin && (
-          <DropdownMenuItem asChild>
-            <Link to="/admin/orders" className="cursor-pointer w-full flex items-center">
-              <Package className="mr-2 h-4 w-4 text-purple-500" />
-              <span>Manage Orders</span>
-            </Link>
+        </div>
+        
+        <DropdownMenuSeparator className="my-1" />
+        
+        <div className="p-1">
+         
+          
+          {isAdmin && (
+            <DropdownMenuItem asChild>
+              <Link 
+                to="/admin/orders" 
+                className="cursor-pointer w-full flex items-center p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                <div className="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-500/20 flex items-center justify-center mr-2">
+                  <Package className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                </div>
+                <span>Manage Orders</span>
+              </Link>
+            </DropdownMenuItem>
+          )}
+          
+         
+        </div>
+        
+        <DropdownMenuSeparator className="my-1" />
+        
+        <div className="p-1">
+          <DropdownMenuItem 
+            onClick={onLogout} 
+            className="cursor-pointer w-full flex items-center p-2 rounded-md text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20"
+          >
+            <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-500/20 flex items-center justify-center mr-2">
+              <LogOut className="h-4 w-4 text-red-600 dark:text-red-400" />
+            </div>
+            <span>Sign out</span>
           </DropdownMenuItem>
-        )}
-        <DropdownMenuItem asChild disabled>
-          <span className="cursor-not-allowed opacity-50 w-full flex items-center">
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
-          </span>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={onLogout} className="text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer w-full flex items-center">
-          <LogOut className="mr-2 h-4 w-4" />
-          <span>Logout</span>
-        </DropdownMenuItem>
+        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   );
 }
 
-function MobileSheetContent({ isAuthenticated, user, onLogout, onClose, navItems }) {
-  const iconSize = "h-5 w-5";
-  const initials = getUserInitials(user);
+// --- Mobile Menu Component ---
+function MobileMenu({ isAuthenticated, user, onLogout, onClose, navItems, currentPath, cartItemsCount }) {
   return (
-    <SheetContent side="right" className="w-full max-w-xs sm:max-w-sm p-0 flex flex-col bg-gradient-to-b from-background via-background to-muted/30">
-      <SheetHeader className="p-4 border-b border-border/30">
-        <SheetTitle className="flex items-center gap-3 text-left">
-          {isAuthenticated ? (
-            <>
-              <Avatar className="h-10 w-10 border">
-                <AvatarImage src={user?.coverImage || undefined} alt="User avatar" />
-                <AvatarFallback className="bg-gradient-to-br from-primary/70 to-primary/40 text-primary-foreground">
-                    {initials}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <p className="text-sm font-medium">{user?.username || "User"}</p>
-                <p className="text-xs text-muted-foreground">
-                  {user?.mobile || ""}
-                  {user?.role && (
-                    <span className={`ml-1 ${user?.role === 'Admin' ? 'text-purple-500 font-semibold' : ''}`}>
-                      • {user.role}
-                    </span>
-                  )}
-                </p>
-              </div>
-            </>
-          ) : (
-            <>
-              <Avatar className="h-10 w-10 border bg-muted">
-                  <AvatarFallback>
-                      <User className="h-5 w-5 text-muted-foreground" />
-                  </AvatarFallback>
-              </Avatar>
-              <p className="text-sm font-medium">Guest Menu</p>
-            </>
-          )}
-        </SheetTitle>
+    <SheetContent 
+      side="right" 
+      className="w-full max-w-xs sm:max-w-sm p-0 border-l border-gray-200 dark:border-gray-800"
+    >
+      <SheetHeader className="p-4 border-b border-gray-200 dark:border-gray-800 flex flex-row justify-between items-center">
+        <SheetTitle className="text-left">Menu</SheetTitle>
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+          onClick={onClose}
+        >
+          <X className="h-5 w-5 text-gray-500" />
+        </Button>
       </SheetHeader>
-
-      <nav className="flex-grow p-4 overflow-y-auto">
-        <div className="mb-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-          Navigation
+      
+      {isAuthenticated && (
+        <div className="p-4 border-b border-gray-200 dark:border-gray-800">
+          <div className="flex items-center space-x-3">
+            <Avatar className="h-12 w-12 border-2 border-white dark:border-gray-900 shadow-sm">
+              <AvatarImage src={user?.coverImage || undefined} alt={user?.username || "User"} />
+              <AvatarFallback className="bg-gradient-to-br from-primary to-primary/60 text-white font-medium">
+                {getUserInitials(user)}
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <div className="font-medium text-base">{user?.username || "User"}</div>
+              {user?.mobile && (
+                <div className="text-xs text-gray-500 dark:text-gray-400">{user.mobile}</div>
+              )}
+              {user?.role && (
+                <Badge 
+                  variant={user.role === 'Admin' ? 'outline' : 'secondary'} 
+                  className={cn(
+                    "mt-1 text-xs",
+                    user.role === 'Admin' ? "border-purple-500 text-purple-600 bg-purple-50 dark:bg-purple-900/30" : ""
+                  )}
+                >
+                  {user.role}
+                </Badge>
+              )}
+            </div>
+          </div>
         </div>
-        <ul className="space-y-1.5">
-          {navItems.map((item) => (
-            <li key={item.to}>
-              <NavLink
-                to={item.to}
-                onClick={onClose}
-                className={({ isActive }) =>
-                  cn(
-                    "flex items-center justify-between p-2.5 rounded-md text-sm font-medium transition-colors duration-150 group w-full",
-                    isActive
-                      ? "bg-primary/10 shadow-sm text-primary"
-                      : "text-foreground/80 hover:bg-muted/80 hover:text-foreground"
-                  )
-                }
-              >
-                {({ isActive }) => ( // This function receives isActive as an argument
-                  <>
-                    <div className="flex items-center gap-3">
-                       <item.icon aria-hidden="true" className={cn(
-                         iconSize,
-                         isActive ? item.color : "opacity-80 group-hover:opacity-100",
-                         "transition-colors"
-                       )} />
-                      <span className={isActive ? "font-semibold" : ""}>{item.label}</span>
+      )}
+      
+      <div className="flex-1 overflow-y-auto">
+        <div className="p-4">
+          <div className="mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            Navigation
+          </div>
+          
+          <nav className="space-y-1 mt-3">
+            {navItems.map((item) => {
+              const isActive = currentPath === item.to;
+              return (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className={cn(
+                    "flex items-center justify-between py-3 px-3 rounded-lg text-sm font-medium transition-all duration-200",
+                    isActive 
+                      ? `${item.bgColor} ${item.color}` 
+                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                  )}
+                  onClick={onClose}
+                >
+                  <div className="flex items-center">
+                    <div className={cn(
+                      "flex items-center justify-center w-9 h-9 rounded-full mr-3",
+                      isActive ? "bg-white/80 dark:bg-gray-800" : "bg-gray-100 dark:bg-gray-800"
+                    )}>
+                      <item.icon className={cn(
+                        "h-5 w-5",
+                        isActive ? item.color : "text-gray-500 dark:text-gray-400"
+                      )} />
                     </div>
-                    {isActive && (
-                      <ChevronRight className={cn("h-4 w-4 opacity-70", item.color)} />
+                    <span>{item.label}</span>
+                    
+                    {/* Badge for cart */}
+                    {item.label === 'My Cart' && cartItemsCount > 0 && (
+                      <Badge 
+                        variant="destructive" 
+                        className="ml-2 h-5 min-w-5 px-1.5"
+                      >
+                        {cartItemsCount}
+                      </Badge>
                     )}
-                  </>
-                )}
-              </NavLink>
-            </li>
-          ))}
-        </ul>
+                  </div>
+                  
+                  {isActive && <ChevronRight className={cn("h-4 w-4", item.color)} />}
+                </Link>
+              );
+            })}
+          </nav>
+          
+          {isAuthenticated && (
+            <div className="mt-6">
+              <div className="mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                Account
+              </div>
+              <nav className="space-y-1 mt-3">
+                <Link
+                  to="/profile"
+                  className={cn(
+                    "flex items-center justify-between py-3 px-3 rounded-lg text-sm font-medium transition-all duration-200",
+                    currentPath === '/profile' 
+                      ? "bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400" 
+                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                  )}
+                  onClick={onClose}
+                >
+                  
+                  
+                  {currentPath === '/profile' && (
+                    <ChevronRight className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                  )}
+                </Link>
+              </nav>
+            </div>
+          )}
+        </div>
+      </div>
 
-         {isAuthenticated && (
-             <>
-                <div className="mt-6 mb-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                   Account
-                </div>
-                <ul className="space-y-1.5">
-                    <li>
-                       <NavLink
-                         to="/profile"
-                         onClick={onClose}
-                         className={({ isActive }) =>
-                            cn(
-                             "flex items-center gap-3 p-2.5 rounded-md text-sm font-medium transition-colors duration-150 group w-full",
-                             isActive
-                               ? "bg-muted shadow-sm text-foreground font-semibold"
-                               : "text-foreground/80 hover:bg-muted/80 hover:text-foreground"
-                           )
-                         }
-                       >
-                           <User className={cn(iconSize, "opacity-70 group-hover:opacity-100")} />
-                           Profile
-                       </NavLink>
-                   </li>
-                </ul>
-             </>
-         )}
-      </nav>
-
-      <SheetFooter className="p-4 border-t border-border/30 bg-background/50 mt-auto">
+      <SheetFooter className="p-4 border-t border-gray-200 dark:border-gray-800 mt-auto">
         {isAuthenticated ? (
           <Button
-            variant="ghost"
-            onClick={onLogout} // Corrected: onLogout already handles closing the menu via navigate
-            className="w-full justify-start text-red-600 hover:bg-red-50 hover:text-red-600 gap-3"
+            variant="outline"
+            onClick={() => {
+              onLogout();
+              onClose();
+            }}
+            className="w-full justify-center text-red-600 hover:bg-red-50 hover:text-red-700 border-red-200 gap-2"
           >
-            <LogOut className="h-5 w-5" />
-            Logout
+            <LogOut className="h-4 w-4" />
+            Sign out
           </Button>
         ) : (
-          <Button asChild variant="default" className="w-full gap-3 bg-primary hover:bg-primary/90" onClick={onClose}>
-            <Link to="/login">
-              <User className="h-5 w-5" />
-              Login / Sign Up
-            </Link>
-          </Button>
+          <div className="grid grid-cols-2 gap-2 w-full">
+            <Button
+              asChild
+              variant="outline"
+              className="w-full"
+              onClick={onClose}
+            >
+              <Link to="/login">Sign in</Link>
+            </Button>
+            <Button
+              asChild
+              className="w-full bg-primary hover:bg-primary/90"
+              onClick={onClose}
+            >
+              <Link to="/register">Sign up</Link>
+            </Button>
+          </div>
         )}
       </SheetFooter>
     </SheetContent>

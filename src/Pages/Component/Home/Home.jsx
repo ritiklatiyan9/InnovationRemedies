@@ -9,7 +9,7 @@ import Home6 from "./Home6";
 import Home7 from "./Home7";
 import Home8 from "./Home8";
 import logo from "../../../assets/Images/logo.png";
-import videoSourceUrl from "../../../assets/Video/bg9.mp4";
+import videoSourceUrl from "../../../assets/Video/bg91.mp4";
 import { FlipWords } from "../../../components/ui/flips-words";
 import { PawPrint, HeartPulse, Activity } from "lucide-react";
 
@@ -161,7 +161,7 @@ function Home() {
             </h1>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-6 text-gray-200 drop-shadow-md">
-              Advancing Animal <FlipWords words={words} className="text-white font-semibold" /> Across India
+              Advancing Animal <FlipWords words={words} className="text-green-500 font-semibold" /> Across India
             </h2>
 
             <p className="text-lg md:text-xl text-gray-200 max-w-2xl mb-10 mx-auto md:mx-0">
