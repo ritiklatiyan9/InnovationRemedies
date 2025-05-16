@@ -203,7 +203,7 @@ export default function Header() {
                   size="sm" 
                   className="rounded-full bg-primary hover:bg-primary/90"
                 >
-                  <Link to="/register">Register</Link>
+                  <Link to="/login">Register</Link>
                 </Button>
               </div>
             )}
