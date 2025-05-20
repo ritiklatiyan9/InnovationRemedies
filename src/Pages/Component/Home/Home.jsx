@@ -11,7 +11,7 @@ import Home8 from "./Home8";
 import logo from "../../../assets/Images/logo.png";
 import videoSourceUrl from "../../../assets/Video/bg91.mp4";
 import { FlipWords } from "../../../components/ui/flips-words";
-import { PawPrint, HeartPulse, Activity } from "lucide-react";
+import { PawPrint, HeartPulse, Activity, Dog, TreePine } from "lucide-react";
 
 const customStyle2 = {
   fontFamily: "Libreville-Free, sans-serif",
@@ -182,6 +182,19 @@ function Home() {
                 </motion.span>
                 <span className="text-sm font-medium text-white tracking-wide">Activity Enhancers</span>
               </div>
+                 <div className="flex items-center space-x-2.5 bg-white/10 backdrop-blur-sm px-5 py-2.5 rounded-full shadow-md border border-white/20 transition-all duration-300 hover:bg-white/20 cursor-default">
+                <motion.span className="flex items-center justify-center p-1.5 bg-orange-500 rounded-full text-white shadow-inner" variants={heartBeat} initial="initial" animate="animate">
+                  <Dog size={18} strokeWidth={2.5} />
+                </motion.span>
+                <span className="text-sm font-medium text-white tracking-wide">Growth Boosters</span>
+              </div>
+              <div className="flex items-center space-x-2.5 bg-white/10 backdrop-blur-sm px-5 py-2.5 rounded-full shadow-md border border-white/20 transition-all duration-300 hover:bg-white/20 cursor-default">
+                <motion.span className="flex items-center justify-center p-1.5 bg-emerald-700/80 rounded-full text-white shadow-inner" variants={actSwing} initial="initial" animate="animate">
+                  <TreePine size={18} strokeWidth={2.5} />
+                </motion.span>
+                <span className="text-sm font-medium text-white tracking-wide"> Wellness Enhancers</span>
+              </div>
+              
             </div>
           </div>
         </div>

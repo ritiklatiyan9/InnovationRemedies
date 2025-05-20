@@ -499,7 +499,7 @@ User Query: ${query}`;
         <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-3 px-4 flex items-center justify-between flex-shrink-0 shadow-sm">
           <div className="flex items-center space-x-2">
             <Bot size={20} />
-            <h2 id="ai-assistant-header" className="font-semibold text-base">Innovation Remedies AI</h2>
+            <h2 id="ai-assistant-header" className="font-semibold text-base">Innovation Remedies Life Science AI</h2>
           </div>
           <button
             onClick={onClose}

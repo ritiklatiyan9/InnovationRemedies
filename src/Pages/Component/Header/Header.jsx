@@ -209,6 +209,45 @@ export default function Header() {
             )}
           </div>
           
+          {/* Mobile visible cart and products icons */}
+          <div className="lg:hidden flex items-center gap-2">
+            {/* Products Icon */}
+            <Button 
+              asChild
+              variant="ghost" 
+              size="icon" 
+              className="rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
+              <Link to="/products" aria-label="Products">
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-500/20">
+                  <ShoppingBag className="h-4 w-4 text-blue-500" />
+                </div>
+              </Link>
+            </Button>
+            
+            {/* Cart Icon with Badge */}
+            <Button 
+              asChild
+              variant="ghost" 
+              size="icon" 
+              className="rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 relative"
+            >
+              <Link to="/cart" aria-label="Shopping Cart">
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-red-100 dark:bg-red-500/20">
+                  <ShoppingCart className="h-4 w-4 text-red-500" />
+                </div>
+                {cartItemsCount > 0 && (
+                  <Badge 
+                    variant="destructive" 
+                    className="absolute -top-1 -right-1 h-5 min-w-5 px-1.5 flex items-center justify-center"
+                  >
+                    {cartItemsCount}
+                  </Badge>
+                )}
+              </Link>
+            </Button>
+          </div>
+          
           {/* Mobile menu button */}
           <div className="lg:hidden">
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
