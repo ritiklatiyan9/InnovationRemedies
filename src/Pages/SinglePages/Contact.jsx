@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async'; // Import Helmet for SEO
-import { FiFacebook, FiTwitter, FiLinkedin, FiDribbble } from 'react-icons/fi';
-import { FaChevronDown } from 'react-icons/fa'; 
+import { FiFacebook, FiTwitter, FiLinkedin, FiDribbble } from 'react-icons/fi'; // Keep if used elsewhere, otherwise remove
+import { FaChevronDown } from 'react-icons/fa';
 import logo from '../../assets/Images/logo.png'; // Ensure this is hosted publicly
 
 // Updated Placeholder for the complex left-side graphic
@@ -24,13 +24,50 @@ const countries = [
 ];
 
 const ContactPage = () => {
+  // Form state
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [mobileNumber, setMobileNumber] = useState('');
+  const [message, setMessage] = useState('');
   const [selectedCountry, setSelectedCountry] = useState("IN");
+
   const currentCountry = countries.find(country => country.code === selectedCountry) || countries[0];
 
   // 🌐 Domain Configuration
   const domain = "https://www.innovationremedies.com"; // Update with your actual domain
   const canonicalUrl = `${domain}/contact`;
-  const ogImageUrl = `${domain}${logo}`;
+  const ogImageUrl = `${domain}${logo}`; // Make sure logo path is correct if domain is prepended
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+
+    const countryName = currentCountry.name;
+    const whatsappNumber = "918938963778"; // WhatsApp number without '+' or spaces
+
+    const textMessage = `
+New Inquiry from Innovation Remedies Contact Form:
+--------------------------------------------------
+First Name: ${firstName}
+Last Name: ${lastName}
+Mobile Number: ${mobileNumber}
+Location: ${countryName} (${selectedCountry})
+Message: ${message}
+--------------------------------------------------
+    `.trim(); // .trim() to remove leading/trailing whitespace from template literal
+
+    const encodedMessage = encodeURIComponent(textMessage);
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+    window.open(whatsappUrl, '_blank');
+
+    // Optional: Clear form after submission
+    setFirstName('');
+    setLastName('');
+    setMobileNumber('');
+    setMessage('');
+    setSelectedCountry('IN');
+  };
+
 
   return (
     <div className="flex min-h-screen bg-white">
@@ -91,7 +128,6 @@ const ContactPage = () => {
                 "postalCode": "250001",
                 "addressCountry": "IN"
               },
-              "
               "email": "innovationremedies@gmail.com",
               "url": "${domain}",
               "sameAs": [
@@ -123,13 +159,7 @@ const ContactPage = () => {
             </p>
           </div>
 
-          {/* 👇 Contact Section (Optional visible address for local SEO) */}
-       
-
-          <form className="mt-8 space-y-6" onSubmit={(e) => e.preventDefault()}>
-            {/* Form fields remain unchanged */}
-            {/* Add your form fields here */}
-            {/* Example form fields below */}
+          <form className="mt-8 space-y-6" onSubmit={handleFormSubmit}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
                 <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
@@ -142,6 +172,8 @@ const ContactPage = () => {
                   required
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
                   placeholder="First name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
                 />
               </div>
               <div>
@@ -155,6 +187,8 @@ const ContactPage = () => {
                   required
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
                   placeholder="Last name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
                 />
               </div>
             </div>
@@ -166,14 +200,16 @@ const ContactPage = () => {
               <input
                 id="number"
                 name="number"
-                type="number"
+                type="tel" // Changed to "tel" for better mobile UX
                 required
                 className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
                 placeholder="Mobile Number"
+                value={mobileNumber}
+                onChange={(e) => setMobileNumber(e.target.value)}
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6"> {/* Kept structure for consistency, though only one field here */}
               <div>
                 <label htmlFor="location" className="block text-sm font-medium text-gray-700">
                   Location
@@ -215,6 +251,8 @@ const ContactPage = () => {
                 required
                 className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
                 placeholder="Leave us a message..."
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
               />
             </div>
 
@@ -229,10 +267,9 @@ const ContactPage = () => {
           </form>
 
           <div className="text-sm text-gray-600 border-t pt-4 mt-4">
-            <p><strong>Visit Us:</strong>  B-Block , Baba Colony , Burari , North Delhi - 110084</p>
+            <p><strong>Visit Us:</strong> B-Block , Baba Colony , Burari , North Delhi - 110084</p>
             <p><strong>Email:</strong> innovationremedies@gmail.com</p>
             <p><strong>Phone:</strong> +91-9412702900</p>
-            
           </div>
         </div>
       </div>
