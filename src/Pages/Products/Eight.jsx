@@ -9,8 +9,8 @@ import innovationRemediesLogo from '../../assets/Images/beast.png'; // Optional 
 const makkhiAdvanceSoapData = {
   tagline: "For Effective Control of Ticks, Fleas & Mites",
   mainTitle: "Makkhi",
-  qualifier: "Advance Soap",
-  hindiTitle: "मक्खी एडवांस साबुन",
+  qualifier: " Soap",
+  hindiTitle: "मक्खी  साबुन",
   hindiSlogan: [
     "जिसने भी मक्खी साबुन को लगाया ।",
     "मक्खी चीचड़ी कलिली का किया सफाया ।।"
@@ -18,13 +18,13 @@ const makkhiAdvanceSoapData = {
   compositionTitle: "Composition",
   compositionDetails: "Permethrin 8%, Certimide 1% With Aloevera 1% Soap noodle q.s.",
   keyPoints: [
-    "Makkhi Advance Soap use for External use only",
-    "Makkhi Advance Soap very effective against Fleas Fly & Ticks"
+    "Makkhi  Soap use for External use only",
+    "Makkhi = Soap very effective against Fleas Fly & Ticks"
   ],
   boxDetails: {
     mainIngredients: "Permethrin 8%, Cetrimide, & Aloevera Soap",
-    productName: "Makkhi Advance Soap",
-    hindiName: "मक्खी एडवांस",
+    productName: "Makkhi  Soap",
+    hindiName: "मक्खी ",
     usage: "(For Vet. Use Only)",
     packSizeShort: "75 gm.",
     benefit: "Freedom from Ticks & Flies"
@@ -114,7 +114,7 @@ export default function MakkhiAdvanceSoapPage() {
 
               <img
                 src={makkhiSoapBoxImage}
-                alt="Makkhi Advance Soap Box"
+                alt="Makkhi  Soap Box"
                 className="w-full h-auto object-contain rounded mb-2 sm:mb-3 shadow-md"
                 loading="lazy"
               />

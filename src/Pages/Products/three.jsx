@@ -76,7 +76,7 @@ export default function CalfShaktiPage() {
         <div className="container mx-auto text-center">
           <h1 className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold ${colors.titleYellow}`}>
             {calfShaktiData.mainTitle.toUpperCase()}{' '}
-            <span className="text-white">{calfShaktiData.qualifier.toUpperCase()}</span>
+            <span className="text-white text-3xl">{calfShaktiData.qualifier.toUpperCase()}</span>
           </h1>
           <p className={`mt-2 sm:mt-3 text-xs sm:text-sm md:text-base ${colors.ingredientsText} font-medium px-1 sm:px-2`}>
             <strong>Ingredients:</strong> {calfShaktiData.ingredients.join(', ')}

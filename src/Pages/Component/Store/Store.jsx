@@ -240,58 +240,7 @@ const CommunityShowcase = () => {
 
     
 
-      {/* Showcase Section */}
-      <div
-        id="home"
-        ref={animationRef}
-        className="relative flex flex-col items-center justify-center min-h-[45vh] md:min-h-screen w-full overflow-hidden py-8 md:py-16 lg:py-20 bg-gradient-to-br from-green-100 via-white to-indigo-200 dark:from-slate-900 dark:via-gray-900 dark:to-indigo-950"
-      >
-        {/* Top scrolling strip - smaller on mobile */}
-        <div className="absolute top-14 sm:top-16 md:top-20 w-full z-10 max-w-full overflow-hidden">
-          <InfiniteScrollStrip
-            images={topImages}
-            direction="left"
-            speed={45}
-          />
-        </div>
-
-        {/* Central Content - improved mobile spacing */}
-        <div className="relative z-20 flex flex-col items-center justify-center text-center px-3 sm:px-6 lg:px-8 pt-20 pb-16 md:py-32 mt-6 md:mt-0"> 
-          <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 dark:text-white mb-3 sm:mb-4 md:mb-6">
-            Join Our Vibrant <span className="text-blue-600 dark:text-blue-400">Community</span>
-          </h1>
-          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-700 dark:text-gray-300 max-w-xs sm:max-w-sm md:max-w-lg lg:max-w-2xl mx-auto mb-5 sm:mb-6 md:mb-8">
-            Discover amazing creators, share your work, and connect with like-minded individuals from around the globe.
-          </p>
-          <button className="touch-target flex items-center justify-center px-5 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-3.5 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white text-sm sm:text-base md:text-lg font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105">
-            <Zap size={18} className="mr-1.5 sm:mr-2" />
-            Get Started
-          </button>
-        </div>
-
-        {/* Bottom scrolling strip - adjusted position */}
-        <div className="absolute bottom-8 sm:bottom-12 md:bottom-16 w-full z-10 max-w-full overflow-hidden">
-          <InfiniteScrollStrip
-            images={bottomImages}
-            direction="right"
-            speed={40}
-          />
-        </div>
-
-        {/* Improved Scroll Down Indicator */}
-        <div className="absolute bottom-2 sm:bottom-3 left-1/2 transform -translate-x-1/2 z-30 flex flex-col items-center">
-          <div className="text-blue-600 dark:text-blue-400 animate-bounce p-1 sm:p-1.5 bg-white/50 dark:bg-black/50 backdrop-blur-md rounded-full shadow-md">
-            <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" aria-hidden="true" />
-          </div>
-          <span className="mt-0.5 text-blue-700 dark:text-blue-300 text-[8px] xs:text-[10px] sm:text-xs font-medium tracking-wide">Scroll</span>
-        </div>
-
-        {/* Responsive decorative elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-          <div className="absolute top-1/4 left-1/4 w-24 h-24 xs:w-32 xs:h-32 sm:w-40 sm:h-40 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-full bg-green-300/20 dark:bg-green-500/10 blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-24 h-24 xs:w-32 xs:h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 lg:w-72 lg:h-72 rounded-full bg-indigo-300/20 dark:bg-indigo-500/10 blur-3xl animate-pulse animation-delay-2000"></div>
-        </div>
-      </div>
+     
 
       {/* Product Sections with improved responsive grid */}
       <div id="products" className="relative py-10 sm:py-14 lg:py-20 bg-gradient-to-b from-white to-slate-100 dark:from-gray-900 dark:to-slate-950 safe-padding-bottom">

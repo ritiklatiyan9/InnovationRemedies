@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import Video from './Video';
-
+import vikasji from '../../../assets/Images/vikasji.jpg';
 import {
   Eye, Target, Users, Trophy,
   Briefcase, Lightbulb, Star,
@@ -150,7 +150,7 @@ export default function EnhancedAboutUs() {
       name: "Mr. Vikas Malik",
       role: "Managing Director",
       bio: "Veterinarian with 15+ years experience in clinical practice and telemedicine development",
-      avatar: "https://images.unsplash.com/photo-1612349317150-e413f6a5f3c8?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80"
+      avatar: vikasji,
     },
     {
       name: "Geeta",

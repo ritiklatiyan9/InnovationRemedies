@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRightCircle } from 'lucide-react';
+// Assuming this path is correct for your project structure
 import resolutionKitProductImage from '../../assets/Images/rs.png';
 
 const resolutionKitData = {
@@ -32,6 +33,16 @@ const resolutionKitData = {
     "Vitamin AD₃E",
     "RS Heat Kit"
   ],
+  // Added Benefits from the image
+  benefitsTitle: "Key Benefits:",
+  benefits: [
+    "Development of Genital Organs",
+    "Improves Conception Rate",
+    "Maintain Pregnancy",
+    "Non Specific Anoestrus",
+    "Repeat Breeder",
+    "Silent-Estrous"
+  ],
   recommendedDosageTitle: "Recommended Dosage :",
   dosageInstructions: [
     "Cattle/Buffalo/heifer",
@@ -43,6 +54,8 @@ const resolutionKitData = {
     title: "Available Pack :",
     details: "Resolution Powder 500 gm + RS Heat Kit"
   },
+  // Added Product Note from the image
+  productNote: "Note : It's means Resolution powder for the treatment of infertility. And other mineral powder for defence of infertility. So you will choose? You have need treatment product or defence product.",
   footerTagline: "सर इसका मतलब रीसोल्युशन किट बांझपन के इलाज के लिए सम्पूर्ण समाधान हैं ।"
 };
 
@@ -102,9 +115,9 @@ export default function ResolutionKitProductPage() {
                           : tableEvenRowBg
                       }
                     >
-                      <td className="p-2 border text-center font-medium">{item.no}</td>
-                      <td className="p-2 border font-medium">{item.name}</td>
-                      <td className={`p-2 border ${tableQuantityBg} text-white font-semibold`}>
+                      <td className="p-2 border border-slate-300 text-center font-medium">{item.no}</td>
+                      <td className="p-2 border border-slate-300 font-medium">{item.name}</td>
+                      <td className={`p-2 border border-red-600 ${item.highlight ? '' : tableQuantityBg + ' text-white'} font-semibold`}>
                         {item.quantity}
                       </td>
                     </tr>
@@ -135,7 +148,7 @@ export default function ResolutionKitProductPage() {
               </div>
             </div>
 
-            {/* Image & Dosage */}
+            {/* Image, Benefits & Dosage */}
             <div className="lg:col-span-4 flex flex-col items-center space-y-6">
               <div className="bg-white p-3 rounded-lg shadow-lg w-full max-w-xs">
                 <img
@@ -145,6 +158,21 @@ export default function ResolutionKitProductPage() {
                 />
               </div>
 
+              {/* Benefits Section */}
+              {resolutionKitData.benefits && resolutionKitData.benefits.length > 0 && (
+                <div className="w-full max-w-md p-4 rounded-xl shadow-lg bg-purple-600 text-white text-sm md:text-base">
+                  <h3 className="font-bold text-lg mb-2 text-yellow-300">
+                    {resolutionKitData.benefitsTitle}
+                  </h3>
+                  <ul className="list-disc list-inside space-y-1">
+                    {resolutionKitData.benefits.map((benefit, index) => (
+                      <li key={index}>{benefit}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Dosage Section */}
               <div className={`w-full max-w-md p-4 rounded-xl shadow-lg bg-indigo-100 ${titleColor} text-sm md:text-base`}>
                 <h3 className="font-bold text-lg mb-2 text-yellow-600">
                   {resolutionKitData.recommendedDosageTitle}
@@ -154,6 +182,7 @@ export default function ResolutionKitProductPage() {
                 ))}
               </div>
 
+              {/* Available Pack Section */}
               <div className="text-center w-full max-w-md">
                 <p className={`font-semibold text-base md:text-lg ${titleColor}`}>
                   {resolutionKitData.availablePack.title}{' '}
@@ -164,6 +193,17 @@ export default function ResolutionKitProductPage() {
           </div>
         </div>
       </section>
+
+      {/* Product Note Section */}
+      {resolutionKitData.productNote && (
+        <section className={`${bgColor} py-4 md:py-6`}>
+          <div className="container mx-auto px-4 max-w-7xl">
+            <p className="text-center text-base md:text-lg font-medium text-slate-700 italic">
+              {resolutionKitData.productNote}
+            </p>
+          </div>
+        </section>
+      )}
 
       {/* Footer */}
       <footer className={`${bgColor} py-6`}>

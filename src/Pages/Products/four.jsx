@@ -14,7 +14,7 @@ export default function InnolivDSPage() {
   const innolivDsData = {
     mainTitle: 'INNOLIV-DS',
     hindiTitle: 'इन्नोलिव-डीएस',
-    prefix: 'ULTRA',
+    prefix: '',
     subTitle: 'LIQUID',
     tagline: 'WITH SILYMARINE',
     availablePacks: '500 ml, 1 Litre & 5 Litre',
@@ -109,7 +109,7 @@ export default function InnolivDSPage() {
               <div className="bg-yellow-400 dark:bg-yellow-500 rounded-xl p-4 shadow-lg"> {/* Added shadow */}
                 <div className="text-center">
                   <h2 className="text-2xl sm:text-3xl font-bold text-red-700 dark:text-red-800">
-                    ULTRA {innolivDsData.hindiTitle}
+                     {innolivDsData.hindiTitle}
                   </h2>
                   <h1 className="text-3xl sm:text-4xl font-bold text-red-700 dark:text-red-800 mt-1 sm:mt-2">
                     {innolivDsData.mainTitle}

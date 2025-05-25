@@ -198,35 +198,14 @@ const HeroSection = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Button
-                size="lg"
-                className="group relative overflow-hidden bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-6 text-base rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
-              >
-                <span className="relative z-10 flex items-center">
-                  <PlayCircle className="mr-2 h-5 w-5" />
-                  Explore Our Services
-                </span>
-                <motion.div
-                  className="absolute inset-0 bg-white/20"
-                  initial={{ x: "-100%" }}
-                  whileHover={{ x: "100%" }}
-                  transition={{ duration: 0.5 }}
-                />
-              </Button>
+             
             </motion.div>
 
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Button
-                size="lg"
-                variant="outline"
-                className="group border-white/20 backdrop-blur-sm bg-white/5 text-white hover:bg-white/50 px-8 py-6 text-base rounded-full transition-all duration-300"
-              >
-                View Research Portfolio
-                <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
+             
             </motion.div>
           </motion.div>
         </motion.div>
@@ -244,29 +223,7 @@ const HeroSection = () => {
       </motion.div>
 
       {/* Navigation Arrows */}
-      <div className="absolute top-1/2 -translate-y-1/2 w-full px-4 z-20">
-        <div className="flex justify-between">
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            aria-label="Previous slide"
-            className="p-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300"
-            onClick={() => setCurrentSlide(prev => prev - 1)}
-          >
-            <ChevronLeft className="h-5 w-5 text-white" />
-          </motion.button>
-
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            aria-label="Next slide"
-            className="p-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300"
-            onClick={() => setCurrentSlide(prev => prev + 1)}
-          >
-            <ChevronRight className="h-5 w-5 text-white" />
-          </motion.button>
-        </div>
-      </div>
+      
 
       {/* Sound Toggle */}
      

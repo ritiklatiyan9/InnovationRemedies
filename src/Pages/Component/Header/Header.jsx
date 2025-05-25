@@ -67,7 +67,7 @@ export default function Header() {
   const isAdmin = user?.role === 'Admin';
   
   // Cart items count (example)
-  const cartItemsCount = 1;
+  const cartItemsCount = 0;
 
   // Handle scroll behavior
   useEffect(() => {

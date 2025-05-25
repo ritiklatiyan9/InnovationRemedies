@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'; // Adjust import path
 
 
-import BG_IMAGE_URL from '../../../assets/Video/bg7.jpg'; // <<< REPLACE
+import BG_IMAGE_URL from '../../../assets/Video/uij.png'; // <<< REPLACE
 
 const FreightHero = () => {
   return (
