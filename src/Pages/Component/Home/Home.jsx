@@ -8,10 +8,10 @@ import Home4 from "./Home4";
 import Home6 from "./Home6";
 import Home7 from "./Home7";
 import Home8 from "./Home8";
-import logo from "../../../assets/Images/logo.png";
+// import logo from "../../../assets/Images/logo.png"; // logo import wasn't used directly in the JSX, ogImageUrl uses a string path
 import videoSourceUrl from "../../../assets/Video/bg911.mp4";
 import { FlipWords } from "../../../components/ui/flips-words";
-import { PawPrint, HeartPulse, Activity, Dog, TreePine } from "lucide-react";
+import { PawPrint, HeartPulse, Activity, Dog, TreePine } from "lucide-react"; // PawPrint wasn't used, but keeping it as it was in original
 
 const customStyle2 = {
   fontFamily: "Libreville-Free, sans-serif",
@@ -22,10 +22,10 @@ const customStyle = {
   fontWeight: "400",
 }
 
-const dolceAmyaraStyle = {
-  fontFamily: "'Dolce & Amyara Personal Use', serif",
-  fontWeight: "normal",
-};
+// const dolceAmyaraStyle = { // This style wasn't used, commenting out or removing is fine
+//   fontFamily: "'Dolce & Amyara Personal Use', serif",
+//   fontWeight: "normal",
+// };
 
 function Home() {
   const words = ["World", "Care", "Family", "Health"];
@@ -47,7 +47,7 @@ function Home() {
   // Page description emphasizing national service
   const pageDescription = `${siteName} is your dedicated partner for advanced veterinary pharmaceuticals and animal health solutions throughout India. Enhancing animal wellness, health, and performance with our innovative product range.`;
   const canonicalUrl = `${siteUrl}/`;
-  const ogImageUrl = `${siteUrl}/logo.png`; // Ensure logo.png is in /public folder
+  const ogImageUrl = `${siteUrl}/logo.png`; // Ensure logo.png is in /public folder or accessible at this path
 
   // Organization Schema for the homepage - reinforce national brand
   const primaryEntitySchema = {
@@ -146,7 +146,7 @@ function Home() {
         </div>
 
         <div className="relative z-10 container mx-auto px-6 lg:px-8 flex flex-col md:flex-row items-center gap-8 md:gap-12">
-          <div className="w-full md:w-3/5 lg:w-2/3 text-center md:text-left  mb-6 md:pt-0">
+          <div className="w-full md:w-3/5 lg:w-2/3 text-center md:text-left mb-6 md:pt-0">
           
             <h1
               style={customStyle2}
@@ -169,40 +169,64 @@ function Home() {
               wellness, and vitality of animals throughout India.
             </p>
 
-            <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-              <div className="flex items-center space-x-2.5 bg-white/10 backdrop-blur-sm px-5 py-2.5 rounded-full shadow-md border border-white/20 transition-all duration-300 hover:bg-white/20 cursor-default">
-                <motion.span className="flex items-center justify-center p-1.5 bg-rose-500/80 rounded-full text-white shadow-inner" variants={heartBeat} initial="initial" animate="animate">
+            {/* UPDATED FEATURE HIGHLIGHTS SECTION */}
+            <div className="flex flex-wrap gap-x-6 gap-y-4 justify-center md:justify-start">
+              <div className="flex items-center space-x-2.5 cursor-default">
+                <motion.span 
+                  className="flex items-center justify-center p-1.5 bg-rose-500/80 rounded-full text-white shadow-md" 
+                  variants={heartBeat} 
+                  initial="initial" 
+                  animate="animate"
+                >
                   <HeartPulse size={18} strokeWidth={2.5} />
                 </motion.span>
                 <span className="text-sm font-medium text-white tracking-wide">Health Boosters</span>
               </div>
-              <div className="flex items-center space-x-2.5 bg-white/10 backdrop-blur-sm px-5 py-2.5 rounded-full shadow-md border border-white/20 transition-all duration-300 hover:bg-white/20 cursor-default">
-                <motion.span className="flex items-center justify-center p-1.5 bg-emerald-500/80 rounded-full text-white shadow-inner" variants={actSwing} initial="initial" animate="animate">
+
+              <div className="flex items-center space-x-2.5 cursor-default">
+                <motion.span 
+                  className="flex items-center justify-center p-1.5 bg-emerald-500/80 rounded-full text-white shadow-md" 
+                  variants={actSwing} 
+                  initial="initial" 
+                  animate="animate"
+                >
                   <Activity size={18} strokeWidth={2.5} />
                 </motion.span>
                 <span className="text-sm font-medium text-white tracking-wide">Activity Enhancers</span>
               </div>
-                 <div className="flex items-center space-x-2.5 bg-white/10 backdrop-blur-sm px-5 py-2.5 rounded-full shadow-md border border-white/20 transition-all duration-300 hover:bg-white/20 cursor-default">
-                <motion.span className="flex items-center justify-center p-1.5 bg-orange-500 rounded-full text-white shadow-inner" variants={heartBeat} initial="initial" animate="animate">
+
+              <div className="flex items-center space-x-2.5 cursor-default">
+                <motion.span 
+                  className="flex items-center justify-center p-1.5 bg-orange-500 rounded-full text-white shadow-md" 
+                  variants={heartBeat} 
+                  initial="initial" 
+                  animate="animate"
+                >
                   <Dog size={18} strokeWidth={2.5} />
                 </motion.span>
                 <span className="text-sm font-medium text-white tracking-wide">Growth Boosters</span>
               </div>
-              <div className="flex items-center space-x-2.5 bg-white/10 backdrop-blur-sm px-5 py-2.5 rounded-full shadow-md border border-white/20 transition-all duration-300 hover:bg-white/20 cursor-default">
-                <motion.span className="flex items-center justify-center p-1.5 bg-emerald-700/80 rounded-full text-white shadow-inner" variants={actSwing} initial="initial" animate="animate">
+
+              <div className="flex items-center space-x-2.5 cursor-default">
+                <motion.span 
+                  className="flex items-center justify-center p-1.5 bg-emerald-700/80 rounded-full text-white shadow-md" 
+                  variants={actSwing} 
+                  initial="initial" 
+                  animate="animate"
+                >
                   <TreePine size={18} strokeWidth={2.5} />
                 </motion.span>
-                <span className="text-sm font-medium text-white tracking-wide"> Wellness Enhancers</span>
+                <span className="text-sm font-medium text-white tracking-wide">Wellness Enhancers</span>
               </div>
-              
             </div>
+            {/* END OF UPDATED FEATURE HIGHLIGHTS SECTION */}
+
           </div>
         </div>
       </section>
 
       <Home8 />
-       <div className=""><Home6 /></div>
-     
+      <div className=""><Home6 /></div>
       <Home7 />
       <div className=""><Home3 /></div>
       <div className=""><Home4 /></div>

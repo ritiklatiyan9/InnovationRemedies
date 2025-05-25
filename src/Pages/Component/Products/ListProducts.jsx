@@ -1598,7 +1598,7 @@ function ListProducts() {
                     <SelectItem value="relevance" className="text-xs sm:text-sm">Relevance</SelectItem>
                     <SelectItem value="price-asc" className="text-xs sm:text-sm">Price: Low to High</SelectItem>
                     <SelectItem value="price-desc" className="text-xs sm:text-sm">Price: High to Low</SelectItem>
-                  
+                    <SelectItem value="name-asc" className="text-xs sm:text-sm">Name: A to Z</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

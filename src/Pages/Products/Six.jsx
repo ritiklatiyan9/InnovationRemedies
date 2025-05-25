@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowRightCircle } from 'lucide-react';
 // Assuming this path is correct for your project structure
-import resolutionKitProductImage from '../../assets/Images/rs.png';
+import resolutionKitProductImage from '../../assets/Images/newresolutionkit.png';
 
 const resolutionKitData = {
   mainTitle: "RESOLUTION-KIT",

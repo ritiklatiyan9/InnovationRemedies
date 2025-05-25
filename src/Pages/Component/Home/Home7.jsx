@@ -104,7 +104,7 @@ const HeroSection = () => {
           >
             Compassionate Care
             <br />
-            For Your <span style={customStyleHighlight} className="text-sky-400 -tracking-tighter">Beloved Pets</span>
+            For Your <br /><span style={customStyleHighlight} className="text-sky-400 -tracking-tighter">Beloved Animals</span>
           </motion.h1>
 
           <motion.p

@@ -265,59 +265,7 @@ export default function EnhancedAboutUs() {
       <WaveDivider color="from-blue-100 to-emerald-100" />
 
       {/* Vision & Mission */}
-      <motion.section
-        className="py-20 bg-white relative z-10"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={staggerContainer}
-      >
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            <motion.div 
-              className="order-2 md:order-1 space-y-12"
-              variants={fadeIn}
-            >
-              <motion.div 
-                variants={fadeInScale}
-                whileHover={{ scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 100 }}
-                className="p-8 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 shadow-sm relative overflow-hidden"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-transparent opacity-30"></div>
-                <div className="flex items-center mb-4">
-                  <MissionIcon />
-                  <h2 className="text-2xl md:text-3xl font-bold ml-4 text-gray-800">Our Mission</h2>
-                </div>
-                <p className="text-gray-700 leading-relaxed text-lg">
-                  Revolutionize animal healthcare with AI-powered diagnostic tools and telemedicine platforms designed specifically for veterinary professionals. Our innovative solutions enable faster, more accurate diagnoses and remote consultations, helping veterinarians deliver high-quality care anytime, anywhere. Trusted in over 50 countries, our technology leverages advanced machine learning and real-time data analytics to support decision-making, reduce diagnostic errors, and streamline workflows.
-                </p>
-              </motion.div>
-            </motion.div>
-
-            <motion.div
-              className="order-1 md:order-2 flex justify-center"
-              variants={fadeIn}
-              initial={{ opacity: 0, scale: 0.8, rotate: -2 }}
-              whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-              viewport={{ once: true, amount: 0.5 }}
-              transition={{ duration: 0.8, type: 'spring' }}
-            >
-              <div className="relative">
-                <div className="absolute inset-0 bg-blue-200 rounded-xl transform rotate-3"></div>
-                <img 
-                  src="https://www.blogtyrant.com/wp-content/uploads/2011/02/best-about-us-pages.png" 
-                  alt="About our mission" 
-                  className="relative z-10 rounded-xl shadow-xl transform hover:rotate-0 transition-all duration-500 hover:scale-105"
-                />
-                <div className="absolute -bottom-4 -right-4 w-16 h-16 bg-emerald-400 rounded-full flex items-center justify-center text-white">
-                  <Award size={32} />
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </motion.section>
+      
 
       <WaveDivider inverted={true} color="from-emerald-100 to-blue-100" />
 
