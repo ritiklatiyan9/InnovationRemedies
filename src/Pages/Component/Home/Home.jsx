@@ -8,8 +8,8 @@ import Home4 from "./Home4";
 import Home6 from "./Home6";
 import Home7 from "./Home7";
 import Home8 from "./Home8";
-// import logo from "../../../assets/Images/logo.png"; // logo import wasn't used directly in the JSX, ogImageUrl uses a string path
-import videoSourceUrl from "../../../assets/Video/doc5.mp4";
+// import logo from "../../../assets/Images/logo.png"; // logo imp7ort wasn't used directly in the JSX, ogImageUrl uses a string path
+import videoSourceUrl from "../../../assets/Video/doc7.mp4";
 import { FlipWords } from "../../../components/ui/flips-words";
 import { PawPrint, HeartPulse, Activity, Dog, TreePine } from "lucide-react"; // PawPrint wasn't used, but keeping it as it was in original
 
