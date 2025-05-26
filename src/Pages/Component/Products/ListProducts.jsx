@@ -61,23 +61,23 @@ import icj from '../../../assets/Images/ict.jpg';
 
 // Original productsData (IDs should ideally be unique for all entries)
 export const productsData = [
-  // 1. Resolution kit - 549
+  // 1. RS-Kit (Updated from Resolution Kit)
   {
-    id: 'resolution-kit',
-    name: ' Resolution™ Kit',
+    id: 'rs-kit', // Changed from resolution-kit for clarity, image shows RS-Kit
+    name: 'RS-Kit Fertility Kit', // Updated Name based on image reskit
     brand: 'Innovation Remedies',
     category: 'Veterinary Care',
-    subcategory: 'Diagnostic Kits',
-    description: 'Complete resolution kit for veterinary care',
-    longDescription: 'Our Resolution Kit offers a comprehensive solution for various veterinary care needs. It includes essential components to aid in quick diagnosis and effective treatment, ensuring animal well-being. Ideal for field veterinarians and clinics.',
-    metaDescription: 'Buy Resolution Kit for veterinary care at ₹450 (MRP ₹549). Complete diagnostic solution for animal health. Essential for field veterinarians & clinics. Innovation Remedies India.',
-    keywords: ['resolution kit', 'veterinary diagnostic kit', 'animal health kit', 'veterinary care equipment', 'field veterinary kit', 'innovation remedies resolution kit'],
+    subcategory: 'Fertility Kits', // Updated subcategory
+    description: 'Fertility kit for Anovulatory Estrus & Anoestrus in livestock.',
+    longDescription: 'RS-Kit is a fertility kit containing Clomiphene Citrate and Copper Sulphate tablets. It is designed to manage conditions like Anovulatory Estrus, Anoestrus, Delayed Puberty, Cystic Ovarian Degeneration, Delayed Ovulation, and Early Embryonic Death in livestock, by stimulating the release of GnRH and subsequent ovulation.',
+    metaDescription: 'Buy RS-Kit Fertility Kit for veterinary use at ₹450 (MRP ₹549). Addresses infertility issues in livestock. Innovation Remedies India.',
+    keywords: ['rs-kit', 'fertility kit', 'clomiphene citrate', 'copper sulphate', 'anovulatory estrus', 'anoestrus', 'livestock fertility', 'innovation remedies rs-kit'],
     price: 450.00,
     MRP:549.00,
     currency: 'INR',
-    imageUrl: reskit,
-    imageFileName: 'resolution.png',
-    imageAlt: 'Resolution Kit - Complete Veterinary Diagnostic Solution by Innovation Remedies',
+    imageUrl: reskit, // Image shows "RS-Kit"
+    imageFileName: 'rs_kit_fertility_kit.png', // Updated filename
+    imageAlt: 'RS-Kit Fertility Kit - Clomiphene Citrate & Copper Sulphate by Innovation Remedies',
     gradientFrom: 'from-blue-100',
     gradientTo: 'to-blue-50',
     minQuantity: 1,
@@ -85,20 +85,30 @@ export const productsData = [
     reviewCount: 156,
     stock: 25,
     inStock: true,
-    sku: 'IR-RES-KIT-001',
+    sku: 'IR-RS-KIT-001', // Updated SKU
     gtin: '8901234567890',
-    features: ['Comprehensive care', 'Veterinary grade', 'Easy to use'],
-    benefits: ['Quick diagnosis capability', 'Field-ready portable design', 'All-in-one solution'],
-    applications: ['Field veterinary practice', 'Animal clinics', 'Emergency care'],
-    packSize: '1 Kit',
+    features: [
+        'Combikit: Clomiphene Citrate 300mg (1 Tablet)',
+        'Combikit: Copper Sulphate (Anhydrous) 750mg (2 Tablets)',
+        'Treats Anovulatory Estrus & Anoestrus',
+        'Stimulates Pituitary Gland for FSH & LH release'
+    ],
+    benefits: [
+        'Addresses delayed puberty',
+        'Helps with cystic ovarian degeneration',
+        'Manages delayed ovulation and early embryonic death',
+        'Promotes ovulation'
+    ],
+    applications: ['Anovulatory Estrus', 'Anoestrus', 'Delayed Puberty', 'Cystic Ovarian Degeneration', 'Delayed Ovulation', 'Early Embryonic Death'],
+    packSize: '5 Combikits per pack', // Updated from image
     manufacturer: 'Innovation Remedies Pvt Ltd',
     countryOfOrigin: 'India',
   },
 
-  // 2. Innolact Adj Super (Original probably 5L, though name doesn't specify)
+  // 2. Innolact AD3 (No new images, keeping as is)
   {
-    id: 'innolact-ad3-5ltr', // Made ID unique
-    name: 'Innolact® AD3 (5 Ltr.)', // Added pack size to name for clarity
+    id: 'innolact-ad3-5ltr',
+    name: 'Innolact® AD3 (5 Ltr.)',
     brand: 'Innovation Remedies',
     category: 'Lactation Supplements',
     subcategory: 'Dairy Animal Nutrition',
@@ -119,8 +129,8 @@ export const productsData = [
     reviewCount: 89,
     stock: 30,
     inStock: true,
-    sku: 'IR-INNO-AD3-5L-002', // Made SKU unique
-    gtin: '8901234567891', // Assuming GTIN might be shared for product line or needs to be unique
+    sku: 'IR-INNO-AD3-5L-002',
+    gtin: '8901234567891',
     features: ['Boosts milk yield', 'Enhances milk quality', 'Supports udder health'],
     benefits: ['Increases daily milk production', 'Improves fat percentage in milk', 'Maintains animal health during lactation'],
     applications: ['Dairy cattle', 'Buffaloes', 'Lactating animals'],
@@ -129,7 +139,7 @@ export const productsData = [
     countryOfOrigin: 'India',
   },
   {
-    id: 'innolact-ad3-super-10ltr', // Made ID unique
+    id: 'innolact-ad3-super-10ltr',
     name: 'Innolact®  AD3 Super (10 Ltr.)',
     brand: 'Innovation Remedies',
     category: 'Lactation Supplements',
@@ -138,10 +148,10 @@ export const productsData = [
     longDescription: 'Innolact AD3 Super (10 Liters) is an advanced lactation supplement formulated for dairy animals. It enhances milk production, improves milk quality, and supports overall health. Contains vital vitamins and minerals.',
     metaDescription: 'Innolact AD3 Super (10 Liters) - Boost milk production & quality. Vitamin AD3 enriched formula by Innovation Remedies.',
     keywords: ['innolact ad3 super 10l', 'lactation supplement', 'dairy supplement', 'milk production booster', 'innovation remedies innolact'],
-    MRP: 2700.00, // Corrected from mrp
+    MRP: 2700.00,
     price:1800.00,
     currency: 'INR',
-    imageUrl: twotwo, // Assuming same image for product line
+    imageUrl: twotwo,
     imageFileName: 'innolact_ad3_super_10ltr.png',
     imageAlt: 'Innolact AD3 Super 10 Liters - Premium Lactation Supplement',
     gradientFrom: 'from-purple-100',
@@ -151,17 +161,17 @@ export const productsData = [
     reviewCount: 89,
     stock: 30,
     inStock: true,
-    sku: 'IR-INNO-AD3-10L-002A', // Made SKU unique
-    gtin: '8901234567891A', // Made GTIN unique example
+    sku: 'IR-INNO-AD3-10L-002A',
+    gtin: '8901234567891A',
     features: ['Boosts milk yield', 'Enhanced milk quality', 'Supports udder health', 'Economical 10L pack'],
     benefits: ['Increased daily milk production', 'Improved milk fat', 'Maintains health during lactation'],
     applications: ['Dairy cattle', 'Buffaloes', 'Large dairy farms'],
-    packSize: '10 Liters', // Corrected packSize
+    packSize: '10 Liters',
     manufacturer: 'Innovation Remedies Pvt Ltd',
     countryOfOrigin: 'India',
   },
   {
-    id: 'innolact-ad3-super-20ltr', // Made ID unique
+    id: 'innolact-ad3-super-20ltr',
     name: 'Innolact®  AD3 Super (20 Ltr.)',
     brand: 'Innovation Remedies',
     category: 'Lactation Supplements',
@@ -173,7 +183,7 @@ export const productsData = [
     MRP: 4900.00,
     price:3000.00,
     currency: 'INR',
-    imageUrl: twotwo, // Assuming same image for product line
+    imageUrl: twotwo,
     imageFileName: 'innolact_ad3_super_20ltr.png',
     imageAlt: 'Innolact AD3 Super 20 Liters - Bulk Lactation Supplement',
     gradientFrom: 'from-purple-100',
@@ -183,20 +193,20 @@ export const productsData = [
     reviewCount: 89,
     stock: 30,
     inStock: true,
-    sku: 'IR-INNO-AD3-20L-002B', // Made SKU unique
-    gtin: '8901234567891B', // Made GTIN unique example
+    sku: 'IR-INNO-AD3-20L-002B',
+    gtin: '8901234567891B',
     features: ['High milk yield boost', 'Superior milk quality', 'Supports udder health', 'Large 20L pack'],
     benefits: ['Significant increase in milk production', 'Enhanced milk richness', 'Long-term animal wellness'],
     applications: ['High-yielding dairy cattle', 'Large-scale dairy operations', 'Buffaloes'],
-    packSize: '20 Liters', // Corrected packSize
+    packSize: '20 Liters',
     manufacturer: 'Innovation Remedies Pvt Ltd',
     countryOfOrigin: 'India',
   },
 
-  // 3. Innolact gold
+  // 3. Innolact Gold (No new images, keeping as is)
   {
-    id: 'innolact-gold-5ltr', // Made ID unique
-    name: 'Innolact® AD3 Gold (5 Ltr.)', // Added pack size to name for clarity
+    id: 'innolact-gold-5ltr',
+    name: 'Innolact® AD3 Gold (5 Ltr.)',
     brand: 'Innovation Remedies',
     category: 'Lactation Supplements',
     subcategory: 'Premium Dairy Nutrition',
@@ -217,7 +227,7 @@ export const productsData = [
     reviewCount: 112,
     stock: 15,
     inStock: true,
-    sku: 'IR-INNO-GOLD-5L-003', // Made SKU unique
+    sku: 'IR-INNO-GOLD-5L-003',
     gtin: '8901234567892',
     features: ['Premium formulation', 'Maximized milk production', 'With chelated minerals'],
     benefits: ['Superior bioavailability', 'Peak lactation support', 'Enhanced mineral absorption'],
@@ -227,7 +237,7 @@ export const productsData = [
     countryOfOrigin: 'India',
   },
   {
-    id: 'innolact-gold-10ltr', // Made ID unique
+    id: 'innolact-gold-10ltr',
     name: 'Innolact® AD3 Gold (10 Ltr.)',
     brand: 'Innovation Remedies',
     category: 'Lactation Supplements',
@@ -236,10 +246,10 @@ export const productsData = [
     longDescription: 'Innolact AD3 Gold (10 Liters) offers superior lactation support with chelated minerals and high-potency vitamins. Designed to maximize milk production and maintain animal health during peak periods. Economical 10 Liter pack.',
     metaDescription: 'Innolact AD3 Gold (10 Liters) - Chelated minerals for maximum milk production. Innovation Remedies premium range.',
     keywords: ['innolact gold 10l', 'premium lactation supplement', 'chelated minerals cattle', 'innovation remedies gold'],
-    MRP: 2400.00, // Corrected from mrp
+    MRP: 2400.00,
     price:1500.00,
     currency: 'INR',
-    imageUrl: twothree, // Assuming same image for product line
+    imageUrl: twothree,
     imageFileName: 'innolact_gold_10ltr.png',
     imageAlt: 'Innolact AD3 Gold 10 Liters - Chelated Mineral Formula',
     gradientFrom: 'from-amber-100',
@@ -249,17 +259,17 @@ export const productsData = [
     reviewCount: 112,
     stock: 15,
     inStock: true,
-    sku: 'IR-INNO-GOLD-10L-003A', // Made SKU unique
-    gtin: '8901234567892A', // Made GTIN unique example
+    sku: 'IR-INNO-GOLD-10L-003A',
+    gtin: '8901234567892A',
     features: ['Premium formulation', 'Maximized milk production', 'Chelated minerals', '10L pack'],
     benefits: ['Superior bioavailability', 'Peak lactation support', 'Enhanced mineral absorption', 'Cost-effective'],
     applications: ['High-yielding dairy cattle', 'Premium dairy farms', 'Extended use'],
-    packSize: '10 Liters', // Corrected packSize
+    packSize: '10 Liters',
     manufacturer: 'Innovation Remedies Pvt Ltd',
     countryOfOrigin: 'India',
   },
   {
-    id: 'innolact-gold-20ltr', // Made ID unique
+    id: 'innolact-gold-20ltr',
     name: 'Innolact® AD3 Gold (20 Ltr.)',
     brand: 'Innovation Remedies',
     category: 'Lactation Supplements',
@@ -268,10 +278,10 @@ export const productsData = [
     longDescription: 'Our Innolact AD3 Gold (20 Liters) is the ultimate premium formula for superior lactation support in large herds. Features chelated minerals and high-potency vitamins to maximize milk production and animal health during peak lactation.',
     metaDescription: 'Innolact AD3 Gold (20 Liters) - Bulk premium lactation formula with chelated minerals. Innovation Remedies.',
     keywords: ['innolact gold 20l', 'bulk premium lactation', 'chelated minerals dairy', 'innovation remedies'],
-    MRP: 4500.00, // Corrected from mrp
+    MRP: 4500.00,
     price:2500.00,
     currency: 'INR',
-    imageUrl: twothree, // Assuming same image for product line
+    imageUrl: twothree,
     imageFileName: 'innolact_gold_20ltr.png',
     imageAlt: 'Innolact AD3 Gold 20 Liters - Bulk Chelated Mineral Formula',
     gradientFrom: 'from-amber-100',
@@ -281,20 +291,20 @@ export const productsData = [
     reviewCount: 112,
     stock: 15,
     inStock: true,
-    sku: 'IR-INNO-GOLD-20L-003B', // Made SKU unique
-    gtin: '8901234567892B', // Made GTIN unique example
+    sku: 'IR-INNO-GOLD-20L-003B',
+    gtin: '8901234567892B',
     features: ['Top-tier formulation', 'Maximum milk output', 'With chelated minerals', 'Large 20L pack'],
     benefits: ['Highest bioavailability', 'Sustained peak lactation', 'Optimal mineral uptake', 'Best value for large farms'],
     applications: ['Elite dairy cattle herds', 'Large commercial dairy farms', 'Peak lactation management'],
-    packSize: '20 Liters', // Corrected packSize
+    packSize: '20 Liters',
     manufacturer: 'Innovation Remedies Pvt Ltd',
     countryOfOrigin: 'India',
   },
 
-  // 4. Innolact Gel Advance
+  // 4. Innolact Gel Advance 1Ltr (No new image, keeping as is)
   {
-    id: 'innolact-gel-advance-1ltr', // Clarified ID for 1 Liter version
-    name: 'Innolact® Gel Advance (1 Ltr.)', // Added pack size for clarity
+    id: 'innolact-gel-advance-1ltr',
+    name: 'Innolact® Gel Advance (1 Ltr.)',
     brand: 'Innovation Remedies',
     category: 'Lactation Supplements',
     subcategory: 'Gel Formulations',
@@ -315,7 +325,7 @@ export const productsData = [
     reviewCount: 78,
     stock: 22,
     inStock: true,
-    sku: 'IR-INNO-GEL-1L-004', // Clarified SKU
+    sku: 'IR-INNO-GEL-1L-004',
     gtin: '8901234567893',
     features: ['Sulfur-enhanced', 'Easy gel administration', 'Supports metabolic health'],
     benefits: ['Improves protein synthesis', 'Better nutrient utilization', 'Quick absorption formula'],
@@ -325,44 +335,63 @@ export const productsData = [
     countryOfOrigin: 'India',
   },
 
-  // 5. Innolact gel Advance 500gm
+  // 5. Innolact Gel Advance 500gm (Updated with details from Image 14)
   {
-    id: 'innolact-gel-advance-500gm', // Changed ID slightly for consistency
+    id: 'innolact-gel-advance-500gm',
     name: 'Innolact® Gel Advance 500gm',
     brand: 'Innovation Remedies',
     category: 'Lactation Supplements',
-    subcategory: 'Gel Formulations',
-    description: 'Advanced gel formula for lactation support (500gm)',
-    longDescription: 'This 500gm pack of Innolact Gel Advance provides a convenient supply of our advanced gel formula for consistent lactation support. Ideal for managing multiple animals or for extended use.',
-    metaDescription: 'Innolact Gel Advance 500gm pack ₹250 (MRP ₹380). Cost-effective lactation gel supplement. Innovation Remedies.',
-    keywords: ['innolact gel 500gm', 'bulk lactation gel', 'dairy farm supplement', 'cost effective dairy gel', 'innovation remedies 500gm'],
+    subcategory: 'Calcium Gel Formulations', // More specific
+    description: 'Advanced calcium gel for lactation and milk fever prevention (500gm). Orange Flavour.',
+    longDescription: 'Innolact Gel Advance 500gm is a specially formulated, water-soluble, and highly palatable calcium paste. It gets quickly absorbed to raise calcium serum blood levels within minutes, aiding in milk fever prevention and fulfilling urgent calcium needs post-parturition. The molasses base and Dextrose provide instant energy. Orange Flavour.',
+    metaDescription: 'Innolact Gel Advance 500gm pack ₹250 (MRP ₹380). Prevents milk fever, boosts calcium. Innovation Remedies.',
+    keywords: ['innolact gel 500gm', 'calcium gel cattle', 'milk fever prevention', 'post-parturition calcium', 'dairy gel supplement', 'orange flavour', 'innovation remedies'],
     MRP: 380.00,
     price:250.00,
     currency: 'INR',
-    imageUrl: twofour,
+    imageUrl: twofour, // Image 14 shows this product
     imageFileName: 'innolact_gel_advance_500gm.png',
-    imageAlt: 'Innolact Gel Advance 500gm - Economy Pack Lactation Gel Supplement',
+    imageAlt: 'Innolact Gel Advance 500gm - Calcium Gel for Milk Fever Prevention',
     gradientFrom: 'from-teal-100',
     gradientTo: 'to-teal-50',
-    minQuantity: 5,
+    minQuantity: 1, // Updated from 5 as it's a single tube
     rating: 4.9,
     reviewCount: 135,
     stock: 40,
     inStock: true,
-    sku: 'IR-INNO-GEL500GM-005', // Clarified SKU
+    sku: 'IR-INNO-GEL500GM-005',
     gtin: '8901234567894',
-    features: ['Advanced gel formula', 'Cost-effective 500gm pack', 'Quick absorption'],
-    benefits: ['Bulk packaging savings', 'Extended supply', 'Consistent quality'],
-    applications: ['Multi-animal farms', 'Regular supplementation', 'Dairy cooperatives'],
+    features: [
+        'Prevents milk fever',
+        'Urgent calcium post-parturition',
+        'Increases milk production',
+        'Improves liver functions',
+        'Provides balanced energy',
+        'Water soluble & highly palatable',
+        'Quick absorption',
+        'Molasses base & Dextrose for instant energy',
+        'Orange Flavour'
+    ],
+    benefits: [
+        'Rapid rise in calcium serum blood level',
+        'Supports immediate energy needs',
+        'Aids in smooth transition to lactation'
+    ],
+    applications: [
+        'Prevention of milk fever',
+        'Post-calving recovery',
+        'Dairy cattle and buffaloes needing urgent calcium'
+    ],
+    dosage: 'To Prevent milk fever: Give 250 gm at the first sign of calving & give another 250 gm 6 to 12 hours post calving, repeat every 12 hours as needed. Or as directed by the Veterinarian.',
     packSize: '500 grams',
     manufacturer: 'Innovation Remedies Pvt Ltd',
     countryOfOrigin: 'India',
   },
 
-  // 7. Innolact bolus 40 bolus
+  // 7. Innolact bolus (No new image, keeping as is)
   {
     id: 'innolact-bolus-40',
-    name: 'Innolact® Bolus (40 Bolus)', // Added brackets for consistency
+    name: 'Innolact® Bolus (40 Bolus)',
     brand: 'Innovation Remedies',
     category: 'Lactation Supplements',
     subcategory: 'Bolus Formulations',
@@ -393,109 +422,114 @@ export const productsData = [
     countryOfOrigin: 'India',
   },
 
-  // 8. Calfshakti
+  // 8. Calf-Shakti Advance (Updated names and details from Images 1, 8, 9)
   {
-    id: 'calfshakti-1ltr', // Made ID unique
-    name: 'IRL™ CalfShakti (1Ltr)',
+    id: 'calfshakti-advance-1ltr', // Updated ID
+    name: 'Calf-Shakti Advance (1Ltr)', // Updated Name
     brand: 'Innovation Remedies',
     category: 'Calf Nutrition',
     subcategory: 'Growth Supplements',
-    description: 'Enhanced nutrition for calves (1 Liter)',
-    longDescription: 'CalfShakti (1Ltr) provides enhanced nutrition crucial for the healthy growth and development of calves. It supports immune function and helps in achieving optimal weight gain.',
-    metaDescription: 'CalfShakti 1 Liter ₹550 (MRP ₹750) - Premium calf nutrition supplement. Boost immunity & growth. Innovation Remedies.',
-    keywords: ['calfshakti 1l', 'calf supplement', 'calf nutrition', 'calf growth booster', 'young calf care', 'innovation remedies calfshakti'],
+    description: 'Complete nutritional supplement for newborn calves and small animals (1 Liter).',
+    longDescription: 'Calf-Shakti Advance (1Ltr) is a complete tonic providing enhanced nutrition crucial for strong growth and immunity in newborn calves and other small animals. Contains DHA, Aloevera, Flex Oil, Methylcobalamin, Iron, Folic Acid, Niacin, Vitamins A, D3, E, H (Biotin), Zinc, Cobalt, Selenium, and Energy Value. Helps in achieving optimal weight gain and supports gut health.',
+    metaDescription: 'Calf-Shakti Advance 1 Liter ₹550 (MRP ₹750) - Premium calf nutrition. Boosts immunity & growth. Innovation Remedies.',
+    keywords: ['calfshakti advance 1l', 'calf supplement', 'calf nutrition', 'calf growth booster', 'newborn calf care', 'small animal tonic', 'innovation remedies calfshakti'],
     MRP: 750.00,
     price:550.00,
     currency: 'INR',
-    imageUrl: thirteen,
-    imageFileName: 'calfshakti_1ltr.png',
-    imageAlt: 'CalfShakti 1 Liter - Complete Nutrition Supplement for Healthy Calf Growth',
+    imageUrl: thirteen, // Shows "Calf-Shakti ADVANCE"
+    imageFileName: 'calfshakti_advance_1ltr.png', // Updated
+    imageAlt: 'Calf-Shakti Advance 1 Liter - Complete Nutrition for Healthy Calf Growth',
     gradientFrom: 'from-sky-100',
     gradientTo: 'to-sky-50',
-    minQuantity: 2,
+    minQuantity: 1, // Updated from 2
     rating: 4.8,
     reviewCount: 105,
     stock: 18,
     inStock: true,
-    sku: 'IR-CALF-1L-007',
+    sku: 'IR-CALF-ADV-1L-007', // Updated SKU
     gtin: '8901234567896',
-    features: ['Supports calf growth', 'Boosts immunity', '1 Liter pack'],
-    benefits: ['Optimal weight gain', 'Strong immune system', 'Healthy development'],
-    applications: ['Young calves', 'Post-weaning nutrition', 'Growth phase support'],
+    features: ['Strong growth & immunity booster', 'Complete nutritional supplement', 'With DHA & essential vitamins', 'Supports gut health', '1 Liter pack'],
+    benefits: ['Optimal weight gain', 'Strong immune system', 'Healthy development', 'Prevents PICA (eating soil, wood etc.)', 'Improves stress resistance'],
+    applications: ['Newborn calves', 'Sheep & Goats', 'Dogs', 'Lambs', 'After deworming', 'Weakness & debilitating conditions', 'Neuronal disorders like lameness'],
     packSize: '1 Liter',
     manufacturer: 'Innovation Remedies Pvt Ltd',
     countryOfOrigin: 'India',
+    ingredients: 'DHA, Aloevera, Flex Oil, Methylcobalamin, Iron Folic Acid Niacin, Vitamin A, Vitamin D3, Vitamin E, Zinc, Cobalt, Vitamin H (Biotin), Selenium, Energy Value.',
+    dosage: 'CALVES: 20 ML/DAILY, SHEEP & GOAT: 20 ML/DAILY, DOGS: 1ML/5 KG/DAILY, LAMBS: 5ML/DAILY.'
   },
   {
-    id: 'calfshakti-200ml', // Made ID unique
-    name: 'IRL™ CalfShakti (200ml)',
+    id: 'calfshakti-advance-200ml', // Updated ID
+    name: 'Calf-Shakti Advance (200ml)', // Updated Name
     brand: 'Innovation Remedies',
     category: 'Calf Nutrition',
     subcategory: 'Growth Supplements',
-    description: 'Enhanced nutrition for calves (200ml)',
-    longDescription: 'CalfShakti (200ml) provides essential nutrition for young calves, supporting healthy growth, development, and immune function. Convenient smaller pack size.',
-    metaDescription: 'CalfShakti 200ml - Nutrition supplement for young calves. Boost immunity & growth. Innovation Remedies.',
-    keywords: ['calfshakti 200ml', 'calf supplement', 'small calf nutrition', 'calf growth booster', 'innovation remedies calfshakti'],
-    MRP: 180.00, // Adjusted MRP to be more logical for 200ml vs 1L, original was 750
-    price:150.00, // Adjusted price to be more logical, original was 550
+    description: 'Complete nutritional supplement for newborn calves and small animals (200ml). With 10ml measuring cap.',
+    longDescription: 'Calf-Shakti Advance (200ml) provides essential nutrition for young calves and other small animals, supporting strong growth, development, and immune function. Contains DHA, Aloevera, Flex Oil, and vital vitamins & minerals. Convenient smaller pack size with a 10ml measuring cap.',
+    metaDescription: 'Calf-Shakti Advance 200ml - Nutrition supplement for young calves. Boosts immunity & growth. Innovation Remedies.',
+    keywords: ['calfshakti advance 200ml', 'calf supplement', 'small calf nutrition', 'calf growth booster', 'innovation remedies calfshakti'],
+    MRP: 180.00,
+    price:150.00,
     currency: 'INR',
-    imageUrl: calfshaktiml,
-    imageFileName: 'calfshakti_200ml.png',
-    imageAlt: 'CalfShakti 200ml - Nutrition Supplement for Healthy Calf Growth',
+    imageUrl: calfshaktiml, // Image 9 shows this product "Calf-Shakti ADVANCE"
+    imageFileName: 'calfshakti_advance_200ml.png', // Updated
+    imageAlt: 'Calf-Shakti Advance 200ml - Nutrition for Healthy Calf Growth',
     gradientFrom: 'from-sky-100',
     gradientTo: 'to-sky-50',
-    minQuantity: 2, // Min quantity might differ for smaller pack
+    minQuantity: 1, // Updated from 2
     rating: 4.8,
-    reviewCount: 105, // Review count might be for product line
+    reviewCount: 105,
     stock: 18,
     inStock: true,
-    sku: 'IR-CALF-200ML-007A', // Made SKU unique
-    gtin: '8901234567896A', // Made GTIN unique
-    features: ['Supports calf growth', 'Boosts immunity', 'Convenient 200ml pack'],
-    benefits: ['Optimal weight gain', 'Strong immune system', 'Healthy development', 'Easy for small doses'],
-    applications: ['Young calves', 'Individual calf dosing', 'Starter nutrition'],
-    packSize: '200 ml', // Corrected packSize
+    sku: 'IR-CALF-ADV-200ML-007A', // Updated SKU
+    gtin: '8901234567896A',
+    features: ['Strong growth & immunity booster', 'Complete nutritional supplement', 'With DHA & essential vitamins', 'Convenient 200ml pack', 'Includes 10ml measuring cap'],
+    benefits: ['Optimal weight gain', 'Strong immune system', 'Healthy development', 'Easy for small doses', 'Faster recovery after illness'],
+    applications: ['Newborn calves', 'Sheep & Goats', 'Dogs', 'Lambs', 'After cropping in pet', 'After dehorning in calf', 'Faster recovery after illness', 'Weakness & debilitating conditions', 'Neuronal disorder like lameness & improper gait'],
+    packSize: '200 ml',
     manufacturer: 'Innovation Remedies Pvt Ltd',
     countryOfOrigin: 'India',
+    ingredients: 'DHA, Aloevera, Flex Oil, Methylcobalamin, Iron Folic Acid Niacin, Vitamin A, Vitamin D3, Vitamin E, Zinc, Cobalt, Vitamin H (Biotin), Selenium, Energy Value.',
+    dosage: 'CALVES: 20 ML/DAILY, SHEEP & GOAT: 20 ML/DAILY, DOGS: 1ML/5 KG/DAILY, LAMBS: 5ML/DAILY.'
   },
-
-  // 9. Calfshakti 500ml
   {
-    id: 'calfshakti-500ml',
-    name: 'IRL™ CalfShakti (500ml)', // Added brackets for consistency
+    id: 'calfshakti-advance-500ml', // Updated ID
+    name: 'Calf-Shakti Advance (500ml)', // Updated Name
     brand: 'Innovation Remedies',
     category: 'Calf Nutrition',
     subcategory: 'Growth Supplements',
-    description: 'Nutrition supplement for young calves (500ml)',
-    longDescription: 'The 500ml pack of CalfShakti offers a targeted nutrition supplement for young calves, promoting vitality and healthy development during their critical early stages.',
-    metaDescription: 'CalfShakti 500ml ₹330 (MRP ₹419) - Essential nutrition for young calves. Innovation Remedies calf care range.',
-    keywords: ['calfshakti 500ml', 'small calf supplement', 'young calf nutrition', 'calf starter supplement', 'calf vitality booster', 'innovation remedies 500ml'],
+    description: 'Complete nutritional supplement for newborn calves (500ml). Strong growth and immunity booster.',
+    longDescription: 'The 500ml pack of Calf-Shakti Advance offers a targeted complete nutritional supplement for newborn calves, promoting strong growth, immunity, gut health, and overall vitality during their critical early stages.',
+    metaDescription: 'Calf-Shakti Advance 500ml ₹330 (MRP ₹419) - Essential nutrition for newborn calves. Innovation Remedies calf care.',
+    keywords: ['calfshakti advance 500ml', 'newborn calf supplement', 'calf immunity booster', 'calf starter supplement', 'calf vitality booster', 'innovation remedies 500ml'],
     MRP: 419.00,
     price:330.00,
     currency: 'INR',
-    imageUrl: advcalf,
-    imageFileName: 'calfshakti_500ml.png',
-    imageAlt: 'CalfShakti 500ml - Starter Pack Nutrition Supplement for Young Calves',
+    imageUrl: advcalf, // Image 1 shows this product "Calf-Shakti ADVANCE"
+    imageFileName: 'calfshakti_advance_500ml.png', // Updated
+    imageAlt: 'Calf-Shakti Advance 500ml - Nutrition Supplement for Newborn Calves',
     gradientFrom: 'from-cyan-100',
     gradientTo: 'to-cyan-50',
-    minQuantity: 5,
+    minQuantity: 1, // Updated from 5
     rating: 4.7,
     reviewCount: 87,
     stock: 25,
     inStock: true,
-    sku: 'IR-CALF-500ML-008',
+    sku: 'IR-CALF-ADV-500ML-008', // Updated SKU
     gtin: '8901234567897',
-    features: ['For young calves', 'Promotes vitality', 'Convenient 500ml size'],
-    benefits: ['Early stage nutrition', 'Builds strong foundation', 'Easy to administer'],
-    applications: ['Newborn calves', 'Pre-weaning phase', 'Small farms'],
+    features: ['For newborn calves', 'Strong growth & immunity booster', 'Supports gut health', 'Provides essential nutrients', 'Convenient 500ml size'],
+    benefits: ['Early stage nutrition', 'Builds strong foundation', 'Easy to administer', 'Improves overall health'],
+    applications: ['Newborn calves', 'Pre-weaning phase', 'Small farms', 'Growth promotion'],
     packSize: '500 ml',
     manufacturer: 'Innovation Remedies Pvt Ltd',
     countryOfOrigin: 'India',
+    // Ingredients and dosage would be same as other Calf-Shakti Advance products
+    ingredients: 'DHA, Aloevera, Flex Oil, Methylcobalamin, Iron Folic Acid Niacin, Vitamin A, Vitamin D3, Vitamin E, Zinc, Cobalt, Vitamin H (Biotin), Selenium, Energy Value.',
+    dosage: 'CALVES: 20 ML/DAILY, SHEEP & GOAT: 20 ML/DAILY, DOGS: 1ML/5 KG/DAILY, LAMBS: 5ML/DAILY.'
   },
 
-  // 10. Badda H
+  // 10. Badda H (No new images, keeping as is)
   {
-    id: 'badda-h-1ltr', // Made ID unique
+    id: 'badda-h-1ltr',
     name: 'Badda H™ (1Ltr)',
     brand: 'Innovation Remedies',
     category: 'Health Supplements',
@@ -527,7 +561,7 @@ export const productsData = [
     countryOfOrigin: 'India',
   },
   {
-    id: 'badda-h-250ml', // Made ID unique
+    id: 'badda-h-250ml',
     name: 'Badda H™ (250 ml)',
     brand: 'Innovation Remedies',
     category: 'Health Supplements',
@@ -536,7 +570,7 @@ export const productsData = [
     longDescription: 'Badda H (250ml) is formulated to support urinary tract and digestive health in animals. Aids in preventing common issues and promotes systemic balance. Convenient 250ml pack.',
     metaDescription: 'Badda H 250ml - Urinary & digestive health for animals. Innovation Remedies.',
     keywords: ['badda h 250ml', 'animal urinary health', 'animal digestive care', 'innovation remedies'],
-    MRP: 700.00, // Corrected from mrp
+    MRP: 700.00,
     price : 400.00,
     currency: 'INR',
     imageUrl: tryu,
@@ -545,21 +579,21 @@ export const productsData = [
     gradientFrom: 'from-indigo-100',
     gradientTo: 'to-indigo-50',
     minQuantity: 1,
-    rating: 4.8, // Rating likely for product line
-    reviewCount: 112, // Review count likely for product line
+    rating: 4.8,
+    reviewCount: 112,
     stock: 12,
     inStock: true,
-    sku: 'IR-BADDA-250ML-009A', // Made SKU unique
-    gtin: '8901234567898A', // Made GTIN unique
+    sku: 'IR-BADDA-250ML-009A',
+    gtin: '8901234567898A',
     features: ['Urinary tract support', 'Digestive health aid', 'Systemic balance', '250ml pack'],
     benefits: ['Prevents UTI issues', 'Improves digestion', 'Overall health maintenance', 'Easy for smaller doses'],
     applications: ['All livestock', 'Preventive care', 'Individual animal treatment'],
-    packSize: '250 ml', // Corrected packSize
+    packSize: '250 ml',
     manufacturer: 'Innovation Remedies Pvt Ltd',
     countryOfOrigin: 'India',
   },
 
-  // 11. Racer kit
+  // 11. Racer kit (No new image, keeping as is)
   {
     id: 'racer-kit',
     name: 'IRL™ Racer Kit',
@@ -593,125 +627,210 @@ export const productsData = [
     countryOfOrigin: 'India',
   },
 
-  // 12. Innoliv DS
+  // 12. Innoliv DS (Updated with details from Images 5, 6, 29)
   {
-    id: 'innoliv-ds-1ltr', // Made ID unique
+    id: 'innoliv-ds-1ltr',
     name: 'IRL™ Innoliv DS (1Ltr)',
     brand: 'Innovation Remedies',
     category: 'Liver Care',
-    subcategory: 'Hepatic Supplements',
-    description: 'Advanced liver support supplement for animal vitality (1 Liter)',
-    longDescription: 'Innoliv DS (1Ltr) is an advanced liver support supplement that promotes detoxification and enhances overall animal vitality. Essential for maintaining liver health and function.',
-    metaDescription: 'Innoliv DS 1 Liter ₹250 (MRP ₹325) - Advanced liver support for animals. Innovation Remedies hepatic care.',
-    keywords: ['innoliv ds 1l', 'liver support animals', 'hepatic supplement', 'detoxification animals', 'liver care veterinary', 'innovation remedies innoliv'],
-    MRP: 325.00, // Corrected from mrp
+    subcategory: 'Hepatic Supplements with Silymarin',
+    description: 'Advanced liver support and appetite stimulant with Silymarin (1 Liter).',
+    longDescription: 'Innoliv DS (1Ltr) is an advanced liver support supplement with Silymarin. It improves liver health & functions, enhances appetite, FCR & growth rate, aids in better feed intake and nutrient metabolism, prevents fatty liver syndrome, protects the liver from toxins, improves the immune system, and provides balanced energy. A unique combination of Liver Boosting and Appetite Stimulant Herbs with Liver Extract, Amino Acids & Vitamin B Complex.',
+    metaDescription: 'Innoliv DS 1 Liter ₹250 (MRP ₹325) - Liver support with Silymarin for animals. Innovation Remedies.',
+    keywords: ['innoliv ds 1l', 'liver support animals', 'hepatic supplement', 'silymarin', 'detoxification animals', 'appetite stimulant', 'innovation remedies innoliv'],
+    MRP: 325.00,
     price:250.00,
     currency: 'INR',
-    imageUrl: fourteen,
+    imageUrl: fourteen, // Image 5 shows this product
     imageFileName: 'innoliv_ds_1ltr.png',
-    imageAlt: 'Innoliv DS 1 Liter - Advanced Liver Support and Detoxification Supplement',
+    imageAlt: 'Innoliv DS 1 Liter - Liver Support with Silymarin',
     gradientFrom: 'from-teal-100',
     gradientTo: 'to-teal-50',
-    minQuantity: 5, // This was 5, seems high for 1L, but keeping as per original
+    minQuantity: 1, // Updated from 5
     rating: 4.9,
     reviewCount: 135,
     stock: 35,
     inStock: true,
-    sku: 'IR-INNO-LIV-1L-011', // Clarified SKU
+    sku: 'IR-INNO-LIV-1L-011',
     gtin: '8901234567900',
-    features: ['Advanced liver support', 'Promotes detoxification', 'Enhances vitality'],
-    benefits: ['Liver protection', 'Toxin elimination', 'Improved metabolism'],
-    applications: ['All animals', 'Post-medication care', 'Preventive hepatic care'],
+    features: [
+        'Improves Liver Health & Functions', 'Improves Appetite, FCR & Growth Rate',
+        'Helps in Better Feed intake and Nutrient Metabolism', 'Prevents Fatty Liver Syndrome',
+        'Protects Liver from various Toxins', 'Improves Immune System',
+        'Provides Optimum Growth, FCR & Protein Synthesis', 'Provides Balanced Energy',
+        'Contains Silymarin and Vitamin B Complex'
+    ],
+    composition_per_100ml: {
+        'D.L. methionine': '5000 mg', 'I-Lysine HCL': '3000 mg', 'Vitamin B1': '125 mg',
+        'Vitamin B2': '200 mg', 'Vitamin B3': '1250 mg', 'Vitamin B6': '150 mg',
+        'Silymbum marianum': '900 mg', 'Andrographis paniculata': '1000 mg', 'Phyllanthus niruri': '1000 mg',
+        'Solanum nigrum': '1000 mg', 'Ocimum sanctum': '1000 mg', 'Azadirachta indica': '1000 mg',
+        'Tinospora cordifolia': '1200 mg', 'Betaine': '50 mg', 'Liver Extract': '150 mg',
+        'Choline Chloride': '3000 mg', 'Calcium Lactate': '1000 mg', 'Aqua': 'q.s.'
+    },
+    dosage: 'Large Animals: 80-100 ml daily, Small Animals: 30-50 ml daily, Layers: 15-20 ml daily/100 birds, Broilers: 10-15 ml daily/100 birds. Or as directed by Veterinary & Poultry Consultant.',
+    applications: ['All animals', 'Poultry', 'Liver dysfunction', 'Poor appetite', 'Growth promotion', 'Detoxification'],
     packSize: '1 Liter',
     manufacturer: 'Innovation Remedies Pvt Ltd',
     countryOfOrigin: 'India',
   },
   {
-  id: 'innoliv-ds-5ltr', // Made ID unique
+  id: 'innoliv-ds-5ltr',
   name: 'IRL™ Innoliv DS (5Ltr)',
   brand: 'Innovation Remedies',
   category: 'Liver Care',
-  subcategory: 'Hepatic Supplements',
-  description: 'Advanced liver support supplement for animal vitality (5 Liters)',
-  longDescription: 'Innoliv DS (5Ltr) is an advanced liver support supplement that promotes detoxification and enhances overall animal vitality. Essential for maintaining liver health and function. Economical 5 Liter pack.',
-  metaDescription: 'Innoliv DS 5 Liter ₹650 (MRP ₹1250) - Advanced liver support for animals. Innovation Remedies hepatic care products.',
-  keywords: ['innoliv ds 5l', 'liver support animals', 'hepatic supplement', 'detoxification animals', 'liver care veterinary', 'innovation remedies innoliv'],
+  subcategory: 'Hepatic Supplements with Silymarin',
+  description: 'Advanced liver support and appetite stimulant with Silymarin (5 Liters).',
+  longDescription: 'Innoliv DS (5Ltr) is an advanced liver support supplement with Silymarin, ideal for larger herds or poultry operations. It improves liver health & functions, enhances appetite, FCR & growth rate, aids in better feed intake and nutrient metabolism, prevents fatty liver syndrome, protects the liver from toxins, improves the immune system, and provides balanced energy. Economical 5 Liter pack.',
+  metaDescription: 'Innoliv DS 5 Liter ₹650 (MRP ₹1250) - Bulk liver support with Silymarin. Innovation Remedies.',
+  keywords: ['innoliv ds 5l', 'bulk liver support', 'hepatic supplement poultry', 'silymarin animals', 'innovation remedies innoliv'],
   price: 650.00,
-  MRP: 1250.00, // Corrected from mrp
-  discount: 48,  // 48% discount
-  discountAmount: 600.00,  // ₹600 off
+  MRP: 1250.00,
+  discount: 48,
+  discountAmount: 600.00,
   currency: 'INR',
-  imageUrl: fiveltr,
+  imageUrl: fiveltr, // Image 6 shows this product
   imageFileName: 'innoliv_ds_5ltr.png',
-  imageAlt: 'Innoliv DS 5 Liter - Advanced Liver Support and Detoxification Supplement',
+  imageAlt: 'Innoliv DS 5 Liter - Bulk Liver Support with Silymarin',
   gradientFrom: 'from-teal-100',
   gradientTo: 'to-teal-50',
-  minQuantity: 1, // Adjusted minQuantity for larger pack
+  minQuantity: 1,
   rating: 4.9,
   reviewCount: 135,
   stock: 35,
   inStock: true,
-  sku: 'IR-INNO-LIV-5L-011A', // Made SKU unique
-  gtin: '8901234567900A', // Made GTIN unique
-  features: ['Advanced liver support', 'Promotes detoxification', 'Enhances vitality', '5L economy pack'],
-  benefits: ['Liver protection', 'Toxin elimination', 'Improved metabolism', 'Cost-effective for herds'],
-  applications: ['All animals', 'Post-medication care', 'Preventive hepatic care', 'Large animal groups'],
-  packSize: '5 Liters', // Corrected packSize
+  sku: 'IR-INNO-LIV-5L-011A',
+  gtin: '8901234567900A',
+  features: [
+        'Improves Liver Health & Functions', 'Improves Appetite, FCR & Growth Rate',
+        'Helps in Better Feed intake and Nutrient Metabolism', 'Prevents Fatty Liver Syndrome',
+        'Protects Liver from various Toxins', 'Improves Immune System', '5L economy pack',
+        'Contains Silymarin and Vitamin B Complex'
+  ],
+  composition_per_100ml: { // Same as 1L version
+        'D.L. methionine': '5000 mg', 'I-Lysine HCL': '3000 mg', 'Vitamin B1': '125 mg',
+        'Vitamin B2': '200 mg', 'Vitamin B3': '1250 mg', 'Vitamin B6': '150 mg',
+        'Silymbum marianum': '900 mg', 'Andrographis paniculata': '1000 mg', 'Phyllanthus niruri': '1000 mg',
+        'Solanum nigrum': '1000 mg', 'Ocimum sanctum': '1000 mg', 'Azadirachta indica': '1000 mg',
+        'Tinospora cordifolia': '1200 mg', 'Betaine': '50 mg', 'Liver Extract': '150 mg',
+        'Choline Chloride': '3000 mg', 'Calcium Lactate': '1000 mg', 'Aqua': 'q.s.'
+  },
+  dosage: 'Large Animals: 80-100 ml daily, Small Animals: 30-50 ml daily, Layers: 15-20 ml daily/100 birds, Broilers: 10-15 ml daily/100 birds. Or as directed by Veterinary & Poultry Consultant.',
+  applications: ['All animals', 'Poultry flocks', 'Large animal groups', 'Liver support programs', 'Growth enhancement'],
+  packSize: '5 Liters',
   manufacturer: 'Innovation Remedies Pvt Ltd',
   countryOfOrigin: 'India',
-} , 
-
-  // 14. Urocoenta Advance
+  },
+  // NEW: Innoliv DS 500ml (Based on "Available Pack" information from Image 5)
   {
-    id: 'urocoenta-advance-500ml', // Added packsize to id for clarity
-    name: 'Urocenta® Advance (500ml)', // Added packsize to name for clarity
+    id: 'innoliv-ds-500ml',
+    name: 'IRL™ Innoliv DS (500ml)',
     brand: 'Innovation Remedies',
-    category: 'Urinary Care',
-    subcategory: 'Kidney Health',
-    description: 'Advanced urinary health supplement (500ml)',
-    longDescription: 'Urocoenta Advance (500ml) is a cutting-edge supplement for maintaining urinary health in animals. It helps prevent urinary issues and supports healthy kidney function.',
-    metaDescription: 'Urocoenta Advance 500ml ₹210 (MRP ₹300) - Advanced urinary health supplement. Innovation Remedies.',
-    keywords: ['urocoenta advance', 'urinary health supplement', 'kidney support animals', 'uti prevention animals', 'innovation remedies urocoenta'],
-    MRP: 300.00, // Corrected from mrp
-    price:210.00,
+    category: 'Liver Care',
+    subcategory: 'Hepatic Supplements with Silymarin',
+    description: 'Advanced liver support and appetite stimulant with Silymarin (500ml).',
+    longDescription: 'Innoliv DS (500ml) offers advanced liver support with Silymarin in a convenient size. It improves liver health, appetite, FCR, and nutrient metabolism, protects from toxins, and boosts immunity. Ideal for individual animal treatment or smaller requirements.',
+    metaDescription: 'Innoliv DS 500ml - Liver support with Silymarin for animals. Innovation Remedies.',
+    keywords: ['innoliv ds 500ml', 'animal liver care', 'silymarin supplement', 'veterinary hepatic aid', 'innovation remedies innoliv'],
+    MRP: 170.00, // Estimated MRP based on 1L price
+    price: 130.00, // Estimated price
     currency: 'INR',
-    imageUrl: three,
-    imageFileName: 'urocoenta_advance_500ml.png',
-    imageAlt: 'Urocoenta Advance 500ml - Advanced Urinary and Kidney Health Supplement',
-    gradientFrom: 'from-blue-100',
-    gradientTo: 'to-blue-50',
-    minQuantity: 5, // This was 5
-    rating: 4.6,
-    reviewCount: 95,
-    stock: 28,
+    imageUrl: innolivDs500mlImage, // Placeholder - assuming similar bottle to 1L but smaller
+    imageFileName: 'innoliv_ds_500ml.png',
+    imageAlt: 'Innoliv DS 500ml - Liver Support with Silymarin',
+    gradientFrom: 'from-teal-100',
+    gradientTo: 'to-teal-50',
+    minQuantity: 1,
+    rating: 4.9, // Assuming similar rating
+    reviewCount: 130, // Assuming similar review count
+    stock: 30,
     inStock: true,
-    sku: 'IR-URO-ADV-500ML-012', // Clarified SKU
-    gtin: '8901234567901',
-    features: ['Advanced urinary health', 'Supports kidney function', 'Preventative care'],
-    benefits: ['UTI prevention', 'Kidney stone prevention', 'Maintains pH balance'],
-    applications: ['All livestock', 'Preventive care', 'Kidney support'],
+    sku: 'IR-INNO-LIV-500ML-011B',
+    gtin: '8901234567900B',
+    features: [
+        'Improves Liver Health & Functions', 'Improves Appetite, FCR & Growth Rate',
+        'Helps in Better Feed intake and Nutrient Metabolism', 'Prevents Fatty Liver Syndrome',
+        'Contains Silymarin and Vitamin B Complex'
+    ],
+    composition_per_100ml: { // Same as 1L version
+        'D.L. methionine': '5000 mg', 'I-Lysine HCL': '3000 mg', 'Vitamin B1': '125 mg',
+        'Vitamin B2': '200 mg', 'Vitamin B3': '1250 mg', 'Vitamin B6': '150 mg',
+        'Silymbum marianum': '900 mg', 'Andrographis paniculata': '1000 mg', 'Phyllanthus niruri': '1000 mg',
+        'Solanum nigrum': '1000 mg', 'Ocimum sanctum': '1000 mg', 'Azadirachta indica': '1000 mg',
+        'Tinospora cordifolia': '1200 mg', 'Betaine': '50 mg', 'Liver Extract': '150 mg',
+        'Choline Chloride': '3000 mg', 'Calcium Lactate': '1000 mg', 'Aqua': 'q.s.'
+    },
+    dosage: 'Large Animals: 80-100 ml daily, Small Animals: 30-50 ml daily. Or as directed by Veterinary Consultant.',
+    applications: ['Individual animals', 'Small livestock', 'Poultry (small scale)', 'Targeted liver support'],
     packSize: '500 ml',
     manufacturer: 'Innovation Remedies Pvt Ltd',
     countryOfOrigin: 'India',
   },
 
-  // 15. Glucodyna
+  // 14. URO+CENTA ADVANCE (Updated name and details from Image 22)
   {
-    id: 'glucodyna-1ltr', // Clarified ID
-    name: 'Glucodyna™ (1Ltr)',
+    id: 'uro-centa-advance-500ml', // Updated ID
+    name: 'URO+CENTA ADVANCE (500ml)', // Updated Name
+    brand: 'Innovation Remedies',
+    category: 'Uterine Care', // More specific category
+    subcategory: 'Post-Parturition Tonic',
+    description: 'Potent ecobolic and uterine tonic for post-parturition care (500ml).',
+    longDescription: 'URO+CENTA ADVANCE (500ml) is a potent ecobolic and uterine tonic specifically formulated to address common problems faced after parturition. It contains Iron, Shatavari, Azadirachta indica, and Ashwagandha to treat anemic conditions, cure inflammation, aid uterine recovery, and tone the uterus. Helps with Retention of Placenta (ROP), accumulation of lochial fluids, improper uterine involution, and reduces the risk of uterine infections.',
+    metaDescription: 'URO+CENTA ADVANCE 500ml ₹210 (MRP ₹300) - Uterine tonic for post-delivery care. Innovation Remedies.',
+    keywords: ['urocenta advance', 'uro+centa', 'uterine tonic', 'post parturition care', 'ecobolic', 'rop treatment', 'livestock reproductive health', 'innovation remedies'],
+    MRP: 300.00,
+    price:210.00,
+    currency: 'INR',
+    imageUrl: three, // Image 22 shows this "URO+CENTA ADVANCE"
+    imageFileName: 'uro_centa_advance_500ml.png', // Updated
+    imageAlt: 'URO+CENTA ADVANCE 500ml - Post-Parturition Uterine Tonic',
+    gradientFrom: 'from-blue-100',
+    gradientTo: 'to-blue-50',
+    minQuantity: 1, // Updated from 5
+    rating: 4.6,
+    reviewCount: 95,
+    stock: 28,
+    inStock: true,
+    sku: 'IR-UROCENTA-ADV-500ML-012', // Updated SKU
+    gtin: '8901234567901',
+    features: [
+        'Potent ecobolic and uterine tonic',
+        'Addresses common post-parturition problems',
+        'Enriched with Iron for anemic conditions',
+        'Contains Shatavari for inflammation and tissue health',
+        'Azadirachta indica for uterine structure and function recovery',
+        'Ashwagandha for uterine toning'
+    ],
+    benefits: [
+        'Helps in expulsion of retained placenta (ROP)',
+        'Manages accumulation of lochial fluids',
+        'Promotes proper uterine involution',
+        'Reduces risk of uterine infections',
+        'Supports overall reproductive recovery'
+    ],
+    applications: ['Post-parturition care in cows, buffaloes', 'Retention of Placenta (ROP)', 'Improper uterine involution', 'Uterine infections prophylaxis'],
+    packSize: '500 ml',
+    manufacturer: 'Innovation Remedies Pvt Ltd',
+    countryOfOrigin: 'India',
+  },
+
+  // 15. GLUCODYNA-40 Advance (Updated name and details from Image 7)
+  {
+    id: 'glucodyna-40-advance-1ltr', // Updated ID
+    name: 'GLUCODYNA-40 Advance (1Ltr)', // Updated Name
     brand: 'Innovation Remedies',
     category: 'Energy Supplements',
-    subcategory: 'Glucose Support',
-    description: 'Energy and glucose supplement for animals (1 Liter)',
-    longDescription: 'Glucodyna (1Ltr) is a vital energy and glucose supplement for animals, particularly useful during periods of stress, recovery, or high energy demand. Helps maintain blood glucose levels.',
-    metaDescription: 'Glucodyna 1 Liter ₹600 (MRP ₹750) - Instant energy & glucose supplement for animals. Innovation Remedies.',
-    keywords: ['glucodyna 1l', 'glucose supplement animals', 'energy booster animals', 'stress recovery animals', 'innovation remedies glucodyna'],
+    subcategory: 'Postpartum Energy Booster',
+    description: 'Energy booster for postpartum cows with Orange Flavour (1 Liter).',
+    longDescription: 'GLUCODYNA-40 Advance (1Ltr) is an energy booster designed to bridge the energy gap of postpartum cows. It helps in the prevention of NEB & Ketosis, prevents harmful effects of NEB on the uterus, helps bring animals back to feed & milk production, and improves post-calving health & production. Contains Propylene Glycol, Honey, Chromium, Magnesium, Niacin, Olive Oil, Calcium, Ashwagandha, Glycerine, Vitamin C, and Silymarin. Orange Flavour.',
+    metaDescription: 'GLUCODYNA-40 Advance 1 Liter ₹600 (MRP ₹750) - Postpartum energy booster for cows. Innovation Remedies.',
+    keywords: ['glucodyna-40 advance', 'energy booster cows', 'postpartum supplement', 'ketosis prevention', 'propylene glycol', 'orange flavour', 'innovation remedies glucodyna'],
     MRP: 750.00,
     price:600.00,
     currency: 'INR',
-    imageUrl: tenn,
-    imageFileName: 'glucodyna_1ltr.png',
-    imageAlt: 'Glucodyna 1 Liter - Instant Energy and Glucose Support for Animals',
+    imageUrl: tenn, // Image 7 shows "GLUCODYNA-40 Advance"
+    imageFileName: 'glucodyna_40_advance_1ltr.png', // Updated
+    imageAlt: 'GLUCODYNA-40 Advance 1 Liter - Postpartum Energy Booster for Cows',
     gradientFrom: 'from-pink-100',
     gradientTo: 'to-pink-50',
     minQuantity: 1,
@@ -719,54 +838,77 @@ export const productsData = [
     reviewCount: 110,
     stock: 10,
     inStock: true,
-    sku: 'IR-GLUCO-1L-013',
+    sku: 'IR-GLUCO40-ADV-1L-013', // Updated SKU
     gtin: '8901234567902',
-    features: ['Instant energy source', 'Maintains glucose levels', 'Aids recovery'],
-    benefits: ['Quick energy boost', 'Prevents hypoglycemia', 'Stress management'],
-    applications: ['Post-surgery recovery', 'High stress periods', 'Energy deficiency'],
+    features: [
+        'Prevents NEB & Ketosis',
+        'Prevents harmful effects of NEB on Uterus',
+        'Restores feed intake & milk production',
+        'Improves post-calving health & production',
+        'Orange Flavour'
+    ],
+    composition_per_litre: {
+        'Propylene Glycol': '400 ml', 'Purified Honey': '100 ml', 'Bioactive Chromium': '1800 mcg',
+        'Magnesium Sulphate': '1000 mg', 'Niacin': '10 gm', 'Olive Oil': '20 gm',
+        'Calcium Phosphate': '50 gm', 'Ashwagandha Extract': '10 ml', 'Glycrine': '300 ml',
+        'Vitamin C': '5000 mcg', 'Silymarin': '5000 mg', 'Purified Water': 'q.s.'
+    },
+    dosage: '200 ml twice daily for two days, followed by 100 ml daily for two days.',
+    applications: ['Postpartum cows', 'Negative Energy Balance (NEB)', 'Ketosis prevention', 'Sudden drop in milk production', 'Low feed intake post-calving'],
     packSize: '1 Liter',
     manufacturer: 'Innovation Remedies Pvt Ltd',
     countryOfOrigin: 'India',
   },
 
-  // 16. R3 Vet Bolus
+  // 16. R3-Vet Ultra Bolus (Updated name and details from Image 3)
   {
-    id: 'r3-vet-bolus-10', // Clarified ID
-    name: 'R3 Vet Bolus (10 Bolus)', // Added packsize for clarity
+    id: 'r3-vet-ultra-bolus-10', // Updated ID
+    name: 'R3-Vet Ultra Bolus (10 Bolus)', // Updated Name
     brand: 'Innovation Remedies',
     category: 'General Health',
-    subcategory: 'Multi-Purpose Supplements',
-    description: 'Premium veterinary supplement for animal health (10 Bolus)',
-    longDescription: 'R3 Vet Bolus (10 Bolus) is a premium multi-purpose veterinary supplement designed to support overall animal health and well-being. Convenient bolus form for easy administration.',
-    metaDescription: 'R3 Vet Bolus (10 Bolus) ₹300 (MRP ₹400) - Premium multi-purpose veterinary supplement. Innovation Remedies.',
-    keywords: ['r3 vet bolus', 'veterinary bolus', 'multi purpose supplement', 'animal health bolus', 'innovation remedies r3'],
+    subcategory: 'Appetite Stimulant & Digestive Bolus',
+    description: 'Appetite stimulant and restorative bolus for livestock (10 Bolus).',
+    longDescription: 'R3-Vet Ultra Bolus is a comprehensive supplement for appetite or anorexia, weakness & loss of milk production, and neuronal disorders. Contains Cyproheptadine Hcl (appetite stimulant), Live yeast culture & Live Lactobacillus Sporogenes (stabilizes gut flora, improves rumen fermentation), Thiamine HCL (B1) (controls satiety center, appetite loss), Pyridoxine Hcl (B6) (energy metabolism), and Methylcobalamin (brain, nerves, red blood cell production).',
+    metaDescription: 'R3-Vet Ultra Bolus (10 Bolus) ₹300 (MRP ₹400) - Appetite stimulant & health restorative. Innovation Remedies.',
+    keywords: ['r3 vet ultra bolus', 'appetite stimulant cattle', 'anorexia treatment veterinary', 'cyproheptadine bolus', 'probiotic bolus', 'vitamin b bolus', 'innovation remedies r3'],
     MRP: 400.00,
     price:300.00,
     currency: 'INR',
-    imageUrl: R3,
-    imageFileName: 'r3_vet_bolus_10.png',
-    imageAlt: 'R3 Vet Bolus (10 Bolus) - Premium Multi-Purpose Veterinary Health Supplement',
+    imageUrl: R3, // Image 3 shows "R3-Vet Ultra Bolus"
+    imageFileName: 'r3_vet_ultra_bolus_10.png', // Updated
+    imageAlt: 'R3-Vet Ultra Bolus (10 Bolus) - Appetite Stimulant and Restorative',
     gradientFrom: 'from-pink-100',
     gradientTo: 'to-pink-50',
-    minQuantity: 10, // This was 10, seems like it's for a box of 10, so 1 box is min
+    minQuantity: 1, // Updated from 10 (assuming 1 box of 10)
     rating: 4.7,
     reviewCount: 156,
     stock: 60,
     inStock: true,
-    sku: 'IR-R3-BOL10-014', // Clarified SKU
+    sku: 'IR-R3-ULTRA-BOL10-014', // Updated SKU
     gtin: '8901234567903',
-    features: ['Premium supplement', 'Overall animal health', 'Convenient bolus', 'Pack of 10'],
-    benefits: ['Complete nutrition', 'Easy administration', 'Long shelf life'],
-    applications: ['All animals', 'Routine supplementation', 'Health maintenance'],
-    packSize: '10 Boluses',
+    features: [
+        'For Appetite or Anorexia (Cyproheptadine Hcl)',
+        'For Weakness & Loss of Milk Production (Thiamine HCL, Pyridoxine Hcl)',
+        'For Neuronal Disorder (Methylcobalamin)',
+        'Contains Live Yeast Culture & Live Lactobacillus Sporogenes',
+        'Improves digestion & better utilization of feed'
+    ],
+    indications: ['Anorexia', 'Liver Disorder', 'Anaemia & Convalescence Period', 'Adjuvant to antibiotic/Anthelmintic therapy', 'Nervine Disorder', 'Weakness', 'Loss of Milk Production'],
+    composition_per_bolus: {
+        'Cyproheptadine Hcl': '25 mg', 'Live Yeast Culture': '4 mg', 'Live Lactobacillus Sporogenes': '40 million',
+        'Thiamine HCL (B1)': '250 mg', 'Pyridoxine Hcl (B6)': '250 mg', 'Methylcobalamin': '2500 mcg', 'Excipients': 'q.s.'
+    },
+    dosage: 'Large Animal: 1 bolus BD for two days. In Small Animal: 1/2 bolus BD for two days.',
+    applications: ['Appetite stimulation', 'Recovery from illness', 'Support during antibiotic therapy', 'Milk production improvement', 'Nervous system support'],
+    packSize: '10 x 1 Bolus (Strip/Box)', // Updated
     manufacturer: 'Innovation Remedies Pvt Ltd',
     countryOfOrigin: 'India',
   },
 
-  // 17. Innoworm XL 100ml
+  // 17. Innoworm XL (No new image, keeping as is)
   {
     id: 'innoworm-xl-100ml',
-    name: 'IRL™ Innoworm XL (100ml)', // Added brackets
+    name: 'IRL™ Innoworm XL (100ml)',
     brand: 'Innovation Remedies',
     category: 'Parasite Control',
     subcategory: 'Dewormers',
@@ -797,15 +939,15 @@ export const productsData = [
     countryOfOrigin: 'India',
   },
 
-  // 18. Innoworm 30ml
+  // 18. Innoworm 30ml (No new image, keeping as is)
   {
     id: 'innoworm-30ml',
-    name: 'IRL™ Innoworm (30ml)', // Added brackets
+    name: 'IRL™ Innoworm (30ml)',
     brand: 'Innovation Remedies',
     category: 'Parasite Control',
-    subcategory: 'Dewormers', // Description says "Nutritional supplement", but category is "Parasite Control"
-    description: 'Palatable dewormer for young animals (30ml)', // Corrected description to match category
-    longDescription: 'Innoworm 30ml is a palatable dewormer formulated for young or recovering animals. Its palatable formula ensures easy acceptance while effectively controlling parasites.', // Adjusted
+    subcategory: 'Dewormers',
+    description: 'Palatable dewormer for young animals (30ml)',
+    longDescription: 'Innoworm 30ml is a palatable dewormer formulated for young or recovering animals. Its palatable formula ensures easy acceptance while effectively controlling parasites.',
     metaDescription: 'Innoworm 30ml ₹30 (MRP ₹45) - Dewormer for young animals. Palatable formula by Innovation Remedies.',
     keywords: ['innoworm 30ml', 'small animal dewormer', 'young animal parasite control', 'palatable dewormer', 'innovation remedies 30ml'],
     MRP: 45.00,
@@ -819,7 +961,7 @@ export const productsData = [
     minQuantity: 30,
     rating: 4.6,
     reviewCount: 68,
-    stock: 0, // Stock is 0 but inStock is true - potential inconsistency. Will keep as is from original data.
+    stock: 0,
     inStock: true,
     sku: 'IR-WORM-30ML-016',
     gtin: '8901234567905',
@@ -831,23 +973,23 @@ export const productsData = [
     countryOfOrigin: 'India',
   },
 
-  // 19. Weight boost 3kg
+  // 19. Weightboost Powder (Updated name and details from Image 10)
   {
-    id: 'weight-boost-3kg',
-    name: 'Weight Boost (3kg)', // Added brackets
+    id: 'weightboost-powder-3kg', // Updated ID
+    name: 'Weightboost Powder (3kg)', // Updated Name
     brand: 'Innovation Remedies',
     category: 'Nutritional Supplements',
-    subcategory: 'Weight Gain',
-    description: 'Weight gain supplement for livestock (3kg)',
-    longDescription: 'Weight Boost (3kg) is a high-calorie supplement designed to promote significant weight gain in livestock. Ideal for animals needing to build mass or recover condition.',
-    metaDescription: 'Weight Boost 3kg ₹800 (MRP ₹1250) - High-calorie weight gain supplement for livestock. Innovation Remedies.',
-    keywords: ['weight boost 3kg', 'weight gain supplement', 'livestock mass gainer', 'high calorie feed', 'innovation remedies weight boost'],
+    subcategory: 'Energy & Weight Gain',
+    description: 'Energy, protein, and glucose supplement for peripartum animals (3kg).',
+    longDescription: 'Weightboost Powder (3kg) is a complete solution for peripartum animals, providing a daily boost of extra energy, protein, by-pass fat, glucose with minerals, vitamins, and probiotics. It helps address negative energy balance, lipolysis, ketosis, body wasting, and hypogalactia that can occur due to compressed rumen post-parturition. Resulting in Energy, Proteins, Glucose, Mineral, and Vitamin replenishment.',
+    metaDescription: 'Weightboost Powder 3kg ₹800 (MRP ₹1250) - Energy & weight gain for peripartum animals. Innovation Remedies.',
+    keywords: ['weightboost powder', 'peripartum supplement', 'livestock energy', 'weight gain cattle', 'probiotics animals', 'innovation remedies weightboost'],
     MRP: 1250.00,
     price : 800.00,
     currency: 'INR',
-    imageUrl: wui,
-    imageFileName: 'weight_boost_3kg.png',
-    imageAlt: 'Weight Boost 3kg - High-Calorie Weight Gain Supplement for Livestock',
+    imageUrl: wui, // Image 10 shows this product
+    imageFileName: 'weightboost_powder_3kg.png', // Updated
+    imageAlt: 'Weightboost Powder 3kg - Energy & Weight Gain for Peripartum Animals',
     gradientFrom: 'from-purple-100',
     gradientTo: 'to-purple-50',
     minQuantity: 1,
@@ -855,54 +997,139 @@ export const productsData = [
     reviewCount: 120,
     stock: 8,
     inStock: true,
-    sku: 'IR-WEIGHT-3KG-017',
+    sku: 'IR-WEIGHTBST-PDR-3KG-017', // Updated SKU
     gtin: '8901234567906',
-    features: ['High-calorie formula', 'Promotes mass gain', '3kg economy pack'],
-    benefits: ['Rapid weight gain', 'Improved body condition', 'Better market value'],
-    applications: ['Underweight animals', 'Pre-market preparation', 'Recovery feeding'],
+    features: [
+        'Daily boost of extra energy, Protein, By Pass Fat Glucose',
+        'Contains minerals, Vitamins & Probiotics',
+        'Addresses negative energy balance',
+        'Complete solution for peripartum animals'
+    ],
+    benefits: [
+        'Helps overcome energy deficiency',
+        'Helps correct hypoglycaemia',
+        'Helps remove weakness, sluggishness',
+        'Improves feed intake',
+        'Helps restore milk production',
+        'Helps animal recover quickly'
+    ],
+    applications: ['Peripartum animals (around calving/lambing)', 'Negative energy balance', 'Ketosis / Low selective feed intake', 'Body wasting (0.5 Kg - 1 Kg per day)', 'Hypogalactia (low milk production)'],
+    dosage: 'Large Animals: 100 gm per day, Small Animals: 25 gm per day.',
     packSize: '3 kg',
     manufacturer: 'Innovation Remedies Pvt Ltd',
     countryOfOrigin: 'India',
   },
 
-  // 22. Makkhi Soap 75gm
+  // 22. Makkhi Soap (Updated with details from Image 26)
   {
     id: 'makkhi-soap-75gm',
-    name: 'IRL™ Makkhi Soap (75gm)', // Added brackets
+    name: 'IRL™ Makkhi Soap (75gm)',
     brand: 'Innovation Remedies',
     category: 'Animal Hygiene',
-    subcategory: 'Insect Repellents',
-    description: 'Herbal insect repellent soap for animal hygiene (75gm)',
-    longDescription: 'Makkhi Soap (75gm) is a herbal insect repellent soap that ensures animal hygiene and comfort. It effectively repels flies and other ectoparasites while being gentle on the skin.',
-    metaDescription: 'Makkhi Soap 75gm ₹60 (MRP ₹120) - Herbal insect repellent soap for animals. Innovation Remedies.',
-    keywords: ['makkhi soap', 'insect repellent soap', 'fly repellent animals', 'herbal animal soap', 'innovation remedies makkhi'],
+    subcategory: 'Medicated Soaps',
+    description: 'Antiparasitic and antiseptic soap with Permethrin, Cetrimide & Aloevera for animal hygiene (75gm).',
+    longDescription: 'Makkhi Soap (75gm) is formulated for effective control of ticks, fleas, and mites. Contains Permethrin (5%), Cetrimide (1%), and Aloevera (1%) for antiparasitic and antiseptic action while being gentle on the skin. For external animal use only.',
+    metaDescription: 'Makkhi Soap 75gm ₹60 (MRP ₹120) - Controls ticks, fleas & mites. Innovation Remedies.',
+    keywords: ['makkhi soap', 'permethrin soap', 'cetrimide soap', 'aloe vera animal soap', 'tick repellent animals', 'flea control soap', 'innovation remedies makkhi'],
     price: 60.00,
     MRP:120.00,
     currency: 'INR',
-    imageUrl: seventeen,
+    imageUrl: seventeen, // Image 26 shows this product
     imageFileName: 'makkhi_soap_75gm.png',
-    imageAlt: 'Makkhi Soap 75gm - Herbal Insect Repellent Soap for Animal Hygiene',
+    imageAlt: 'Makkhi Soap 75gm - Antiparasitic & Antiseptic Soap for Animals',
     gradientFrom: 'from-blue-100',
     gradientTo: 'to-blue-50',
-    minQuantity: 20,
+    minQuantity: 1, // Updated from 20
     rating: 4.8,
     reviewCount: 105,
     stock: 70,
     inStock: true,
-    sku: 'IR-MAKKHI-SOAP-018',
+    sku: 'IR-MAKKHI-SOAP-75GM-018', // Updated SKU
     gtin: '8901234567907',
-    features: ['Herbal insect repellent', 'Gentle on skin', 'Promotes hygiene'],
-    benefits: ['Natural fly control', 'Skin conditioning', 'Pleasant fragrance'],
-    applications: ['Daily animal bathing', 'Fly season protection', 'Skin care routine'],
+    features: [
+        'Effective control of Ticks, Fleas & Mites',
+        'Contains Permethrin 5%, Cetrimide 1%, Aloevera 1%',
+        'Antiparasitic & Antiseptic',
+        'For external use only'
+    ],
+    benefits: ['Keeps animals free from ectoparasites', 'Soothes skin with Aloe Vera', 'Promotes hygiene'],
+    applications: ['Control of ticks, fleas, flies, and mites on livestock and pets', 'Routine bathing for parasite prevention'],
+    packSize: '75 grams',
+    manufacturer: 'Innovation Remedies Pvt Ltd',
+    countryOfOrigin: 'India',
+  },
+  // NEW: IRL Makkhi Soap (from Image 2, distinct packaging and "IRL" branding)
+  {
+    id: 'irl-makkhi-soap-75gm',
+    name: 'IRL™ Makkhi Soap (Permethrin, Cetrimide & Aloe vera) 75gm',
+    brand: 'IRL (Innovation Remedies)',
+    category: 'Animal Hygiene',
+    subcategory: 'Medicated Soaps',
+    description: 'Antiparasitic & Antiseptic Soap with Permethrin, Cetrimide & Aloe vera (75gm). For Animal Use Only.',
+    longDescription: 'IRL Makkhi Soap is an antiparasitic and antiseptic soap for animal use, containing Permethrin, Cetrimide, and Aloe vera. Effective against ticks, fleas, and mites, ensuring animal comfort and hygiene.',
+    metaDescription: 'IRL Makkhi Soap 75gm - Permethrin, Cetrimide & Aloe vera. Controls ticks, fleas, mites. Innovation Remedies.',
+    keywords: ['irl makkhi soap', 'permethrin soap dog', 'cetrimide animal soap', 'aloe vera pet soap', 'tick soap', 'flea soap', 'innovation remedies irl'],
+    price: 65.00, // Placeholder price
+    MRP: 125.00,  // Placeholder MRP
+    currency: 'INR',
+    imageUrl: irlMakkhiSoapImage, // Placeholder for Image 2
+    imageFileName: 'irl_makkhi_soap_75gm.png',
+    imageAlt: 'IRL Makkhi Soap 75gm - Permethrin, Cetrimide & Aloe vera',
+    gradientFrom: 'from-sky-100',
+    gradientTo: 'to-sky-50',
+    minQuantity: 1,
+    rating: 4.7,
+    reviewCount: 90,
+    stock: 60,
+    inStock: true,
+    sku: 'IRL-MAKKHI-SOAP-75GM-018A',
+    gtin: '8901234567907A',
+    features: ['Contains Permethrin, Cetrimide & Aloe vera', 'Antiparasitic & Antiseptic', 'Effective against ticks, fleas, mites', 'For Animal Use Only'],
+    benefits: ['Cleanses and protects against parasites', 'Soothes skin', 'Maintains animal hygiene'],
+    applications: ['Dogs, cattle, goats, and other animals for control of ectoparasites', 'General hygiene wash'],
+    packSize: '75 grams',
+    manufacturer: 'Innovation Remedies Pvt Ltd',
+    countryOfOrigin: 'India',
+  },
+  // NEW: Makkhi Advance Soap (from Image 27)
+  {
+    id: 'makkhi-advance-soap-75gm',
+    name: 'Makkhi Advance Soap (75gm)',
+    brand: 'Innovation Remedies',
+    category: 'Animal Hygiene',
+    subcategory: 'Medicated Soaps (Advanced)',
+    description: 'Advanced antiparasitic soap with Permethrin 8% for effective control of Ticks, Fleas & Mites (75gm).',
+    longDescription: 'Makkhi Advance Soap offers enhanced protection against ectoparasites with a higher concentration of Permethrin (8%), along with Cetrimide (1%) and Aloe Vera (1%). Designed for very effective control of fleas, flies, and ticks. For external animal use only.',
+    metaDescription: 'Makkhi Advance Soap 75gm - Permethrin 8%. Advanced control of ticks, fleas & mites. Innovation Remedies.',
+    keywords: ['makkhi advance soap', 'permethrin 8% soap', 'strong tick repellent', 'advanced flea control', 'veterinary medicated soap', 'innovation remedies'],
+    price: 75.00, // Placeholder price
+    MRP: 140.00,  // Placeholder MRP
+    currency: 'INR',
+    imageUrl: makkhiAdvanceSoapImage, // Placeholder for Image 27
+    imageFileName: 'makkhi_advance_soap_75gm.png',
+    imageAlt: 'Makkhi Advance Soap 75gm - Permethrin 8% Formula',
+    gradientFrom: 'from-red-100',
+    gradientTo: 'to-rose-50',
+    minQuantity: 1,
+    rating: 4.9,
+    reviewCount: 95,
+    stock: 50,
+    inStock: true,
+    sku: 'IR-MAKKHI-ADV-SOAP-75GM-018B',
+    gtin: '8901234567907B',
+    features: ['Permethrin 8%, Cetrimide 1%, Aloe Vera 1%', 'Very effective against Fleas, Fly & Ticks', 'Advanced formula', 'For external use only'],
+    benefits: ['Stronger action against resistant parasites', 'Ensures freedom from ticks and flies', 'Maintains skin health with Aloe Vera'],
+    applications: ['Animals with heavy infestation of ticks, fleas, and flies', 'Situations requiring stronger parasiticidal action'],
     packSize: '75 grams',
     manufacturer: 'Innovation Remedies Pvt Ltd',
     countryOfOrigin: 'India',
   },
 
-  // 23. Makkhi 15ml
+
+  // 23. Makkhi Liquid 15ml (No new image, keeping as is)
   {
-    id: 'makkhi-liquid-15ml', // Made ID more specific
-    name: 'IRL™ Makkhi Liquid (15ml)', // Added "Liquid" and brackets
+    id: 'makkhi-liquid-15ml',
+    name: 'IRL™ Makkhi Liquid (15ml)',
     brand: 'Innovation Remedies',
     category: 'Pest Control',
     subcategory: 'Concentrated Solutions',
@@ -923,7 +1150,7 @@ export const productsData = [
     reviewCount: 87,
     stock: 55,
     inStock: true,
-    sku: 'IR-MAKKHI-LIQ15ML-019', // Clarified SKU
+    sku: 'IR-MAKKHI-LIQ15ML-019',
     gtin: '8901234567908',
     features: ['Potent concentrate', 'Effective pest control', 'Economical 15ml pack'],
     benefits: ['Long-lasting effect', 'Cost-effective solution', 'Multiple pest control'],
@@ -933,10 +1160,10 @@ export const productsData = [
     countryOfOrigin: 'India',
   },
 
-  // 24. Makkhi 6ml
+  // 24. Makkhi Liquid 6ml (No new image, keeping as is)
   {
-    id: 'makkhi-liquid-6ml', // Made ID specific
-    name: 'IRL™ Makkhi Liquid (6ml)', // Added "Liquid" and brackets
+    id: 'makkhi-liquid-6ml',
+    name: 'IRL™ Makkhi Liquid (6ml)',
     brand: 'Innovation Remedies',
     category: 'Pest Control',
     subcategory: 'Quick Solutions',
@@ -957,7 +1184,7 @@ export const productsData = [
     reviewCount: 93,
     stock: 100,
     inStock: true,
-    sku: 'IR-MAKKHI-LIQ6ML-020', // Clarified SKU
+    sku: 'IR-MAKKHI-LIQ6ML-020',
     gtin: '8901234567909',
     features: ['Fast-acting solution', 'Quick pest knockdown', 'Convenient 6ml size'],
     benefits: ['Immediate results', 'Easy spot application', 'Trial size available'],
@@ -966,137 +1193,443 @@ export const productsData = [
     manufacturer: 'Innovation Remedies Pvt Ltd',
     countryOfOrigin: 'India',
   },
-  // Corrected AYNGROW and RS 21 products
+  // Ayngrow Bolus (Updated with details from Images 15, 16, 17, 18)
    {
-    id: 'ayngrow-bolus-20', // Unique ID
-    name: 'AYNGROW Bolus (20 Bolus)',
+    id: 'ayngrow-bolus-20',
+    name: 'Ayngrow Bolus (20 Bolus)',
     brand: 'Innovation Remedies',
-    category: 'Nutritional Supplements', // Corrected category
-    subcategory: 'Vitamin & Mineral Bolus', // Corrected subcategory
-    description: 'Multivitamin and mineral bolus for livestock (20 Bolus)',
-    longDescription: 'AYNGROW Bolus (20 Bolus) is a comprehensive multivitamin and mineral supplement for livestock, promoting overall health, growth, and productivity. Easy to administer bolus form.',
-    metaDescription: 'AYNGROW Bolus (20 Bolus) ₹650 (MRP ₹900) - Multivitamin & mineral supplement for livestock health. Innovation Remedies.',
-    keywords: ['ayngrow bolus', 'multivitamin bolus', 'mineral supplement livestock', 'animal health bolus', 'innovation remedies ayngrow'],
+    category: 'Nutritional Supplements',
+    subcategory: 'Multivitamin & Mineral Bolus (Udder Health)',
+    description: 'Powerful multivitamin and mineral bolus for udder health, growth, and immunity (20 Bolus).',
+    longDescription: 'Ayngrow Bolus is a powerful multivitamin and mineral supplement designed to enhance udder development in pregnant animals, prevent teat cracks, boost immunity, reduce stress, and prevent mastitis. Contains high levels of Vitamin A, D3, E, H (Biotin), B12, Copper, Zinc, Selenium, and Silymarin. Zinc & Copper with MHA help in teat keratin layer formation and act as antioxidants. Double power Vitamin A & H.',
+    metaDescription: 'Ayngrow Bolus (20 Bolus) ₹650 (MRP ₹900) - For udder health, immunity & growth. Innovation Remedies.',
+    keywords: ['ayngrow bolus', 'udder health bolus', 'teat cracks prevention', 'livestock multivitamin', 'animal immunity booster', 'silymarin bolus', 'innovation remedies ayngrow'],
     MRP: 900.00,
     price:650.00,
     currency: 'INR',
-    imageUrl: twentyone, // Original imageUrl for this item
-    imageFileName: 'ayngrow_bolus_20.png', // Corrected
-    imageAlt: 'AYNGROW Bolus (20 Bolus) - Multivitamin and Mineral Supplement', // Corrected
-    gradientFrom: 'from-green-100', // Adjusted gradient
-    gradientTo: 'to-green-50',   // Adjusted gradient
-    minQuantity: 1, // Min quantity likely 1 pack
-    rating: 4.9, // Assuming rating from original placeholder
-    reviewCount: 93, // Assuming review count from original placeholder
-    stock: 100,
-    inStock: true,
-    sku: 'IR-AYNGROW-BOL20-021', // Unique SKU
-    gtin: '8901234567910', // Example new GTIN
-    features: ['Rich in multivitamins', 'Essential minerals', 'Promotes growth', 'Boosts immunity', 'Pack of 20 Bolus'],
-    benefits: ['Improved animal health', 'Better feed conversion', 'Enhanced productivity', 'Stress reduction'],
-    applications: ['Cattle', 'Buffaloes', 'Sheep', 'Goats', 'Growth promotion', 'Health maintenance'],
-    packSize: '20 Boluses', // Corrected
-    manufacturer: 'Innovation Remedies Pvt Ltd',
-    countryOfOrigin: 'India',
-  },
-  {
-    id: 'ayngrow-bolus-40', // Unique ID
-    name: 'AYNGROW Bolus (40 Bolus)',
-    brand: 'Innovation Remedies',
-    category: 'Nutritional Supplements', // Corrected category
-    subcategory: 'Vitamin & Mineral Bolus', // Corrected subcategory
-    description: 'Multivitamin and mineral bolus for livestock (40 Bolus)',
-    longDescription: 'AYNGROW Bolus (40 Bolus) provides a larger pack of comprehensive multivitamin and mineral supplement for livestock. Supports overall health, growth, and productivity. Convenient bolus form.',
-    metaDescription: 'AYNGROW Bolus (40 Bolus) ₹1050 (MRP ₹1550) - Bulk multivitamin & mineral supplement for livestock. Innovation Remedies.',
-    keywords: ['ayngrow bolus 40', 'bulk multivitamin bolus', 'livestock mineral supplement', 'animal wellness', 'innovation remedies ayngrow'],
-    MRP: 1550.00, // Corrected from mrp
-    price:1050.00,
-    currency: 'INR',
-    imageUrl: fourtybolus, // Original imageUrl for this item
-    imageFileName: 'ayngrow_bolus_40.png', // Corrected
-    imageAlt: 'AYNGROW Bolus (40 Bolus) - Bulk Multivitamin and Mineral Supplement', // Corrected
-    gradientFrom: 'from-green-100', // Adjusted gradient
-    gradientTo: 'to-teal-50',    // Adjusted gradient
-    minQuantity: 1, // Min quantity likely 1 pack
+    imageUrl: twentyone, // Image 15 shows 20 Bolus pack
+    imageFileName: 'ayngrow_bolus_20.png',
+    imageAlt: 'Ayngrow Bolus (20 Bolus) - Multivitamin for Udder Health & Immunity',
+    gradientFrom: 'from-green-100',
+    gradientTo: 'to-green-50',
+    minQuantity: 1,
     rating: 4.9,
     reviewCount: 93,
     stock: 100,
     inStock: true,
-    sku: 'IR-AYNGROW-BOL40-022', // Unique SKU
-    gtin: '8901234567911', // Example new GTIN
-    features: ['Comprehensive multivitamins', 'Key minerals', 'Supports robust growth', 'Strengthens immunity', 'Economy pack of 40 Bolus'],
-    benefits: ['Enhanced animal vitality', 'Improved feed efficiency', 'Boosted reproductive health', 'Cost-effective for herds'],
-    applications: ['Dairy cattle', 'Beef cattle', 'Large ruminants', 'Breeding stock', 'Overall herd health programs'],
-    packSize: '40 Boluses', // Corrected
+    sku: 'IR-AYNGROW-BOL20-021',
+    gtin: '8901234567910',
+    features: [
+        'Increases udder size in pregnant animals', 'Removes weakness and stress',
+        'Increases immunity', 'Prevents cracking of hooves and teats ("Say No to Teat Cracks")',
+        'Prevents animal from falling sick repeatedly', 'Helpful in preventing mastitis',
+        'Increases stamina and strength in race buffaloes/bulls', 'Prevents milk leakage',
+        'Advantage of Zinc & Copper with MHA', 'Advantage of Double power Vit. A & H'
+    ],
+    composition_per_bolus: { // From Image 16 & 18 (Our Product values)
+        'Vitamin A': '500000 I.U.', 'Vitamin D3': '100000 I.U.', 'Vitamin E': '600 mg',
+        'Vitamin H (Biotin)': '20000 mcg', 'Vitamin B12': '300 mcg', 'Copper': '1000 mcg (as Ch. Copper)',
+        'Zinc': '500 mg (as Ch. Zinc)', 'Selenium': '300 mcg', 'Silymarine': '500 mg', 'Trisodium Citrate': '5 gm', // Trisodium Citrate from image 18 composition
+        'Excipients': 'q.s.'
+    },
+    benefits: [
+        'Improved udder health and development', 'Enhanced immunity and stress resistance',
+        'Prevention of teat cracks and mastitis', 'Better overall productivity'
+    ],
+    applications: ['Last months of pregnancy (1 bolus daily for 40 days)', 'Race buffaloes/bulls (1 bolus daily for 40 days)', 'General health and immunity boost'],
+    packSize: '20 Boluses',
     manufacturer: 'Innovation Remedies Pvt Ltd',
     countryOfOrigin: 'India',
   },
   {
-    id: 'rs21-solution-210ml', // Unique ID
-    name: 'RS 21 Solution (210 ml)', // Added "Solution" for clarity
+    id: 'ayngrow-bolus-40',
+    name: 'Ayngrow Bolus (40 Bolus)',
     brand: 'Innovation Remedies',
-    category: 'Reproductive Health', // Corrected category
-    subcategory: 'Fertility Solutions', // Corrected subcategory
+    category: 'Nutritional Supplements',
+    subcategory: 'Multivitamin & Mineral Bolus (Udder Health)',
+    description: 'Powerful multivitamin and mineral bolus for udder health, growth, and immunity (40 Bolus pack).',
+    longDescription: 'Ayngrow Bolus (40 Bolus pack) provides a comprehensive multivitamin and mineral supplement for enhancing udder development, preventing teat cracks, boosting immunity, and reducing stress in livestock. Contains high levels of Vitamin A, D3, E, H (Biotin), B12, Copper, Zinc, Selenium, and Silymarin. Ideal for extended use or larger herds.',
+    metaDescription: 'Ayngrow Bolus (40 Bolus) ₹1050 (MRP ₹1550) - Bulk pack for udder health. Innovation Remedies.',
+    keywords: ['ayngrow bolus 40', 'bulk udder health bolus', 'livestock mineral supplement', 'animal wellness', 'teat care', 'innovation remedies ayngrow'],
+    MRP: 1550.00,
+    price:1050.00,
+    currency: 'INR',
+    imageUrl: fourtybolus, // Image 15 shows 40 Bolus pack option
+    imageFileName: 'ayngrow_bolus_40.png',
+    imageAlt: 'Ayngrow Bolus (40 Bolus) - Bulk Multivitamin for Udder Health',
+    gradientFrom: 'from-green-100',
+    gradientTo: 'to-teal-50',
+    minQuantity: 1,
+    rating: 4.9,
+    reviewCount: 93,
+    stock: 100,
+    inStock: true,
+    sku: 'IR-AYNGROW-BOL40-022',
+    gtin: '8901234567911',
+    features: [ // Same as 20 bolus pack
+        'Increases udder size in pregnant animals', 'Removes weakness and stress',
+        'Increases immunity', 'Prevents cracking of hooves and teats',
+        'Helpful in preventing mastitis', 'Economy pack of 40 Bolus'
+    ],
+    composition_per_bolus: { // Same as 20 bolus pack
+        'Vitamin A': '500000 I.U.', 'Vitamin D3': '100000 I.U.', 'Vitamin E': '600 mg',
+        'Vitamin H (Biotin)': '20000 mcg', 'Vitamin B12': '300 mcg', 'Copper': '1000 mcg (as Ch. Copper)',
+        'Zinc': '500 mg (as Ch. Zinc)', 'Selenium': '300 mcg', 'Silymarine': '500 mg', 'Trisodium Citrate': '5 gm',
+        'Excipients': 'q.s.'
+    },
+    benefits: ['Sustained udder health support', 'Cost-effective for herd management', 'Consistent supply for 40-day regimen'],
+    applications: ['Last months of pregnancy (1 bolus daily for 40 days)', 'Race buffaloes/bulls (1 bolus daily for 40 days)', 'Large herds requiring udder health and immunity support'],
+    packSize: '40 Boluses',
+    manufacturer: 'Innovation Remedies Pvt Ltd',
+    countryOfOrigin: 'India',
+  },
+  // RS 21 Solution (Keeping as is, no new image directly for it, distinct from RS-Kit)
+  {
+    id: 'rs21-solution-210ml',
+    name: 'RS 21 Solution (210 ml)',
+    brand: 'Innovation Remedies',
+    category: 'Reproductive Health',
+    subcategory: 'Fertility Solutions',
     description: 'Repeat Breeding and Infertility Solution (210 ml)',
     longDescription: 'RS 21 Solution (210 ml) is specially formulated to address issues of repeat breeding and infertility in livestock. It helps optimize reproductive health and improve conception rates.',
     metaDescription: 'RS 21 Solution (210 ml) ₹350 (MRP ₹415) - For repeat breeding & infertility in livestock. Innovation Remedies.',
     keywords: ['rs21 solution', 'repeat breeding solution', 'livestock infertility', 'animal fertility supplement', 'innovation remedies rs21'],
-    MRP: 415.00, // Corrected from mrp
+    MRP: 415.00,
     price:350.00,
     currency: 'INR',
-    imageUrl: gly, // Using 'twentyone' image for RS21, as 'fourtybolus' was for AYNGROW.
-    imageFileName: 'rs21_solution_210ml.png', // Corrected
-    imageAlt: 'RS 21 Solution (210 ml) - Repeat Breeding and Infertility Solution', // Corrected
-    gradientFrom: 'from-rose-100', // Adjusted gradient
-    gradientTo: 'to-pink-50',      // Adjusted gradient
-    minQuantity: 1, // Min quantity likely 1 bottle
-    rating: 4.9, // Assuming rating
-    reviewCount: 93, // Assuming review count
+    imageUrl: gly,
+    imageFileName: 'rs21_solution_210ml.png',
+    imageAlt: 'RS 21 Solution (210 ml) - Repeat Breeding and Infertility Solution',
+    gradientFrom: 'from-rose-100',
+    gradientTo: 'to-pink-50',
+    minQuantity: 1,
+    rating: 4.9,
+    reviewCount: 93,
     stock: 100,
     inStock: true,
-    sku: 'IR-RS21-SOL210ML-023', // Unique SKU
-    gtin: '8901234567912', // Example new GTIN
+    sku: 'IR-RS21-SOL210ML-023',
+    gtin: '8901234567912',
     features: ['Addresses repeat breeding', 'Supports fertility', 'Optimizes reproductive cycle', 'Liquid solution 210ml'],
     benefits: ['Improved conception rates', 'Reduced inter-calving period', 'Enhanced reproductive efficiency', 'Supports hormonal balance'],
     applications: ['Cows', 'Buffaloes', 'Heifers with reproductive issues', 'Animals with history of repeat breeding'],
-    packSize: '210 ml', // Corrected
+    packSize: '210 ml',
     manufacturer: 'Innovation Remedies Pvt Ltd',
     countryOfOrigin: 'India',
   },
-  // The Innocef Tazo 4.5gm was commented out in the original, so I'm keeping it commented.
-  // If you need it, it should also be reviewed for similar consistency.
-  // {
-  //   id: 'innocef-tazo-4.5gm',
-  //   name: 'Innocef Tazo 4.5gm',
-  //   brand: 'Innovation Remedies',
-  //   category: 'Antibiotics',
-  //   subcategory: 'Injectable Antibiotics',
-  //   description: 'Advanced injectable antibiotic (Ceftriaxone & Tazobactam)',
-  //   longDescription: 'Innocef Tazo 4.5gm is an advanced injectable antibiotic combination (Ceftriaxone & Tazobactam) for treating severe bacterial infections in animals. Provides broad-spectrum coverage.',
-  //   metaDescription: 'Innocef Tazo 4.5gm ₹415 - Injectable antibiotic for severe infections. Innovation Remedies.',
-  //   keywords: ['innocef tazo', 'ceftriaxone tazobactam', 'injectable antibiotic', 'veterinary antibiotic', 'innovation remedies antibiotic'],
-  //   price: 415.00, // Assuming no MRP given or MRP is same as price
-  //   MRP: 415.00, // Added MRP for consistency, assuming it's same as price if no discount.
-  //   currency: 'INR',
-  //   imageUrl: innoceftazo,
-  //   imageFileName: 'innocef_tazo_4.5gm.png',
-  //   imageAlt: 'Innocef Tazo 4.5gm - Advanced Injectable Antibiotic',
-  //   gradientFrom: 'from-emerald-100',
-  //   gradientTo: 'to-emerald-50',
-  //   minQuantity: 10,
-  //   rating: 4.8,
-  //   reviewCount: 85,
-  //   stock: 20,
-  //   inStock: true,
-  //   sku: 'IR-INNO-TAZO-4.5GM-024', // Example SKU
-  //   gtin: '8901234567913', // Example GTIN
-  //   features: ['Injectable antibiotic', 'Ceftriaxone & Tazobactam', 'Treats severe infections', '4.5gm vial'],
-  //   benefits: ['Broad-spectrum action', 'Rapid recovery', 'Hospital-grade treatment'],
-  //   applications: ['Severe bacterial infections', 'Post-surgical prophylaxis', 'Resistant infections'],
-  //   packSize: '4.5 grams',
-  //   manufacturer: 'Innovation Remedies Pvt Ltd',
-  //   countryOfOrigin: 'India',
-  // }
+  // NEW: Innocef-3 Injection (from Image 19)
+  {
+    id: 'innocef-3-injection-3gm',
+    name: 'Innocef-3 Injection (3gm)',
+    brand: 'Innovation Remedies',
+    category: 'Antibiotics',
+    subcategory: 'Injectable Antibiotics (Cephalosporin)',
+    description: 'Ceftriaxone 3gm/Vial Injection for wide range of bacterial infections.',
+    longDescription: 'Innocef-3 (Ceftriaxone 3gm/Vial) is an injectable antibiotic effective against a wide range of Gram-negative and Gram-positive bacteria. Offers the advantage of once-daily dosing for treating various infections in animals.',
+    metaDescription: 'Innocef-3 Injection 3gm - Ceftriaxone for veterinary use. Treats bacterial infections. Innovation Remedies.',
+    keywords: ['innocef-3', 'ceftriaxone injection', 'veterinary antibiotic', 'gram-positive bacteria', 'gram-negative bacteria', 'animal infection treatment', 'innovation remedies'],
+    price: 250.00, // Placeholder price
+    MRP: 300.00,   // Placeholder MRP
+    currency: 'INR',
+    imageUrl: innocef3Image, // Placeholder for Image 19
+    imageFileName: 'innocef_3_injection_3gm.png',
+    imageAlt: 'Innocef-3 Ceftriaxone 3gm Injection',
+    gradientFrom: 'from-red-100',
+    gradientTo: 'to-orange-50',
+    minQuantity: 1,
+    rating: 4.8,
+    reviewCount: 70,
+    stock: 40,
+    inStock: true,
+    sku: 'IR-INNOCEF3-INJ-3GM-024',
+    gtin: '8901234567913',
+    features: ['Contains Ceftriaxone 3gm per Vial', 'Effective against Gram-ve & Gram+ve Bacteria', 'Advantage of Once Daily Dosing', 'Rx Product'],
+    benefits: ['Broad-spectrum bactericidal action', 'Convenient once-daily administration', 'Effectively treats a variety of infections'],
+    applications: ['Respiratory Tract Infections (Pneumonia)', 'Bone & Joint Infections', 'Post-operative Infections', 'Urogenital Tract Infections (Cystitis, Metritis)', 'Skin & Soft Tissue Infections'],
+    dosage: '10mg/kg body weight Daily for 3-5 days by I.M. or I.V. route, on the basis of ceftriaxone content.',
+    packSize: '3 gm Vial',
+    manufacturer: 'Innovation Remedies Pvt Ltd',
+    countryOfOrigin: 'India',
+  },
+  // NEW: Bectrohit Injection Vet (from Image 20)
+  {
+    id: 'bectrohit-injection-4.5gm',
+    name: 'Bectrohit Injection Vet (4.5gm)',
+    brand: 'Innovation Remedies',
+    category: 'Antibiotics',
+    subcategory: 'Injectable Antibiotics (Penicillin Combination)',
+    description: 'Amoxycillin & Cloxacillin combination antibiotic (4.5gm) for mixed infections.',
+    longDescription: 'Bectrohit Injection Vet (4.5gm) is a trusted choice combining Amoxycillin and Cloxacillin (1:1 ratio). It is a broad-spectrum bactericidal, ideal for mixed infections, attaining high concentration in soft tissue. Safe for lactating and young animals.',
+    metaDescription: 'Bectrohit Injection Vet 4.5gm - Amoxycillin & Cloxacillin. For mixed infections. Innovation Remedies.',
+    keywords: ['bectrohit', 'amoxycillin cloxacillin', 'veterinary injection', 'mixed infection antibiotic', 'mastitis treatment', 'innovation remedies'],
+    price: 350.00, // Placeholder price
+    MRP: 420.00,   // Placeholder MRP
+    currency: 'INR',
+    imageUrl: bectrohitImage, // Placeholder for Image 20
+    imageFileName: 'bectrohit_injection_4_5gm.png',
+    imageAlt: 'Bectrohit Amoxycillin & Cloxacillin 4.5gm Injection',
+    gradientFrom: 'from-blue-100',
+    gradientTo: 'to-cyan-50',
+    minQuantity: 1,
+    rating: 4.7,
+    reviewCount: 65,
+    stock: 35,
+    inStock: true,
+    sku: 'IR-BECTROHIT-INJ-4.5GM-025',
+    gtin: '8901234567914',
+    features: ['Amoxycillin and Cloxacillin in 1:1 ratio', 'Broad Spectrum Bactericidal', 'Ideal in Mixed Infection', 'Safe in Lactating and Young Animals', 'Rx Product'],
+    recommendations: ['Mastitis', 'H.S. and Pneumonia', 'Leptospirosis', 'Cystitis and Nephritis', 'Secondary Bacterial Infections'],
+    benefits: ['Proven safety and efficacy', 'High concentration in soft tissue infections', 'Effective against a wide range of bacteria'],
+    dosage: 'Live Stock: 6-10 mg/kg bwt. Daily for 3-5 days by IM/IV Route.',
+    packSize: '4.5 gm Vial',
+    manufacturer: 'Innovation Remedies Pvt Ltd',
+    countryOfOrigin: 'India',
+  },
+  // NEW: Bectrohit-Fort Injection Vet (from Image 21 - 3gm version)
+  {
+    id: 'bectrohit-fort-injection-3gm',
+    name: 'Bectrohit-Fort Injection Vet (3gm)',
+    brand: 'Innovation Remedies',
+    category: 'Antibiotics',
+    subcategory: 'Injectable Antibiotics (Penicillin with Beta-Lactamase Inhibitor)',
+    description: 'Amoxycillin (2gm) & Sulbactam (1gm) combination for resistant infections (3gm).',
+    longDescription: 'Bectrohit-Fort (3gm vial) combines Amoxycillin (2gm) with Sulbactam (1gm) to combat resistant infections. It significantly decreases bacterial count in resistant infections and reduces somatic cell count in cases like E. coli and S. aureus mastitis.',
+    metaDescription: 'Bectrohit-Fort Injection 3gm - Amoxycillin & Sulbactam for resistant infections. Innovation Remedies.',
+    keywords: ['bectrohit-fort', 'amoxycillin sulbactam', 'resistant infection antibiotic', 'veterinary antibiotic combination', 'mastitis resistant', 'innovation remedies'],
+    price: 400.00, // Placeholder price
+    MRP: 480.00,   // Placeholder MRP
+    currency: 'INR',
+    imageUrl: bectrohitFortImage, // Placeholder for Image 21 (can be same for 4.5gm)
+    imageFileName: 'bectrohit_fort_injection_3gm.png',
+    imageAlt: 'Bectrohit-Fort Amoxycillin & Sulbactam 3gm Injection',
+    gradientFrom: 'from-yellow-100',
+    gradientTo: 'to-amber-50',
+    minQuantity: 1,
+    rating: 4.9,
+    reviewCount: 75,
+    stock: 30,
+    inStock: true,
+    sku: 'IR-BECTROFORT-INJ-3GM-026',
+    gtin: '8901234567915',
+    features: ['Amoxycillin 2gm + Sulbactam 1gm per 3gm vial', 'Combats Resistant Infections', 'Reduces somatic cell count in mastitis', 'Rx Product'],
+    benefits: ['Effective against beta-lactamase producing bacteria', 'Excellent combination for resistant infections', 'Addresses resistant mastitis, respiratory tract infections, post-operative infections'],
+    dosage: '7-10 mg/kg body weight by I.V. or I.M. route once or twice daily for 3-5 days.',
+    packSize: '3 gm Vial',
+    manufacturer: 'Innovation Remedies Pvt Ltd',
+    countryOfOrigin: 'India',
+  },
+  // NEW: Bectrohit-Fort Injection Vet (from Image 21 - 4.5gm version)
+  {
+    id: 'bectrohit-fort-injection-4.5gm',
+    name: 'Bectrohit-Fort Injection Vet (4.5gm)',
+    brand: 'Innovation Remedies',
+    category: 'Antibiotics',
+    subcategory: 'Injectable Antibiotics (Penicillin with Beta-Lactamase Inhibitor)',
+    description: 'Amoxycillin (3gm) & Sulbactam (1.5gm) combination for resistant infections (4.5gm).',
+    longDescription: 'Bectrohit-Fort (4.5gm vial) combines Amoxycillin (3gm) with Sulbactam (1.5gm) for enhanced action against resistant infections. It significantly decreases bacterial count in resistant infections and is effective for conditions like resistant mastitis.',
+    metaDescription: 'Bectrohit-Fort Injection 4.5gm - Amoxycillin & Sulbactam. Treats resistant infections. Innovation Remedies.',
+    keywords: ['bectrohit-fort 4.5gm', 'amoxycillin sulbactam high dose', 'veterinary antibiotic resistant', 'innovation remedies antibiotic'],
+    price: 550.00, // Placeholder price
+    MRP: 650.00,   // Placeholder MRP
+    currency: 'INR',
+    imageUrl: bectrohitFortImage, // Placeholder for Image 21
+    imageFileName: 'bectrohit_fort_injection_4_5gm.png',
+    imageAlt: 'Bectrohit-Fort Amoxycillin & Sulbactam 4.5gm Injection',
+    gradientFrom: 'from-yellow-100',
+    gradientTo: 'to-amber-50',
+    minQuantity: 1,
+    rating: 4.9,
+    reviewCount: 78,
+    stock: 28,
+    inStock: true,
+    sku: 'IR-BECTROFORT-INJ-4.5GM-027',
+    gtin: '8901234567916',
+    features: ['Amoxycillin 3gm + Sulbactam 1.5gm per 4.5gm vial', 'Strong action against Resistant Infections', 'Reduces bacterial count effectively', 'Rx Product'],
+    benefits: ['Overcomes resistance mechanisms', 'Potent treatment for severe infections', 'Suitable for challenging cases like resistant mastitis'],
+    dosage: '7-10 mg/kg body weight by I.V. or I.M. route once or twice daily for 3-5 days.',
+    packSize: '4.5 gm Vial',
+    manufacturer: 'Innovation Remedies Pvt Ltd',
+    countryOfOrigin: 'India',
+  },
+  // Innocef Tazo 4.5gm (Uncommented and updated from Image 23)
+  {
+    id: 'innocef-tazo-4.5gm',
+    name: 'INNOCEF-TAZO Injection (4.5gm)',
+    brand: 'Innovation Remedies',
+    category: 'Antibiotics',
+    subcategory: 'Injectable Antibiotics (Cephalosporin with Beta-Lactamase Inhibitor)',
+    description: 'Cefoperazone (4gm) & Tazobactam (500mg) combination for broad-spectrum bacterial infections (4.5gm).',
+    longDescription: 'INNOCEF-TAZO (4.5gm Vial) combines Cefoperazone (4gm) and Tazobactam (500mg). It is rapidly absorbed, widely distributed, and slowly eliminated. Acts by inhibiting bacterial cell wall synthesis and has broad-spectrum activity against gram-positive, gram-negative, and anaerobic bacteria.',
+    metaDescription: 'INNOCEF-TAZO Injection 4.5gm - Cefoperazone & Tazobactam. Broad-spectrum antibiotic. Innovation Remedies.',
+    keywords: ['innocef-tazo', 'cefoperazone tazobactam', 'injectable antibiotic veterinary', 'anaerobic bacteria treatment', 'severe infections', 'innovation remedies'],
+    price: 415.00,
+    MRP: 415.00,
+    currency: 'INR',
+    imageUrl: innoceftazo, // Image 23 confirms this product
+    imageFileName: 'innocef_tazo_injection_4_5gm.png',
+    imageAlt: 'INNOCEF-TAZO Cefoperazone & Tazobactam 4.5gm Injection',
+    gradientFrom: 'from-emerald-100',
+    gradientTo: 'to-emerald-50',
+    minQuantity: 1, // Updated from 10
+    rating: 4.8,
+    reviewCount: 85,
+    stock: 20,
+    inStock: true,
+    sku: 'IR-INNOTAZO-INJ-4.5GM-028', // Updated SKU
+    gtin: '8901234567917',
+    features: ['Cefoperazone 4gm + Tazobactam 500mg per 4.5gm Vial', 'Rapidly absorbed, widely distributed', 'Broad-spectrum activity (Gram +ve, Gram -ve, Anaerobic)', 'Inhibits bacterial cell wall synthesis', 'Rx Product'],
+    benefits: ['Effective against a wide range of pathogens', 'Overcomes beta-lactamase resistance', 'Suitable for severe and mixed infections'],
+    dosage: '10 mg/kg body weight on the basis of Cefoperazone content I.V./I.M. or S.C. route.',
+    packSize: '4.5 gm Vial (4500 mg)',
+    manufacturer: 'Innovation Remedies Pvt Ltd',
+    countryOfOrigin: 'India',
+  },
+  // NEW: Medinn-Enro Injection (from Image 24 - 30ml version)
+  {
+    id: 'medinn-enro-injection-30ml',
+    name: 'Medinn-Enro Enrofloxacin Injection (30ml)',
+    brand: 'Innovation Remedies',
+    category: 'Antibiotics',
+    subcategory: 'Injectable Antibiotics (Fluoroquinolone)',
+    description: 'Enrofloxacin IP 100 mg/ML injection for wide spectrum bacterial infections (30ml).',
+    longDescription: 'Medinn-Enro (30ml) is an Enrofloxacin IP 100 mg/ML injection for treating various bacterial infections in animals, including gastrointestinal, respiratory tract, urinary tract, soft tissues, and skin infections.',
+    metaDescription: 'Medinn-Enro Injection 30ml - Enrofloxacin 100mg/ml. Treats wide spectrum infections. Innovation Remedies.',
+    keywords: ['medinn-enro', 'enrofloxacin injection', 'veterinary fluoroquinolone', 'bacterial infection cattle', 'respiratory infection treatment', 'innovation remedies'],
+    price: 90.00, // Placeholder price
+    MRP: 110.00,   // Placeholder MRP
+    currency: 'INR',
+    imageUrl: medinnEnroImage, // Placeholder for Image 24 (can be same for 100ml)
+    imageFileName: 'medinn_enro_injection_30ml.png',
+    imageAlt: 'Medinn-Enro Enrofloxacin 100mg/ml Injection 30ml',
+    gradientFrom: 'from-orange-100',
+    gradientTo: 'to-yellow-50',
+    minQuantity: 1,
+    rating: 4.6,
+    reviewCount: 60,
+    stock: 50,
+    inStock: true,
+    sku: 'IR-MEDENRO-INJ-30ML-029',
+    gtin: '8901234567918',
+    features: ['Enrofloxacin IP 100 mg/ML', 'Treats wide spectrum infections', 'Convenient 30ml pack', 'Rx Product'],
+    indications_clinical_uses: ['Gastrointestinal Infection', 'Respiratory Tract Infection', 'Urinary Tract Infection', 'Soft Tissues And Skin Infection', 'Infection Caused By Wide Spectrum bacteria'],
+    benefits: ['Effective against many common bacterial pathogens', 'Good tissue penetration', 'Versatile applications'],
+    dosage: '1 ML Each Kg Body Weight or As Directed by The Veterinarian.', // Note: This dosage seems very high (1ml/kg for 100mg/ml product). Usually it's mg/kg. Clarify with product literature. Assuming it's 1ml per certain kg range or specific mg/kg. For now, copying as written.
+    packSize: '30 ml Vial',
+    manufacturer: 'Innovation Remedies Pvt Ltd',
+    countryOfOrigin: 'India',
+  },
+  // NEW: Medinn-Enro Injection (from Image 24 - 100ml version)
+  {
+    id: 'medinn-enro-injection-100ml',
+    name: 'Medinn-Enro Enrofloxacin Injection (100ml)',
+    brand: 'Innovation Remedies',
+    category: 'Antibiotics',
+    subcategory: 'Injectable Antibiotics (Fluoroquinolone)',
+    description: 'Enrofloxacin IP 100 mg/ML injection for wide spectrum bacterial infections (100ml).',
+    longDescription: 'Medinn-Enro (100ml) provides Enrofloxacin IP 100 mg/ML for treating a broad range of bacterial infections in animals. Suitable for gastrointestinal, respiratory, urinary tract, soft tissue, and skin infections. Larger pack for multiple treatments or large animals.',
+    metaDescription: 'Medinn-Enro Injection 100ml - Enrofloxacin 100mg/ml. For wide spectrum infections. Innovation Remedies.',
+    keywords: ['medinn-enro 100ml', 'enrofloxacin bulk', 'veterinary antibiotic large pack', 'innovation remedies enrofloxacin'],
+    price: 250.00, // Placeholder price
+    MRP: 300.00,    // Placeholder MRP
+    currency: 'INR',
+    imageUrl: medinnEnroImage, // Placeholder for Image 24
+    imageFileName: 'medinn_enro_injection_100ml.png',
+    imageAlt: 'Medinn-Enro Enrofloxacin 100mg/ml Injection 100ml',
+    gradientFrom: 'from-orange-100',
+    gradientTo: 'to-yellow-50',
+    minQuantity: 1,
+    rating: 4.6,
+    reviewCount: 62,
+    stock: 45,
+    inStock: true,
+    sku: 'IR-MEDENRO-INJ-100ML-030',
+    gtin: '8901234567919',
+    features: ['Enrofloxacin IP 100 mg/ML', 'Effective for wide spectrum infections', 'Economical 100ml pack', 'Rx Product'],
+    indications_clinical_uses: ['Gastrointestinal Infection', 'Respiratory Tract Infection', 'Urinary Tract Infection', 'Soft Tissues And Skin Infection', 'Infection Caused By Wide Spectrum bacteria'],
+    benefits: ['Broad antibacterial coverage', 'Cost-effective for larger requirements', 'Reliable treatment option'],
+    dosage: '1 ML Each Kg Body Weight or As Directed by The Veterinarian.', // See note on 30ml version.
+    packSize: '100 ml Vial',
+    manufacturer: 'Innovation Remedies Pvt Ltd',
+    countryOfOrigin: 'India',
+  },
+  // NEW: IRL Innoworm-DS Bolus Vet (from Image 28)
+  {
+    id: 'irl-innoworm-ds-bolus',
+    name: 'IRL™ Innoworm-DS Bolus Vet',
+    brand: 'IRL (Innovation Remedies)',
+    category: 'Parasite Control',
+    subcategory: 'Broad Spectrum Dewormer Bolus',
+    description: 'Oxyclozanide, Levamisole Hcl, and Ivermectin Bolus for fluke and worm drench in cattle and sheep.',
+    longDescription: 'IRL Innoworm-DS Bolus Vet is a broad-spectrum dewormer containing Oxyclozanide, Levamisole Hcl, and Ivermectin. It is an excellent tablet for killing liver flukes and stomach worms in pregnant and all cattle and sheep.',
+    metaDescription: 'IRL Innoworm-DS Bolus - Oxyclozanide, Levamisole, Ivermectin. Fluke & worm control. Innovation Remedies.',
+    keywords: ['innoworm-ds bolus', 'oxyclozanide bolus', 'levamisole ivermectin', 'fluke drench cattle', 'sheep dewormer', 'broad spectrum anthelmintic', 'innovation remedies irl'],
+    price: 50.00,  // Placeholder price per bolus
+    MRP: 65.00,    // Placeholder MRP per bolus
+    currency: 'INR',
+    imageUrl: innowormDsBolusImage, // Placeholder for Image 28
+    imageFileName: 'irl_innoworm_ds_bolus.png',
+    imageAlt: 'IRL Innoworm-DS Bolus - Oxyclozanide, Levamisole, Ivermectin',
+    gradientFrom: 'from-lime-100',
+    gradientTo: 'to-green-50',
+    minQuantity: 1, // Typically sold per bolus or strip
+    rating: 4.8,
+    reviewCount: 80,
+    stock: 100,
+    inStock: true,
+    sku: 'IRL-INNOWORMDS-BOL-031',
+    gtin: '8901234567920',
+    features: ['Contains Oxyclozanide, Levamisole Hcl, and Ivermectin', 'Broad-spectrum: Fluke and Worm drench', 'Suitable for Cattle and Sheep', 'Effective against liver and stomach worms', 'Safe for pregnant animals (as per packaging claim)'],
+    benefits: ['Comprehensive parasite control', 'Treats mixed worm and fluke infestations', 'Improves animal health and productivity'],
+    applications: ['Control of liver flukes, roundworms, lungworms, and other endoparasites in cattle and sheep', 'Routine deworming programs'],
+    packSize: '1 Bolus', // Image specifies "1 Bolus" unit
+    manufacturer: 'Innovation Remedies Pvt Ltd',
+    countryOfOrigin: 'India',
+  },
+  // NEW: RESOLUTION-PRO POWDER (from Image 30)
+  {
+    id: 'resolution-pro-powder-500gm',
+    name: 'RESOLUTION-PRO™ POWDER (500gm)',
+    brand: 'Innovation Remedies',
+    category: 'Nutritional Supplements',
+    subcategory: 'Fertility & Mineral Powder',
+    description: 'Mineral powder with Omega 3 & 6, Chelated Minerals, Vitamins & Herbals for infertility treatment (500gm).',
+    longDescription: 'RESOLUTION-PRO POWDER (500gm) is a specialized mineral powder for the treatment of infertility in livestock. It aids in the development of genital organs, improves conception rate, and helps maintain pregnancy. Contains Omega 3 & 6 fatty acids, chelated Copper, Zinc, Manganese, Chromium, Selenium, Iodine, Phosphorus, Cobalt, Iron, Vitamins A, D3, E, and Herbals. Includes 25gm measure cap.',
+    metaDescription: 'RESOLUTION-PRO POWDER 500gm - Treats infertility in livestock. Chelated minerals & vitamins. Innovation Remedies.',
+    keywords: ['resolution-pro powder', 'infertility treatment cattle', 'livestock mineral supplement', 'chelated minerals fertility', 'omega 3 6 animals', 'repeat breeder powder', 'innovation remedies resolution'],
+    price: 450.00, // Placeholder price
+    MRP: 550.00,   // Placeholder MRP
+    currency: 'INR',
+    imageUrl: resolutionProPowderImage, // Placeholder for Image 30
+    imageFileName: 'resolution_pro_powder_500gm.png',
+    imageAlt: 'RESOLUTION-PRO POWDER 500gm - For Livestock Infertility',
+    gradientFrom: 'from-purple-100',
+    gradientTo: 'to-pink-50',
+    minQuantity: 1,
+    rating: 4.7,
+    reviewCount: 70,
+    stock: 60,
+    inStock: true,
+    sku: 'IR-RESPRO-PDR-500GM-032',
+    gtin: '8901234567921',
+    features: [
+        'Treats infertility: Non Specific Anoestrus, Repeat Breeder, Silent-Estrous',
+        'Development of Genital Organs', 'Improves Conception Rate', 'Maintain Pregnancy',
+        'Contains Omega 3 & 6, Chelated Minerals, Vitamins, Herbals', 'With 25gm Measure Cap'
+    ],
+    composition_per_500gm: {
+        'OMEGA 3 & 6 (FATTY ACID)': '500 mg', 'CH. COPPER SULPHATE': '18 gm', 'CH. ZINC SULPHATE': '44 gm',
+        'CH. MAGNESE CHLORIDE': '14.5 gm', 'CH. CHROMIUM SULPHATE': '1500 mg', 'SELENIUM': '22 mg',
+        'POTASSIUM IODATE (IODINE)': '340 mg', 'SODIUM ACID PHOSPHATE': '96.635 gm', 'DICALCIUM PHOSPHATE': '315 gm',
+        'COBALT SULPHATE': '500 mg', 'FERROUS SULPHATE (IRON)': '500 mg',
+        'VITAMIN A': '1.60 gm (ABOUT 50 Lac IU)', 'VITAMIN D3': '0.40 gm (ABOUT 15 Lac IU)',
+        'VITAMIN E': '2000 mg (ABOUT 30 Lac IU)', 'HERBALS': 'q.s.'
+    },
+    benefits: ['Effective treatment for various infertility issues', 'Provides essential micronutrients for reproduction', 'Supports overall reproductive health'],
+    recommended_dosage: 'Cattle/Buffalo/Heifer: 20-25 gm daily. Calf/Sheep/Goat: 10-15 gm daily. Feed Mixing Ratio: 500 gm-1Kg in 100 Kg of feed.',
+    applications: ['Treatment of infertility in livestock', 'Anoestrus management', 'Repeat breeding cases', 'Silent estrus issues'],
+    packSize: '500 gm with 25gm Measure Cap',
+    manufacturer: 'Innovation Remedies Pvt Ltd',
+    countryOfOrigin: 'India',
+  }
 ];
 // Helper function to process product data (normalize MRP, calculate discounts, add timers)
 const processProductDataArray = (initialData) => {

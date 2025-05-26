@@ -185,8 +185,8 @@ export default function EnhancedAboutUs() {
     },
     { 
       year: "2022", 
-      title: " Diagnostic Breakthrough", 
-      desc: "Released first-gen diagnostic tool achieving 99% accuracy",  
+      title: " Tested & Proven Products", 
+      desc: " Introduced 50+ veterinary products with 99% diagnostic accuracy",  
       icon: <Target className="text-emerald-500" />,
       color: "bg-emerald-50 border-emerald-200"
     },
@@ -199,8 +199,8 @@ export default function EnhancedAboutUs() {
     },
     { 
       year: "2025", 
-      title: "Online Portal Launch", 
-      desc: "Released pet owner website with 2K+ users in first month", 
+      title: "Online Website Launch", 
+      desc: "Released  website with 2K+ users in first month", 
       icon: <Star className="text-rose-500" />,
       color: "bg-rose-50 border-rose-200"
     }
@@ -256,7 +256,7 @@ export default function EnhancedAboutUs() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              Revolutionizing animal healthcare with AI-powered diagnostic tools and telemedicine platforms.
+              Revolutionizing animal Healthcare with Great Veterinary Products
             </motion.p>
           </motion.div>
         </div>
