@@ -69,7 +69,7 @@ const Home4 = () => {
         </div>
 
         {/* Right Column: Orbit Graphic - Enhanced sizing and animation */}
-        <div className="md:w-1/2 flex items-center justify-center mt-12 md:mt-0">
+        <div className="md:w-1/2 flex items-center justify-center  md:mt-0">
           {/* Orbit Container - Adjusted responsive sizing */}
         <img src={twelveone} alt="" />
         </div>

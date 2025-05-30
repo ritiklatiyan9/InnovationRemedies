@@ -1,68 +1,104 @@
 import React from "react";
 import veterinaryVideoUrl from "../../../assets/Video/bg121.mp4"; // Ensure this path is correct
-// ensure it's correctly imported/linked in your project's HTML or CSS.
 
-const customStyle = {
-  fontFamily: "Oregon LDO, sans-serif", // Custom font style, 'sans-serif' is a fallback
-  fontWeight: "400",
-};
-const customStyle2 = {
-  fontFamily: "Moonhouse, sans-serif", // Custom font style, 'sans-serif' is a fallback
-  fontWeight: "400",
+// Ensure your custom fonts 'Oregon LDO' and 'Moonhouse' are correctly
+// imported/linked in your project's HTML or CSS (e.g., via @font-face in your global CSS).
+// For example, in your main CSS file:
+// @font-face {
+//   font-family: 'Oregon LDO';
+//   src: url('/fonts/OregonLDO.woff2') format('woff2'), /* Adjust path */
+//        url('/fonts/OregonLDO.woff') format('woff');
+//   font-weight: 400; /* Or whatever weights you have */
+//   font-style: normal;
+// }
+// @font-face {
+//   font-family: 'Moonhouse';
+//   src: url('/fonts/Moonhouse.woff2') format('woff2'), /* Adjust path */
+//        url('/fonts/Moonhouse.woff') format('woff');
+//   font-weight: 400;
+//   font-style: normal;
+// }
+
+
+// It's generally better to define font families in CSS and use Tailwind classes,
+// but for direct application like this, these styles are fine.
+const customStyleOregon = {
+  fontFamily: "Oregon LDO, sans-serif",
+  fontWeight: "400", // Assuming Oregon LDO is used for regular/bold text
 };
 
+const customStyleMoonhouse = {
+  fontFamily: "Libreville-Free, sans-serif",
+  fontWeight: "400", // Assuming Moonhouse is a more decorative/accent font
+};
 
 const HeroSection = () => {
-  
-
   return (
     <section
-      style={customStyle}
-      className="relative w-full h-screen overflow-hidden" // h-screen makes it take full viewport height
+      className="relative w-full min-h-screen overflow-hidden flex items-center justify-center" // min-h-screen allows content to grow, flex for centering
     >
       {/* Background Video Container */}
       <div className="absolute inset-0 z-0">
         <video
           autoPlay
           loop
-          muted // Muted is often required for autoplay in modern browsers
-          playsInline // Important for iOS Safari to play inline and not fullscreen
+          muted
+          playsInline
           src={veterinaryVideoUrl}
-          className="w-full h-full object-cover object-center" // 'object-cover' ensures the video covers the area
-          // Optional: Add a poster image for while the video loads or if it fails
-          // poster="/path/to/your/video-poster-image.jpg"
+          className="w-full h-full object-cover object-center"
           onError={(e) => {
             console.error("Video Error:", e);
-            // You could implement a fallback to a static image here if the video fails
-            // For example, by setting a state variable that changes the background.
+            // Fallback: you could set a state to show a static background image here
           }}
         >
-          Your browser does not support the video tag. {/* Fallback text for old browsers */}
+          Your browser does not support the video tag.
         </video>
       </div>
 
-      {/* Gradient Overlay for Text Contrast */}
-      {/* This overlay helps make the text readable over various video backgrounds.
-          Adjust the colors and opacity (e.g., slate-900/85) as needed. */}
-      <div className="absolute inset-0 z-[5] bg-gradient-to-r from-slate-900/85 via-slate-900/60 to-transparent"></div>
+      {/* Dark Overlay for Text Contrast - Increased opacity for better readability */}
+      <div className="absolute inset-0 z-[5] bg-black/70"></div> {/* Simple, effective dark overlay */}
 
-      {/* Content Area */}
-      {/* 'relative z-10' ensures this content is above the video and overlay.
-          'flex items-center' for vertical centering of the content block.
-          'h-full' ensures the flex container takes the full height of the section. */}
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 flex items-center h-full py-16 md:py-24">
-        <div className="max-w-xl lg:max-w-2xl"> {/* Constrains the width of the text content */}
-        <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-bold text-white leading-tight">
-  Thoughtful Handling
-  <br /> 
-  Expertly <br /> <span style={customStyle2} className="text-sky-400 -tracking-tighter">Developed Solutions</span>
-</h1>
-<p className="mt-4 sm:mt-6 text-base sm:text-lg text-slate-200 max-w-lg -tracking-tighter">
-  Committed to excellence in every step. We treat your products with the utmost care and apply deep technical expertise to deliver innovative, reliable solutions tailored to your needs.
-</p>
+      {/* Content Area - Centered */}
+      <div className="relative z-10 container mx-auto px-6 sm:px-8 lg:px-12 text-center py-20 md:py-32">
+        {/* Optional: You can have a smaller tagline/pre-header if needed */}
+        <p 
+          style={customStyleOregon} 
+          className="text-sky-300 text-base sm:text-lg md:text-xl font-light mb-3 sm:mb-4 tracking-wide"
+        >
+          Commitment in Every Detail
+        </p>
 
-          {/* Buttons and other interactive elements were removed as per your request */}
-        </div>
+        <h1 
+          style={customStyleOregon} // Base font for the H1
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6 sm:mb-8"
+        >
+          Thoughtful Handling,
+          <br />
+          <span 
+            style={customStyleMoonhouse} 
+            className="block text-sky-400 mt-1 sm:mt-2 text-[.8em] -tracking-tight" // Slightly larger, Moonhouse font
+          >
+            Expertly Developed Solutions
+          </span>
+        </h1>
+
+        <p 
+          style={customStyleOregon}
+          className="mt-4 sm:mt-6 text-base sm:text-lg lg:text-xl text-slate-200 max-w-xl lg:max-w-2xl mx-auto leading-relaxed -tracking-tighter"
+        >
+          We meticulously care for your products and leverage deep technical expertise to craft innovative, reliable solutions tailored precisely to your needs.
+        </p>
+
+        {/* Example Button (Optional) - Styled for a modern look */}
+        {/* <div className="mt-8 sm:mt-10">
+          <a
+            href="#learn-more" // Replace with your actual link
+            style={customStyleOregon}
+            className="inline-block bg-sky-500 hover:bg-sky-600 text-white font-semibold text-lg px-8 py-3 rounded-lg shadow-lg transition-colors duration-300 transform hover:scale-105"
+          >
+            Discover Our Approach
+          </a>
+        </div> */}
       </div>
     </section>
   );

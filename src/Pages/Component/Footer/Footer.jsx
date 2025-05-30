@@ -33,8 +33,8 @@ function Footer() {
     { href: "https://youtube.com", label: "YouTube", Icon: Youtube },
   ];
 
-  const linkStyle = "text-gray-600 hover:text-emerald-600 transition-colors duration-300 group text-base flex items-center font-medium";
-  const iconLinkStyle = "inline-flex items-center text-gray-600 hover:text-emerald-600 transition-colors duration-300 text-base font-medium";
+  const linkStyle = "text-gray-700 hover:text-emerald-600 transition-colors duration-300 group text-base flex items-center font-medium";
+  const iconLinkStyle = "inline-flex items-center text-gray-700 hover:text-emerald-600 transition-colors duration-300 text-base font-medium";
 
   const socialIconVariants = {
     hover: {
@@ -49,31 +49,40 @@ function Footer() {
 
   return (
     <footer
-      className="animated-gradient-background text-gray-700 border-t-2 border-emerald-200/70" // Apply animated gradient and subtle top border
-      style={{ fontFamily: baseFontFamily }} // Base font for the footer
+      className="relative overflow-hidden text-gray-700 border-t border-emerald-100/50"
+      style={{ fontFamily: baseFontFamily }}
     >
-      <div className="container mx-auto px-6 sm:px-8 lg:px-12">
+      {/* Professional Gradient Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/40 via-teal-50/30 to-cyan-50/40"></div>
+      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-emerald-50/20 to-transparent"></div>
+      
+      {/* Decorative gradient orbs */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-br from-emerald-100/30 to-transparent rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gradient-to-br from-teal-100/30 to-transparent rounded-full blur-3xl"></div>
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-cyan-100/20 to-transparent rounded-full blur-3xl"></div>
+
+      <div className="container mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
 
         {/* Top Section: Brand, Tagline, Social */}
-        <div className="py-16 md:py-20 text-center md:text-left border-b border-gray-200/80">
+        <div className="py-16 md:py-20 text-center md:text-left border-b border-emerald-200/30">
           <div className="md:flex md:items-center md:justify-between">
             <div className="mb-12 md:mb-0">
               <Link to="/" className="inline-block mb-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-sm">
                 <motion.img
                   src={logo}
-                  className="h-20 sm:h-24 w-auto mx-auto md:mx-0"
+                  className="h-20 sm:h-24 w-auto mx-auto md:mx-0 drop-shadow-md"
                   alt="Innovation Remedies Logo"
                   whileHover={{ scale: 1.05 }}
                   transition={{ type: 'spring', stiffness: 400, damping: 10 }}
                 />
               </Link>
               <h2
-                className="text-3xl md:text-4xl text-emerald-700 tracking-tight mb-3"
+                className="text-3xl md:text-4xl text-emerald-800 tracking-tight mb-3"
                 style={{ fontFamily: customFontFamily, fontWeight: 'normal' }}
               >
                 Innovation Remedies Life Science Pvt. Ltd.
               </h2>
-              <p className="mt-3 text-lg text-emerald-600/90 max-w-md mx-auto md:mx-0 font-medium">
+              <p className="mt-3 text-lg text-emerald-700/80 max-w-md mx-auto md:mx-0 font-medium">
                 Enhancing animal health through innovative solutions
               </p>
             </div>
@@ -86,7 +95,7 @@ function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/70 hover:bg-emerald-50 text-emerald-600 flex items-center justify-center transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 shadow-md backdrop-blur-sm"
+                  className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/80 hover:bg-emerald-50 text-emerald-600 flex items-center justify-center transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 shadow-lg backdrop-blur-sm border border-emerald-100/50"
                   variants={socialIconVariants}
                   whileHover="hover"
                   whileTap="tap"
@@ -103,7 +112,7 @@ function Footer() {
           {/* Quick Links */}
           <div className="lg:col-span-1">
             <h3
-              className="text-xl text-emerald-700 mb-6 font-semibold"
+              className="text-xl text-emerald-800 mb-6 font-semibold"
               style={{ fontFamily: customFontFamily }}
             >
               Explore
@@ -120,7 +129,7 @@ function Footer() {
           {/* Contact Us */}
           <div className="lg:col-span-1">
             <h3
-              className="text-xl text-emerald-700 mb-6 font-semibold"
+              className="text-xl text-emerald-800 mb-6 font-semibold"
               style={{ fontFamily: customFontFamily }}
             >
               Get In Touch
@@ -128,7 +137,7 @@ function Footer() {
             <ul className="space-y-5">
               <li className="flex items-start">
                 <MapPin size={22} className="text-emerald-600 mr-3 mt-1 flex-shrink-0" />
-                <span className="text-base text-gray-600 leading-relaxed">
+                <span className="text-base text-gray-700 leading-relaxed">
                   B-Block, Baba Colony, Burari, North Delhi - 110084
                 </span>
               </li>
@@ -148,14 +157,14 @@ function Footer() {
           </div>
 
           {/* Newsletter Section - More Prominent */}
-          <div className="sm:col-span-2 lg:col-span-2 bg-white/80 backdrop-blur-md p-8 sm:p-10 rounded-2xl shadow-xl border border-emerald-200/60">
+          <div className="sm:col-span-2 lg:col-span-2 bg-gradient-to-br from-white/90 to-emerald-50/50 backdrop-blur-md p-8 sm:p-10 rounded-2xl shadow-xl border border-emerald-200/40">
             <h3
-              className="text-2xl text-emerald-700 mb-4 text-center font-semibold"
+              className="text-2xl text-emerald-800 mb-4 text-center font-semibold"
               style={{ fontFamily: customFontFamily }}
             >
               Subscribe to Our Newsletter
             </h3>
-            <p className="text-base text-gray-500 mb-6 text-center max-w-lg mx-auto">
+            <p className="text-base text-gray-600 mb-6 text-center max-w-lg mx-auto">
               Stay updated with our latest innovations, product launches, and special offers.
             </p>
             <form className="flex flex-col sm:flex-row sm:space-x-3 space-y-4 sm:space-y-0 max-w-lg mx-auto">
@@ -165,13 +174,13 @@ function Footer() {
                 type="email"
                 required
                 placeholder="your.email@example.com"
-                className="flex-grow px-5 py-3.5 text-base bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 placeholder-gray-400 shadow-sm"
+                className="flex-grow px-5 py-3.5 text-base bg-white/90 border border-emerald-200/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 placeholder-gray-400 shadow-sm backdrop-blur-sm"
                 whileFocus={{ scale: 1.02 }}
               />
               <motion.button
                 type="submit"
-                className="bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 px-6 rounded-lg text-base font-medium transition-colors duration-300 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 group shadow-lg whitespace-nowrap"
-                whileHover={{ scale: 1.03, boxShadow: "0px 5px 15px rgba(16, 185, 129, 0.4)" }}
+                className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white py-3.5 px-6 rounded-lg text-base font-medium transition-all duration-300 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 group shadow-lg whitespace-nowrap"
+                whileHover={{ scale: 1.03, boxShadow: "0px 10px 25px rgba(16, 185, 129, 0.3)" }}
                 whileTap={{ scale: 0.98 }}
               >
                 Subscribe <Send size={18} className="ml-2 transform group-hover:translate-x-1 transition-transform duration-300" />
@@ -181,17 +190,37 @@ function Footer() {
         </div>
 
         {/* Copyright Section */}
-        <div className="py-10 border-t border-gray-200/80 text-center">
-          <p className="text-base text-gray-600">
-            © {currentYear} <Link to="/" className="font-medium text-emerald-600 hover:text-emerald-700 hover:underline">Innovation Remedies Life Science Pvt. Ltd.</Link> All Rights Reserved.
+        <div className="py-10 border-t border-emerald-200/30 text-center">
+          <p className="text-base text-gray-700">
+            © {currentYear} <Link to="/" className="font-medium text-emerald-700 hover:text-emerald-800 hover:underline">Innovation Remedies Life Science Pvt. Ltd.</Link> All Rights Reserved.
           </p>
-          <p className="text-sm text-slate-500 mt-3 flex items-center justify-center">
-            <a href="https://wa.me/+919760302690" target="_blank" rel="noopener noreferrer" className="text-emerald-600 hover:text-emerald-700 hover:underline flex items-center">
+          <p className="text-sm text-slate-600 mt-3 flex items-center justify-center">
+            <a href="https://wa.me/+919760302690" target="_blank" rel="noopener noreferrer" className="text-emerald-700 hover:text-emerald-800 hover:underline flex items-center">
               Made with <Heart size={16} className="mx-1 text-rose-500 inline" fill="currentColor" /> by ByteMatrix
             </a>
           </p>
         </div>
       </div>
+
+      {/* Additional CSS for subtle animation (optional) */}
+      <style jsx>{`
+        @keyframes gradient-shift {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+        
+        .animated-gradient {
+          background-size: 200% 200%;
+          animation: gradient-shift 15s ease infinite;
+        }
+      `}</style>
     </footer>
   );
 }

@@ -9,7 +9,7 @@ import Home6 from "./Home6";
 import Home7 from "./Home7";
 import Home8 from "./Home8";
 // import logo from "../../../assets/Images/logo.png"; // logo imp7ort wasn't used directly in the JSX, ogImageUrl uses a string path
-import videoSourceUrl from "../../../assets/Video/doc10.mp4";
+import videoSourceUrl from "../../../assets/Video/bg8.mp4";
 import { FlipWords } from "../../../components/ui/flips-words";
 import { PawPrint, HeartPulse, Activity, Dog, TreePine } from "lucide-react"; // PawPrint wasn't used, but keeping it as it was in original
 
@@ -41,7 +41,7 @@ function Home() {
 
   // --- SEO & Domain Config (NATIONAL FOCUS) ---
   const siteUrl = "https://www.innovationremedies.com";
-  const siteName = "Innovation Remedies";
+  const siteName = "Innovation Remedies Life Science Pvt. Ltd.";
   // Page title for national brand recognition
   const pageTitle = `${siteName} | Trusted Animal Health & Veterinary Products Across India`;
   // Page description emphasizing national service
@@ -227,7 +227,7 @@ function Home() {
 
       <Home8 />
       <div className=""><Home6 /></div>
-      <Home7 />
+     
       <div className=""><Home3 /></div>
       <div className=""><Home4 /></div>
       <div><Home2 /></div>

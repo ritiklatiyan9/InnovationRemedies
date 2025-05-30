@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import Video from './Video';
 import vikasji from '../../../assets/Images/vikasji.jpg';
+import Carousel from './carousel';
 import {
   Eye, Target, Users, Trophy,
   Briefcase, Lightbulb, Star,
@@ -263,6 +264,9 @@ export default function EnhancedAboutUs() {
       </motion.section>
 
       <WaveDivider color="from-blue-100 to-emerald-100" />
+
+
+      <Carousel />
 
       {/* Vision & Mission */}
       
