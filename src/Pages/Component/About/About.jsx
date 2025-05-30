@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import Video from './Video';
 import vikasji from '../../../assets/Images/vikasji.jpg';
+import OurVideos from './OurVideos';
 import Carousel from './carousel';
 import {
   Eye, Target, Users, Trophy,
@@ -530,6 +531,9 @@ export default function EnhancedAboutUs() {
           </div>
         </div>
       </motion.section>
+
+
+      <OurVideos />
 
       {/* CTA Section */}
       <section className="relative py-24 md:py-32 z-10 overflow-hidden">
