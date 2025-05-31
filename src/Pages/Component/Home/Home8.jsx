@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Star, ArrowUpRight } from "lucide-react";
 import one from '../../../assets/Images/buf.png'; // Double-check this path!
-import three from '../../../assets/Images/dog.jpg'; // Double-check this path!
+import three from '../../../assets/Images/dogs.png'; // Double-check this path!
 import two from '../../../assets/Images/cow.png'; // Double-check this path!
 import sheep from '../../../assets/Images/sheep.jpg'; // Double-check this path!
 import cats from '../../../assets/Images/cat.png'; // Double-check this path!
@@ -46,18 +46,7 @@ const TestimonialCard = ({ item, isActive }) => {
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/0 to-black/0" />
       
-      <motion.a
-        href={`https://${item.companyUrl}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="absolute top-4 right-4 bg-white/20 backdrop-blur-md text-white p-3 rounded-full cursor-pointer hover:bg-white/30 transition-all duration-300"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        aria-label={`Visit ${item.companyUrl}`}
-      >
-        <ArrowUpRight className="w-5 h-5" />
-      </motion.a>
-      
+    
       <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
         <div className="flex mb-3 gap-1">
           {Array(0)
