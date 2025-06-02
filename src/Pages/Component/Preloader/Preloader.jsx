@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './preloader.css';
 
 // Replace 'logo.png' with the path to your actual logo
-import Logo from '../../../assets/Images/logonew.png';
+import Logo from '../../../assets/Images/logo.png';
 
 const Preloader = ({ setLoading }) => {
   useEffect(() => {
