@@ -71,7 +71,7 @@ const Home4 = () => {
           <img 
             src={twelveone} 
             alt="" 
-            className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 object-contain opacity-90 hover:opacity-100 transition-opacity duration-300"
+            className="w-full h-full sm:w-40 sm:h-40 md:w-48 md:h-96 lg:w-96 lg:h-full object-contain opacity-90 hover:opacity-100 transition-opacity duration-300"
           />
         </div>
       </div>
