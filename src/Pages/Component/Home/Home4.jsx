@@ -38,21 +38,20 @@ const Home4 = () => {
       {/* Enhanced Dimming overlay - subtle gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-black/70"></div>
 
-      {/* Content wrapper - Increased padding and gap */}
-      <div className="relative z-10 flex flex-col md:flex-row items-center justify-center min-h-screen px-6 sm:px-10 lg:px-16 py-20 gap-12 md:gap-8">
+      {/* Content wrapper - Updated layout */}
+      <div className="relative z-10 min-h-screen px-6 sm:px-10 lg:px-16 py-20">
 
         {/* Left Column - Improved text styling and spacing */}
-        <div className="md:w-1/2 text-center md:text-left space-y-8 max-w-xl">
+        <div className="max-w-2xl text-left space-y-8 pt-20">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-white drop-shadow-md">
             भरोसा ही हमारे उत्पादों को सबसे बेहतरीन बनाता है।
           </h1>
           <p className="text-lg text-gray-300 drop-shadow-sm">
           हज़ारों संतुष्ट ग्राहकों की तरह आप भी हमारे प्लेटफ़ॉर्म पर निर्भर करें, जो सहज एकीकरण और शक्तिशाली सुविधाएँ प्रदान करता है। भरोसे का अनुभव कीजिए – फर्क साफ़ नज़र आएगा।
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-5 mt-6">
+          <div className="flex flex-col sm:flex-row items-start gap-5 mt-6">
             <Button size="lg" className="px-8 py-3 bg-slate-300 text-black rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-shadow duration-300">
               Start Journey
-            
             </Button>
             {/* Refined Tag */}
             <div className="inline-flex items-center">
@@ -64,14 +63,16 @@ const Home4 = () => {
                     From Innovation Remedies
                 </span>
             </div>
-
           </div>
         </div>
 
-        {/* Right Column: Orbit Graphic - Enhanced sizing and animation */}
-        <div className="md:w-1/2 flex items-center justify-center  md:mt-0">
-          {/* Orbit Container - Adjusted responsive sizing */}
-        <img src={twelveone} alt="" />
+        {/* Right Bottom Image - Positioned absolutely */}
+        <div className="absolute bottom-4 right-4 md:bottom-0 md:right-8">
+          <img 
+            src={twelveone} 
+            alt="" 
+            className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 object-contain opacity-90 hover:opacity-100 transition-opacity duration-300"
+          />
         </div>
       </div>
     </div>

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Star, ArrowUpRight } from "lucide-react";
-import one from '../../../assets/Images/buf.png'; // Double-check this path!
+import one from '../../../assets/Images/buffalo.png'; // Double-check this path!
 import three from '../../../assets/Images/dogs.png'; // Double-check this path!
-import two from '../../../assets/Images/cow.png'; // Double-check this path!
-import sheep from '../../../assets/Images/sheep.jpg'; // Double-check this path!
+import two from '../../../assets/Images/cow.jpg'; // Double-check this path!
+import sheep from '../../../assets/Images/sheep.png'; // Double-check this path!
 import cats from '../../../assets/Images/cat.png'; // Double-check this path!
 import fish from '../../../assets/Images/fish.png'; // Double-check this path!
 const customStyle = {
