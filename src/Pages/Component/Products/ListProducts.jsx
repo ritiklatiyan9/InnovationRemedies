@@ -54,9 +54,14 @@ import ui from '../../../assets/Images/ui.png';
 import fiveltr from '../../../assets/Images/fiveltr.png';
 import gly from '../../../assets/Video/gly.png';
 import wui from '../../../assets/Images/wui.png';
+import innolactnew from '../../../assets/Images/new/innolactnew.png';
 import fourtybolus from '../../../assets/Images/fourtybolus.png';
 import tryu from '../../../assets/Images/tryu.png';
 import icj from '../../../assets/Images/ict.jpg';
+import innolactten from '../../../assets/Images/new/innolactten.png';
+import innolacttwenty from '../../../assets/Images/new/innolacttwenty.png';
+import innolact from '../../../assets/Images/new/innolact.png';
+import innolactfive from '../../../assets/Images/new/innolactfive.png';
 
 
 // Original productsData (IDs should ideally be unique for all entries)
@@ -141,7 +146,39 @@ export const productsData = [
     MRP: 2700.00, // Corrected from mrp
     price:1800.00,
     currency: 'INR',
-    imageUrl: twotwo, // Assuming same image for product line
+    imageUrl: innolactten, // Assuming same image for product line
+    imageFileName: 'innolact_ad3_super_10ltr.png',
+    imageAlt: 'Innolact AD3 Super 10 Liters - Premium Lactation Supplement',
+    gradientFrom: 'from-purple-100',
+    gradientTo: 'to-purple-50',
+    minQuantity: 1,
+    rating: 4.5,
+    reviewCount: 89,
+    stock: 30,
+    inStock: true,
+    sku: 'IR-INNO-AD3-10L-002A', // Made SKU unique
+    gtin: '8901234567891A', // Made GTIN unique example
+    features: ['Boosts milk yield', 'Enhanced milk quality', 'Supports udder health', 'Economical 10L pack'],
+    benefits: ['Increased daily milk production', 'Improved milk fat', 'Maintains health during lactation'],
+    applications: ['Dairy cattle', 'Buffaloes', 'Large dairy farms'],
+    packSize: '10 Liters', // Corrected packSize
+    manufacturer: 'Innovation Remedies Pvt Ltd',
+    countryOfOrigin: 'India',
+  },
+   {
+    id: 'innolact-ad3-super-10ltr', // Made ID unique
+    name: 'Innolact®  AD3 Super (5Ltr.)',
+    brand: 'Innovation Remedies',
+    category: 'Lactation Supplements',
+    subcategory: 'Dairy Animal Nutrition',
+    description: 'Advanced lactation supplement for dairy animals (10 Liters)',
+    longDescription: 'Innolact AD3 Super (10 Liters) is an advanced lactation supplement formulated for dairy animals. It enhances milk production, improves milk quality, and supports overall health. Contains vital vitamins and minerals.',
+    metaDescription: 'Innolact AD3 Super (10 Liters) - Boost milk production & quality. Vitamin AD3 enriched formula by Innovation Remedies.',
+    keywords: ['innolact ad3 super 10l', 'lactation supplement', 'dairy supplement', 'milk production booster', 'innovation remedies innolact'],
+    MRP: 2700.00, // Corrected from mrp
+    price:1800.00,
+    currency: 'INR',
+    imageUrl: innolactnew, // Assuming same image for product line
     imageFileName: 'innolact_ad3_super_10ltr.png',
     imageAlt: 'Innolact AD3 Super 10 Liters - Premium Lactation Supplement',
     gradientFrom: 'from-purple-100',
@@ -173,7 +210,7 @@ export const productsData = [
     MRP: 4900.00,
     price:3000.00,
     currency: 'INR',
-    imageUrl: twotwo, // Assuming same image for product line
+    imageUrl: innolacttwenty, // Assuming same image for product line
     imageFileName: 'innolact_ad3_super_20ltr.png',
     imageAlt: 'Innolact AD3 Super 20 Liters - Bulk Lactation Supplement',
     gradientFrom: 'from-purple-100',
@@ -339,9 +376,42 @@ export const productsData = [
     MRP: 380.00,
     price:250.00,
     currency: 'INR',
-    imageUrl: twofour,
+    imageUrl: innolactfive,
     imageFileName: 'innolact_gel_advance_500gm.png',
     imageAlt: 'Innolact Gel Advance 500gm - Economy Pack Lactation Gel Supplement',
+    gradientFrom: 'from-teal-100',
+    gradientTo: 'to-teal-50',
+    minQuantity: 5,
+    rating: 4.9,
+    reviewCount: 135,
+    stock: 40,
+    inStock: true,
+    sku: 'IR-INNO-GEL500GM-005', // Clarified SKU
+    gtin: '8901234567894',
+    features: ['Advanced gel formula', 'Cost-effective 500gm pack', 'Quick absorption'],
+    benefits: ['Bulk packaging savings', 'Extended supply', 'Consistent quality'],
+    applications: ['Multi-animal farms', 'Regular supplementation', 'Dairy cooperatives'],
+    packSize: '500 grams',
+    manufacturer: 'Innovation Remedies Pvt Ltd',
+    countryOfOrigin: 'India',
+  },
+
+  {
+    id: 'innolact-gel-advance-500gm', // Changed ID slightly for consistency
+    name: 'Innolact® Gel Advance 500gm',
+    brand: 'Innovation Remedies',
+    category: 'Lactation Supplements',
+    subcategory: 'Gel Formulations',
+    description: 'Advanced gel formula for lactation support (500gm)',
+    longDescription: 'This 500gm pack of Innolact Gel Advance provides a convenient supply of our advanced gel formula for consistent lactation support. Ideal for managing multiple animals or for extended use.',
+    metaDescription: 'Innolact Gel Advance 500gm pack ₹250 (MRP ₹380). Cost-effective lactation gel supplement. Innovation Remedies.',
+    keywords: ['innolact gel 500gm', 'bulk lactation gel', 'dairy farm supplement', 'cost effective dairy gel', 'innovation remedies 500gm'],
+    MRP: 380.00,
+    price:250.00,
+    currency: 'INR',
+    imageUrl: innolact,
+    imageFileName: 'innolact_gel_advance_500gm.png',
+    imageAlt: 'Innolact Gel Advance 300gm - Economy Pack Lactation Gel Supplement',
     gradientFrom: 'from-teal-100',
     gradientTo: 'to-teal-50',
     minQuantity: 5,
