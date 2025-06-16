@@ -52,6 +52,7 @@ import tenn from '../../../assets/Images/tenn.png';
 import advcalf from '../../../assets/Images/advcalf.png';
 import ui from '../../../assets/Images/ui.png';
 import fiveltr from '../../../assets/Images/fiveltr.png';
+import racer from '../../../assets/Images/new/racer.png'
 import gly from '../../../assets/Video/gly.png';
 import wui from '../../../assets/Images/wui.png';
 import innolactnew from '../../../assets/Images/new/innolactnew.png';
@@ -62,6 +63,8 @@ import innolactten from '../../../assets/Images/new/innolactten.png';
 import innolacttwenty from '../../../assets/Images/new/innolacttwenty.png';
 import innolact from '../../../assets/Images/new/innolact.png';
 import innolactfive from '../../../assets/Images/new/innolactfive.png';
+import innolactwhite from '../../../assets/Images/new/innolactwhite.png';
+import whitebox from '../../../assets/Images/new/whitebox.png'
 
 
 // Original productsData (IDs should ideally be unique for all entries)
@@ -166,21 +169,21 @@ export const productsData = [
     countryOfOrigin: 'India',
   },
    {
-    id: 'innolact-ad3-super-10ltr', // Made ID unique
+    id: 'innolact-ad3-super-5ltr', // Made ID unique
     name: 'Innolact®  AD3 Super (5Ltr.)',
     brand: 'Innovation Remedies',
     category: 'Lactation Supplements',
     subcategory: 'Dairy Animal Nutrition',
-    description: 'Advanced lactation supplement for dairy animals (10 Liters)',
-    longDescription: 'Innolact AD3 Super (10 Liters) is an advanced lactation supplement formulated for dairy animals. It enhances milk production, improves milk quality, and supports overall health. Contains vital vitamins and minerals.',
-    metaDescription: 'Innolact AD3 Super (10 Liters) - Boost milk production & quality. Vitamin AD3 enriched formula by Innovation Remedies.',
-    keywords: ['innolact ad3 super 10l', 'lactation supplement', 'dairy supplement', 'milk production booster', 'innovation remedies innolact'],
-    MRP: 2700.00, // Corrected from mrp
-    price:1800.00,
+    description: 'Advanced lactation supplement for dairy animals (5 Liters)',
+    longDescription: 'Innolact AD3 Super (5 Liters) is an advanced lactation supplement formulated for dairy animals. It enhances milk production, improves milk quality, and supports overall health. Contains vital vitamins and minerals.',
+    metaDescription: 'Innolact AD3 Super ( 5 Liters) - Boost milk production & quality. Vitamin AD3 enriched formula by Innovation Remedies.',
+    keywords: ['innolact ad3 super 5l', 'lactation supplement', 'dairy supplement', 'milk production booster', 'innovation remedies innolact'],
+    MRP: 1400.00, // Corrected from mrp
+    price:950.00,
     currency: 'INR',
     imageUrl: innolactnew, // Assuming same image for product line
-    imageFileName: 'innolact_ad3_super_10ltr.png',
-    imageAlt: 'Innolact AD3 Super 10 Liters - Premium Lactation Supplement',
+    imageFileName: 'innolact_ad3_super_5ltr.png',
+    imageAlt: 'Innolact AD3 Super 5 Liters - Premium Lactation Supplement',
     gradientFrom: 'from-purple-100',
     gradientTo: 'to-purple-50',
     minQuantity: 1,
@@ -276,7 +279,7 @@ export const productsData = [
     MRP: 2400.00, // Corrected from mrp
     price:1500.00,
     currency: 'INR',
-    imageUrl: twothree, // Assuming same image for product line
+    imageUrl: whitebox, // Assuming same image for product line
     imageFileName: 'innolact_gold_10ltr.png',
     imageAlt: 'Innolact AD3 Gold 10 Liters - Chelated Mineral Formula',
     gradientFrom: 'from-amber-100',
@@ -308,7 +311,7 @@ export const productsData = [
     MRP: 4500.00, // Corrected from mrp
     price:2500.00,
     currency: 'INR',
-    imageUrl: twothree, // Assuming same image for product line
+    imageUrl: innolactwhite, // Assuming same image for product line
     imageFileName: 'innolact_gold_20ltr.png',
     imageAlt: 'Innolact AD3 Gold 20 Liters - Bulk Chelated Mineral Formula',
     gradientFrom: 'from-amber-100',
@@ -339,10 +342,10 @@ export const productsData = [
     longDescription: 'Innolact Gel Advance (1 Liter) is a unique sulfur-enhanced supplement designed to support lactation and improve metabolic functions in dairy animals. The gel form ensures easy administration and quick absorption.',
     metaDescription: 'Innolact Gel Advance (1 Liter) ₹900 (MRP ₹1400) - Sulfur-enhanced gel supplement for dairy animals. Innovation Remedies.',
     keywords: ['innolact gel 1l', 'sulfur supplement cattle', 'gel lactation supplement', 'metabolic support dairy', 'innovation remedies gel'],
-    MRP: 1400.00,
-    price: 900.00,
+    MRP: 700.00,
+    price: 400.00,
     currency: 'INR',
-    imageUrl: twofive,
+    imageUrl: innolactfive,
     imageFileName: 'innolact_gel_advance_1ltr.png',
     imageAlt: 'Innolact Gel Advance 1 Liter - Sulfur-Enhanced Gel Supplement',
     gradientFrom: 'from-yellow-100',
@@ -397,8 +400,8 @@ export const productsData = [
   },
 
   {
-    id: 'innolact-gel-advance-500gm', // Changed ID slightly for consistency
-    name: 'Innolact® Gel Advance 500gm',
+    id: 'innolact-gel-advance-300gm', // Changed ID slightly for consistency
+    name: 'Innolact® Gel Advance 300gm',
     brand: 'Innovation Remedies',
     category: 'Lactation Supplements',
     subcategory: 'Gel Formulations',
@@ -406,8 +409,8 @@ export const productsData = [
     longDescription: 'This 500gm pack of Innolact Gel Advance provides a convenient supply of our advanced gel formula for consistent lactation support. Ideal for managing multiple animals or for extended use.',
     metaDescription: 'Innolact Gel Advance 500gm pack ₹250 (MRP ₹380). Cost-effective lactation gel supplement. Innovation Remedies.',
     keywords: ['innolact gel 500gm', 'bulk lactation gel', 'dairy farm supplement', 'cost effective dairy gel', 'innovation remedies 500gm'],
-    MRP: 380.00,
-    price:250.00,
+    MRP: 280.00,
+    price:180.00,
     currency: 'INR',
     imageUrl: innolact,
     imageFileName: 'innolact_gel_advance_500gm.png',
@@ -574,8 +577,8 @@ export const productsData = [
     longDescription: 'Badda H (1Ltr) is formulated to support and maintain urinary tract and digestive health in animals. It aids in preventing common issues and promotes overall systemic balance.',
     metaDescription: 'Badda H 1 Liter ₹1200 (MRP ₹1650) - Urinary tract & digestive health supplement for animals. Innovation Remedies.',
     keywords: ['badda h 1l', 'urinary health animals', 'digestive health supplement', 'systemic balance animals', 'innovation remedies badda'],
-    MRP: 1650.00,
-    price : 1200.00,
+    MRP: 1562.00,
+    price : 1100.00,
     currency: 'INR',
     imageUrl: eight,
     imageFileName: 'badda_h_1ltr.png',
@@ -606,8 +609,8 @@ export const productsData = [
     longDescription: 'Badda H (250ml) is formulated to support urinary tract and digestive health in animals. Aids in preventing common issues and promotes systemic balance. Convenient 250ml pack.',
     metaDescription: 'Badda H 250ml - Urinary & digestive health for animals. Innovation Remedies.',
     keywords: ['badda h 250ml', 'animal urinary health', 'animal digestive care', 'innovation remedies'],
-    MRP: 700.00, // Corrected from mrp
-    price : 400.00,
+    MRP: 428.00, // Corrected from mrp
+    price : 350.00,
     currency: 'INR',
     imageUrl: tryu,
     imageFileName: 'badda_h_250ml.png',
@@ -632,18 +635,18 @@ export const productsData = [
   // 11. Racer kit
   {
     id: 'racer-kit',
-    name: 'IRL™ Racer Kit',
+    name: 'IRL™ Racer ( 1Ltr. )',
     brand: 'Innovation Remedies',
     category: 'Performance Enhancement',
     subcategory: 'Racing Animal Care',
-    description: 'Performance enhancement kit for racing animals',
-    longDescription: 'The IRL™ Racer Kit is a specialized performance enhancement solution for racing animals. It is designed to optimize energy, stamina, and recovery for peak competitive performance.',
+    description: 'Performance enhancement  for racing animals',
+    longDescription: 'The IRL™ Racer  is a specialized performance enhancement solution for racing animals. It is designed to optimize energy, stamina, and recovery for peak competitive performance.',
     metaDescription: 'IRL™ Racer Kit ₹1100 (MRP ₹1690) - Performance enhancement for racing animals. Innovation Remedies.',
     keywords: ['racer kit', 'racing animal supplement', 'performance enhancement animals', 'racing horse supplement', 'stamina booster animals', 'innovation remedies racer'],
-    MRP:1690.00,
-    price:1100.00,
+    MRP:860.00,
+    price:600.00,
     currency: 'INR',
-    imageUrl: sui,
+    imageUrl: racer,
     imageFileName: 'racer_kit.png',
     imageAlt: 'IRL Racer Kit - Professional Performance Enhancement Kit for Racing Animals',
     gradientFrom: 'from-red-100',
@@ -706,7 +709,7 @@ export const productsData = [
   longDescription: 'Innoliv DS (5Ltr) is an advanced liver support supplement that promotes detoxification and enhances overall animal vitality. Essential for maintaining liver health and function. Economical 5 Liter pack.',
   metaDescription: 'Innoliv DS 5 Liter ₹650 (MRP ₹1250) - Advanced liver support for animals. Innovation Remedies hepatic care products.',
   keywords: ['innoliv ds 5l', 'liver support animals', 'hepatic supplement', 'detoxification animals', 'liver care veterinary', 'innovation remedies innoliv'],
-  price: 650.00,
+  price: 700.00,
   MRP: 1250.00, // Corrected from mrp
   discount: 48,  // 48% discount
   discountAmount: 600.00,  // ₹600 off
@@ -733,14 +736,14 @@ export const productsData = [
 
   // 14. Urocoenta Advance
   {
-    id: 'urocoenta-advance-500ml', // Added packsize to id for clarity
-    name: 'Urocenta® Advance (500ml)', // Added packsize to name for clarity
+    id: 'urocoenta-advance-1l', // Added packsize to id for clarity
+    name: 'Urocenta® Advance (1Ltr)', // Added packsize to name for clarity
     brand: 'Innovation Remedies',
     category: 'Urinary Care',
     subcategory: 'Kidney Health',
-    description: 'Advanced urinary health supplement (500ml)',
-    longDescription: 'Urocoenta Advance (500ml) is a cutting-edge supplement for maintaining urinary health in animals. It helps prevent urinary issues and supports healthy kidney function.',
-    metaDescription: 'Urocoenta Advance 500ml ₹210 (MRP ₹300) - Advanced urinary health supplement. Innovation Remedies.',
+    description: 'Advanced urinary health supplement (1L)',
+    longDescription: 'Urocoenta Advance (1l) is a cutting-edge supplement for maintaining urinary health in animals. It helps prevent urinary issues and supports healthy kidney function.',
+    metaDescription: 'Urocoenta Advance 1l ₹210 (MRP ₹300) - Advanced urinary health supplement. Innovation Remedies.',
     keywords: ['urocoenta advance', 'urinary health supplement', 'kidney support animals', 'uti prevention animals', 'innovation remedies urocoenta'],
     MRP: 300.00, // Corrected from mrp
     price:210.00,
@@ -776,8 +779,8 @@ export const productsData = [
     longDescription: 'Glucodyna (1Ltr) is a vital energy and glucose supplement for animals, particularly useful during periods of stress, recovery, or high energy demand. Helps maintain blood glucose levels.',
     metaDescription: 'Glucodyna 1 Liter ₹600 (MRP ₹750) - Instant energy & glucose supplement for animals. Innovation Remedies.',
     keywords: ['glucodyna 1l', 'glucose supplement animals', 'energy booster animals', 'stress recovery animals', 'innovation remedies glucodyna'],
-    MRP: 750.00,
-    price:600.00,
+    MRP: 800.00,
+    price:650.00,
     currency: 'INR',
     imageUrl: tenn,
     imageFileName: 'glucodyna_1ltr.png',

@@ -93,7 +93,8 @@ function Home() {
   };
 
   return (
-    <div className="w-full text-gray-800 font-sans">
+    <div
+     className="w-full text-gray-800 font-sans">
       <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
