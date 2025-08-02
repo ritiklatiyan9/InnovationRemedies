@@ -372,7 +372,7 @@ function App() {
           <Router>
             <ScrollToTop />
             <Header />
-            <main className="pt-16 md:pt-16 min-h-screen">
+            <main className=" min-h-screen">
               <Routes>
                 <Route 
                   path="/" 

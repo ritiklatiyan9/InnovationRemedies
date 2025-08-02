@@ -22,6 +22,18 @@ const customStyle = {
   fontWeight: "400",
 }
 
+const customFontStyle5 = {
+  fontFamily: "'Qrada Personal Use', sans-serif",
+  fontWeight: 600,
+  fontStyle: "normal",
+};
+const customFontStyle3 = {
+  fontFamily: "'Neue Montreal Regular', sans-serif",
+  fontWeight: 600,
+  fontStyle: "normal",
+};
+
+
 // const dolceAmyaraStyle = { // This style wasn't used, commenting out or removing is fine
 //   fontFamily: "'Dolce & Amyara Personal Use', serif",
 //   fontWeight: "normal",
@@ -156,22 +168,22 @@ function Home() {
               <span className="block text-4xl md:text-8xl -tracking-tighter lg:text-8xl bg-gradient-to-r from-blue-200 via-slate-100 to-indigo-200 bg-clip-text text-transparent" style={customStyle}>
                 INNOVATION
               </span>
-              <span className="block whitespace-nowrap text-2xl md:text-6xl mt-2 text-slate-300 font-light">
+              <span style={customFontStyle3} className="block whitespace-nowrap text-2xl md:text-6xl mt-2 text-slate-300 font-light">
               Remedies Life Science Pvt. Ltd.
               </span>
             </h1>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-6 text-gray-200 drop-shadow-md">
+            <h2   style={customFontStyle3}  className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-6 text-gray-200 drop-shadow-md">
               Advancing Animal <FlipWords words={words} className="text-green-500 font-semibold" /> Across India
             </h2>
 
-            <p className="text-lg md:text-xl text-gray-200 max-w-2xl mb-10 mx-auto md:mx-0">
+            <p  style={customFontStyle3}  className="text-lg md:text-xl text-gray-200 max-w-2xl mb-10 mx-auto md:mx-0">
               Welcome to {siteName}. We deliver cutting-edge veterinary solutions nationwide, enhancing the health,
               wellness, and vitality of animals throughout India.
             </p>
 
             {/* UPDATED FEATURE HIGHLIGHTS SECTION */}
-            <div className="flex flex-wrap gap-x-6 gap-y-4 justify-center md:justify-start">
+            <div  style={customFontStyle3}  className="flex flex-wrap gap-x-6 gap-y-4 justify-center md:justify-start">
               <div className="flex items-center space-x-2.5 cursor-default">
                 <motion.span 
                   className="flex items-center justify-center p-1.5 bg-rose-500/80 rounded-full text-white shadow-md" 

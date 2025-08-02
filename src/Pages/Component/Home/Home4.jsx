@@ -29,6 +29,18 @@ const iconColorMap = {
   red: 'bg-red-600/80 shadow-red-500/50',
 };
 
+const customFontStyle5 = {
+  fontFamily: "'Qrada Personal Use', sans-serif",
+  fontWeight: 600,
+  fontStyle: "normal",
+};
+const customFontStyle3 = {
+  fontFamily: "'Neue Montreal Regular', sans-serif",
+  fontWeight: 600,
+  fontStyle: "normal",
+};
+
+
 const Home4 = () => {
   return (
     <div
@@ -42,7 +54,7 @@ const Home4 = () => {
       <div className="relative z-10 min-h-screen px-6 sm:px-10 lg:px-16 py-20">
 
         {/* Left Column - Improved text styling and spacing */}
-        <div className="max-w-2xl text-left space-y-8 pt-20">
+        <div style={customFontStyle3} className="max-w-2xl text-left space-y-8 pt-20">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-white drop-shadow-md">
             भरोसा ही हमारे उत्पादों को सबसे बेहतरीन बनाता है।
           </h1>

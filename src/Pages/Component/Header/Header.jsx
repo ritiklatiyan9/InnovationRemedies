@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { Home, ShoppingBag, Book, Users, Mail, Menu, LogOut, User, 
-         ChevronRight, Settings, ShoppingCart, Package, X } from 'lucide-react';
+import { Home, ShoppingBag, Book, Users, Mail, Menu, LogOut, 
+         ChevronRight, ShoppingCart, Package, X } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetFooter } from '@/components/ui/sheet';
 import {
   NavigationMenu,
@@ -12,7 +12,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
@@ -61,30 +60,23 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
-  const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const isAdmin = user?.role === 'Admin';
   
   // Cart items count (example)
-  const cartItemsCount = 0;
+  const cartItemsCount = 0;// Assuming 3 items for demo purposes, you can wire this up
 
   // Handle scroll behavior
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       
-      // Set scrolled state for visual changes
-      setIsScrolled(currentScrollY > 10);
-      
       if (currentScrollY < 20) {
-        // Always show header at the top of the page
         setIsVisible(true);
       } else if (currentScrollY < lastScrollY) {
-        // Scrolling up - show header
         setIsVisible(true);
       } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        // Scrolling down and not at the top - hide header
         setIsVisible(false);
       }
       
@@ -117,13 +109,13 @@ export default function Header() {
 
   return (
     <header className={cn(
-      "fixed inset-x-0 z-50 transition-all duration-300 transform",
-      isVisible ? "top-0 translate-y-0" : "-translate-y-full",
-      isScrolled 
-        ? "bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-lg dark:shadow-gray-950/30 border-b border-gray-200 dark:border-gray-800/50" 
-        : "bg-white dark:bg-gray-900 border-b border-transparent",
+      "fixed inset-x-2 sm:inset-x-4 md:inset-x-6 z-50 transition-all duration-500 ease-in-out transform",
+      isVisible ? "top-4 translate-y-0" : "-translate-y-[150%]",
+      "bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl",
+      "rounded-2xl md:rounded-full border border-slate-300/50 dark:border-slate-700/50",
+      "shadow-xl shadow-slate-900/10"
     )}>
-      <div className="container mx-auto h-16 flex items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto h-16 flex items-center justify-between px-4 sm:px-6">
         {/* Logo */}
         <Link
           to="/"
@@ -136,37 +128,31 @@ export default function Header() {
             alt="Innovation Remedies Company Logo"
             className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
           />
-          <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full rounded-full"></span>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden lg:block mx-auto">
+        <div className="hidden lg:block">
           <NavigationMenu>
-            <NavigationMenuList className="flex items-center p-1 bg-gray-100/70 dark:bg-gray-800/50 rounded-full shadow-inner">
+            <NavigationMenuList className="flex items-center">
               {getAllNavItems().map((item) => (
                 <NavigationMenuItem key={item.to} className="mx-0.5">
                   <NavLink
                     to={item.to}
                     className={({ isActive }) => cn(
-                      "group flex items-center px-4 py-2 rounded-full text-sm font-medium transition-all duration-200",
+                      "group flex items-center px-3 py-2 rounded-full text-sm font-medium transition-all duration-200",
                       isActive 
                         ? `${item.bgColor} ${item.color} shadow-sm` 
-                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-200/50 dark:hover:bg-gray-700/50"
+                        : "text-slate-700 dark:text-slate-300 hover:bg-slate-500/10 dark:hover:bg-slate-400/10"
                     )}
                   >
-                    <div className={cn(
-                      "flex items-center justify-center w-7 h-7 rounded-full mr-2",
-                      "transition-colors duration-200",
-                      "group-hover:bg-white dark:group-hover:bg-gray-800"
-                    )}>
-                      <item.icon className={cn(
-                        "h-4 w-4",
-                        item.color
+                    <item.icon className={cn(
+                        "h-4 w-4 mr-2",
+                        // The `isActive` check needs to be inside a function for `cn` to process it correctly
+                        ({ isActive }) => isActive ? item.color : "text-slate-500 dark:text-slate-400" 
                       )} />
-                    </div>
+                    {/* THIS WAS THE MISSING PART */}
                     {item.label}
                     
-                    {/* Badge for cart */}
                     {item.label === 'My Cart' && cartItemsCount > 0 && (
                       <Badge 
                         variant="destructive" 
@@ -189,57 +175,42 @@ export default function Header() {
             {isAuthenticated ? (
               <UserDropdown user={user} onLogout={handleLogout} />
             ) : (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800/50 p-1 rounded-full">
                 <Button 
                   asChild 
                   variant="ghost" 
                   size="sm" 
-                  className="rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+                  className="rounded-full hover:bg-white/70 dark:hover:bg-slate-700/50"
                 >
                   <Link to="/login">Sign in</Link>
                 </Button>
                 <Button 
                   asChild 
                   size="sm" 
-                  className="rounded-full bg-primary hover:bg-primary/90"
+                  className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
                 >
-                  <Link to="/login">Register</Link>
+                  <Link to="/register">Register</Link>
                 </Button>
               </div>
             )}
           </div>
           
-          {/* Mobile visible cart and products icons */}
-          <div className="lg:hidden flex items-center gap-2">
-            {/* Products Icon */}
+          {/* Mobile visible icons (Cart) */}
+          <div className="lg:hidden flex items-center">
             <Button 
               asChild
               variant="ghost" 
               size="icon" 
-              className="rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
-            >
-              <Link to="/products" aria-label="Products">
-                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-500/20">
-                  <ShoppingBag className="h-4 w-4 text-blue-500" />
-                </div>
-              </Link>
-            </Button>
-            
-            {/* Cart Icon with Badge */}
-            <Button 
-              asChild
-              variant="ghost" 
-              size="icon" 
-              className="rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 relative"
+              className="rounded-full relative"
             >
               <Link to="/cart" aria-label="Shopping Cart">
-                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-red-100 dark:bg-red-500/20">
+                 <div className="flex items-center justify-center w-8 h-8 rounded-full bg-red-100 dark:bg-red-500/20">
                   <ShoppingCart className="h-4 w-4 text-red-500" />
                 </div>
                 {cartItemsCount > 0 && (
                   <Badge 
                     variant="destructive" 
-                    className="absolute -top-1 -right-1 h-5 min-w-5 px-1.5 flex items-center justify-center"
+                    className="absolute -top-1 -right-1 h-5 min-w-5 flex items-center justify-center"
                   >
                     {cartItemsCount}
                   </Badge>
@@ -255,10 +226,10 @@ export default function Header() {
                 <Button 
                   variant="ghost" 
                   size="icon" 
-                  className="rounded-full hover:bg-gray-100 dark:hover:bg-gray-800" 
+                  className="rounded-full" 
                   aria-label="Open menu"
                 >
-                  <Menu className="h-6 w-6 text-gray-700 dark:text-gray-300" />
+                  <Menu className="h-6 w-6 text-slate-800 dark:text-slate-200" />
                 </Button>
               </SheetTrigger>
               <MobileMenu
@@ -277,6 +248,7 @@ export default function Header() {
     </header>
   );
 }
+
 
 // --- User Dropdown Component ---
 function UserDropdown({ user, onLogout }) {
@@ -331,8 +303,6 @@ function UserDropdown({ user, onLogout }) {
         <DropdownMenuSeparator className="my-1" />
         
         <div className="p-1">
-         
-          
           {isAdmin && (
             <DropdownMenuItem asChild>
               <Link 
@@ -346,8 +316,6 @@ function UserDropdown({ user, onLogout }) {
               </Link>
             </DropdownMenuItem>
           )}
-          
-         
         </div>
         
         <DropdownMenuSeparator className="my-1" />
@@ -483,7 +451,8 @@ function MobileMenu({ isAuthenticated, user, onLogout, onClose, navItems, curren
                   )}
                   onClick={onClose}
                 >
-                  
+                  {/* You might want to add profile icon and text here */}
+                  <span>Profile</span>
                   
                   {currentPath === '/profile' && (
                     <ChevronRight className="h-4 w-4 text-blue-600 dark:text-blue-400" />

@@ -19,6 +19,18 @@ import veterinaryVideoUrl from "../../../assets/Video/bg121.mp4"; // Ensure this
 //   font-style: normal;
 // }
 
+const customFontStyle5 = {
+  fontFamily: "'Qrada Personal Use', sans-serif",
+  fontWeight: 600,
+  fontStyle: "normal",
+};
+const customFontStyle3 = {
+  fontFamily: "'Neue Montreal Regular', sans-serif",
+  fontWeight: 600,
+  fontStyle: "normal",
+};
+
+
 
 // It's generally better to define font families in CSS and use Tailwind classes,
 // but for direct application like this, these styles are fine.
@@ -69,22 +81,22 @@ const HeroSection = () => {
         </p>
 
         <h1 
-          style={customStyleOregon} // Base font for the H1
+          style={customFontStyle3}  // Base font for the H1
           className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6 sm:mb-8"
         >
           Thoughtful Handling,
           <br />
           <span 
-            style={customStyleMoonhouse} 
-            className="block text-sky-400 mt-1 sm:mt-2 text-[.8em] -tracking-tight" // Slightly larger, Moonhouse font
+            style={customFontStyle5} 
+            className="block text-sky-400 mt-1 sm:mt-2 text-[.6em] p-4 -tracking-tight" // Slightly larger, Moonhouse font
           >
             Expertly Developed Solutions
           </span>
         </h1>
 
         <p 
-          style={customStyleOregon}
-          className="mt-4 sm:mt-6 text-base sm:text-lg lg:text-xl text-slate-200 max-w-xl lg:max-w-2xl mx-auto leading-relaxed -tracking-tighter"
+          style={customFontStyle3}
+          className="mt-4 sm:mt-6 text-lg sm:text-lg lg:text-xl text-slate-200 max-w-xl lg:max-w-2xl mx-auto leading-relaxed -tracking-tighter"
         >
           We meticulously care for your products and leverage deep technical expertise to craft innovative, reliable solutions tailored precisely to your needs.
         </p>
