@@ -1,9 +1,15 @@
-import React, { useState, useEffect } from 'react'; // Added useState, useEffect
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useTransform,
+  useInView,
+  useReducedMotion,
+  LayoutGroup,
+} from 'framer-motion';
 import {
   Select,
   SelectContent,
@@ -12,15 +18,116 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import {
-  Filter,
-  Vegan,
-  Flower2,
-  ShoppingCart,
   ChevronLeft,
   ChevronRight,
-  Sparkles,
-  Clock, // Added Clock icon
+  Clock,
+  ArrowUpRight,
+  ArrowDown,
+  Star,
 } from 'lucide-react';
+
+/* --------------------------- Font + motion tokens ------------------------- */
+const BRAND = {
+  fontFamily: "Moonhouse, 'Neue Montreal Regular', sans-serif",
+};
+const DISPLAY = {
+  fontFamily:
+    "'Neue Montreal Regular', 'SF Pro Text Semibold', 'Inter', system-ui, sans-serif",
+  fontWeight: 600,
+};
+const BODY = {
+  fontFamily:
+    "'Neue Montreal Regular', 'SF Pro Text Regular', system-ui, sans-serif",
+};
+const MONO = {
+  fontFamily: "'SF Pro Text Regular', ui-monospace, monospace",
+  letterSpacing: '0.2em',
+};
+const EASE_OUT = [0.22, 1, 0.36, 1];
+
+/* ------------------------------- LazyImage ------------------------------- */
+// Optimized image: uses IntersectionObserver via rootMargin for pre-buffering,
+// colored placeholder shimmers until load, fades in smoothly.
+function LazyImage({ src, alt, className = '', placeholder = '#f1f5f9' }) {
+  const imgRef = useRef(null);
+  const [loaded, setLoaded] = useState(false);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = imgRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setInView(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { rootMargin: '200px 0px' } // start loading 200px before entering viewport
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={imgRef}
+      className="relative w-full h-full"
+      style={{ backgroundColor: placeholder }}
+    >
+      {!loaded && (
+        <motion.div
+          aria-hidden
+          className="absolute inset-0"
+          style={{ backgroundColor: placeholder }}
+          animate={{ opacity: [0.6, 0.95, 0.6] }}
+          transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      )}
+      {inView && (
+        <motion.img
+          src={src}
+          alt={alt}
+          loading="lazy"
+          decoding="async"
+          onLoad={() => setLoaded(true)}
+          initial={{ opacity: 0, scale: 1.04 }}
+          animate={{ opacity: loaded ? 1 : 0, scale: loaded ? 1 : 1.04 }}
+          transition={{ duration: 0.6, ease: EASE_OUT }}
+          className={className}
+          style={{ willChange: 'transform, opacity' }}
+        />
+      )}
+    </div>
+  );
+}
+
+/* ------------------------- Gradient → accent helper ---------------------- */
+// Maps Tailwind gradient class to a hex-ish accent for per-product theming.
+const GRADIENT_TO_ACCENT = {
+  'from-blue-100': '#dbeafe',
+  'from-sky-100': '#e0f2fe',
+  'from-emerald-100': '#d1fae5',
+  'from-amber-100': '#fef3c7',
+  'from-rose-100': '#ffe4e6',
+  'from-violet-100': '#ede9fe',
+  'from-pink-100': '#fce7f3',
+  'from-green-100': '#dcfce7',
+  'from-orange-100': '#ffedd5',
+  'from-teal-100': '#ccfbf1',
+  'from-indigo-100': '#e0e7ff',
+  'from-slate-100': '#f1f5f9',
+  'from-cyan-100': '#cffafe',
+  'from-yellow-100': '#fef9c3',
+  'from-red-100': '#fee2e2',
+  'from-lime-100': '#ecfccb',
+  'from-fuchsia-100': '#fae8ff',
+};
+function accentForGradient(g) {
+  return GRADIENT_TO_ACCENT[g] || '#f1f5f9';
+}
 
 // Import all images (assuming these paths are correct)
 import R3 from '../../../assets/Images/R3.png';
@@ -1308,155 +1415,260 @@ function DiscountTimer({ endDateString }) {
   );
 }
 
-function ProductCard({ 
-  id, 
-  name, 
+function Stars({ rating }) {
+  const full = Math.floor(rating);
+  const frac = rating - full;
+  return (
+    <span className="inline-flex items-center gap-[2px]">
+      {[0, 1, 2, 3, 4].map((i) => {
+        const fill = i < full ? 1 : i === full ? frac : 0;
+        return (
+          <span key={i} className="relative inline-block w-[11px] h-[11px]">
+            <Star size={11} className="absolute inset-0 text-neutral-300" fill="currentColor" />
+            <span
+              className="absolute inset-0 overflow-hidden text-neutral-900"
+              style={{ width: `${fill * 100}%` }}
+            >
+              <Star size={11} fill="currentColor" />
+            </span>
+          </span>
+        );
+      })}
+    </span>
+  );
+}
+
+function ProductCard({
+  id,
+  name,
   brand,
-  description, 
-  price, 
-  MRP,           // Use uppercase MRP
-  discountPercentage, // Use calculated discount percentage
-  discountAmount,     // Use calculated discount amount
-  discountEndDate,    // New prop for timer
+  description,
+  price,
+  MRP,
+  discountPercentage,
+  discountAmount,
+  discountEndDate,
   currency,
-  imageUrl, 
+  imageUrl,
   imageAlt,
-  gradientFrom = DEFAULT_GRADIENT_FROM, 
-  gradientTo = DEFAULT_GRADIENT_TO, 
-  minQuantity, 
-  rating, 
+  gradientFrom = DEFAULT_GRADIENT_FROM,
+  gradientTo = DEFAULT_GRADIENT_TO,
+  minQuantity,
+  rating,
   reviewCount,
   stock,
   inStock,
-  sku
+  sku,
+  category,
 }) {
   const navigate = useNavigate();
-  const gradientClasses = `bg-gradient-to-br ${gradientFrom} ${gradientTo}`;
+  const cardRef = useRef(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: cardRef,
+    offset: ['start end', 'end start'],
+  });
+  const imgY = useTransform(scrollYProgress, [0, 1], [20, -30]);
+
   const handleCardClick = () => navigate(`/product/${id}`);
   const imgSrc = typeof imageUrl === 'string' ? imageUrl : imageUrl?.src;
+  const accent = accentForGradient(gradientFrom);
 
-  const productMicrodata = { /* ... (microdata remains same, ensure price is selling price) ... */ };
-   if (MRP && Number(MRP) > Number(price) && productMicrodata.offers) {
+  const productMicrodata = {};
+  if (MRP && Number(MRP) > Number(price) && productMicrodata.offers) {
     productMicrodata.offers.priceSpecification = {
-      "@type": "PriceSpecification",
-      "price": Number(MRP).toFixed(2),
-      "priceCurrency": currency,
-      "valueAddedTaxIncluded": true, // Assuming MRP includes tax
-      "priceType": "ListPrice"
+      '@type': 'PriceSpecification',
+      price: Number(MRP).toFixed(2),
+      priceCurrency: currency,
+      valueAddedTaxIncluded: true,
+      priceType: 'ListPrice',
     };
   }
 
+  const nameStyle = {
+    fontFamily:
+      "system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+    fontWeight: 500,
+    letterSpacing: '-0.01em',
+  };
 
   return (
-    <motion.div variants={itemVariants} className="h-full flex flex-col">
-      <Card
-        role="button"
-        tabIndex={0}
-        onClick={handleCardClick}
-        onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && handleCardClick()}
-        className={`group w-full overflow-hidden rounded-2xl border-none shadow-lg hover:shadow-2xl transition-all duration-300 ease-out flex flex-col cursor-pointer ${gradientClasses}`}
-        itemScope
-        itemType="https://schema.org/Product"
+    <motion.article
+      ref={cardRef}
+      variants={itemVariants}
+      whileHover={reduce ? {} : { y: -4 }}
+      transition={{ duration: 0.4, ease: EASE_OUT }}
+      className="group relative flex flex-col h-full cursor-pointer"
+      itemScope
+      itemType="https://schema.org/Product"
+      role="button"
+      tabIndex={0}
+      onClick={handleCardClick}
+      onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleCardClick()}
+      style={BODY}
+    >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productMicrodata) }}
+      />
+
+      {/* Image panel — soft accent tint, no border */}
+      <div
+        className="relative h-[280px] sm:h-[320px] overflow-hidden rounded-[1.25rem]"
+        style={{
+          background: `linear-gradient(160deg, ${accent} 0%, ${accent}60 55%, #ffffff 100%)`,
+        }}
       >
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productMicrodata) }} />
-        
-        <div className="relative w-full h-[170px] sm:h-[200px] md:h-[220px] flex items-center justify-center p-2 sm:p-3 overflow-hidden">
-          {discountPercentage > 0 && inStock && (
-            <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold z-10 shadow-md">
-              {discountPercentage}% OFF
-            </div>
-          )}
-          
-          <motion.img
-            src={imgSrc}
-            alt={imageAlt}
-            title={`${name} - ${brand} Veterinary Products`}
-            className="object-contain w-full h-full drop-shadow-xl transition-transform duration-300 ease-out group-hover:scale-105"
-            loading="lazy"
-            itemProp="image"
+        {/* Subtle radial accent */}
+        <div
+          aria-hidden
+          className="absolute inset-0 pointer-events-none opacity-80 transition-opacity duration-700 group-hover:opacity-100"
+          style={{
+            background: `radial-gradient(circle at 50% 55%, ${accent} 0%, transparent 65%)`,
+          }}
+        />
+
+        {/* Top row — category + discount */}
+        <div className="absolute top-4 left-4 right-4 flex items-start justify-between z-10">
+          <span
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] uppercase bg-white/85 backdrop-blur-sm text-neutral-700"
+            style={MONO}
+          >
+            {category || 'Veterinary'}
+          </span>
+          {discountPercentage > 0 && inStock ? (
+            <span
+              className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] tabular-nums bg-neutral-900 text-white"
+              style={nameStyle}
+            >
+              −{discountPercentage}%
+            </span>
+          ) : null}
+        </div>
+
+        {/* Product image with parallax + lazy load */}
+        <motion.div
+          className="absolute inset-0 flex items-center justify-center p-8"
+          style={reduce ? {} : { y: imgY }}
+        >
+          <div className="relative w-full h-full transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.08]">
+            <LazyImage
+              src={imgSrc}
+              alt={imageAlt || name}
+              placeholder={accent}
+              className="absolute inset-0 w-full h-full object-contain drop-shadow-[0_18px_22px_rgba(0,0,0,0.1)]"
+            />
+          </div>
+        </motion.div>
+
+        {/* Bottom-left arrow indicator — slides in on hover */}
+        <div className="absolute bottom-4 right-4 z-10">
+          <span className="flex items-center justify-center w-9 h-9 rounded-full bg-neutral-900 text-white opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]">
+            <ArrowUpRight size={14} />
+          </span>
+        </div>
+
+        {/* Out of stock overlay */}
+        {!inStock && (
+          <div className="absolute inset-0 bg-black/55 backdrop-blur-[1px] flex items-center justify-center z-20">
+            <span
+              className="text-white text-[10px] uppercase px-3 py-1.5 rounded-full border border-white/40"
+              style={MONO}
+            >
+              Out of stock
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* Content — no border, clean spacing */}
+      <div className="flex flex-col flex-grow pt-4 gap-2">
+        <h3
+          className="text-[15px] md:text-base text-neutral-900 leading-snug line-clamp-2 min-h-[2.6rem] group-hover:text-neutral-600 transition-colors duration-300"
+          style={nameStyle}
+          itemProp="name"
+          title={name}
+        >
+          {name}
+        </h3>
+
+        {description && (
+          <p className="text-[12.5px] text-neutral-500 leading-relaxed line-clamp-2">
+            {description}
+          </p>
+        )}
+
+        {/* Rating */}
+        {typeof rating === 'number' && reviewCount > 0 && (
+          <div
+            className="flex items-center gap-2 text-[11px] text-neutral-500 mt-1"
+            itemProp="aggregateRating"
+            itemScope
+            itemType="https://schema.org/AggregateRating"
+          >
+            <Stars rating={rating} />
+            <span className="tabular-nums">
+              <span itemProp="ratingValue">{rating.toFixed(1)}</span>
+              <span className="text-neutral-400"> · </span>
+              <span itemProp="reviewCount">{reviewCount}</span>
+            </span>
+          </div>
+        )}
+
+        {/* Discount timer */}
+        {discountEndDate && new Date(discountEndDate) > new Date() && inStock && (
+          <div className="mt-1">
+            <DiscountTimer endDateString={discountEndDate} />
+          </div>
+        )}
+
+        {/* Price row — no CTA here (whole card is clickable) */}
+        <div
+          className="mt-auto pt-3 flex items-baseline gap-2"
+          itemProp="offers"
+          itemScope
+          itemType="https://schema.org/Offer"
+        >
+          <link
+            itemProp="url"
+            href={`https://www.innovationremedies.com/product/${id}`}
           />
-          {!inStock && (
-            <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-              <span className="text-white font-bold text-lg">Out of Stock</span>
-            </div>
+          <meta
+            itemProp="availability"
+            content={
+              inStock
+                ? 'https://schema.org/InStock'
+                : 'https://schema.org/OutOfStock'
+            }
+          />
+          <meta itemProp="priceCurrency" content={currency} />
+          {Number(price) > 0 ? (
+            <>
+              <span
+                className="text-lg tabular-nums text-neutral-900"
+                style={nameStyle}
+                itemProp="price"
+                content={Number(price).toFixed(2)}
+              >
+                ₹{Number(price).toFixed(0)}
+              </span>
+              {MRP && Number(MRP) > Number(price) && (
+                <span className="text-xs text-neutral-400 line-through tabular-nums">
+                  ₹{Number(MRP).toFixed(0)}
+                </span>
+              )}
+              <span className="ml-auto text-[10px] uppercase text-neutral-400" style={MONO}>
+                Min {minQuantity}
+              </span>
+            </>
+          ) : (
+            <span className="text-sm text-neutral-900" style={nameStyle}>
+              Price on request
+            </span>
           )}
         </div>
-        <CardContent className="p-4 pt-3 bg-white/80 backdrop-blur-sm rounded-b-2xl flex flex-col flex-grow text-left">
-          <h3 className="text-md sm:text-lg font-bold text-slate-800 leading-tight group-hover:text-sky-600 transition-colors" title={name} itemProp="name">
-            {name}
-          </h3>
-          {description && (
-            <p className="text-xs sm:text-sm text-slate-600 line-clamp-2 min-h-[32px] sm:min-h-[40px] mt-1">
-              {description}
-            </p>
-          )}
-          {typeof rating === 'number' && typeof reviewCount === 'number' && reviewCount > 0 && (
-            <div className="flex items-center text-xs text-amber-600 mt-1.5" itemProp="aggregateRating" itemScope itemType="https://schema.org/AggregateRating">
-              <Sparkles size={14} className="mr-1 fill-amber-400 text-amber-500" />
-              <span itemProp="ratingValue">{rating.toFixed(1)}</span> 
-              (<span itemProp="reviewCount">{reviewCount}</span> reviews)
-            </div>
-          )}
-          
-          {/* Price, Discount, Timer, and Button Block - Pushed to bottom */}
-          <div className="mt-auto space-y-2 pt-3">
-            {/* Price and Discount Info */}
-            <div itemProp="offers" itemScope itemType="https://schema.org/Offer">
-              <link itemProp="url" href={`https://www.innovationremedies.com/product/${id}`} />
-              <meta itemProp="availability" content={inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"} />
-              <meta itemProp="priceCurrency" content={currency} />
-              {Number(price) > 0 ? (
-                <>
-                  <div className="flex items-baseline gap-1.5">
-                    <p className="text-base sm:text-lg font-bold text-slate-900" itemProp="price" content={Number(price).toFixed(2)}>
-                      ₹{Number(price).toFixed(2)}
-                    </p>
-                    {MRP && Number(MRP) > Number(price) && (
-                      <p className="text-xs sm:text-sm text-slate-500 line-through">
-                        ₹{Number(MRP).toFixed(2)}
-                      </p>
-                    )}
-                  </div>
-                  {discountPercentage > 0 && (
-                    <p className="text-xs text-green-600 font-semibold mt-0.5">
-                      {discountPercentage}% OFF
-                      {discountAmount > 0 && ` (Save ₹${Number(discountAmount).toFixed(0)})`}
-                    </p>
-                  )}
-                </>
-              ) : (
-                <p className="text-sm sm:text-base font-semibold text-slate-900">
-                  Price on Request
-                </p>
-              )}
-            </div>
-
-            {/* Discount Timer */}
-            {discountEndDate && new Date(discountEndDate) > new Date() && inStock && (
-              <DiscountTimer endDateString={discountEndDate} />
-            )}
-
-            {/* Min Quantity and Button */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pt-1">
-              <p className="text-xs text-slate-500 whitespace-nowrap self-center sm:self-auto">
-                Min. {minQuantity} units
-              </p>
-              <Button
-                onClick={e => { e.stopPropagation(); handleCardClick(); }}
-                variant="default"
-                size="sm"
-                className="w-full sm:w-auto rounded-lg text-xs sm:text-sm bg-sky-500 hover:bg-sky-600 text-white shadow-md hover:shadow-lg transition-all duration-200"
-                disabled={!inStock}
-                aria-label={inStock ? `View details for ${name}` : `${name} is out of stock`}
-              >
-                <ShoppingCart size={16} className="mr-1.5" />
-                {inStock ? 'Details' : 'Out of Stock'}
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </motion.div>
+      </div>
+    </motion.article>
   );
 }
 
@@ -1466,10 +1678,33 @@ function ListProducts() {
   const currentDate = new Date().toISOString();
   
   const [sortBy, setSortBy] = useState('relevance');
+  const [activeCategory, setActiveCategory] = useState('all');
 
   const processedProducts = processProductDataArray(productsData);
-  
-  const sortedProducts = [...processedProducts].sort((a, b) => {
+
+  // Distinct categories with counts
+  const categories = React.useMemo(() => {
+    const map = new Map();
+    processedProducts.forEach((p) => {
+      const c = p.category || 'Other';
+      map.set(c, (map.get(c) || 0) + 1);
+    });
+    return [
+      { key: 'all', label: 'All', count: processedProducts.length },
+      ...Array.from(map.entries()).map(([label, count]) => ({
+        key: label,
+        label,
+        count,
+      })),
+    ];
+  }, [processedProducts]);
+
+  const filteredProducts =
+    activeCategory === 'all'
+      ? processedProducts
+      : processedProducts.filter((p) => p.category === activeCategory);
+
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
     switch (sortBy) {
       case 'price-asc':
         return (a.price || 0) - (b.price || 0);
@@ -1483,10 +1718,10 @@ function ListProducts() {
         return (b.reviewCount || 0) - (a.reviewCount || 0);
       case 'relevance':
       default:
-        if (a.inStock !== b.inStock) return b.inStock ? -1 : 1; // In stock items first
+        if (a.inStock !== b.inStock) return b.inStock ? -1 : 1;
         const discountDiff = (b.discountPercentage || 0) - (a.discountPercentage || 0);
-        if (discountDiff !== 0) return discountDiff; // Higher discount first
-        return (b.reviewCount || 0) - (a.reviewCount || 0); // Higher review count first
+        if (discountDiff !== 0) return discountDiff;
+        return (b.reviewCount || 0) - (a.reviewCount || 0);
     }
   });
 
@@ -1639,148 +1874,665 @@ function ListProducts() {
         </script>
       </Helmet>
 
-      <div className="bg-slate-50 min-h-screen font-sans text-slate-800">
-         <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-sky-600 text-white px-4 py-2 rounded z-50">
+      <div className="bg-white min-h-screen text-neutral-900" style={BODY}>
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-neutral-900 text-white px-4 py-2 rounded z-50"
+        >
           Skip to main content
         </a>
-
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
-          <nav aria-label="Breadcrumb" className="mb-8">
-            <ol className="flex items-center space-x-2 text-sm text-slate-600">
-              <li>
-                <a href="/" className="hover:text-sky-600 transition-colors">Home</a>
-              </li>
-              <li className="flex items-center">
-                <ChevronRight size={16} className="mx-2 text-slate-400" />
-                <span className="font-medium text-slate-800">Products</span>
-              </li>
-            </ol>
-          </nav>
-
-        
-
-          <div className="sticky top-0 z-20 py-4 bg-slate-50/80 backdrop-blur-md mb-8 rounded-xl shadow-sm">
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 px-4">
-             
-              <div className="w-full sm:w-auto sm:min-w-[180px]">
-                <Select value={sortBy} onValueChange={(value) => setSortBy(value || 'relevance')}>
-                  <SelectTrigger className="w-full rounded-lg h-10 text-xs sm:text-sm border-slate-300 text-slate-700 focus:ring-sky-500 focus:border-sky-500">
-                    <SelectValue placeholder="Sort by" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="relevance" className="text-xs sm:text-sm">Relevance</SelectItem>
-                    <SelectItem value="price-asc" className="text-xs sm:text-sm">Price: Low to High</SelectItem>
-                    <SelectItem value="price-desc" className="text-xs sm:text-sm">Price: High to Low</SelectItem>
-                    <SelectItem value="name-asc" className="text-xs sm:text-sm">Name: A to Z</SelectItem>
-                  </SelectContent>
-                </Select>
+        {/* Compact page intro — replaces the giant dark hero */}
+        <section className="relative pt-28 md:pt-32 pb-8 md:pb-12 bg-white">
+          <div className="max-w-[1400px] mx-auto px-6 md:px-10">
+            <nav
+              aria-label="Breadcrumb"
+              className="flex items-center gap-2 text-[11px] uppercase text-neutral-500 mb-8"
+              style={MONO}
+            >
+              <Link to="/" className="hover:text-neutral-900 transition-colors">
+                Home
+              </Link>
+              <ChevronRight size={12} className="opacity-50" />
+              <span className="text-neutral-900">Products</span>
+            </nav>
+            <div className="grid md:grid-cols-12 gap-8 items-end">
+              <div className="md:col-span-8">
+                <p
+                  className="text-[11px] uppercase text-emerald-700 mb-4"
+                  style={MONO}
+                >
+                  — The complete catalogue
+                </p>
+                <h1
+                  className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.03em] leading-[1.02] text-neutral-900"
+                  style={DISPLAY}
+                >
+                  Products —
+                  <span className="italic font-light bg-gradient-to-r from-emerald-600 via-teal-600 to-blue-700 bg-clip-text text-transparent">
+                    {' '}
+                    {processedProducts.length} formulations.
+                  </span>
+                </h1>
+              </div>
+              <div className="md:col-span-4 md:text-right">
+                <p className="text-sm text-neutral-600 leading-relaxed max-w-sm md:ml-auto">
+                  Precision-engineered veterinary pharmaceuticals and
+                  nutritional solutions. Browse, filter, and pick what works for
+                  your animals.
+                </p>
               </div>
             </div>
           </div>
-        <main id="main-content">
-          <motion.div
-            className="grid grid-cols-2 gap-y-6 sm:grid-cols-2 gap-x-6 md:grid-cols-3 lg:grid-cols-4 xl:gap-x-8"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
+        </section>
+
+        <CategoryTabs
+          categories={categories}
+          activeCategory={activeCategory}
+          setActiveCategory={setActiveCategory}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          count={sortedProducts.length}
+        />
+
+        <main
+          id="main-content"
+          className="max-w-[1400px] mx-auto px-6 md:px-10 pb-24 pt-10"
+        >
+          <LayoutGroup>
+            <motion.div
+              layout
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12 md:gap-x-8 md:gap-y-14"
+              transition={{ layout: { duration: 0.5, ease: EASE_OUT } }}
+            >
+              <AnimatePresence mode="popLayout">
+                {sortedProducts.map((p) => (
+                  <motion.div
+                    key={p.id}
+                    layout
+                    initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95, y: -20 }}
+                    transition={{ duration: 0.45, ease: EASE_OUT }}
+                  >
+                    <ProductCard {...p} />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
+          </LayoutGroup>
+
+          {/* Empty state */}
+          {sortedProducts.length === 0 && (
+            <div className="py-24 text-center">
+              <p className="text-[11px] uppercase text-neutral-500 mb-4" style={MONO}>
+                — Nothing here
+              </p>
+              <h3
+                className="text-2xl md:text-3xl text-neutral-900 tracking-[-0.02em]"
+                style={DISPLAY}
+              >
+                No products in this category.
+              </h3>
+              <button
+                onClick={() => setActiveCategory('all')}
+                className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-neutral-900 text-white text-sm hover:bg-neutral-800 transition-colors"
+                style={DISPLAY}
+              >
+                View all products
+              </button>
+            </div>
+          )}
+
+          <nav
+            aria-label="Pagination"
+            className="flex items-center justify-center gap-3 mt-16 md:mt-20"
           >
-            {sortedProducts.map(p => (
-              <ProductCard key={p.id} {...p} />
-            ))}
-          </motion.div>
+            <button
+              disabled
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-neutral-200 text-neutral-400 cursor-not-allowed text-sm"
+              style={DISPLAY}
+            >
+              <ChevronLeft size={15} /> Previous
+            </button>
+            <span
+              className="text-[11px] uppercase text-neutral-500 px-3"
+              style={MONO}
+            >
+              Page 01
+            </span>
+            <button
+              className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-neutral-900 text-white hover:bg-neutral-800 transition-colors text-sm"
+              style={DISPLAY}
+            >
+              Next
+              <ChevronRight
+                size={15}
+                className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1"
+              />
+            </button>
+          </nav>
         </main>
 
-         <nav aria-label="Pagination" className="flex justify-center mt-12 sm:mt-16 space-x-3">
-            <Button variant="outline" size="default" className="rounded-lg text-slate-700 border-slate-300 hover:border-slate-400 hover:bg-slate-100 px-6" disabled>
-              <ChevronLeft className="mr-2 h-4 w-4" /> Previous
-            </Button>
-            <Button variant="default" size="default" className="rounded-lg bg-sky-500 hover:bg-sky-600 text-white shadow-md hover:shadow-lg px-6">
-              Next <ChevronRight className="ml-2 h-4 w-4" />
-            </Button>
-          </nav>
+        {/* Trust stats */}
+        <TrustStats averageRating={averageRating} />
 
-          <section className="mt-20 sm:mt-28 border-t border-slate-200 pt-12 sm:pt-16">
-            <div className="max-w-3xl mx-auto text-center">
-              <Sparkles className="mx-auto h-12 w-12 text-amber-400 mb-4" />
-               <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-4">Trusted by Veterinarians & Farmers</h2>
-              <p className="text-md text-slate-600">
-                We are committed to providing effective and reliable animal health solutions. Our products are backed by research and manufactured to the highest quality standards.
-              </p>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mt-12">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-sky-600">50+</div>
-                  <div className="text-sm text-slate-600 mt-1">Products</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-sky-600">50,000+</div>
-                  <div className="text-sm text-slate-600 mt-1">Happy Customers</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-sky-600">
-                    {averageRating > 0 ? parseFloat(averageRating).toFixed(1) : '5.0'}
-                  </div>
-                  <div className="text-sm text-slate-600 mt-1">Average Rating</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-sky-600">14+</div>
-                  <div className="text-sm text-slate-600 mt-1">Years Experience</div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section className="mt-16 prose prose-slate max-w-4xl mx-auto">
-            <h2 className="text-2xl font-bold mb-4">Why Choose Innovation Remedies Veterinary Products?</h2>
-            <p>
-              Innovation Remedies has been a trusted name in animal healthcare since 2010. Our comprehensive range of veterinary products includes:
-            </p>
-            <ul>
-              <li><strong>Lactation Supplements:</strong> Including Innolact AD3, Innolact Gold, and Gel formulations for optimal milk production</li>
-              <li><strong>Growth Supplements:</strong> CalfShakti and Weight Boost for healthy animal development</li>
-              <li><strong>Health Supplements:</strong> Liver care (Innoliv DS), urinary health (Urocoenta), and digestive support (Badda H)</li>
-              <li><strong>Parasite Control:</strong> Innoworm range for effective deworming</li>
-              <li><strong>Pest Control:</strong> Makkhi products for insect and fly control</li>
-              <li><strong>General Health & Fertility:</strong> AYNGROW Bolus for multivitamins, RS 21 for reproductive health.</li>
-            </ul>
-            <p>
-              All our products are manufactured in GMP-certified facilities and undergo rigorous quality testing to ensure safety and efficacy for your animals. We focus on innovative solutions to common veterinary challenges, helping you ensure the health and productivity of your livestock.
-            </p>
-          </section>
-
-          <section className="mt-16 max-w-4xl mx-auto">
-            <h2 className="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
-            <div className="space-y-4" itemScope itemType="https://schema.org/FAQPage">
-              <div itemScope itemProp="mainEntity" itemType="https://schema.org/Question">
-                <h3 className="font-semibold text-lg" itemProp="name">What are the best lactation supplements for dairy cattle?</h3>
-                <div itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
-                  <p itemProp="text" className="text-slate-600 mt-2">
-                    Our top lactation supplements include Innolact AD3 Gold with chelated minerals for premium results, Innolact AD3 for consistent daily supplementation, 
-                    and Innolact Gel Advance for easy administration and quick absorption. These products are specifically formulated to boost milk production, improve milk quality, and support the overall health of lactating animals.
-                  </p>
-                </div>
-              </div>
-              <div itemScope itemProp="mainEntity" itemType="https://schema.org/Question">
-                <h3 className="font-semibold text-lg" itemProp="name">How to order Innovation Remedies products in bulk?</h3>
-                <div itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
-                  <p itemProp="text" className="text-slate-600 mt-2">
-                    For bulk orders and wholesale inquiries, please contact our sales team directly through our "Contact Us" page or call the provided number. We offer special pricing and support for veterinary clinics, large dairy farms, and distributors. 
-                    Minimum order quantities may vary by product, and details can be found on individual product pages or by discussing with our team.
-                  </p>
-                </div>
-              </div>
-               <div itemScope itemProp="mainEntity" itemType="https://schema.org/Question">
-                <h3 className="font-semibold text-lg" itemProp="name">Are Innovation Remedies products safe for all types of livestock?</h3>
-                <div itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
-                  <p itemProp="text" className="text-slate-600 mt-2">
-                    Most of our products are formulated for a broad range of livestock, including cattle, buffaloes, sheep, and goats. However, specific product applications and recommended dosages are detailed on each product's page and packaging. Always consult the product label or a veterinarian for guidance specific to your animals' needs.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-      </div>
+        {/* Why + FAQ (kept for SEO, restyled) */}
+        <WhySection />
+        <FAQSection />
       </div>
     </HelmetProvider>
+  );
+}
+
+/* ---------------------------- Products Hero ------------------------------ */
+function ProductsHero({ total, averageRating, categories = [] }) {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start start', 'end start'],
+  });
+  const reduce = useReducedMotion();
+  const titleY = useTransform(scrollYProgress, [0, 1], ['0%', '-25%']);
+  const titleOp = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
+  return (
+    <section
+      ref={ref}
+      className="relative overflow-hidden text-white"
+      style={{ backgroundColor: '#05070f' }}
+    >
+      {/* Gradient base */}
+      <div
+        aria-hidden
+        className="absolute inset-0"
+        style={{
+          background:
+            'linear-gradient(135deg, #05070f 0%, #080d20 45%, #050814 75%, #05070f 100%)',
+        }}
+      />
+      {/* Ambient orbs */}
+      <motion.div
+        className="absolute w-[65vw] h-[65vw] rounded-full blur-3xl"
+        style={{
+          background:
+            'radial-gradient(circle, rgba(59,89,200,0.38) 0%, transparent 65%)',
+          top: '-25%',
+          left: '-15%',
+        }}
+        animate={reduce ? {} : { x: [0, 30, 0], y: [0, 20, 0] }}
+        transition={{ duration: 40, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        className="absolute w-[70vw] h-[70vw] rounded-full blur-3xl"
+        style={{
+          background:
+            'radial-gradient(circle, rgba(27,44,120,0.4) 0%, transparent 65%)',
+          bottom: '-35%',
+          right: '-15%',
+        }}
+        animate={reduce ? {} : { x: [0, -25, 0], y: [0, -20, 0] }}
+        transition={{ duration: 50, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20 pointer-events-none" />
+
+      <motion.div
+        style={reduce ? {} : { y: titleY, opacity: titleOp }}
+        className="relative max-w-[1400px] mx-auto px-6 md:px-10 pt-32 md:pt-40 pb-24 md:pb-32"
+      >
+        {/* Breadcrumb */}
+        <nav
+          aria-label="Breadcrumb"
+          className="flex items-center gap-2 text-[11px] uppercase text-white/60 mb-10"
+          style={MONO}
+        >
+          <Link to="/" className="hover:text-white transition-colors">
+            Home
+          </Link>
+          <ChevronRight size={12} className="opacity-50" />
+          <span className="text-white">Products</span>
+        </nav>
+
+        <div className="grid md:grid-cols-12 gap-10 items-end">
+          <div className="md:col-span-8">
+            <p
+              className="text-[11px] uppercase text-emerald-300/90 mb-6"
+              style={MONO}
+            >
+              — The complete range
+            </p>
+            <h1
+              className="leading-[0.88] tracking-[-0.04em] text-[16vw] md:text-[11vw] lg:text-[9.5vw]"
+              style={BRAND}
+            >
+              <span className="bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">
+                PRODUCTS
+              </span>
+            </h1>
+
+            {/* Top categories — mini showcase */}
+            {categories.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: EASE_OUT, delay: 0.35 }}
+                className="mt-10 flex flex-wrap gap-2"
+              >
+                {categories.map((c, i) => (
+                  <motion.a
+                    key={c.key}
+                    href="#main-content"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.5,
+                      ease: EASE_OUT,
+                      delay: 0.45 + i * 0.05,
+                    }}
+                    className="group inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/20 hover:border-white/50 hover:bg-white/5 text-[11px] uppercase text-white/80 transition-colors"
+                    style={MONO}
+                  >
+                    <span
+                      className="w-1.5 h-1.5 rounded-full bg-emerald-400 opacity-70 group-hover:opacity-100 transition-opacity"
+                    />
+                    {c.label}
+                    <span className="text-white/40 tabular-nums">{c.count}</span>
+                  </motion.a>
+                ))}
+              </motion.div>
+            )}
+          </div>
+          <div className="md:col-span-4 flex flex-col items-start md:items-end gap-6">
+            <p className="text-white/70 text-base leading-relaxed md:text-right max-w-xs">
+              Precision-engineered veterinary pharmaceuticals and nutritional
+              solutions. Browse the full catalogue.
+            </p>
+            <div
+              className="grid grid-cols-2 gap-6 text-left md:text-right w-full"
+              style={MONO}
+            >
+              <div>
+                <div
+                  className="text-2xl md:text-3xl text-white tabular-nums tracking-tight"
+                  style={DISPLAY}
+                >
+                  {total}
+                </div>
+                <div className="text-[10px] uppercase text-white/50 mt-1">
+                  Products
+                </div>
+              </div>
+              <div>
+                <div
+                  className="text-2xl md:text-3xl text-white tabular-nums tracking-tight"
+                  style={DISPLAY}
+                >
+                  {averageRating > 0
+                    ? parseFloat(averageRating).toFixed(1)
+                    : '5.0'}
+                </div>
+                <div className="text-[10px] uppercase text-white/50 mt-1">
+                  Avg. rating
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Scroll cue */}
+        <div
+          className="mt-20 flex items-center gap-3 text-[10px] uppercase text-white/50"
+          style={MONO}
+        >
+          <span>Browse</span>
+          <motion.span
+            animate={reduce ? {} : { y: [0, 5, 0] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            <ArrowDown size={12} />
+          </motion.span>
+        </div>
+      </motion.div>
+    </section>
+  );
+}
+
+/* ----------------------------- Category tabs ----------------------------- */
+function CategoryTabs({
+  categories,
+  activeCategory,
+  setActiveCategory,
+  sortBy,
+  setSortBy,
+  count,
+}) {
+  return (
+    <div className="relative bg-white border-b border-neutral-200">
+      <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-4">
+        {/* Top row — count + sort */}
+        <div className="flex items-center justify-between gap-4 mb-3">
+          <motion.span
+            key={count}
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, ease: EASE_OUT }}
+            className="text-[11px] uppercase text-neutral-500 tabular-nums"
+            style={MONO}
+          >
+            — {count} {count === 1 ? 'product' : 'products'}
+            {activeCategory !== 'all' && (
+              <span className="ml-2 text-neutral-400">/ {activeCategory}</span>
+            )}
+          </motion.span>
+          <div className="flex items-center gap-3">
+            <span
+              className="hidden sm:inline text-[11px] uppercase text-neutral-400"
+              style={MONO}
+            >
+              Sort
+            </span>
+            <Select
+              value={sortBy}
+              onValueChange={(v) => setSortBy(v || 'relevance')}
+            >
+              <SelectTrigger
+                className="min-w-[170px] rounded-full h-9 text-[11px] uppercase bg-neutral-100 border-transparent hover:border-neutral-300 transition-colors"
+                style={MONO}
+              >
+                <SelectValue placeholder="Sort" />
+              </SelectTrigger>
+              <SelectContent className="rounded-xl">
+                <SelectItem value="relevance" className="text-xs">
+                  Relevance
+                </SelectItem>
+                <SelectItem value="price-asc" className="text-xs">
+                  Price · Low to High
+                </SelectItem>
+                <SelectItem value="price-desc" className="text-xs">
+                  Price · High to Low
+                </SelectItem>
+                <SelectItem value="name-asc" className="text-xs">
+                  Name · A → Z
+                </SelectItem>
+                <SelectItem value="rating" className="text-xs">
+                  Top rated
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {/* Category chips — horizontal scroll */}
+        <LayoutGroup id="category-tabs">
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar -mx-1 px-1 pb-1">
+            {categories.map((c) => {
+              const isActive = activeCategory === c.key;
+              return (
+                <motion.button
+                  key={c.key}
+                  onClick={() => setActiveCategory(c.key)}
+                  className={`relative shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-full text-[11px] uppercase transition-colors duration-300 ${
+                    isActive
+                      ? 'text-white'
+                      : 'text-neutral-600 hover:text-neutral-900'
+                  }`}
+                  style={MONO}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="activeChip"
+                      className="absolute inset-0 bg-neutral-900 rounded-full -z-10"
+                      transition={{
+                        type: 'spring',
+                        stiffness: 400,
+                        damping: 32,
+                      }}
+                    />
+                  )}
+                  <span className="relative whitespace-nowrap">{c.label}</span>
+                  <span
+                    className={`relative tabular-nums text-[10px] ${
+                      isActive ? 'text-white/70' : 'text-neutral-400'
+                    }`}
+                  >
+                    {c.count}
+                  </span>
+                </motion.button>
+              );
+            })}
+          </div>
+        </LayoutGroup>
+      </div>
+
+      <style>{`
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
+    </div>
+  );
+}
+
+/* ------------------------------ Trust stats ------------------------------ */
+function TrustStats({ averageRating }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-80px' });
+  const stats = [
+    { label: 'Products', value: '50+' },
+    { label: 'Happy customers', value: '50,000+' },
+    {
+      label: 'Avg. rating',
+      value: averageRating > 0 ? parseFloat(averageRating).toFixed(1) : '5.0',
+    },
+    { label: 'Years experience', value: '14+' },
+  ];
+  return (
+    <section
+      ref={ref}
+      className="relative bg-neutral-50 py-20 md:py-28 border-t border-neutral-200"
+    >
+      <div className="max-w-[1400px] mx-auto px-6 md:px-10">
+        <div className="max-w-2xl mb-14">
+          <p className="text-[11px] uppercase text-neutral-500 mb-5" style={MONO}>
+            — Trusted
+          </p>
+          <h2
+            className="text-3xl md:text-5xl tracking-[-0.03em] leading-[1.05] text-neutral-900"
+            style={DISPLAY}
+          >
+            Backed by veterinarians.
+            <br />
+            <span className="text-neutral-400">Proven on farms.</span>
+          </h2>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          {stats.map((s, i) => (
+            <motion.div
+              key={s.label}
+              initial={{ opacity: 0, y: 24 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{
+                duration: 0.7,
+                delay: i * 0.08,
+                ease: EASE_OUT,
+              }}
+              className="border-t border-neutral-300 pt-5"
+            >
+              <div
+                className="text-4xl md:text-6xl tracking-[-0.03em] tabular-nums text-neutral-900 leading-none"
+                style={DISPLAY}
+              >
+                {s.value}
+              </div>
+              <div
+                className="text-[11px] uppercase text-neutral-500 mt-3"
+                style={MONO}
+              >
+                {s.label}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------ Why section ------------------------------ */
+function WhySection() {
+  return (
+    <section className="relative bg-white py-20 md:py-28 border-t border-neutral-200">
+      <div className="max-w-4xl mx-auto px-6 md:px-10">
+        <p className="text-[11px] uppercase text-neutral-500 mb-5" style={MONO}>
+          — Why Innovation Remedies
+        </p>
+        <h2
+          className="text-3xl md:text-5xl tracking-[-0.03em] leading-[1.05] text-neutral-900 mb-8"
+          style={DISPLAY}
+        >
+          A comprehensive range,
+          <br />
+          <span className="text-neutral-400">formulated with purpose.</span>
+        </h2>
+        <div className="prose prose-neutral max-w-none text-neutral-600">
+          <ul className="grid sm:grid-cols-2 gap-4 list-none p-0">
+            {[
+              ['Lactation supplements', 'Innolact AD3, Innolact Gold, Gel — optimal milk production'],
+              ['Growth supplements', 'CalfShakti, Weight Boost — healthy development'],
+              ['Health supplements', 'Innoliv DS, Urocoenta, Badda H — liver, urinary, digestive'],
+              ['Parasite control', 'Innoworm range — effective deworming'],
+              ['Pest control', 'Makkhi — insect and fly protection'],
+              ['Fertility & vitamins', 'AYNGROW Bolus, RS 21 — reproductive health'],
+            ].map(([title, body]) => (
+              <li
+                key={title}
+                className="flex items-start gap-3 p-5 rounded-2xl bg-neutral-50 border border-neutral-200"
+              >
+                <span
+                  className="mt-2 w-1.5 h-1.5 rounded-full bg-neutral-900 shrink-0"
+                />
+                <div>
+                  <div
+                    className="text-sm text-neutral-900 mb-1"
+                    style={DISPLAY}
+                  >
+                    {title}
+                  </div>
+                  <div className="text-xs text-neutral-500 leading-relaxed">
+                    {body}
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-8 text-sm">
+            All products manufactured in GMP-certified facilities, with rigorous
+            quality testing to ensure safety and efficacy.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------ FAQ section ------------------------------ */
+function FAQSection() {
+  const faqs = [
+    {
+      q: 'What are the best lactation supplements for dairy cattle?',
+      a: 'Innolact AD3 Gold with chelated minerals, Innolact AD3 for daily supplementation, and Innolact Gel Advance for easy administration. All formulated to boost milk production, improve quality, and support lactating animals.',
+    },
+    {
+      q: 'How to order Innovation Remedies products in bulk?',
+      a: 'Contact our sales team through the Contact page or call us directly. Special pricing and support is available for veterinary clinics, dairy farms, and distributors.',
+    },
+    {
+      q: 'Are Innovation Remedies products safe for all types of livestock?',
+      a: 'Most products are formulated for a broad range of livestock — cattle, buffaloes, sheep, goats. Applications and dosages are detailed on each product page. Always consult the label or a veterinarian for guidance specific to your animals.',
+    },
+  ];
+  const [open, setOpen] = useState(0);
+  return (
+    <section
+      className="relative bg-neutral-50 py-20 md:py-28 border-t border-neutral-200"
+      itemScope
+      itemType="https://schema.org/FAQPage"
+    >
+      <div className="max-w-4xl mx-auto px-6 md:px-10">
+        <p className="text-[11px] uppercase text-neutral-500 mb-5" style={MONO}>
+          — Frequently asked
+        </p>
+        <h2
+          className="text-3xl md:text-5xl tracking-[-0.03em] leading-[1.05] text-neutral-900 mb-12"
+          style={DISPLAY}
+        >
+          Questions, answered.
+        </h2>
+        <div className="divide-y divide-neutral-200 border-t border-b border-neutral-200">
+          {faqs.map((f, i) => {
+            const isOpen = open === i;
+            return (
+              <div
+                key={i}
+                itemScope
+                itemProp="mainEntity"
+                itemType="https://schema.org/Question"
+              >
+                <button
+                  onClick={() => setOpen(isOpen ? -1 : i)}
+                  className="w-full flex items-center justify-between gap-6 py-6 md:py-7 text-left group"
+                >
+                  <h3
+                    className="text-lg md:text-xl tracking-[-0.01em] text-neutral-900"
+                    style={DISPLAY}
+                    itemProp="name"
+                  >
+                    {f.q}
+                  </h3>
+                  <motion.span
+                    animate={{ rotate: isOpen ? 45 : 0 }}
+                    transition={{ duration: 0.4, ease: EASE_OUT }}
+                    className="shrink-0 w-9 h-9 rounded-full border border-neutral-300 flex items-center justify-center group-hover:border-neutral-900 transition-colors"
+                  >
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 12 12"
+                      className="text-neutral-900"
+                    >
+                      <path
+                        d="M6 1v10M1 6h10"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </motion.span>
+                </button>
+                <motion.div
+                  initial={false}
+                  animate={{
+                    height: isOpen ? 'auto' : 0,
+                    opacity: isOpen ? 1 : 0,
+                  }}
+                  transition={{ duration: 0.4, ease: EASE_OUT }}
+                  className="overflow-hidden"
+                  itemScope
+                  itemProp="acceptedAnswer"
+                  itemType="https://schema.org/Answer"
+                >
+                  <p
+                    className="text-sm md:text-base text-neutral-600 leading-relaxed pb-6 md:pb-7 max-w-2xl"
+                    itemProp="text"
+                  >
+                    {f.a}
+                  </p>
+                </motion.div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
   );
 }
 

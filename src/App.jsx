@@ -479,9 +479,7 @@ function App() {
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>
-            <Footer /> 
-            <ChatIcon onClick={() => setIsChatOpen(true)} />
-            <ChatModal isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
+            <Footer />
                {/* <CookieConsent />  */}
           </Router>
         )}

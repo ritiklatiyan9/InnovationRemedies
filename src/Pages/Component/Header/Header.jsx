@@ -1,13 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { Home, ShoppingBag, Book, Users, Mail, Menu, LogOut, 
-         ChevronRight, ShoppingCart, Package, X } from 'lucide-react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetFooter } from '@/components/ui/sheet';
+import { motion, LayoutGroup } from 'framer-motion';
 import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuList,
-} from '@/components/ui/navigation-menu';
+  Menu,
+  LogOut,
+  ChevronRight,
+  ShoppingCart,
+  Package,
+  X,
+  ArrowUpRight,
+} from 'lucide-react';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+  SheetFooter,
+} from '@/components/ui/sheet';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,214 +33,261 @@ import { toast } from 'react-hot-toast';
 import BrandLogo from '../../../assets/Images/logo.png';
 import { cn } from '@/lib/utils';
 
-// --- Configuration ---
-const navItems = [
-  { to: '/', label: 'Home', icon: Home, color: 'text-rose-500', bgColor: 'bg-rose-100 dark:bg-rose-500/20' },
-  { to: '/products', label: 'Products', icon: ShoppingBag, color: 'text-blue-500', bgColor: 'bg-blue-100 dark:bg-blue-500/20' },
-  { to: '/store', label: 'Information', icon: Book, color: 'text-emerald-500', bgColor: 'bg-emerald-100 dark:bg-emerald-500/20' },
-  { to: '/about', label: 'About Us', icon: Users, color: 'text-amber-500', bgColor: 'bg-amber-100 dark:bg-amber-500/20' },
-  { to: '/contact', label: 'Contact', icon: Mail, color: 'text-indigo-500', bgColor: 'bg-indigo-100 dark:bg-indigo-500/20' },
-  { to: '/cart', label: 'My Cart', icon: ShoppingCart, color: 'text-red-500', bgColor: 'bg-red-100 dark:bg-red-500/20' },
-];
-
-const adminNavItem = {
-  to: '/admin/orders',
-  label: 'Manage Orders',
-  icon: Package,
-  color: 'text-purple-500',
-  bgColor: 'bg-purple-100 dark:bg-purple-500/20',
-  adminOnly: true
+const DISPLAY = {
+  fontFamily:
+    "'Neue Montreal Regular', 'SF Pro Text Semibold', 'Inter', system-ui, sans-serif",
+  fontWeight: 600,
+};
+const MONO = {
+  fontFamily: "'SF Pro Text Regular', ui-monospace, monospace",
+  letterSpacing: "0.18em",
 };
 
-// --- Helper Function ---
+const navItems = [
+  { to: '/', label: 'Home' },
+  { to: '/products', label: 'Products' },
+  { to: '/store', label: 'Information' },
+  { to: '/about', label: 'About' },
+  { to: '/contact', label: 'Contact' },
+];
+
+const adminNavItem = { to: '/admin/orders', label: 'Orders', adminOnly: true };
+
 const getUserInitials = (user) => {
   if (!user) return 'GU';
   if (user.username) {
     const names = user.username.split(' ');
-    if (names.length > 1) return (names[0][0] + names[names.length - 1][0]).toUpperCase();
+    if (names.length > 1)
+      return (names[0][0] + names[names.length - 1][0]).toUpperCase();
     return names[0].substring(0, 2).toUpperCase();
   }
-  if (user.mobile && user.mobile.length >= 2) return user.mobile.substring(0, 2).toUpperCase();
+  if (user.mobile && user.mobile.length >= 2)
+    return user.mobile.substring(0, 2).toUpperCase();
   return 'U';
 };
 
-// --- Component ---
 export default function Header() {
   const { user, isAuthenticated, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const isAdmin = user?.role === 'Admin';
-  
-  // Cart items count (example)
-  const cartItemsCount = 0;// Assuming 3 items for demo purposes, you can wire this up
 
-  // Handle scroll behavior
+  const cartItemsCount = 0;
+
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      
-      if (currentScrollY < 20) {
-        setIsVisible(true);
-      } else if (currentScrollY < lastScrollY) {
-        setIsVisible(true);
-      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+      setIsScrolled(currentScrollY > 20);
+      if (currentScrollY < 20) setIsVisible(true);
+      else if (currentScrollY < lastScrollY) setIsVisible(true);
+      else if (currentScrollY > lastScrollY && currentScrollY > 120)
         setIsVisible(false);
-      }
-      
       setLastScrollY(currentScrollY);
     };
-    
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
   const getAllNavItems = () => {
-    const baseNavItems = navItems.filter(item => !item.adminOnly);
-    if (isAdmin) return [...baseNavItems, adminNavItem];
-    return baseNavItems;
+    if (isAdmin) return [...navItems, adminNavItem];
+    return navItems;
   };
 
   const handleLogout = async () => {
     try {
       await logout();
-      toast.success('Logged out successfully');
+      toast.success('Logged out');
       navigate('/');
       setIsMobileMenuOpen(false);
     } catch (error) {
       toast.error(error?.message || 'Failed to logout');
-      console.error("Logout error:", error);
+      console.error('Logout error:', error);
     }
   };
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   return (
-    <header className={cn(
-      "fixed inset-x-2 sm:inset-x-4 md:inset-x-6 z-50 transition-all duration-500 ease-in-out transform",
-      isVisible ? "top-4 translate-y-0" : "-translate-y-[150%]",
-      "bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl",
-      "rounded-2xl md:rounded-full border border-slate-300/50 dark:border-slate-700/50",
-      "shadow-xl shadow-slate-900/10"
-    )}>
-      <div className="mx-auto h-16 flex items-center justify-between px-4 sm:px-6">
-        {/* Logo */}
+    <motion.header
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: isVisible ? 0 : -100, opacity: isVisible ? 1 : 0 }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      className={cn(
+        'fixed inset-x-0 top-0 z-50 transition-all duration-500',
+        'bg-white/90 backdrop-blur-xl border-b',
+        isScrolled ? 'border-neutral-200/80 shadow-[0_1px_20px_-8px_rgba(0,0,0,0.1)]' : 'border-neutral-200/40'
+      )}
+    >
+      <div
+        className={cn(
+          'mx-auto flex items-center justify-between px-5 sm:px-8 transition-all duration-500',
+          isScrolled ? 'h-14' : 'h-16 md:h-[72px]'
+        )}
+      >
+        {/* Logo with animated gradient ring */}
         <Link
           to="/"
-          className="flex-shrink-0 group relative"
+          className="flex items-center gap-3 group"
           onClick={closeMobileMenu}
           aria-label="Innovation Remedies Home"
         >
-          <img
-            src={BrandLogo}
-            alt="Innovation Remedies Company Logo"
-            className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-          />
+          <motion.span
+            aria-hidden
+            className="relative inline-flex items-center justify-center w-11 h-11 rounded-full overflow-hidden"
+            style={{
+              background:
+                'conic-gradient(from 0deg, #6ee7b7, #60a5fa, #a78bfa, #f472b6, #6ee7b7)',
+            }}
+          >
+            <motion.span
+              className="absolute inset-0 rounded-full"
+              style={{
+                background:
+                  'conic-gradient(from 0deg, #6ee7b7, #60a5fa, #a78bfa, #f472b6, #6ee7b7)',
+              }}
+              animate={{ rotate: 360 }}
+              transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
+            />
+            <span className="relative flex items-center justify-center w-[86%] h-[86%] rounded-full bg-white">
+              <img
+                src={BrandLogo}
+                alt="Innovation Remedies"
+                className="w-[80%] h-[80%] object-contain transition-transform duration-500 group-hover:scale-105"
+              />
+            </span>
+          </motion.span>
+          <span className="hidden md:flex flex-col leading-tight">
+            <span
+              className="text-[10px] uppercase text-neutral-400 tracking-[0.22em]"
+              style={MONO}
+            >
+              Innovation
+            </span>
+            <span
+              className="text-[13px] text-neutral-900 tracking-[-0.01em]"
+              style={{
+                ...DISPLAY,
+                fontWeight: 600,
+              }}
+            >
+              Remedies
+              <span className="text-emerald-600">.</span>
+            </span>
+          </span>
         </Link>
 
-        {/* Desktop Navigation */}
-        <div className="hidden lg:block">
-          <NavigationMenu>
-            <NavigationMenuList className="flex items-center">
-              {getAllNavItems().map((item) => (
-                <NavigationMenuItem key={item.to} className="mx-0.5">
-                  <NavLink
-                    to={item.to}
-                    className={({ isActive }) => cn(
-                      "group flex items-center px-3 py-2 rounded-full text-sm font-medium transition-all duration-200",
-                      isActive 
-                        ? `${item.bgColor} ${item.color} shadow-sm` 
-                        : "text-slate-700 dark:text-slate-300 hover:bg-slate-500/10 dark:hover:bg-slate-400/10"
+        {/* Desktop Nav with morphing active pill */}
+        <LayoutGroup id="header-nav">
+          <nav
+            className="hidden lg:flex items-center gap-0.5 bg-neutral-50/80 border border-neutral-200/70 p-1 rounded-full"
+            style={DISPLAY}
+          >
+            {getAllNavItems().map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.to === '/'}
+                className={({ isActive }) =>
+                  cn(
+                    'relative px-4 py-1.5 text-sm tracking-tight transition-colors duration-300 rounded-full',
+                    isActive ? 'text-white' : 'text-neutral-600 hover:text-neutral-900'
+                  )
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    {isActive && (
+                      <motion.span
+                        layoutId="nav-pill"
+                        className="absolute inset-0 rounded-full bg-neutral-900 -z-0"
+                        transition={{
+                          type: 'spring',
+                          stiffness: 380,
+                          damping: 30,
+                        }}
+                      />
                     )}
-                  >
-                    <item.icon className={cn(
-                        "h-4 w-4 mr-2",
-                        // The `isActive` check needs to be inside a function for `cn` to process it correctly
-                        ({ isActive }) => isActive ? item.color : "text-slate-500 dark:text-slate-400" 
-                      )} />
-                    {/* THIS WAS THE MISSING PART */}
-                    {item.label}
-                    
-                    {item.label === 'My Cart' && cartItemsCount > 0 && (
-                      <Badge 
-                        variant="destructive" 
-                        className="ml-2 h-5 min-w-5 px-1.5 flex items-center justify-center"
-                      >
-                        {cartItemsCount}
-                      </Badge>
-                    )}
-                  </NavLink>
-                </NavigationMenuItem>
-              ))}
-            </NavigationMenuList>
-          </NavigationMenu>
-        </div>
+                    <span className="relative z-10">{item.label}</span>
+                  </>
+                )}
+              </NavLink>
+            ))}
+          </nav>
+        </LayoutGroup>
 
-        {/* Right section: User & Mobile Menu */}
-        <div className="flex items-center space-x-2">
-          {/* User menu - Desktop */}
+        {/* Right actions */}
+        <div className="flex items-center gap-2 md:gap-3">
+          {/* Cart */}
+          <Link
+            to="/cart"
+            aria-label="Cart"
+            className="relative w-10 h-10 rounded-full flex items-center justify-center text-neutral-800 hover:bg-neutral-100 transition-colors duration-300 border border-transparent hover:border-neutral-200"
+          >
+            <ShoppingCart className="h-[18px] w-[18px]" />
+            {cartItemsCount > 0 && (
+              <span
+                className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-emerald-500 text-white text-[10px] font-semibold flex items-center justify-center tabular-nums ring-2 ring-white"
+                style={{ fontFamily: 'inherit' }}
+              >
+                {cartItemsCount}
+              </span>
+            )}
+          </Link>
+
+          {/* Sign in / user */}
           <div className="hidden lg:block">
             {isAuthenticated ? (
               <UserDropdown user={user} onLogout={handleLogout} />
             ) : (
-              <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800/50 p-1 rounded-full">
-                <Button 
-                  asChild 
-                  variant="ghost" 
-                  size="sm" 
-                  className="rounded-full hover:bg-white/70 dark:hover:bg-slate-700/50"
-                >
-                  <Link to="/login">Sign in</Link>
-                </Button>
-                <Button 
-                  asChild 
-                  size="sm" 
-                  className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
-                >
-                  <Link to="/register">Register</Link>
-                </Button>
-              </div>
+              <Link
+                to="/login"
+                className="group relative inline-flex items-center gap-2 pl-4 pr-1.5 py-1.5 rounded-full text-sm bg-neutral-900 text-white overflow-hidden hover:shadow-[0_8px_30px_-6px_rgba(110,231,183,0.5)] transition-all duration-500"
+                style={DISPLAY}
+              >
+                {/* Animated gradient border on hover */}
+                <motion.span
+                  aria-hidden
+                  className="absolute inset-0 rounded-full p-[1.5px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  style={{
+                    background:
+                      'conic-gradient(from 0deg, #6ee7b7, #60a5fa, #a78bfa, #f472b6, #6ee7b7)',
+                    WebkitMask:
+                      'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                    WebkitMaskComposite: 'xor',
+                    maskComposite: 'exclude',
+                  }}
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}
+                />
+                <span className="relative">Sign in</span>
+                <span className="relative flex items-center justify-center w-7 h-7 rounded-full bg-white/15 overflow-hidden">
+                  <ArrowUpRight
+                    size={13}
+                    className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-4 group-hover:-translate-y-4"
+                  />
+                  <ArrowUpRight
+                    size={13}
+                    className="absolute transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] -translate-x-4 translate-y-4 group-hover:translate-x-0 group-hover:translate-y-0"
+                  />
+                </span>
+              </Link>
             )}
           </div>
-          
-          {/* Mobile visible icons (Cart) */}
-          <div className="lg:hidden flex items-center">
-            <Button 
-              asChild
-              variant="ghost" 
-              size="icon" 
-              className="rounded-full relative"
-            >
-              <Link to="/cart" aria-label="Shopping Cart">
-                 <div className="flex items-center justify-center w-8 h-8 rounded-full bg-red-100 dark:bg-red-500/20">
-                  <ShoppingCart className="h-4 w-4 text-red-500" />
-                </div>
-                {cartItemsCount > 0 && (
-                  <Badge 
-                    variant="destructive" 
-                    className="absolute -top-1 -right-1 h-5 min-w-5 flex items-center justify-center"
-                  >
-                    {cartItemsCount}
-                  </Badge>
-                )}
-              </Link>
-            </Button>
-          </div>
-          
-          {/* Mobile menu button */}
+
+          {/* Mobile hamburger */}
           <div className="lg:hidden">
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="rounded-full" 
+                <button
+                  className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-neutral-100 text-neutral-900 transition-colors duration-300"
                   aria-label="Open menu"
                 >
-                  <Menu className="h-6 w-6 text-slate-800 dark:text-slate-200" />
-                </Button>
+                  <Menu className="h-[18px] w-[18px]" />
+                </button>
               </SheetTrigger>
               <MobileMenu
                 isAuthenticated={isAuthenticated}
@@ -245,53 +302,68 @@ export default function Header() {
           </div>
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 }
 
-
-// --- User Dropdown Component ---
+/* ----------------------------- User dropdown ----------------------------- */
 function UserDropdown({ user, onLogout }) {
   const initials = getUserInitials(user);
   const isAdmin = user?.role === 'Admin';
-  
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button 
-          variant="ghost" 
-          className="relative h-10 w-10 rounded-full p-0 overflow-hidden border-2 border-primary/10 hover:border-primary/30 transition-all duration-200"
+        <button
+          className="relative h-10 w-10 rounded-full p-0 overflow-hidden border border-neutral-200 hover:border-neutral-900 transition-colors duration-300"
         >
           <Avatar className="h-10 w-10">
-            <AvatarImage src={user?.coverImage || undefined} alt={user?.username || "User avatar"} />
-            <AvatarFallback className="bg-gradient-to-br from-primary to-primary/60 text-white font-semibold">
+            <AvatarImage
+              src={user?.coverImage || undefined}
+              alt={user?.username || 'User avatar'}
+            />
+            <AvatarFallback className="bg-neutral-900 text-white font-semibold text-xs">
               {initials}
             </AvatarFallback>
           </Avatar>
-          <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-white dark:border-gray-900"></span>
-        </Button>
+          <span className="absolute bottom-0.5 right-0.5 h-2 w-2 rounded-full bg-emerald-500 border border-white" />
+        </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-60 p-2 mt-1 rounded-xl overflow-hidden" align="end" forceMount>
-        <div className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-800/70 rounded-lg mb-1">
-          <Avatar className="h-12 w-12 border-2 border-white dark:border-gray-900 shadow-sm">
-            <AvatarImage src={user?.coverImage || undefined} alt={user?.username || "User avatar"} />
-            <AvatarFallback className="bg-gradient-to-br from-primary to-primary/60 text-white font-semibold">
+      <DropdownMenuContent
+        className="w-60 p-2 mt-2 rounded-2xl border border-neutral-200"
+        align="end"
+        forceMount
+      >
+        <div className="flex items-start gap-3 p-3 bg-neutral-50 rounded-xl mb-1">
+          <Avatar className="h-10 w-10 border border-white shadow-sm">
+            <AvatarImage
+              src={user?.coverImage || undefined}
+              alt={user?.username || 'User avatar'}
+            />
+            <AvatarFallback className="bg-neutral-900 text-white font-semibold text-xs">
               {initials}
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
-            <p className="text-base font-medium leading-none mb-1">{user?.username || "Welcome!"}</p>
+            <p
+              className="text-sm leading-tight text-neutral-900"
+              style={DISPLAY}
+            >
+              {user?.username || 'Welcome'}
+            </p>
             {user?.mobile && (
-              <p className="text-xs text-muted-foreground">
+              <p className="text-[11px] text-neutral-500 mt-0.5">
                 {user.mobile}
               </p>
             )}
             {user?.role && (
-              <Badge 
-                variant={user.role === 'Admin' ? 'outline' : 'secondary'} 
+              <Badge
+                variant={user.role === 'Admin' ? 'outline' : 'secondary'}
                 className={cn(
-                  "mt-2 text-xs",
-                  user.role === 'Admin' ? "border-purple-500 text-purple-600 bg-purple-50 dark:bg-purple-900/30" : ""
+                  'mt-2 text-[10px] w-fit',
+                  user.role === 'Admin'
+                    ? 'border-neutral-900 text-neutral-900'
+                    : ''
                 )}
               >
                 {user.role}
@@ -299,99 +371,102 @@ function UserDropdown({ user, onLogout }) {
             )}
           </div>
         </div>
-        
-        <DropdownMenuSeparator className="my-1" />
-        
-        <div className="p-1">
-          {isAdmin && (
+
+        {isAdmin && (
+          <>
+            <DropdownMenuSeparator className="my-1" />
             <DropdownMenuItem asChild>
-              <Link 
-                to="/admin/orders" 
-                className="cursor-pointer w-full flex items-center p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+              <Link
+                to="/admin/orders"
+                className="cursor-pointer flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-50"
               >
-                <div className="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-500/20 flex items-center justify-center mr-2">
-                  <Package className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                <div className="w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center">
+                  <Package className="h-4 w-4 text-neutral-800" />
                 </div>
-                <span>Manage Orders</span>
+                <span className="text-sm">Manage orders</span>
               </Link>
             </DropdownMenuItem>
-          )}
-        </div>
-        
+          </>
+        )}
+
         <DropdownMenuSeparator className="my-1" />
-        
-        <div className="p-1">
-          <DropdownMenuItem 
-            onClick={onLogout} 
-            className="cursor-pointer w-full flex items-center p-2 rounded-md text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20"
-          >
-            <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-500/20 flex items-center justify-center mr-2">
-              <LogOut className="h-4 w-4 text-red-600 dark:text-red-400" />
-            </div>
-            <span>Sign out</span>
-          </DropdownMenuItem>
-        </div>
+        <DropdownMenuItem
+          onClick={onLogout}
+          className="cursor-pointer flex items-center gap-3 p-2 rounded-lg text-red-600 hover:bg-red-50"
+        >
+          <div className="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center">
+            <LogOut className="h-4 w-4" />
+          </div>
+          <span className="text-sm">Sign out</span>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
 }
 
-// --- Mobile Menu Component ---
-function MobileMenu({ isAuthenticated, user, onLogout, onClose, navItems, currentPath, cartItemsCount }) {
+/* ------------------------------ Mobile menu ------------------------------ */
+function MobileMenu({
+  isAuthenticated,
+  user,
+  onLogout,
+  onClose,
+  navItems,
+  currentPath,
+  cartItemsCount,
+}) {
   return (
-    <SheetContent 
-      side="right" 
-      className="w-full max-w-xs sm:max-w-sm p-0 border-l border-gray-200 dark:border-gray-800"
+    <SheetContent
+      side="right"
+      className="w-full max-w-sm p-0 border-l border-neutral-200 bg-white"
     >
-      <SheetHeader className="p-4 border-b border-gray-200 dark:border-gray-800 flex flex-row justify-between items-center">
-        <SheetTitle className="text-left">Menu</SheetTitle>
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          className="rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+      <SheetHeader className="p-5 border-b border-neutral-200 flex flex-row justify-between items-center">
+        <SheetTitle className="text-left text-sm uppercase" style={MONO}>
+          Menu
+        </SheetTitle>
+        <button
+          className="w-9 h-9 rounded-full hover:bg-neutral-100 flex items-center justify-center"
           onClick={onClose}
         >
-          <X className="h-5 w-5 text-gray-500" />
-        </Button>
+          <X className="h-4 w-4 text-neutral-700" />
+        </button>
       </SheetHeader>
-      
+
       {isAuthenticated && (
-        <div className="p-4 border-b border-gray-200 dark:border-gray-800">
-          <div className="flex items-center space-x-3">
-            <Avatar className="h-12 w-12 border-2 border-white dark:border-gray-900 shadow-sm">
-              <AvatarImage src={user?.coverImage || undefined} alt={user?.username || "User"} />
-              <AvatarFallback className="bg-gradient-to-br from-primary to-primary/60 text-white font-medium">
+        <div className="p-5 border-b border-neutral-200">
+          <div className="flex items-center gap-3">
+            <Avatar className="h-11 w-11 border border-neutral-200">
+              <AvatarImage
+                src={user?.coverImage || undefined}
+                alt={user?.username || 'User'}
+              />
+              <AvatarFallback className="bg-neutral-900 text-white text-xs">
                 {getUserInitials(user)}
               </AvatarFallback>
             </Avatar>
             <div>
-              <div className="font-medium text-base">{user?.username || "User"}</div>
+              <div className="text-sm text-neutral-900" style={DISPLAY}>
+                {user?.username || 'User'}
+              </div>
               {user?.mobile && (
-                <div className="text-xs text-gray-500 dark:text-gray-400">{user.mobile}</div>
-              )}
-              {user?.role && (
-                <Badge 
-                  variant={user.role === 'Admin' ? 'outline' : 'secondary'} 
-                  className={cn(
-                    "mt-1 text-xs",
-                    user.role === 'Admin' ? "border-purple-500 text-purple-600 bg-purple-50 dark:bg-purple-900/30" : ""
-                  )}
-                >
-                  {user.role}
-                </Badge>
+                <div className="text-[11px] text-neutral-500">
+                  {user.mobile}
+                </div>
               )}
             </div>
           </div>
         </div>
       )}
-      
+
       <div className="flex-1 overflow-y-auto">
         <div className="p-4">
-          <div className="mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+          <div
+            className="mb-3 px-2 text-[10px] uppercase text-neutral-400"
+            style={MONO}
+          >
             Navigation
           </div>
-          
-          <nav className="space-y-1 mt-3">
+
+          <nav className="space-y-0.5">
             {navItems.map((item) => {
               const isActive = currentPath === item.to;
               return (
@@ -399,72 +474,49 @@ function MobileMenu({ isAuthenticated, user, onLogout, onClose, navItems, curren
                   key={item.to}
                   to={item.to}
                   className={cn(
-                    "flex items-center justify-between py-3 px-3 rounded-lg text-sm font-medium transition-all duration-200",
-                    isActive 
-                      ? `${item.bgColor} ${item.color}` 
-                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    'flex items-center justify-between py-3 px-3 rounded-xl text-sm transition-colors duration-300',
+                    isActive
+                      ? 'bg-neutral-900 text-white'
+                      : 'text-neutral-800 hover:bg-neutral-50'
                   )}
+                  style={DISPLAY}
                   onClick={onClose}
                 >
-                  <div className="flex items-center">
-                    <div className={cn(
-                      "flex items-center justify-center w-9 h-9 rounded-full mr-3",
-                      isActive ? "bg-white/80 dark:bg-gray-800" : "bg-gray-100 dark:bg-gray-800"
-                    )}>
-                      <item.icon className={cn(
-                        "h-5 w-5",
-                        isActive ? item.color : "text-gray-500 dark:text-gray-400"
-                      )} />
-                    </div>
-                    <span>{item.label}</span>
-                    
-                    {/* Badge for cart */}
-                    {item.label === 'My Cart' && cartItemsCount > 0 && (
-                      <Badge 
-                        variant="destructive" 
-                        className="ml-2 h-5 min-w-5 px-1.5"
-                      >
-                        {cartItemsCount}
-                      </Badge>
+                  <span>{item.label}</span>
+                  {item.label === 'My Cart' && cartItemsCount > 0 && (
+                    <Badge className="h-5 min-w-5 px-1.5 bg-emerald-500">
+                      {cartItemsCount}
+                    </Badge>
+                  )}
+                  <ChevronRight
+                    className={cn(
+                      'h-4 w-4 transition-opacity',
+                      isActive ? 'opacity-100' : 'opacity-30'
                     )}
-                  </div>
-                  
-                  {isActive && <ChevronRight className={cn("h-4 w-4", item.color)} />}
+                  />
                 </Link>
               );
             })}
+
+            <Link
+              to="/cart"
+              className={cn(
+                'flex items-center justify-between py-3 px-3 rounded-xl text-sm transition-colors duration-300',
+                currentPath === '/cart'
+                  ? 'bg-neutral-900 text-white'
+                  : 'text-neutral-800 hover:bg-neutral-50'
+              )}
+              style={DISPLAY}
+              onClick={onClose}
+            >
+              <span>My Cart</span>
+              <ChevronRight className="h-4 w-4 opacity-30" />
+            </Link>
           </nav>
-          
-          {isAuthenticated && (
-            <div className="mt-6">
-              <div className="mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                Account
-              </div>
-              <nav className="space-y-1 mt-3">
-                <Link
-                  to="/profile"
-                  className={cn(
-                    "flex items-center justify-between py-3 px-3 rounded-lg text-sm font-medium transition-all duration-200",
-                    currentPath === '/profile' 
-                      ? "bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400" 
-                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                  )}
-                  onClick={onClose}
-                >
-                  {/* You might want to add profile icon and text here */}
-                  <span>Profile</span>
-                  
-                  {currentPath === '/profile' && (
-                    <ChevronRight className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                  )}
-                </Link>
-              </nav>
-            </div>
-          )}
         </div>
       </div>
 
-      <SheetFooter className="p-4 border-t border-gray-200 dark:border-gray-800 mt-auto">
+      <SheetFooter className="p-4 border-t border-neutral-200 mt-auto">
         {isAuthenticated ? (
           <Button
             variant="outline"
@@ -478,23 +530,16 @@ function MobileMenu({ isAuthenticated, user, onLogout, onClose, navItems, curren
             Sign out
           </Button>
         ) : (
-          <div className="grid grid-cols-2 gap-2 w-full">
-            <Button
-              asChild
-              variant="outline"
-              className="w-full"
-              onClick={onClose}
-            >
-              <Link to="/login">Sign in</Link>
-            </Button>
-            <Button
-              asChild
-              className="w-full bg-primary hover:bg-primary/90"
-              onClick={onClose}
-            >
-              <Link to="/register">Sign up</Link>
-            </Button>
-          </div>
+          <Button
+            asChild
+            className="w-full bg-neutral-900 hover:bg-neutral-800 text-white rounded-full h-11"
+            onClick={onClose}
+          >
+            <Link to="/login" className="flex items-center justify-center gap-2" style={DISPLAY}>
+              Sign in
+              <ArrowUpRight size={14} />
+            </Link>
+          </Button>
         )}
       </SheetFooter>
     </SheetContent>

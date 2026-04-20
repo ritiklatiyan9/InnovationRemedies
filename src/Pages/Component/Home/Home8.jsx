@@ -72,7 +72,7 @@ const CreativeCarousel = () => {
       rotateY: rotateY,
       rotateX: rotateX,
       zIndex: zIndex,
-    };
+    }; 
   };
 
   if (!cardsData || cardsData.length === 0) {
@@ -84,7 +84,7 @@ const CreativeCarousel = () => {
   }
 
   return (
-    <div className="bg-gray-100 flex flex-col justify-center items-center min-h-screen w-full overflow-hidden py-16">
+    <div className="bg-green-100   flex flex-col justify-center items-center min-h-screen w-full overflow-hidden py-16">
       {/* Container for the circular carousel */}
       <div
         className="relative flex items-center justify-center"

@@ -1,616 +1,817 @@
-import React, { useRef } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import Video from './Video';
-import vikasji from '../../../assets/Images/vikasji.jpg';
-import OurVideos from './OurVideos';
-import Carousel from './carousel';
+import React, { useRef, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
-  Eye, Target, Users, Trophy,
-  Briefcase, Lightbulb, Star,
-  ArrowRight, MessageSquare, Heart, Award, Calendar
+  motion,
+  AnimatePresence,
+  useScroll,
+  useTransform,
+  useInView,
+  useReducedMotion,
+  useMotionValue,
+  animate as fmAnimate,
+} from 'framer-motion';
+import {
+  Users,
+  Trophy,
+  Lightbulb,
+  Star,
+  Target,
+  ArrowUpRight,
+  ArrowDown,
+  Heart,
+  Award,
+  Microscope,
 } from 'lucide-react';
-import { motion, useScroll, useTransform, useInView } from 'framer-motion';
+import vikasji from '../../../assets/Images/vikasji.jpg';
+import aboutVideo from '../../../assets/Images/vid.mp4';
 
-const customStyle = {
-  fontFamily: "SF Pro Text Regular, sans-serif",
-  fontWeight: "400",
+const BRAND = { fontFamily: "Moonhouse, 'Neue Montreal Regular', sans-serif" };
+const DISPLAY = {
+  fontFamily:
+    "'Neue Montreal Regular', 'SF Pro Text Semibold', 'Inter', system-ui, sans-serif",
+  fontWeight: 600,
 };
+const BODY = {
+  fontFamily:
+    "'Neue Montreal Regular', 'SF Pro Text Regular', system-ui, sans-serif",
+};
+const MONO = {
+  fontFamily: "'SF Pro Text Regular', ui-monospace, monospace",
+  letterSpacing: '0.2em',
+};
+const EASE_OUT = [0.22, 1, 0.36, 1];
 
-const VisionIcon = () => (
-  <motion.svg
-    width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-    initial={{ scale: 0.9, opacity: 0.8 }}
-    whileHover={{ scale: 1.1, rotate: 5 }}
-    transition={{ type: 'spring', stiffness: 300 }}
-  >
-    <circle cx="12" cy="12" r="9" stroke="#10B981" strokeWidth="1.5" />
-    <path d="M12 7v5l3 3" stroke="#10B981" strokeWidth="1.5" strokeLinecap="round" />
-    <motion.circle
-      cx="12" cy="12" r="2" fill="#10B981"
-      animate={{ scale: [1, 1.2, 1], opacity: [1, 0.7, 1] }}
-      transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-    />
-  </motion.svg>
-);
+/* ------------------------------- Count up -------------------------------- */
+function CountUp({ to, suffix = '', duration = 1.8 }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-40px' });
+  const mv = useMotionValue(0);
+  const [display, setDisplay] = useState('0');
+  const reduce = useReducedMotion();
+  useEffect(() => {
+    if (!inView) return;
+    if (reduce) return setDisplay(String(to));
+    const c = fmAnimate(mv, to, {
+      duration,
+      ease: EASE_OUT,
+      onUpdate: (v) => setDisplay(Math.round(v).toLocaleString()),
+    });
+    return c.stop;
+  }, [inView, to, duration, reduce, mv]);
+  return (
+    <span ref={ref}>
+      {display}
+      {suffix}
+    </span>
+  );
+}
 
-const MissionIcon = () => (
-  <motion.svg
-    width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-    initial={{ scale: 0.9, opacity: 0.8 }}
-    whileHover={{ scale: 1.1, rotate: -5 }}
-    transition={{ type: 'spring', stiffness: 300 }}
-  >
-    <rect x="5" y="5" width="14" height="14" rx="2" stroke="#3B82F6" strokeWidth="1.5" />
-    <motion.path
-      d="M12 5V19" stroke="#3B82F6" strokeWidth="1.5" strokeLinecap="round"
-      initial={{ pathLength: 0 }}
-      animate={{ pathLength: 1 }}
-      transition={{ duration: 1, delay: 0.2 }}
-    />
-    <motion.path
-      d="M5 12h14" stroke="#3B82F6" strokeWidth="1.5" strokeLinecap="round"
-      initial={{ pathLength: 0 }}
-      animate={{ pathLength: 1 }}
-      transition={{ duration: 1, delay: 0.4 }}
-    />
-  </motion.svg>
-);
+/* ------------------------------- Reveal ---------------------------------- */
+function Reveal({ children, delay = 0, y = 28, className = '' }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-80px' });
+  const reduce = useReducedMotion();
+  return (
+    <motion.div
+      ref={ref}
+      initial={reduce ? false : { opacity: 0, y }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.8, delay, ease: EASE_OUT }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
-// --- New Background Elements ---
+/* =============================== HERO ==================================== */
+function Hero() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start start', 'end start'],
+  });
+  const reduce = useReducedMotion();
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1.05, 1.18]);
+  const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '-25%']);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
-// Enhanced background with particles
-const EnhancedBackground = () => (
-  <div className="absolute inset-0 w-full h-full overflow-hidden opacity-40 pointer-events-none">
-    <svg className="w-full h-full opacity-15" preserveAspectRatio="none">
-      <defs>
-        <radialGradient id="backgroundGrad" cx="50%" cy="50%" r="70%" fx="50%" fy="50%">
-          <stop offset="0%" stopColor="#ecfdf5" stopOpacity="0.8" />
-          <stop offset="100%" stopColor="#f0fdfa" stopOpacity="0" />
-        </radialGradient>
-        <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="15" />
-        </filter>
-      </defs>
-      <rect width="100%" height="100%" fill="url(#backgroundGrad)" filter="url(#softGlow)" />
-    </svg>
-    
-    {/* Animated Particles */}
-    {Array.from({ length: 15 }).map((_, i) => (
+  return (
+    <section
+      ref={ref}
+      className="relative w-full h-[100svh] min-h-[720px] overflow-hidden text-white bg-[#05070f]"
+      style={BODY}
+    >
+      {/* Video layer with parallax */}
       <motion.div
-        key={i}
-        className="absolute rounded-full"
+        aria-hidden
+        style={reduce ? {} : { y: bgY, scale: bgScale }}
+        className="absolute inset-0 -z-10"
+      >
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          src={aboutVideo}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+        />
+      </motion.div>
+
+      {/* Color overlays for depth + readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#05070f]/60 via-[#05070f]/45 to-[#05070f]/80 pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_20%_60%,transparent_0%,rgba(0,0,0,0.4)_100%)] pointer-events-none" />
+
+      {/* Ambient blue orbs to match site */}
+      <motion.div
+        className="absolute w-[55vw] h-[55vw] rounded-full blur-3xl opacity-70 pointer-events-none"
         style={{
-          top: `${Math.random() * 100}%`,
-          left: `${Math.random() * 100}%`,
-          width: `${Math.random() * 20 + 5}px`,
-          height: `${Math.random() * 20 + 5}px`,
-          background: i % 2 === 0 ? 'rgba(16, 185, 129, 0.2)' : 'rgba(59, 130, 246, 0.2)',
+          background:
+            'radial-gradient(circle, rgba(59,89,200,0.35) 0%, transparent 65%)',
+          top: '-20%',
+          left: '-10%',
         }}
-        animate={{
-          y: [0, Math.random() * -100 - 50],
-          x: [0, (Math.random() - 0.5) * 50],
-          opacity: [0, 0.7, 0],
-        }}
-        transition={{
-          duration: Math.random() * 10 + 15,
-          repeat: Infinity,
-          ease: "linear",
-          delay: Math.random() * 10,
-        }}
+        animate={reduce ? {} : { x: [0, 30, 0], y: [0, 20, 0] }}
+        transition={{ duration: 40, repeat: Infinity, ease: 'easeInOut' }}
       />
-    ))}
-  </div>
-);
 
-// Modernized Wave Divider
-const WaveDivider = ({ inverted = false, color = "from-green-100 to-blue-100" }) => (
-  <div className={`w-full h-24 relative overflow-hidden ${inverted ? 'transform rotate-180' : ''}`}>
-    <div className={`absolute w-full h-full bg-gradient-to-r ${color} opacity-50`}></div>
-    <svg viewBox="0 0 1440 120" className="absolute bottom-0 w-full h-full">
-      <motion.path
-        d="M0,64 C320,120 480,20 720,80 C960,140 1200,40 1440,96 L1440,120 L0,120 Z"
-        fill="white"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1 }}
-      />
-    </svg>
-  </div>
-);
+      {/* Top meta bar */}
+      <div className="absolute top-24 inset-x-0 z-20 px-6 md:px-10 flex items-center justify-between text-[11px] text-white/60">
+        <div className="flex items-center gap-2" style={MONO}>
+          <motion.span
+            className="w-[6px] h-[6px] rounded-full bg-emerald-400"
+            animate={reduce ? {} : { opacity: [1, 0.3, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <span className="uppercase">About · Innovation Remedies</span>
+        </div>
+      </div>
 
-// --- Main Component ---
+      <motion.div
+        style={reduce ? {} : { y: contentY, opacity: contentOpacity }}
+        className="relative z-10 h-full flex flex-col justify-end pb-24 md:pb-28 px-6 md:px-10"
+      >
+        <div className="max-w-[1400px] mx-auto w-full">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.1 }}
+            className="flex items-center gap-3 mb-8"
+          >
+            <span className="h-px w-12 bg-white/60" />
+            <span
+              className="text-[11px] uppercase text-emerald-300/90"
+              style={MONO}
+            >
+              Est. 2020 · Animal health · India
+            </span>
+          </motion.div>
 
-export default function EnhancedAboutUs() {
-  // Animation variants
-  const fadeIn = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
-  };
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: EASE_OUT, delay: 0.2 }}
+            className="text-5xl md:text-7xl lg:text-8xl tracking-[-0.03em] leading-[0.95] max-w-5xl"
+            style={DISPLAY}
+          >
+            <span className="block bg-gradient-to-b from-white via-white to-white/70 bg-clip-text text-transparent">
+              We exist to advance
+            </span>
+            <span className="block italic font-light bg-gradient-to-r from-emerald-300 via-teal-200 to-blue-300 bg-clip-text text-transparent">
+              animal care — together.
+            </span>
+          </motion.h1>
 
-  const fadeInScale = {
-    hidden: { opacity: 0, scale: 0.9 },
-    visible: { opacity: 1, scale: 1, transition: { duration: 0.6 } }
-  };
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: EASE_OUT, delay: 0.45 }}
+            className="mt-10 max-w-xl text-base md:text-lg text-white/75 leading-relaxed"
+          >
+            Since 2020, Innovation Remedies has engineered veterinary
+            pharmaceuticals and nutritional solutions for farmers, clinics, and
+            distributors across 28 Indian states.
+          </motion.p>
+        </div>
+      </motion.div>
 
-  const staggerContainer = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.15
-      }
-    }
-  };
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2, duration: 0.6 }}
+        className="absolute bottom-6 right-6 md:right-10 z-20 flex items-center gap-2 text-[10px] uppercase text-white/50"
+        style={MONO}
+      >
+        <span>Scroll</span>
+        <motion.span
+          animate={reduce ? {} : { y: [0, 6, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <ArrowDown size={12} />
+        </motion.span>
+      </motion.div>
+    </section>
+  );
+}
 
-  // References for scroll animations
-  const timelineRef = useRef(null);
-
-  // Team member data
-  const teamMembers = [
+/* ============================ VALUES / STORY ============================= */
+function Story() {
+  const values = [
     {
-      name: "Mr. Vikas Malik",
-      role: "Managing Director",
-      bio: "Veterinarian with 15+ years experience in clinical practice and telemedicine development",
-      avatar: vikasji,
+      icon: Microscope,
+      tint: 'bg-emerald-600',
+      title: 'Science first',
+      body:
+        'Every formulation is validated through rigorous R&D before it reaches a single farm.',
     },
     {
-      name: "Geeta",
-      role: "Chief Marketing Officer",
-      bio: "Visionary Expert in  Medical diagnostics",
-      avatar: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80"
+      icon: Heart,
+      tint: 'bg-rose-600',
+      title: 'Animals above all',
+      body:
+        'Welfare is the yardstick — if it does not measurably improve animal health, we do not ship it.',
     },
-  
     {
-      name: "Aryan Malik",
-      role: "Lead Market Specialist",
-      bio: "Growing Mindset with 4+ years in veterinary marketing and sales",
-      avatar: "https://images.unsplash.com/photo-1599566150168-df1fcf16f1f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80"
-    }
-  ];
-  
-  // Timeline milestones
-  const milestones = [
-    { 
-      year: "2019", 
-      title: "Company Founding", 
-      desc: "Established with a  focused on veterinary  research", 
-      icon: <Lightbulb className="text-amber-500" />,
-      color: "bg-amber-50 border-amber-200"
+      icon: Users,
+      tint: 'bg-blue-600',
+      title: 'For the farmer',
+      body:
+        'Designed around the realities of Indian livestock, Indian climate, and Indian economics.',
     },
-    { 
-      year: "2021", 
-      title: "Global Expansion", 
-      desc: "Launched platform in 5+ states across India", 
-      icon: <Users className="text-blue-500" />,
-      color: "bg-blue-50 border-blue-200"
-    },
-    { 
-      year: "2022", 
-      title: " Tested & Proven Products", 
-      desc: " Introduced 50+ veterinary products with 99% diagnostic accuracy",  
-      icon: <Target className="text-emerald-500" />,
-      color: "bg-emerald-50 border-emerald-200"
-    },
-    { 
-      year: "2023", 
-      title: "1 Million Pet Lives Impacted", 
-      desc: "Reached milestone of serving 1 million pets through partner clinics", 
-      icon: <Trophy className="text-purple-500" />,
-      color: "bg-purple-50 border-purple-200"
-    },
-    { 
-      year: "2025", 
-      title: "Online Website Launch", 
-      desc: "Released  website with 2K+ users in first month", 
-      icon: <Star className="text-rose-500" />,
-      color: "bg-rose-50 border-rose-200"
-    }
-  ];
-
-  // Stats data
-  const stats = [
-    { value: "5+", label: "States", icon: <Users className="mx-auto mb-3 text-blue-500" size={32} /> },
-    { value: "1M+", label: "Pets Helped", icon: <Heart className="mx-auto mb-3 text-rose-500" size={32} /> },
-    { value: "99%", label: "Diagnostic Accuracy", icon: <Target className="mx-auto mb-3 text-emerald-500" size={32} /> },
-    { value: "5,000+", label: "Veterinary Partners", icon: <Award className="mx-auto mb-3 text-amber-500" size={32} /> }
   ];
 
   return (
-    <div
-      className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-emerald-50 font-sans text-gray-800 overflow-hidden relative"
-      style={customStyle}
-      id="about-us-page"
+    <section className="relative bg-white py-28 md:py-36" style={BODY}>
+      <div className="max-w-[1400px] mx-auto px-6 md:px-10">
+        <div className="grid md:grid-cols-12 gap-10 lg:gap-16 items-start">
+          <Reveal className="md:col-span-5">
+            <p
+              className="text-[11px] uppercase text-emerald-700 mb-5"
+              style={MONO}
+            >
+              — Who we are
+            </p>
+            <h2
+              className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.03em] leading-[1.02]"
+              style={DISPLAY}
+            >
+              A quiet company,
+              <br />
+              <span className="italic font-light bg-gradient-to-r from-emerald-600 via-teal-600 to-blue-700 bg-clip-text text-transparent">
+                doing loud work.
+              </span>
+            </h2>
+          </Reveal>
+          <div className="md:col-span-7 space-y-6 text-neutral-600 leading-relaxed text-base md:text-lg">
+            <Reveal delay={0.1}>
+              <p>
+                Innovation Remedies Life Science was founded in 2020 with a
+                simple belief: India's animal health sector deserved
+                pharmaceutical-grade rigour without pharmaceutical-grade
+                pricing.
+              </p>
+            </Reveal>
+            <Reveal delay={0.15}>
+              <p>
+                What began as a small R&D lab in Meerut has grown into a
+                pan-India operation — 48+ formulations, 1,200+ partner clinics,
+                2 million animals served. We remain stubbornly focused on the
+                fundamentals: science, safety, and trust.
+              </p>
+            </Reveal>
+          </div>
+        </div>
+
+        {/* Values row */}
+        <div className="grid md:grid-cols-3 gap-5 mt-20 md:mt-28">
+          {values.map((v, i) => (
+            <Reveal key={v.title} delay={i * 0.08}>
+              <article className="group relative h-full p-8 rounded-[1.5rem] bg-neutral-50 border border-neutral-200 hover:bg-white hover:border-neutral-300 transition-colors duration-500">
+                <motion.span
+                  whileHover={{ rotate: 12, scale: 1.06 }}
+                  transition={{ duration: 0.4, ease: EASE_OUT }}
+                  className={`inline-flex items-center justify-center w-11 h-11 rounded-full text-white mb-6 shadow-sm ${v.tint}`}
+                >
+                  <v.icon size={18} />
+                </motion.span>
+                <h3
+                  className="text-xl md:text-2xl tracking-[-0.02em] text-neutral-900 mb-3"
+                  style={DISPLAY}
+                >
+                  {v.title}
+                </h3>
+                <p className="text-sm text-neutral-600 leading-relaxed">
+                  {v.body}
+                </p>
+              </article>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ================================ STATS ================================== */
+function Stats() {
+  const stats = [
+    { label: 'States reached', value: 28, suffix: '' },
+    { label: 'Animals served', value: 2, suffix: 'M+' },
+    { label: 'Diagnostic accuracy', value: 99, suffix: '%' },
+    { label: 'Partner clinics', value: 1200, suffix: '+' },
+  ];
+  return (
+    <section
+      className="relative bg-[#05070f] text-white py-24 md:py-32 overflow-hidden"
+      style={BODY}
     >
-      {/* Enhanced Background */}
-      <EnhancedBackground />
-
-      {/* Hero Section with Video Background */}
-      <motion.section
-        className="relative pt-20 pb-24 overflow-hidden min-h-screen flex items-center"
-        initial="hidden"
-        animate="visible"
-        variants={fadeIn}
-      >
-        {/* Video Background */}
-        <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/30 to-blue-500/30 mix-blend-overlay z-10"></div>
-          <div className="absolute inset-0 bg-black/50 z-10"></div>
-          <Video className="absolute inset-0 w-full h-full object-cover" />
-        </div>
-        
-        <div className="container mx-auto px-4 relative z-20">
-          <motion.div 
-            className="text-center"
-            variants={fadeIn}
+      <div
+        aria-hidden
+        className="absolute w-[55vw] h-[55vw] rounded-full blur-3xl opacity-40 pointer-events-none"
+        style={{
+          background:
+            'radial-gradient(circle, rgba(59,89,200,0.3) 0%, transparent 65%)',
+          top: '-25%',
+          left: '-15%',
+        }}
+      />
+      <div className="relative max-w-[1400px] mx-auto px-6 md:px-10">
+        <Reveal>
+          <p
+            className="text-[11px] uppercase text-emerald-300/90 mb-5"
+            style={MONO}
           >
-            <motion.h1 
-              className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 text-white drop-shadow-lg"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
-              Transforming Healthcare
-            </motion.h1>
-            <motion.p
-              className="text-xl md:text-2xl text-white mt-4 max-w-3xl mx-auto"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-            >
-              Revolutionizing animal Healthcare with Great Veterinary Products
-            </motion.p>
-          </motion.div>
-        </div>
-      </motion.section>
-
-      <WaveDivider color="from-blue-100 to-emerald-100" />
-
-
-      <Carousel />
-
-      {/* Vision & Mission */}
-      
-
-      <WaveDivider inverted={true} color="from-emerald-100 to-blue-100" />
-
-      {/* Team Section */}
-      <motion.section
-        className="py-20 bg-gradient-to-br from-blue-50 to-blue-100 relative z-10"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-        variants={staggerContainer}
-      >
-        <div className="container mx-auto px-4 sm:px-6">
-          <motion.div 
-            className="text-center mb-16" 
-            variants={fadeIn}
+            — By the numbers
+          </p>
+          <h2
+            className="text-4xl md:text-6xl tracking-[-0.03em] leading-[1.02] max-w-3xl"
+            style={DISPLAY}
           >
-            <span className="inline-block px-4 py-1 rounded-full bg-blue-200 text-blue-700 text-sm font-medium mb-4">
-              Our People
+            Measured impact.
+            <br />
+            <span className="italic font-light bg-gradient-to-r from-emerald-300 via-teal-200 to-blue-300 bg-clip-text text-transparent">
+              No marketing fluff.
             </span>
-            <h2 className="text-3xl md:text-5xl font-bold mb-4 text-gray-800">Meet Our Leadership</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-              A team of veterinary experts, software engineers, and healthcare innovators driving our mission forward.
-            </p>
-          </motion.div>
-
-          <motion.div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-            variants={staggerContainer}
-          >
-            {teamMembers.map((member, index) => (
-              <motion.div 
-                key={index} 
-                variants={{
-                  hidden: { opacity: 0, y: 50 },
-                  visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, delay: index * 0.1 } }
-                }}
-                whileHover={{ y: -10, scale: 1.02, boxShadow: "0 10px 20px rgba(0,0,0,0.1)" }}
-                transition={{ type: "spring", stiffness: 200 }}
-              >
-                <Card className="bg-white p-6 rounded-xl overflow-hidden shadow-lg transition-all duration-300 h-full flex flex-col text-center border-t-4 border-blue-400">
-                  <div className="w-32 h-32 mx-auto mb-6 rounded-full overflow-hidden ring-4 ring-blue-100 ring-offset-2 shadow-md transform transition-all duration-300 hover:scale-105">
-                    <img src={member.avatar} alt={member.name} className="w-full h-full object-cover" loading="lazy"/>
-                  </div>
-                  <h3 className="font-bold text-xl mb-1 text-gray-800">{member.name}</h3>
-                  <p className="text-emerald-600 text-sm mb-4 font-medium tracking-wide uppercase">{member.role}</p>
-                  <p className="text-gray-600 text-base flex-grow">{member.bio}</p>
-                  
-                  <div className="mt-6 pt-6 border-t border-gray-100">
-                 
-                  </div>
-                </Card>
-              </motion.div>
-            ))}
-          </motion.div>
+          </h2>
+        </Reveal>
+        <div className="mt-16 md:mt-20 grid grid-cols-2 md:grid-cols-4 gap-8">
+          {stats.map((s, i) => (
+            <Reveal key={s.label} delay={i * 0.06}>
+              <div className="border-t border-white/20 pt-5">
+                <div
+                  className="text-5xl md:text-7xl tracking-[-0.04em] tabular-nums leading-none"
+                  style={DISPLAY}
+                >
+                  <CountUp to={s.value} suffix={s.suffix} />
+                </div>
+                <div
+                  className="mt-4 text-[11px] uppercase text-white/50"
+                  style={MONO}
+                >
+                  {s.label}
+                </div>
+              </div>
+            </Reveal>
+          ))}
         </div>
-      </motion.section>
+      </div>
+    </section>
+  );
+}
 
-      <WaveDivider color="from-blue-100 to-white" />
+/* ============================== TIMELINE ================================= */
+// Each item has a pre-set (x) position for its dot so it lands on the curve.
+// Curve alternates between x=20 and x=80 (SVG viewBox units = px since SVG is 100px wide).
+function dotXForIndex(i) {
+  return i % 2 === 0 ? 80 : 20;
+}
 
-      {/* Achievements Timeline */}
-      <section 
-        className="py-20 bg-white relative z-10"
-        ref={timelineRef}
+// Items are 220 tall (minHeight). Dot y is at top+110 of each item.
+// Builds a smooth S-curve that passes through every dot.
+function buildCurvePath(count) {
+  if (count < 1) return '';
+  const itemH = 220;
+  const firstY = 110;
+  let d = `M ${dotXForIndex(0)} ${firstY}`;
+  for (let i = 1; i < count; i++) {
+    const prevX = dotXForIndex(i - 1);
+    const prevY = firstY + (i - 1) * itemH;
+    const curX = dotXForIndex(i);
+    const curY = firstY + i * itemH;
+    // Bulge outward from the midpoint to create a wave.
+    // Control points pull the curve toward the opposite side in between.
+    const midY = (prevY + curY) / 2;
+    const bulge = prevX === 80 ? 110 : -10; // push past the edge for a nice bow
+    const c1x = bulge;
+    const c2x = prevX === 80 ? -10 : 110;
+    d += ` C ${c1x} ${midY - 10}, ${c2x} ${midY + 10}, ${curX} ${curY}`;
+  }
+  return d;
+}
+
+function TimelineItem({ m, index }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-20%' });
+  const reduce = useReducedMotion();
+  const x = dotXForIndex(index);
+
+  return (
+    <div
+      ref={ref}
+      className="relative pl-32 md:pl-40 py-10 md:py-14 group"
+      style={{ minHeight: '220px' }}
+    >
+      {/* Single dot — positioned on the curve */}
+      <motion.span
+        initial={reduce ? false : { scale: 0 }}
+        animate={inView ? { scale: 1 } : {}}
+        transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.1 }}
+        className="absolute top-[100px] md:top-[110px] w-5 h-5 rounded-full bg-white border-[3px] shadow-[0_0_0_6px_rgba(255,255,255,0.9)] z-10"
+        style={{
+          left: `${x}px`,
+          borderColor: m.color || '#10b981',
+          transform: 'translate(-50%, -50%)',
+        }}
+      />
+
+      {/* Header row: step + divider + year pill */}
+      <motion.div
+        initial={reduce ? false : { opacity: 0, y: 14 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.15 }}
+        className="flex items-baseline gap-4 mb-4"
       >
-        <div className="container mx-auto px-4 sm:px-6">
-          <motion.div
-            className="text-center mb-16"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.5 }}
-            variants={fadeIn}
+        <span
+          className="text-[10px] uppercase text-neutral-500 tabular-nums"
+          style={MONO}
+        >
+          Step {String(index + 1).padStart(2, '0')}
+        </span>
+        <span className="h-px flex-1 bg-neutral-200" />
+        <span
+          className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] text-white tabular-nums"
+          style={{ ...MONO, backgroundColor: m.color || '#10b981' }}
+        >
+          {m.year}
+        </span>
+      </motion.div>
+
+      {/* Content */}
+      <motion.div
+        initial={reduce ? false : { opacity: 0, y: 20 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.7, ease: EASE_OUT, delay: 0.2 }}
+        className="flex items-start gap-4"
+      >
+        <motion.span
+          whileHover={{ rotate: 12, scale: 1.06 }}
+          transition={{ duration: 0.4, ease: EASE_OUT }}
+          className={`shrink-0 inline-flex items-center justify-center w-11 h-11 rounded-full text-white shadow-sm ${m.tint}`}
+        >
+          <m.icon size={18} />
+        </motion.span>
+        <div className="flex-1">
+          <h3
+            className="text-2xl md:text-4xl tracking-[-0.02em] text-neutral-900 leading-tight transition-colors duration-500 group-hover:text-neutral-600"
+            style={DISPLAY}
           >
-            <span className="inline-block px-4 py-1 rounded-full bg-emerald-200 text-emerald-700 text-sm font-medium mb-4">
-              Our Journey
+            {m.title}
+          </h3>
+          <p className="mt-3 text-neutral-600 leading-relaxed max-w-2xl">
+            {m.desc}
+          </p>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+function Timeline() {
+  const sectionRef = useRef(null);
+  const railRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: railRef,
+    offset: ['start 80%', 'end 20%'],
+  });
+  const reduce = useReducedMotion();
+
+  const milestones = [
+    {
+      year: '2019',
+      title: 'The idea',
+      desc: 'Founders begin R&D on veterinary formulations built specifically for Indian livestock conditions.',
+      icon: Lightbulb,
+      tint: 'bg-amber-600',
+      color: '#d97706',
+    },
+    {
+      year: '2020',
+      title: 'Company founded',
+      desc: 'Innovation Remedies Life Science Pvt. Ltd. incorporated in Meerut, UP.',
+      icon: Target,
+      tint: 'bg-emerald-600',
+      color: '#059669',
+    },
+    {
+      year: '2021',
+      title: 'First 5 states',
+      desc: 'Distribution network established across five north-Indian states and 200 partner clinics.',
+      icon: Users,
+      tint: 'bg-blue-600',
+      color: '#2563eb',
+    },
+    {
+      year: '2022',
+      title: '50+ products shipping',
+      desc: 'Catalogue crossed 50 formulations spanning lactation, growth, liver, deworming and dermatology.',
+      icon: Award,
+      tint: 'bg-teal-600',
+      color: '#0d9488',
+    },
+    {
+      year: '2023',
+      title: '1 million animals served',
+      desc: 'Our products reached an estimated one million animals through partner clinics and cooperatives.',
+      icon: Trophy,
+      tint: 'bg-indigo-600',
+      color: '#4f46e5',
+    },
+    {
+      year: '2025',
+      title: 'Online platform',
+      desc: 'Launched innovationremedies.com to reach distributors, veterinarians and farmers directly.',
+      icon: Star,
+      tint: 'bg-rose-600',
+      color: '#e11d48',
+    },
+  ];
+
+  return (
+    <section
+      ref={sectionRef}
+      className="relative bg-white py-28 md:py-36"
+      style={BODY}
+    >
+      <div className="max-w-[1100px] mx-auto px-6 md:px-10">
+        <div className="grid md:grid-cols-12 gap-10 items-end mb-16 md:mb-20">
+          <Reveal className="md:col-span-8">
+            <p
+              className="text-[11px] uppercase text-emerald-700 mb-5"
+              style={MONO}
+            >
+              — The journey
+            </p>
+            <h2
+              className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.03em] leading-[1.02] text-neutral-900"
+              style={DISPLAY}
+            >
+              Five years.
+              <br />
+              <span className="italic font-light bg-gradient-to-r from-emerald-600 via-teal-600 to-blue-700 bg-clip-text text-transparent">
+                Six milestones.
+              </span>
+            </h2>
+          </Reveal>
+          <Reveal className="md:col-span-4" delay={0.1}>
+            <p className="text-sm md:text-base text-neutral-600 leading-relaxed max-w-sm">
+              A short story — told through the moments that shaped us.
+            </p>
+          </Reveal>
+        </div>
+
+        {/* Timeline rail — curved SVG */}
+        <div ref={railRef} className="relative">
+          {/* Curved rail covers the whole timeline with an S-curve that passes
+              through each dot (alternating x=80 and x=20, 220 units apart). */}
+          <svg
+            aria-hidden
+            className="absolute left-0 top-0 h-full w-[100px] pointer-events-none"
+            preserveAspectRatio="none"
+            viewBox={`0 0 100 ${milestones.length * 220}`}
+            fill="none"
+          >
+            <defs>
+              <linearGradient
+                id="rail-gradient"
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="1"
+              >
+                <stop offset="0%" stopColor="#10b981" />
+                <stop offset="50%" stopColor="#14b8a6" />
+                <stop offset="100%" stopColor="#2563eb" />
+              </linearGradient>
+            </defs>
+
+            {/* Background rail */}
+            <path
+              d={buildCurvePath(milestones.length)}
+              stroke="#e5e7eb"
+              strokeWidth="2"
+              strokeLinecap="round"
+              vectorEffect="non-scaling-stroke"
+            />
+
+            {/* Progress rail — fills as user scrolls */}
+            <motion.path
+              d={buildCurvePath(milestones.length)}
+              stroke="url(#rail-gradient)"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              vectorEffect="non-scaling-stroke"
+              style={reduce ? { pathLength: 1 } : { pathLength: scrollYProgress }}
+            />
+          </svg>
+
+          {milestones.map((m, i) => (
+            <TimelineItem key={m.year + i} m={m} index={i} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ================================= TEAM ================================== */
+function Team() {
+  const team = [
+    {
+      name: 'Mr. Vikas Malik',
+      role: 'Managing Director',
+      bio: 'Veterinarian with 15+ years in clinical practice and telemedicine development.',
+      avatar: vikasji,
+    },
+    {
+      name: 'Geeta',
+      role: 'Chief Marketing Officer',
+      bio: 'Visionary expert in medical diagnostics and veterinary brand strategy.',
+      avatar:
+        'https://images.unsplash.com/photo-1607746882042-944635dfe10e?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80',
+    },
+    {
+      name: 'Aryan Malik',
+      role: 'Lead Market Specialist',
+      bio: 'Growth mindset with 4+ years in veterinary marketing and channel sales.',
+      avatar:
+        'https://images.unsplash.com/photo-1599566150168-df1fcf16f1f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=900&q=80',
+    },
+  ];
+
+  return (
+    <section
+      className="relative bg-neutral-50 py-28 md:py-36 border-t border-neutral-200"
+      style={BODY}
+    >
+      <div className="max-w-[1400px] mx-auto px-6 md:px-10">
+        <Reveal className="max-w-3xl mb-16">
+          <p
+            className="text-[11px] uppercase text-emerald-700 mb-5"
+            style={MONO}
+          >
+            — Leadership
+          </p>
+          <h2
+            className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.03em] leading-[1.02] text-neutral-900"
+            style={DISPLAY}
+          >
+            The people
+            <br />
+            <span className="italic font-light bg-gradient-to-r from-emerald-600 via-teal-600 to-blue-700 bg-clip-text text-transparent">
+              behind the work.
             </span>
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-800">Milestones & Achievements</h2>
-            <p className="text-gray-600 max-w-3xl mx-auto text-lg">
-              Transforming veterinary care one achievement at a time, with innovative solutions and global impact.
-            </p>
-          </motion.div>
+          </h2>
+        </Reveal>
 
-          <div className="relative max-w-4xl mx-auto">
-            {/* Timeline line - enhanced */}
-            <div className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-emerald-200 via-blue-300 to-purple-300 rounded-full"></div>
-
-            {/* Timeline items with improved design and animations - properly alternating */}
-            {milestones.map((item, index) => {
-              const isEven = index % 2 === 0;
-              
-              return (
-                <motion.div
-                  key={index}
-                  className="mb-16 w-full"
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, amount: 0.3 }}
-                  variants={{
-                    hidden: { 
-                      opacity: 0, 
-                      scale: 0.9,
-                      x: isEven ? -50 : 50 
-                    },
-                    visible: { 
-                      opacity: 1, 
-                      scale: 1,
-                      x: 0,
-                      transition: { 
-                        type: "spring", 
-                        stiffness: 100, 
-                        delay: index * 0.1 
-                      } 
-                    }
-                  }}
-                >
-                  {/* Mobile layout (stacked) */}
-                  <div className="md:hidden flex flex-col items-start pl-8 relative">
-                    <div className="absolute left-0 top-4 w-6 h-6 rounded-full bg-white border-4 border-emerald-400 shadow-md z-10"></div>
-                    <motion.div 
-                      className={`w-full p-6 rounded-xl shadow-lg border-l-4 ${item.color} hover:shadow-xl transition-all duration-300`}
-                      whileHover={{ scale: 1.03 }}
-                      transition={{ type: "spring", stiffness: 300 }}
-                    >
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center">
-                          {item.icon}
-                        </div>
-                        <div className="text-xl font-bold text-gray-700">{item.year}</div>
-                      </div>
-                      <h3 className="text-xl font-bold mb-2 text-gray-800">{item.title}</h3>
-                      <p className="text-gray-600">{item.desc}</p>
-                    </motion.div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+          {team.map((t, i) => (
+            <Reveal key={t.name} delay={i * 0.08}>
+              <article className="group relative rounded-[1.5rem] overflow-hidden bg-white border border-neutral-200 hover:border-neutral-300 transition-colors duration-500 h-full">
+                <div className="relative aspect-[4/5] overflow-hidden">
+                  <img
+                    src={t.avatar}
+                    alt={t.name}
+                    loading="lazy"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                  <span
+                    className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] uppercase bg-white/90 backdrop-blur-sm text-neutral-700"
+                    style={MONO}
+                  >
+                    0{i + 1}
+                  </span>
+                </div>
+                <div className="p-6 md:p-7">
+                  <div
+                    className="text-[10px] uppercase text-emerald-700 mb-2"
+                    style={MONO}
+                  >
+                    {t.role}
                   </div>
-                  
-                  {/* Desktop layout (alternating) */}
-                  <div className="hidden md:flex items-center w-full">
-                    {/* Left side content */}
-                    {isEven ? (
-                      <>
-                        <div className="w-5/12 px-4 text-right">
-                          <motion.div 
-                            className={`p-6 rounded-xl shadow-lg border-l-4 ${item.color} hover:shadow-xl transition-all duration-300`}
-                            whileHover={{ scale: 1.03, y: -5 }}
-                            transition={{ type: "spring", stiffness: 300 }}
-                          >
-                            <div className="flex items-center gap-3 mb-4 justify-end">
-                              <div className="text-xl font-bold text-gray-700">{item.year}</div>
-                              <div className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center">
-                                {item.icon}
-                              </div>
-                            </div>
-                            <h3 className="text-xl font-bold mb-2 text-gray-800">{item.title}</h3>
-                            <p className="text-gray-600">{item.desc}</p>
-                          </motion.div>
-                        </div>
-                        
-                        {/* Center Dot */}
-                        <div className="w-2/12 flex justify-center">
-                          <motion.div 
-                            className="relative z-10 w-6 h-6 rounded-full bg-white border-4 border-emerald-400 shadow-md"
-                            initial={{ scale: 0 }}
-                            whileInView={{ scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ type: "spring", stiffness: 300, delay: index * 0.1 + 0.2 }}
-                          />
-                        </div>
-                        
-                        {/* Right side (empty) */}
-                        <div className="w-5/12"></div>
-                      </>
-                    ) : (
-                      <>
-                        {/* Left side (empty) */}
-                        <div className="w-5/12"></div>
-                        
-                        {/* Center Dot */}
-                        <div className="w-2/12 flex justify-center">
-                          <motion.div 
-                            className="relative z-10 w-6 h-6 rounded-full bg-white border-4 border-emerald-400 shadow-md"
-                            initial={{ scale: 0 }}
-                            whileInView={{ scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ type: "spring", stiffness: 300, delay: index * 0.1 + 0.2 }}
-                          />
-                        </div>
-                        
-                        {/* Right side content */}
-                        <div className="w-5/12 px-4 text-left">
-                          <motion.div 
-                            className={`p-6 rounded-xl shadow-lg border-r-4 ${item.color} hover:shadow-xl transition-all duration-300`}
-                            whileHover={{ scale: 1.03, y: -5 }}
-                            transition={{ type: "spring", stiffness: 300 }}
-                          >
-                            <div className="flex items-center gap-3 mb-4 justify-start">
-                              <div className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center">
-                                {item.icon}
-                              </div>
-                              <div className="text-xl font-bold text-gray-700">{item.year}</div>
-                            </div>
-                            <h3 className="text-xl font-bold mb-2 text-gray-800">{item.title}</h3>
-                            <p className="text-gray-600">{item.desc}</p>
-                          </motion.div>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
+                  <h3
+                    className="text-xl md:text-2xl tracking-[-0.02em] text-neutral-900 mb-3"
+                    style={DISPLAY}
+                  >
+                    {t.name}
+                  </h3>
+                  <p className="text-sm text-neutral-600 leading-relaxed">
+                    {t.bio}
+                  </p>
+                </div>
+              </article>
+            </Reveal>
+          ))}
         </div>
-      </section>
+      </div>
+    </section>
+  );
+}
 
-      {/* Stats Section */}
-      <motion.section
-        className="py-16 bg-gradient-to-br from-emerald-50 to-blue-50 relative z-10"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={staggerContainer}
+/* ================================= CTA =================================== */
+function CTA() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  });
+  const reduce = useReducedMotion();
+  const glowY = useTransform(scrollYProgress, [0, 1], ['15%', '-15%']);
+
+  return (
+    <section
+      ref={ref}
+      className="relative overflow-hidden bg-[#05070f] text-white py-28 md:py-40"
+      style={BODY}
+    >
+      <motion.div
+        style={reduce ? {} : { y: glowY }}
+        className="absolute inset-0 pointer-events-none"
       >
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                className="p-6 rounded-xl bg-white shadow-md"
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { 
-                    opacity: 1, 
-                    y: 0, 
-                    transition: { 
-                      delay: index * 0.1,
-                      type: "spring",
-                      stiffness: 100
-                    } 
-                  }
-                }}
-                whileHover={{ 
-                  y: -10, 
-                  boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" 
-                }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                {stat.icon}
-                <motion.h3
-                  className="text-3xl md:text-4xl font-bold text-gray-800 mb-1"
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ type: "spring", stiffness: 100, delay: 0.2 + index * 0.1 }}
-                >
-                  {stat.value}
-                </motion.h3>
-                <p className="text-gray-500 font-medium">{stat.label}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </motion.section>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50rem] h-[50rem] rounded-full bg-gradient-to-br from-emerald-500/10 via-teal-500/5 to-transparent blur-3xl" />
+      </motion.div>
 
-
-      <OurVideos />
-
-      {/* CTA Section */}
-      <section className="relative py-24 md:py-32 z-10 overflow-hidden">
-        {/* Animated Gradient Background */}
-        <motion.div
-          className="absolute inset-0 z-0"
-          style={{
-            background: 'linear-gradient(135deg, #6ee7b7, #3b82f6, #10b981)',
-            backgroundSize: '300% 300%',
-          }}
-          animate={{ backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'] }}
-          transition={{ duration: 15, ease: 'linear', repeat: Infinity }}
-        />
-
-        {/* Floating elements in background */}
-        {Array.from({ length: 6 }).map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full bg-white opacity-20"
-            style={{
-              width: `${Math.random() * 100 + 50}px`,
-              height: `${Math.random() * 100 + 50}px`,
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              y: [0, -100, 0],
-              x: [0, Math.random() * 50 - 25, 0],
-              rotate: [0, 360],
-            }}
-            transition={{
-              duration: Math.random() * 20 + 15,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-
-        <div className="container mx-auto px-4 sm:px-6 text-center relative z-10">
-          <motion.div
-            className="max-w-3xl mx-auto"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+      <div className="relative max-w-5xl mx-auto px-6 md:px-10 text-center">
+        <Reveal>
+          <p
+            className="text-[11px] uppercase text-emerald-300/90 mb-8"
+            style={MONO}
           >
-            <motion.h2
-              className="text-3xl md:text-5xl font-bold mb-6 text-white drop-shadow-md"
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2, duration: 0.8 }}
+            — Let's build together
+          </p>
+          <h2
+            className="text-4xl md:text-6xl lg:text-7xl tracking-[-0.04em] leading-[0.98]"
+            style={DISPLAY}
+          >
+            Partner with us
+            <br />
+            <span className="italic font-light bg-gradient-to-r from-emerald-300 via-teal-200 to-blue-300 bg-clip-text text-transparent">
+              on the next decade
+            </span>
+            <br />
+            of animal care.
+          </h2>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
+            <Link
+              to="/contact"
+              className="group inline-flex items-center gap-3 px-7 py-4 rounded-full bg-white text-black hover:bg-emerald-300 transition-colors duration-300 active:scale-[0.98]"
+              style={DISPLAY}
             >
-              Ready to Transform Your Veterinary Practice?
-            </motion.h2>
-            <motion.p
-              className="text-xl text-white mb-8"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4, duration: 0.8 }}
+              <span className="text-sm">Get in touch</span>
+              <ArrowUpRight
+                size={16}
+                className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:rotate-45"
+              />
+            </Link>
+            <Link
+              to="/products"
+              className="inline-flex items-center gap-3 px-7 py-4 rounded-full border border-white/30 text-white hover:bg-white/5 transition-colors duration-300 active:scale-[0.98]"
+              style={DISPLAY}
             >
-              Join thousands of veterinary professionals already using our AI-powered solutions.
-            </motion.p>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.6, duration: 0.8 }}
-            >
-              <Button size="lg" className="bg-white text-emerald-600 hover:bg-emerald-50 font-semibold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
-                Get Started 
-              </Button>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
+              <span className="text-sm">See products</span>
+              <ArrowUpRight size={16} />
+            </Link>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* =============================== About =================================== */
+export default function About() {
+  return (
+    <div className="w-full bg-white text-neutral-900 antialiased" style={BODY}>
+      <Hero />
+      <Story />
+      <Stats />
+      <Timeline />
+      <Team />
+      <CTA />
     </div>
   );
 }

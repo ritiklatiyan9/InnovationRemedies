@@ -1,46 +1,116 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'; // Added CardDescription
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAuth } from '../context/AuthContext'; // Adjust path if needed
-import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import { cn } from '@/lib/utils'; // Assuming you have this utility
-import { Eye, EyeOff, Lock, Smartphone, ShieldCheck, AlertCircle, KeyRound } from 'lucide-react'; // Using Lucide icons
+import { cn } from '@/lib/utils';
+import {
+  Eye,
+  EyeOff,
+  Smartphone,
+  ShieldCheck,
+  AlertCircle,
+  KeyRound,
+  Lock,
+  ArrowUpRight,
+  ArrowLeft,
+} from 'lucide-react';
 
-// --- Google SVG Icon ---
-const GoogleIcon = (props) => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px" {...props}>
-    <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12 s5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20 s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z" />
-    <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657 C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z" />
-    <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36 c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z" />
-    <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.574l6.19,5.238 C42.012,35.846,44,30.138,44,24C44,22.659,43.862,21.35,43.611,20.083z" />
-  </svg>
-);
+const BRAND = {
+  fontFamily: "Moonhouse, 'Neue Montreal Regular', sans-serif",
+};
+const DISPLAY = {
+  fontFamily:
+    "'Neue Montreal Regular', 'SF Pro Text Semibold', 'Inter', system-ui, sans-serif",
+  fontWeight: 600,
+};
+const BODY = {
+  fontFamily:
+    "'Neue Montreal Regular', 'SF Pro Text Regular', system-ui, sans-serif",
+};
+const MONO = {
+  fontFamily: "'SF Pro Text Regular', ui-monospace, monospace",
+  letterSpacing: "0.2em",
+};
 
+const EASE_OUT = [0.22, 1, 0.36, 1];
 
-// --- Main Auth Form Component ---
+/* ------------------------------ Field input ------------------------------ */
+function Field({
+  id,
+  label,
+  type = 'text',
+  Icon,
+  value,
+  onChange,
+  placeholder,
+  maxLength,
+  inputMode,
+  disabled,
+  required,
+  trailing,
+}) {
+  const [focused, setFocused] = useState(false);
+  return (
+    <div>
+      <label
+        htmlFor={id}
+        className="block text-[10px] uppercase text-neutral-500 mb-2"
+        style={MONO}
+      >
+        {label}
+      </label>
+      <div
+        className={cn(
+          'relative flex items-center border-b transition-colors duration-300',
+          focused ? 'border-neutral-900' : 'border-neutral-200'
+        )}
+      >
+        {Icon ? (
+          <Icon
+            size={16}
+            className={cn(
+              'mr-3 transition-colors duration-300',
+              focused ? 'text-neutral-900' : 'text-neutral-400'
+            )}
+            aria-hidden
+          />
+        ) : null}
+        <input
+          id={id}
+          type={type}
+          inputMode={inputMode}
+          maxLength={maxLength}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          required={required}
+          disabled={disabled}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          className="flex-1 bg-transparent py-3 text-[15px] text-neutral-900 placeholder:text-neutral-400 focus:outline-none disabled:opacity-60"
+        />
+        {trailing}
+      </div>
+    </div>
+  );
+}
+
+/* --------------------------- Main auth component ------------------------- */
 export default function AuthForm() {
   const { login, register, error, loading, isAuthenticated, clearError } = useAuth();
   const navigate = useNavigate();
 
-  const [activeTab, setActiveTab] = useState("login");
+  const [activeTab, setActiveTab] = useState('login');
   const [formError, setFormError] = useState('');
 
-  // Login states - Changed loginMobile from array to string
-  const [loginMobileNumber, setLoginMobileNumber] = useState('');
+  const [loginMobile, setLoginMobile] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
-  // Register states
   const [registerMobile, setRegisterMobile] = useState('');
   const [registerPassword, setRegisterPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -50,39 +120,31 @@ export default function AuthForm() {
   useEffect(() => {
     setFormError('');
     clearError();
-    // Reset fields when tab changes for better UX
     if (activeTab === 'login') {
       setRegisterMobile('');
       setRegisterPassword('');
       setConfirmPassword('');
     } else {
-      setLoginMobileNumber('');
+      setLoginMobile('');
       setLoginPassword('');
       setRememberMe(false);
     }
   }, [activeTab, clearError]);
 
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/');
-    }
+    if (isAuthenticated) navigate('/');
   }, [isAuthenticated, navigate]);
 
-  // --- Input Handlers ---
-  const handleMobileInputChange = (setter) => (e) => {
-    const value = e.target.value.replace(/[^0-9]/g, ''); // Allow only digits
-    if (value.length <= 10) { // Limit to 10 digits
-       setter(value);
-    }
+  const handleMobileChange = (setter) => (e) => {
+    const v = e.target.value.replace(/[^0-9]/g, '');
+    if (v.length <= 10) setter(v);
   };
 
-  // --- Submit Handlers ---
-  const handleLoginSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setFormError('');
     clearError();
-
-    if (!loginMobileNumber || loginMobileNumber.length !== 10) {
+    if (!loginMobile || loginMobile.length !== 10) {
       setFormError('Please enter a valid 10-digit mobile number');
       return;
     }
@@ -91,16 +153,16 @@ export default function AuthForm() {
       return;
     }
     try {
-      await login(loginMobileNumber, loginPassword); // Use loginMobileNumber directly
-      toast.success('Login successful!');
+      await login(loginMobile, loginPassword);
+      toast.success('Welcome back');
       navigate('/');
     } catch (err) {
-      console.error("Login failed:", err);
+      console.error('Login failed:', err);
       toast.error(err.message || 'Login failed');
     }
   };
 
-  const handleRegisterSubmit = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     setFormError('');
     clearError();
@@ -109,194 +171,426 @@ export default function AuthForm() {
       return;
     }
     if (!registerPassword || registerPassword.length < 6) {
-        setFormError('Password must be at least 6 characters long');
-        return;
+      setFormError('Password must be at least 6 characters');
+      return;
     }
     if (registerPassword !== confirmPassword) {
-      setFormError('Passwords do not match!');
+      setFormError('Passwords do not match');
       return;
     }
     try {
-      await register({ mobile: registerMobile, password: registerPassword, confirmPassword : confirmPassword, });
-      toast.success('Registration successful! Please login.');
-      setActiveTab('login'); // Switch to login automatically
+      await register({
+        mobile: registerMobile,
+        password: registerPassword,
+        confirmPassword,
+      });
+      toast.success('Account created. Please sign in.');
+      setActiveTab('login');
     } catch (err) {
-      console.error("Registration failed:", err);
+      console.error('Registration failed:', err);
       toast.error(err.message || 'Registration failed');
     }
   };
 
-  // --- Styling & Animation ---
-  const inputBaseClasses = "flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"; // Reduced ring offset slightly
-  const inputWithIconClasses = `${inputBaseClasses} pl-10`;
-  const iconWrapperClasses = "absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground";
-  const passwordToggleClasses = "absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground cursor-pointer";
-
-  const triggerBaseStyle = "flex-1 py-2.5 px-2 sm:px-4 text-sm font-medium rounded-full transition-all duration-300 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
-  const triggerActiveStyle = "bg-primary text-primary-foreground shadow-sm"; // Slightly reduced shadow
-  const triggerInactiveStyle = "text-muted-foreground hover:bg-muted/60 hover:text-foreground";
-
-  const cardVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 0.4, ease: "easeOut" } }
-  };
-
-  const formVariants = {
-    enter: (direction) => ({ x: direction > 0 ? 25 : -25, opacity: 0 }),
-    center: { x: 0, opacity: 1, transition: { duration: 0.35, ease: "easeOut" } },
-    exit: (direction) => ({ x: direction < 0 ? 25 : -25, opacity: 0, position: 'absolute', width: '100%', transition: { duration: 0.25, ease: "easeIn" } }) // Added position absolute for smoother exit
-  };
-
-  const motionProps = {
-    custom: activeTab === 'login' ? 1 : -1,
-    initial: "enter", animate: "center", exit: "exit", variants: formVariants,
-  };
-
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 p-4"> {/* Changed gradient */}
-      <motion.div initial="hidden" animate="visible" variants={cardVariants} className="w-full max-w-md">
-        <Card className="w-full shadow-lg bg-card rounded-xl overflow-hidden border border-border/50"> {/* Refined card appearance */}
-          <CardHeader className="p-5 sm:p-6 pb-3 text-center">
-            <CardTitle className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
-              {activeTab === 'login' ? 'Welcome Back!' : 'Create Account'}
-            </CardTitle>
-            <CardDescription className="text-xs sm:text-sm text-muted-foreground pt-1">
-               {activeTab === 'login' ? 'Login using your mobile number.' : 'Enter your details to register.'}
-            </CardDescription>
-          </CardHeader>
+    <div
+      className="relative min-h-screen w-full flex bg-white"
+      style={BODY}
+    >
+      {/* Back to home */}
+      <Link
+        to="/"
+        className="absolute top-6 left-6 z-20 inline-flex items-center gap-2 text-[11px] uppercase text-neutral-500 hover:text-neutral-900 transition-colors"
+        style={MONO}
+      >
+        <ArrowLeft size={14} />
+        Home
+      </Link>
 
-          <div className="px-4 sm:px-6 pb-5">
-            <Tabs defaultValue="login" value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-2 bg-muted p-1 rounded-full h-auto mb-5 sm:mb-6">
-                <TabsTrigger value="login" className={cn(triggerBaseStyle, activeTab === 'login' ? triggerActiveStyle : triggerInactiveStyle)}>Login</TabsTrigger>
-                <TabsTrigger value="register" className={cn(triggerBaseStyle, activeTab === 'register' ? triggerActiveStyle : triggerInactiveStyle)}>Register</TabsTrigger>
-              </TabsList>
+      {/* ============================ Left panel ============================ */}
+      <div className="hidden lg:flex relative w-1/2 overflow-hidden text-white">
+        {/* Animated gradient */}
+        <motion.div
+          className="absolute inset-0"
+          style={{
+            backgroundImage:
+              'linear-gradient(135deg, #03060f 0%, #0a1230 25%, #0d1b4a 50%, #05071a 75%, #03060f 100%)',
+            backgroundSize: '300% 300%',
+          }}
+          animate={{
+            backgroundPosition: ['0% 0%', '100% 50%', '50% 100%', '0% 0%'],
+          }}
+          transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute w-[60vh] h-[60vh] rounded-full blur-3xl opacity-55"
+          style={{
+            background:
+              'radial-gradient(circle, rgba(59,89,200,0.55) 0%, transparent 65%)',
+            top: '-15%',
+            left: '-10%',
+          }}
+          animate={{ x: [0, 60, 0], y: [0, 40, 0] }}
+          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute w-[55vh] h-[55vh] rounded-full blur-3xl opacity-45"
+          style={{
+            background:
+              'radial-gradient(circle, rgba(27,44,120,0.6) 0%, transparent 65%)',
+            bottom: '-20%',
+            right: '-10%',
+          }}
+          animate={{ x: [0, -50, 0], y: [0, -30, 0] }}
+          transition={{ duration: 24, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20 pointer-events-none" />
 
-              {/* Error Alert */}
-              <AnimatePresence>
-                 {(formError || error) && (
-                   <motion.div
-                       initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
-                       transition={{ duration: 0.3 }} className="mb-4"
-                   >
-                       <Alert variant="destructive" className="p-3 rounded-md">
-                           <AlertCircle className="h-4 w-4" />
-                           <AlertTitle className="text-sm font-medium">Error</AlertTitle>
-                           <AlertDescription className="text-xs">
-                               {formError || error}
-                           </AlertDescription>
-                       </Alert>
-                   </motion.div>
-                 )}
-              </AnimatePresence>
-
-              {/* Form Content Area with fixed height for smooth animation */}
-              <div className="relative overflow-hidden min-h-[310px] sm:min-h-[330px]"> {/* Adjusted min-height */}
-                 <AnimatePresence initial={false} custom={activeTab === 'login' ? 1 : -1}>
-                    {/* Login Form */}
-                    {activeTab === 'login' && (
-                      <motion.div key="login" {...motionProps}>
-                        <TabsContent value="login" className="mt-0 border-0 p-0">
-                          <form onSubmit={handleLoginSubmit} className="space-y-4 sm:space-y-5">
-                            {/* Mobile Number Input */}
-                            <div className="space-y-1.5">
-                              <Label htmlFor="login-mobile" className="text-xs sm:text-sm font-medium text-muted-foreground pl-1">Mobile Number</Label>
-                              <div className="relative">
-                                <Smartphone className={iconWrapperClasses} aria-hidden="true" />
-                                <Input
-                                  id="login-mobile"
-                                  type="tel"
-                                  inputMode='numeric'
-                                  placeholder="Enter 10-digit mobile number"
-                                  maxLength={10}
-                                  value={loginMobileNumber}
-                                  onChange={handleMobileInputChange(setLoginMobileNumber)} // Use reusable handler
-                                  required
-                                  disabled={loading}
-                                  className={inputWithIconClasses}
-                                />
-                              </div>
-                            </div>
-                            {/* Password Input */}
-                            <div className="space-y-1.5">
-                              <Label htmlFor="login-password" className="text-xs sm:text-sm font-medium text-muted-foreground pl-1">Password</Label>
-                              <div className="relative">
-                                <KeyRound className={iconWrapperClasses} aria-hidden="true" />
-                                <Input id="login-password" type={showLoginPassword ? 'text' : 'password'} placeholder="Enter your password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} required disabled={loading} className={inputWithIconClasses} />
-                                <button type="button" onClick={() => setShowLoginPassword(!showLoginPassword)} className={passwordToggleClasses} aria-label={showLoginPassword ? "Hide password" : "Show password"}>
-                                  {showLoginPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                                </button>
-                              </div>
-                            </div>
-                            {/* Remember Me & Forgot Password */}
-                            <div className="flex items-center justify-between text-xs sm:text-sm pt-1">
-                              <div className="flex items-center space-x-2">
-                                <Checkbox id="remember-me" checked={rememberMe} onCheckedChange={(checked) => setRememberMe(!!checked)} disabled={loading} className="data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground rounded-[4px]" /> {/* Slightly less rounded checkbox */}
-                                <Label htmlFor="remember-me" className="font-medium text-foreground cursor-pointer select-none">Remember me</Label>
-                              </div>
-                              <Button variant="link" type="button" className="p-0 h-auto text-xs sm:text-sm text-primary hover:text-primary/80 hover:no-underline" disabled={loading}>Forgot Password?</Button>
-                            </div>
-                            {/* Login Button */}
-                            <Button type="submit" className="w-full h-11 rounded-md text-sm font-semibold mt-3 sm:mt-4 shadow-sm transition-all duration-300 hover:shadow-md disabled:opacity-70" disabled={loading}>
-                              {loading ? 'Logging in...' : 'Login'}
-                            </Button>
-                          </form>
-                        </TabsContent>
-                       </motion.div>
-                     )}
-
-                     {/* Register Form */}
-                     {activeTab === 'register' && (
-                        <motion.div key="register" {...motionProps}>
-                          <TabsContent value="register" className="mt-0 border-0 p-0">
-                            <form onSubmit={handleRegisterSubmit} className="space-y-4 sm:space-y-5">
-                              {/* Mobile Number Input */}
-                              <div className="space-y-1.5">
-                                <Label htmlFor="register-mobile" className="text-xs sm:text-sm font-medium text-muted-foreground pl-1">Mobile Number</Label>
-                                <div className="relative">
-                                  <Smartphone className={iconWrapperClasses} aria-hidden="true" />
-                                  <Input id="register-mobile" type="tel" inputMode='numeric' placeholder="Enter 10-digit mobile number" maxLength={10} value={registerMobile} onChange={handleMobileInputChange(setRegisterMobile)} required disabled={loading} className={inputWithIconClasses} />
-                                </div>
-                              </div>
-                              {/* Password Input */}
-                              <div className="space-y-1.5">
-                                <Label htmlFor="register-password" className="text-xs sm:text-sm font-medium text-muted-foreground pl-1">Create Password</Label>
-                                <div className="relative">
-                                  <Lock className={iconWrapperClasses} aria-hidden="true" />
-                                  <Input id="register-password" type={showRegisterPassword ? 'text' : 'password'} placeholder="Minimum 6 characters" value={registerPassword} onChange={(e) => setRegisterPassword(e.target.value)} required disabled={loading} className={inputWithIconClasses} />
-                                  <button type="button" onClick={() => setShowRegisterPassword(!showRegisterPassword)} className={passwordToggleClasses} aria-label={showRegisterPassword ? "Hide password" : "Show password"}>
-                                    {showRegisterPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                                  </button>
-                                </div>
-                              </div>
-                              {/* Confirm Password Input */}
-                              <div className="space-y-1.5">
-                                <Label htmlFor="confirm-password" className="text-xs sm:text-sm font-medium text-muted-foreground pl-1">Confirm Password</Label>
-                                <div className="relative">
-                                   <ShieldCheck className={iconWrapperClasses} aria-hidden="true" />
-                                  <Input id="confirm-password" type={showConfirmPassword ? 'text' : 'password'} placeholder="Re-enter your password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required disabled={loading} className={inputWithIconClasses} />
-                                  <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className={passwordToggleClasses} aria-label={showConfirmPassword ? "Hide password" : "Show password"}>
-                                    {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                                  </button>
-                                </div>
-                              </div>
-                              {/* Register Button */}
-                              <Button type="submit" className="w-full h-11 rounded-md text-sm font-semibold mt-3 sm:mt-4 shadow-sm transition-all duration-300 hover:shadow-md disabled:opacity-70" disabled={loading}>
-                                {loading ? 'Registering...' : 'Create Account'}
-                              </Button>
-                            </form>
-                          </TabsContent>
-                        </motion.div>
-                     )}
-                 </AnimatePresence>
-              </div>
-            </Tabs>
+        {/* Content */}
+        <div className="relative z-10 flex flex-col justify-between p-10 xl:p-14 w-full">
+          <div className="flex items-center gap-3">
+            <motion.span
+              className="w-[6px] h-[6px] rounded-full bg-emerald-400"
+              animate={{ opacity: [1, 0.3, 1] }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            />
+            <span className="text-[11px] uppercase text-white/70" style={MONO}>
+              Innovation Remedies · Meerut, IN
+            </span>
           </div>
 
-          {/* Footer with Social Login */}
-        
-        </Card>
-      </motion.div>
+          <div>
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: EASE_OUT, delay: 0.2 }}
+              className="text-6xl xl:text-7xl tracking-[-0.04em] leading-[0.9] mb-6"
+              style={BRAND}
+            >
+              INNOVATION
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: EASE_OUT, delay: 0.35 }}
+              className="text-lg text-white/70 max-w-sm leading-relaxed"
+            >
+              Advancing animal health — one trusted formulation at a time.
+              Access your dashboard to track orders, partner resources, and
+              more.
+            </motion.p>
+          </div>
+
+          <div
+            className="flex items-center justify-between text-[11px] uppercase text-white/50"
+            style={MONO}
+          >
+            <span>Est. 2020</span>
+            <span>28 States · 1200+ Clinics</span>
+          </div>
+        </div>
+      </div>
+
+      {/* ============================ Right panel =========================== */}
+      <div className="relative flex-1 flex items-center justify-center px-6 py-20 md:py-10">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: EASE_OUT }}
+          className="w-full max-w-md"
+        >
+          {/* Mobile brand */}
+          <div className="lg:hidden mb-10 text-center">
+            <h1
+              className="text-5xl tracking-[-0.04em] leading-[0.9] mb-2 text-neutral-900"
+              style={BRAND}
+            >
+              INNOVATION
+            </h1>
+            <p className="text-xs uppercase text-neutral-500" style={MONO}>
+              Remedies Life Science
+            </p>
+          </div>
+
+          <p
+            className="text-[11px] uppercase text-neutral-500 mb-3"
+            style={MONO}
+          >
+            {activeTab === 'login' ? '— Sign in' : '— Create account'}
+          </p>
+          <h2
+            className="text-3xl md:text-4xl tracking-[-0.03em] leading-tight text-neutral-900 mb-2"
+            style={DISPLAY}
+          >
+            {activeTab === 'login'
+              ? 'Welcome back.'
+              : 'Join Innovation Remedies.'}
+          </h2>
+          <p className="text-sm text-neutral-500 mb-10">
+            {activeTab === 'login'
+              ? 'Sign in with your mobile number to continue.'
+              : 'Create an account in under a minute.'}
+          </p>
+
+          {/* Tab toggle */}
+          <div className="relative inline-flex items-center p-1 rounded-full bg-neutral-100 mb-8">
+            {['login', 'register'].map((t) => {
+              const isActive = activeTab === t;
+              return (
+                <button
+                  key={t}
+                  onClick={() => setActiveTab(t)}
+                  className={cn(
+                    'relative z-10 px-5 py-2 text-xs uppercase tracking-[0.2em] transition-colors duration-300',
+                    isActive ? 'text-white' : 'text-neutral-500'
+                  )}
+                  style={MONO}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="tabHighlight"
+                      className="absolute inset-0 bg-neutral-900 rounded-full -z-10"
+                      transition={{ duration: 0.4, ease: EASE_OUT }}
+                    />
+                  )}
+                  {t === 'login' ? 'Sign in' : 'Create'}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Error */}
+          <AnimatePresence>
+            {(formError || error) && (
+              <motion.div
+                initial={{ opacity: 0, y: -6, height: 0 }}
+                animate={{ opacity: 1, y: 0, height: 'auto' }}
+                exit={{ opacity: 0, y: -6, height: 0 }}
+                transition={{ duration: 0.3 }}
+                className="mb-6"
+              >
+                <div className="flex items-start gap-2.5 p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-700">
+                  <AlertCircle size={15} className="mt-0.5 shrink-0" />
+                  <p className="text-xs">{formError || error}</p>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Forms */}
+          <div className="relative">
+            <AnimatePresence mode="wait" initial={false}>
+              {activeTab === 'login' ? (
+                <motion.form
+                  key="login"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.35, ease: EASE_OUT }}
+                  onSubmit={handleLogin}
+                  className="space-y-6"
+                >
+                  <Field
+                    id="login-mobile"
+                    label="Mobile number"
+                    type="tel"
+                    inputMode="numeric"
+                    maxLength={10}
+                    Icon={Smartphone}
+                    placeholder="10-digit number"
+                    value={loginMobile}
+                    onChange={handleMobileChange(setLoginMobile)}
+                    disabled={loading}
+                    required
+                  />
+                  <Field
+                    id="login-password"
+                    label="Password"
+                    type={showLoginPassword ? 'text' : 'password'}
+                    Icon={KeyRound}
+                    placeholder="Your password"
+                    value={loginPassword}
+                    onChange={(e) => setLoginPassword(e.target.value)}
+                    disabled={loading}
+                    required
+                    trailing={
+                      <button
+                        type="button"
+                        onClick={() => setShowLoginPassword(!showLoginPassword)}
+                        className="p-1.5 text-neutral-400 hover:text-neutral-900 transition-colors"
+                        aria-label={
+                          showLoginPassword ? 'Hide password' : 'Show password'
+                        }
+                      >
+                        {showLoginPassword ? (
+                          <EyeOff size={16} />
+                        ) : (
+                          <Eye size={16} />
+                        )}
+                      </button>
+                    }
+                  />
+
+                  <div className="flex items-center justify-between">
+                    <label className="flex items-center gap-2 cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        checked={rememberMe}
+                        onChange={(e) => setRememberMe(e.target.checked)}
+                        className="w-4 h-4 rounded-[3px] border-neutral-300 accent-neutral-900"
+                      />
+                      <span className="text-xs text-neutral-600">
+                        Remember me
+                      </span>
+                    </label>
+                    <button
+                      type="button"
+                      className="text-xs text-neutral-900 underline-offset-4 hover:underline"
+                    >
+                      Forgot password?
+                    </button>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="group w-full inline-flex items-center justify-between gap-3 px-6 py-4 rounded-full bg-neutral-900 text-white hover:bg-neutral-800 disabled:opacity-60 transition-colors duration-300 active:scale-[0.98]"
+                    style={DISPLAY}
+                  >
+                    <span className="text-sm">
+                      {loading ? 'Signing in…' : 'Sign in'}
+                    </span>
+                    <span className="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 overflow-hidden relative">
+                      <ArrowUpRight
+                        size={14}
+                        className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-4 group-hover:-translate-y-4"
+                      />
+                      <ArrowUpRight
+                        size={14}
+                        className="absolute transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] -translate-x-4 translate-y-4 group-hover:translate-x-0 group-hover:translate-y-0"
+                      />
+                    </span>
+                  </button>
+                </motion.form>
+              ) : (
+                <motion.form
+                  key="register"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  transition={{ duration: 0.35, ease: EASE_OUT }}
+                  onSubmit={handleRegister}
+                  className="space-y-6"
+                >
+                  <Field
+                    id="register-mobile"
+                    label="Mobile number"
+                    type="tel"
+                    inputMode="numeric"
+                    maxLength={10}
+                    Icon={Smartphone}
+                    placeholder="10-digit number"
+                    value={registerMobile}
+                    onChange={handleMobileChange(setRegisterMobile)}
+                    disabled={loading}
+                    required
+                  />
+                  <Field
+                    id="register-password"
+                    label="Create password"
+                    type={showRegisterPassword ? 'text' : 'password'}
+                    Icon={Lock}
+                    placeholder="Minimum 6 characters"
+                    value={registerPassword}
+                    onChange={(e) => setRegisterPassword(e.target.value)}
+                    disabled={loading}
+                    required
+                    trailing={
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setShowRegisterPassword(!showRegisterPassword)
+                        }
+                        className="p-1.5 text-neutral-400 hover:text-neutral-900 transition-colors"
+                        aria-label={
+                          showRegisterPassword
+                            ? 'Hide password'
+                            : 'Show password'
+                        }
+                      >
+                        {showRegisterPassword ? (
+                          <EyeOff size={16} />
+                        ) : (
+                          <Eye size={16} />
+                        )}
+                      </button>
+                    }
+                  />
+                  <Field
+                    id="confirm-password"
+                    label="Confirm password"
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    Icon={ShieldCheck}
+                    placeholder="Re-enter password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    disabled={loading}
+                    required
+                    trailing={
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
+                        className="p-1.5 text-neutral-400 hover:text-neutral-900 transition-colors"
+                        aria-label={
+                          showConfirmPassword
+                            ? 'Hide password'
+                            : 'Show password'
+                        }
+                      >
+                        {showConfirmPassword ? (
+                          <EyeOff size={16} />
+                        ) : (
+                          <Eye size={16} />
+                        )}
+                      </button>
+                    }
+                  />
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="group w-full inline-flex items-center justify-between gap-3 px-6 py-4 rounded-full bg-neutral-900 text-white hover:bg-neutral-800 disabled:opacity-60 transition-colors duration-300 active:scale-[0.98]"
+                    style={DISPLAY}
+                  >
+                    <span className="text-sm">
+                      {loading ? 'Creating account…' : 'Create account'}
+                    </span>
+                    <span className="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 overflow-hidden relative">
+                      <ArrowUpRight
+                        size={14}
+                        className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-4 group-hover:-translate-y-4"
+                      />
+                      <ArrowUpRight
+                        size={14}
+                        className="absolute transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] -translate-x-4 translate-y-4 group-hover:translate-x-0 group-hover:translate-y-0"
+                      />
+                    </span>
+                  </button>
+                </motion.form>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <p
+            className="mt-10 text-[11px] uppercase text-neutral-400 text-center"
+            style={MONO}
+          >
+            Protected by industry-standard encryption
+          </p>
+        </motion.div>
+      </div>
     </div>
   );
 }

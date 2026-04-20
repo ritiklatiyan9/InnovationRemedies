@@ -377,157 +377,556 @@ function ProductDetailPage() {
         </script>
       </Helmet>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 font-sans bg-gray-50 min-h-screen">
-        <nav className="flex items-center text-sm mb-6 text-gray-500">
-          <Link to="/" className="hover:text-gray-700 transition-colors">Home</Link>
-          <ChevronRight size={14} className="mx-2" />
-          <Link to="/products" className="hover:text-gray-700 transition-colors">Products</Link>
-          <ChevronRight size={14} className="mx-2" />
-          <span className="text-gray-900 font-medium truncate max-w-xs">{product.name}</span>
-        </nav>
+      <div
+        className="relative bg-white min-h-screen text-neutral-900"
+        style={{
+          fontFamily:
+            "'Neue Montreal Regular', 'SF Pro Text Regular', system-ui, sans-serif",
+        }}
+      >
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 pt-28 md:pt-32 pb-20">
+          {/* Breadcrumb */}
+          <nav
+            aria-label="Breadcrumb"
+            className="flex items-center gap-2 text-[11px] uppercase text-neutral-500 mb-10"
+            style={{ fontFamily: "'SF Pro Text Regular', ui-monospace, monospace", letterSpacing: '0.2em' }}
+          >
+            <Link to="/" className="hover:text-neutral-900 transition-colors">Home</Link>
+            <ChevronRight size={12} className="opacity-50" />
+            <Link to="/products" className="hover:text-neutral-900 transition-colors">Products</Link>
+            <ChevronRight size={12} className="opacity-50" />
+            <span className="text-neutral-900 truncate max-w-[40ch]">{product.name}</span>
+          </nav>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="flex flex-col lg:flex-row gap-8 md:gap-12">
-          <div className="w-full lg:w-2/5">
-            <Card className="overflow-hidden border-none shadow-lg rounded-xl bg-white">
-              <div className={`p-6 text-center flex justify-center items-center min-h-[300px] md:min-h-[400px] ${imageBackgroundColor}`}>
-                <motion.img
-                    key={displayImageUrl}
-                    src={displayImageUrl}
-                    alt={product.name}
-                    className="w-auto h-auto object-contain max-w-full max-h-80"
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 0.5 }}
-                    whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
-                    draggable="false"
-                    loading="lazy"
+          {/* Split hero */}
+          <div className="grid lg:grid-cols-12 gap-10 lg:gap-16">
+            {/* ============ Left: image panel (sticky on desktop) ============ */}
+            <div className="lg:col-span-6 lg:sticky lg:top-28 lg:self-start">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                className="relative rounded-[2rem] overflow-hidden aspect-square"
+                style={{
+                  background: `linear-gradient(145deg, ${productDisplayColor}26 0%, ${productDisplayColor}0a 60%, #ffffff 100%)`,
+                }}
+              >
+                <div
+                  aria-hidden
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: `radial-gradient(circle at 50% 55%, ${productDisplayColor}33 0%, transparent 60%)`,
+                  }}
                 />
-              </div>
-              <div className="p-4 bg-white flex flex-wrap justify-center items-center gap-2">
-                {currentStock > 0 ? (<Badge color="#22c55e" icon={<CheckCircle size={12} />}>In Stock</Badge>) : (<Badge color="#ef4444" icon={<AlertTriangle size={12} />}>Out of Stock</Badge>)}
-                {currentStock < 10 && currentStock > 0 && !stockLessThanMoqButPositive && (<Badge color="#f59e0b" icon={<AlertTriangle size={12} />}>Low Stock ({currentStock})</Badge>)}
-                {stockLessThanMoqButPositive && (<Badge color="#f97316" icon={<PackageMinus size={12} />}>Stock {"<"} MOQ</Badge>)}
-                {product.rating && product.rating >= 4.8 && (<Badge color="#eab308" icon={<Star size={12} className="fill-current" />}>Top Rated</Badge>)}
-              </div>
-            </Card>
-          </div>
-
-          <div className="w-full lg:w-3/5 flex flex-col space-y-6">
-            <div>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 leading-tight">{product.name}</h1>
-              <div className="flex items-center mt-3">
-                <ProductRating rating={product.rating} reviewCount={product.reviewCount} />
-              </div>
+                <motion.img
+                  key={displayImageUrl}
+                  src={displayImageUrl}
+                  alt={product.name}
+                  className="absolute inset-0 w-[78%] h-[78%] m-auto object-contain drop-shadow-[0_32px_40px_rgba(0,0,0,0.15)]"
+                  initial={{ scale: 0.94, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                  whileHover={{ scale: 1.04, rotate: -1.5 }}
+                  draggable="false"
+                />
+                {/* Top corner tags */}
+                <div className="absolute top-5 left-5 right-5 flex items-start justify-between z-10 gap-3">
+                  <span
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] uppercase bg-white/90 backdrop-blur-sm border border-neutral-200 text-neutral-700"
+                    style={{ fontFamily: "'SF Pro Text Regular', ui-monospace, monospace", letterSpacing: '0.2em' }}
+                  >
+                    <span
+                      className="w-1.5 h-1.5 rounded-full"
+                      style={{ backgroundColor: productDisplayColor }}
+                    />
+                    {product.category || 'Veterinary'}
+                  </span>
+                  <div className="flex flex-wrap justify-end gap-1.5">
+                    {currentStock > 0 ? (
+                      <Badge color="#059669" icon={<CheckCircle size={11} />}>In stock</Badge>
+                    ) : (
+                      <Badge color="#dc2626" icon={<AlertTriangle size={11} />}>Out</Badge>
+                    )}
+                    {product.rating >= 4.8 && (
+                      <Badge color="#d97706" icon={<Star size={11} className="fill-current" />}>Top rated</Badge>
+                    )}
+                  </div>
+                </div>
+                {/* Bottom corner index */}
+                <span
+                  className="absolute bottom-5 right-5 text-[10px] uppercase text-neutral-500"
+                  style={{ fontFamily: "'SF Pro Text Regular', ui-monospace, monospace", letterSpacing: '0.2em' }}
+                >
+                  SKU · {product.sku || product.id}
+                </span>
+              </motion.div>
             </div>
 
-            <motion.div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-              <div className="flex justify-between items-center mb-6">
-                <div className="flex flex-col">
-                  <span className="text-sm text-gray-500 line-through">₹{(product.price * 1.2).toFixed(2)}</span>
-                  <span className="text-3xl font-bold text-gray-900">₹{product.price.toFixed(2)}</span>
-                  <span className="text-xs text-green-600 font-medium mt-1">You save ₹{(product.price * 0.2).toFixed(2)} (20%)</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button variant="ghost" size="icon" className="rounded-full h-10 w-10 hover:bg-pink-50 hover:text-pink-500 text-gray-400" aria-label="Add to wishlist"><Heart size={20} /></Button>
-                </div>
-              </div>
+            {/* ============ Right: details ============ */}
+            <div className="lg:col-span-6">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+              >
+                <p
+                  className="text-[11px] uppercase mb-4"
+                  style={{
+                    color: productDisplayColor,
+                    fontFamily: "'SF Pro Text Regular', ui-monospace, monospace",
+                    letterSpacing: '0.2em',
+                  }}
+                >
+                  — {product.brand || 'Innovation Remedies'}
+                </p>
+                <h1
+                  className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.03em] leading-[1.02] text-neutral-900"
+                  style={{
+                    fontFamily:
+                      "'Neue Montreal Regular', 'SF Pro Text Semibold', 'Inter', system-ui, sans-serif",
+                    fontWeight: 600,
+                  }}
+                >
+                  {product.name}
+                </h1>
+                <p className="mt-5 text-neutral-600 leading-relaxed text-base md:text-lg max-w-2xl">
+                  {product.longDescription || product.description}
+                </p>
 
-              <div className="flex flex-wrap items-center mt-6 gap-3">
-                <span className="text-gray-700 font-medium">Quantity:</span>
-                <QuantitySelector quantity={quantity} onQuantityChange={handleQuantityChange} stock={currentStock} minOrderQty={moq} />
-                {currentStock > 0 ? (<span className="text-sm text-green-600">{currentStock} available</span>) : (<span className="text-sm text-red-600 font-medium">Out of stock</span>)}
-              </div>
-              {moq > 1 && (<p className="text-xs text-gray-500 mt-1.5 ml-1">Minimum order quantity: {moq}</p>)}
-              {stockLessThanMoqButPositive && (<motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="p-3 bg-yellow-50 border border-yellow-200 rounded-md text-yellow-700 text-sm flex items-start gap-2 mt-4"><AlertTriangle size={18} className="flex-shrink-0 mt-0.5" /><span>Current stock ({currentStock}) is less than MOQ ({moq}). Cannot order.</span></motion.div>)}
-              {currentStock === 0 && (<motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm flex items-start gap-2 mt-4"><AlertTriangle size={18} className="flex-shrink-0 mt-0.5" /><span>This product is out of stock.</span></motion.div>)}
+                {/* Rating */}
+                <div className="mt-6">
+                  <ProductRating rating={product.rating} reviewCount={product.reviewCount} />
+                </div>
+              </motion.div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
-                <Button variant="outline" size="lg" className="text-base flex items-center justify-center gap-2 h-12 shadow-sm hover:shadow" onClick={handleAddToCart} disabled={!isOrderable || currentStock <= 0}><ShoppingCart size={18} /> Add to Cart</Button>
-                <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-                   <Button asChild variant="default" size="lg" className="text-base text-white h-12 shadow-sm hover:shadow-md transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2" style={isOrderable && currentStock > 0 ? { backgroundColor: productDisplayColor, borderColor: productDisplayColor } : {}} disabled={!isOrderable || currentStock <= 0} onClick={handleOpenModal}>
-                    <span>{isAuthenticated ? <UserCheck size={18} /> : <LogIn size={18} />} Buy Now</span>
-                  </Button>
-                  <DialogContent className="w-full max-w-[95vw] sm:max-w-[520px] p-0 bg-white rounded-xl overflow-y-auto max-h-[90vh] shadow-lg">
-                    <DialogHeader className="p-4 sm:p-6 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-gray-100 sticky top-0 z-10">
-                      <DialogTitle className="text-xl font-bold text-gray-900 flex items-center gap-2"><ShoppingCart size={20} className="text-gray-700" /> Checkout</DialogTitle>
-                      <DialogDescription className="text-sm text-gray-600 mt-1">{checkoutStep === 1 ? "Enter shipping details" : "Review and confirm order"}</DialogDescription>
-                    </DialogHeader>
-                    <div className="px-4 sm:px-6 pt-4">
-                      <div className="flex items-center justify-between mb-6">
-                        <div className="flex items-center"><div className={`h-8 w-8 rounded-full flex items-center justify-center font-medium text-sm ${checkoutStep >= 1 ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-500"}`}>{checkoutStep > 1 ? <Check size={16} /> : "1"}</div><div className="ml-2"><p className="text-sm font-medium text-gray-900">Shipping</p></div></div>
-                        <div className="grow mx-4 h-1 bg-gray-200 rounded"><div className="h-full bg-blue-600 rounded transition-all duration-300" style={{ width: checkoutStep >= 2 ? "100%" : "0%" }}></div></div>
-                        <div className="flex items-center"><div className={`h-8 w-8 rounded-full flex items-center justify-center font-medium text-sm ${checkoutStep >= 2 ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-500"}`}>2</div><div className="ml-2"><p className="text-sm font-medium text-gray-900">Payment</p></div></div>
+              {/* Price block */}
+              <motion.div
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+                className="mt-10 pb-8 border-b border-neutral-200"
+              >
+                <div className="flex items-baseline gap-3">
+                  <span
+                    className="text-5xl md:text-6xl tabular-nums tracking-[-0.03em] text-neutral-900"
+                    style={{
+                      fontFamily:
+                        "'Neue Montreal Regular', system-ui, sans-serif",
+                      fontWeight: 600,
+                    }}
+                  >
+                    ₹{product.price.toFixed(0)}
+                  </span>
+                  <span className="text-neutral-400 text-lg line-through tabular-nums">
+                    ₹{(product.price * 1.2).toFixed(0)}
+                  </span>
+                  <span
+                    className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] tabular-nums bg-emerald-600 text-white"
+                    style={{ fontFamily: "'SF Pro Text Regular', ui-monospace, monospace", letterSpacing: '0.15em' }}
+                  >
+                    SAVE 20%
+                  </span>
+                </div>
+                <div
+                  className="mt-3 text-[11px] uppercase text-neutral-500"
+                  style={{ fontFamily: "'SF Pro Text Regular', ui-monospace, monospace", letterSpacing: '0.2em' }}
+                >
+                  Incl. of all taxes · Min order {moq}
+                </div>
+              </motion.div>
+
+              {/* Quantity + actions */}
+              <motion.div
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
+                className="mt-8"
+              >
+                <div className="flex flex-wrap items-center gap-4">
+                  <div className="flex items-center gap-3">
+                    <span
+                      className="text-[10px] uppercase text-neutral-500"
+                      style={{ fontFamily: "'SF Pro Text Regular', ui-monospace, monospace", letterSpacing: '0.2em' }}
+                    >
+                      Quantity
+                    </span>
+                    <QuantitySelector quantity={quantity} onQuantityChange={handleQuantityChange} stock={currentStock} minOrderQty={moq} />
+                  </div>
+                  {currentStock > 0 ? (
+                    <span className="text-xs text-emerald-700 tabular-nums">
+                      {currentStock} available
+                    </span>
+                  ) : (
+                    <span className="text-xs text-red-600 tabular-nums">
+                      Out of stock
+                    </span>
+                  )}
+                </div>
+
+                {stockLessThanMoqButPositive && (
+                  <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 text-sm flex items-start gap-2">
+                    <AlertTriangle size={16} className="flex-shrink-0 mt-0.5" />
+                    <span>Available stock ({currentStock}) is below MOQ ({moq}). Cannot order.</span>
+                  </motion.div>
+                )}
+                {currentStock === 0 && (
+                  <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mt-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm flex items-start gap-2">
+                    <AlertTriangle size={16} className="flex-shrink-0 mt-0.5" />
+                    <span>This product is currently out of stock.</span>
+                  </motion.div>
+                )}
+
+                <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <button
+                    onClick={handleAddToCart}
+                    disabled={!isOrderable || currentStock <= 0}
+                    className="group inline-flex items-center justify-between gap-3 px-6 py-4 rounded-full border border-neutral-900 text-neutral-900 hover:bg-neutral-900 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300 active:scale-[0.98]"
+                    style={{
+                      fontFamily:
+                        "'Neue Montreal Regular', system-ui, sans-serif",
+                      fontWeight: 600,
+                    }}
+                  >
+                    <span className="flex items-center gap-2 text-sm">
+                      <ShoppingCart size={16} />
+                      Add to cart
+                    </span>
+                    <Heart size={15} className="opacity-60" />
+                  </button>
+
+                  <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                    <button
+                      disabled={!isOrderable || currentStock <= 0}
+                      onClick={handleOpenModal}
+                      className="group inline-flex items-center justify-between gap-3 px-6 py-4 rounded-full text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300 active:scale-[0.98]"
+                      style={{
+                        backgroundColor: productDisplayColor,
+                        fontFamily:
+                          "'Neue Montreal Regular', system-ui, sans-serif",
+                        fontWeight: 600,
+                      }}
+                    >
+                      <span className="flex items-center gap-2 text-sm">
+                        {isAuthenticated ? <UserCheck size={16} /> : <LogIn size={16} />}
+                        Buy now
+                      </span>
+                      <span className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center overflow-hidden relative">
+                        <ChevronRight size={14} className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-3" />
+                      </span>
+                    </button>
+                    <DialogContent className="w-full max-w-[95vw] sm:max-w-[520px] p-0 bg-white rounded-2xl overflow-y-auto max-h-[90vh] shadow-xl">
+                      <DialogHeader className="p-5 sm:p-6 border-b border-neutral-200 sticky top-0 z-10 bg-white">
+                        <DialogTitle className="text-xl tracking-[-0.02em] text-neutral-900 flex items-center gap-2"
+                          style={{ fontFamily: "'Neue Montreal Regular', system-ui, sans-serif", fontWeight: 600 }}
+                        >
+                          <ShoppingCart size={18} /> Checkout
+                        </DialogTitle>
+                        <DialogDescription className="text-sm text-neutral-600 mt-1">
+                          {checkoutStep === 1 ? 'Enter shipping details' : 'Review and confirm order'}
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="px-5 sm:px-6 pt-4">
+                        <div className="flex items-center justify-between mb-6">
+                          <div className="flex items-center">
+                            <div className={`h-8 w-8 rounded-full flex items-center justify-center font-medium text-sm ${checkoutStep >= 1 ? 'bg-neutral-900 text-white' : 'bg-neutral-200 text-neutral-500'}`}>{checkoutStep > 1 ? <Check size={16} /> : '1'}</div>
+                            <div className="ml-2"><p className="text-sm font-medium text-neutral-900">Shipping</p></div>
+                          </div>
+                          <div className="grow mx-4 h-px bg-neutral-200">
+                            <div className="h-full bg-neutral-900 transition-all duration-500" style={{ width: checkoutStep >= 2 ? '100%' : '0%' }} />
+                          </div>
+                          <div className="flex items-center">
+                            <div className={`h-8 w-8 rounded-full flex items-center justify-center font-medium text-sm ${checkoutStep >= 2 ? 'bg-neutral-900 text-white' : 'bg-neutral-200 text-neutral-500'}`}>2</div>
+                            <div className="ml-2"><p className="text-sm font-medium text-neutral-900">Payment</p></div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <AnimatePresence mode="wait">
-                      {checkoutStep === 1 ? (
-                        <motion.div key="shipping" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.2 }} className="px-4 sm:px-6 space-y-4">
-                          <FormField label="Full Name" id="shippingName" value={formData.shippingName} onChange={(e) => setFormData({...formData, shippingName: e.target.value})} placeholder="Enter your full name" error={formErrors.shippingName} />
-                          <FormField label="Mobile Number" id="shippingMobile" value={formData.shippingMobile} onChange={(e) => setFormData({...formData, shippingMobile: e.target.value})} placeholder="Enter 10-digit mobile" error={formErrors.shippingMobile} />
-                          <FormField label="Shipping Address" id="shippingAddress" type="textarea" value={formData.shippingAddress} onChange={(e) => setFormData({...formData, shippingAddress: e.target.value})} placeholder="Complete address with pincode" error={formErrors.shippingAddress} />
-                        </motion.div>
-                      ) : (
-                        <motion.div key="payment" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} transition={{ duration: 0.2 }} className="px-4 sm:px-6 space-y-4">
-                          <div className="bg-gray-50 rounded-lg p-4 mb-4 shadow-sm"><h4 className="text-sm font-medium text-gray-700 mb-3">Shipping Details:</h4><div className="text-sm text-gray-600 space-y-1"><p><span className="font-medium">Name:</span> {formData.shippingName}</p><p><span className="font-medium">Mobile:</span> {formData.shippingMobile}</p><p className="break-words"><span className="font-medium">Address:</span> {formData.shippingAddress}</p></div></div>
-                          <h4 className="text-sm font-medium text-gray-700 mb-2">Select Payment Method:</h4>
-                          <div onClick={() => setSelectedPaymentMethod("cod")} className={`flex items-center justify-between p-3 border rounded-md cursor-pointer transition-colors shadow-sm ${selectedPaymentMethod === "cod" ? "border-blue-500 bg-blue-50 ring-2 ring-blue-200" : "border-gray-300 hover:border-gray-400 hover:bg-gray-50"}`}><div className="flex items-center gap-3"><Banknote size={20} className={selectedPaymentMethod === "cod" ? "text-blue-600" : "text-gray-500"} /><div><span className={`font-medium ${selectedPaymentMethod === "cod" ? "text-blue-700" : "text-gray-700"}`}>Cash on Delivery</span><p className="text-xs text-gray-500 mt-0.5">Pay upon receiving order</p></div></div>{selectedPaymentMethod === "cod" && <CheckCircle size={18} className="text-blue-600" />}</div>
-                          <div className="flex items-center justify-between p-3 border rounded-md cursor-not-allowed opacity-60 border-gray-300 shadow-sm"><div className="flex items-center gap-3"><CreditCard size={20} className="text-gray-500" /><div><span className="font-medium text-gray-500">Online Payment</span><p className="text-xs text-gray-500 mt-0.5">Coming soon</p></div></div></div>
+                      <AnimatePresence mode="wait">
+                        {checkoutStep === 1 ? (
+                          <motion.div key="shipping" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25 }} className="px-5 sm:px-6 space-y-4">
+                            <FormField label="Full Name" id="shippingName" value={formData.shippingName} onChange={(e) => setFormData({...formData, shippingName: e.target.value})} placeholder="Enter your full name" error={formErrors.shippingName} />
+                            <FormField label="Mobile Number" id="shippingMobile" value={formData.shippingMobile} onChange={(e) => setFormData({...formData, shippingMobile: e.target.value})} placeholder="10-digit mobile number" error={formErrors.shippingMobile} />
+                            <FormField label="Shipping Address" id="shippingAddress" type="textarea" value={formData.shippingAddress} onChange={(e) => setFormData({...formData, shippingAddress: e.target.value})} placeholder="Complete address with pincode" error={formErrors.shippingAddress} />
+                          </motion.div>
+                        ) : (
+                          <motion.div key="payment" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} transition={{ duration: 0.25 }} className="px-5 sm:px-6 space-y-4">
+                            <div className="bg-neutral-50 rounded-xl p-4 border border-neutral-200">
+                              <h4 className="text-xs uppercase tracking-wider text-neutral-500 mb-3">Shipping to</h4>
+                              <div className="text-sm text-neutral-700 space-y-1">
+                                <p className="font-medium text-neutral-900">{formData.shippingName}</p>
+                                <p>{formData.shippingMobile}</p>
+                                <p className="break-words">{formData.shippingAddress}</p>
+                              </div>
+                            </div>
+                            <h4 className="text-xs uppercase tracking-wider text-neutral-500 mb-2 mt-4">Payment method</h4>
+                            <button onClick={() => setSelectedPaymentMethod('cod')} className={`flex items-center justify-between w-full p-4 border rounded-xl cursor-pointer transition-colors ${selectedPaymentMethod === 'cod' ? 'border-neutral-900 bg-neutral-50' : 'border-neutral-200 hover:border-neutral-400'}`}>
+                              <div className="flex items-center gap-3">
+                                <Banknote size={18} className={selectedPaymentMethod === 'cod' ? 'text-neutral-900' : 'text-neutral-500'} />
+                                <div className="text-left">
+                                  <div className="font-medium text-sm text-neutral-900">Cash on Delivery</div>
+                                  <div className="text-xs text-neutral-500 mt-0.5">Pay upon receiving the order</div>
+                                </div>
+                              </div>
+                              {selectedPaymentMethod === 'cod' && <CheckCircle size={18} className="text-neutral-900" />}
+                            </button>
+                            <div className="flex items-center justify-between p-4 border border-neutral-200 rounded-xl cursor-not-allowed opacity-50">
+                              <div className="flex items-center gap-3">
+                                <CreditCard size={18} className="text-neutral-500" />
+                                <div>
+                                  <div className="font-medium text-sm text-neutral-600">Online Payment</div>
+                                  <div className="text-xs text-neutral-500 mt-0.5">Coming soon</div>
+                                </div>
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                      <div className="mt-4 mx-5 sm:mx-6 py-4 px-4 rounded-xl bg-neutral-50 border border-neutral-200">
+                        <div className="flex items-start gap-4">
+                          <div
+                            className="w-14 h-14 flex-shrink-0 rounded-lg p-1 flex items-center justify-center"
+                            style={{ backgroundColor: `${productDisplayColor}20` }}
+                          >
+                            <img src={displayImageUrl} alt={product.name} className="max-w-full max-h-full object-contain" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-neutral-900 truncate">{product.name}</p>
+                            <p className="text-xs text-neutral-500 mt-0.5">Unit ₹{product.price.toFixed(2)}</p>
+                            <div className="flex items-center mt-2 gap-2">
+                              <span className="text-[10px] uppercase text-neutral-500">Qty</span>
+                              {checkoutStep === 1 ? (
+                                <QuantitySelector quantity={quantity} onQuantityChange={handleQuantityChange} stock={currentStock} minOrderQty={moq} size="small" />
+                              ) : (
+                                <span className="text-sm font-medium tabular-nums">{quantity}</span>
+                              )}
+                            </div>
+                          </div>
+                          <p className="text-sm font-semibold text-neutral-900 tabular-nums whitespace-nowrap">
+                            ₹{(product.price * quantity).toFixed(2)}
+                          </p>
+                        </div>
+                        <div className="mt-4 pt-3 border-t border-neutral-200 flex justify-between items-baseline">
+                          <span className="text-xs uppercase text-neutral-500 tracking-wider">Total</span>
+                          <span className="text-xl tabular-nums text-neutral-900" style={{ fontFamily: "'Neue Montreal Regular', system-ui, sans-serif", fontWeight: 600 }}>₹{totalPurchasePrice}</span>
+                        </div>
+                      </div>
+                      {orderError && (
+                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mx-5 sm:mx-6 mt-4 p-3 bg-red-50 border border-red-200 rounded-xl">
+                          <p className="text-sm text-red-700 flex items-start gap-2">
+                            <AlertTriangle size={14} className="mt-0.5 flex-shrink-0" />
+                            <span>{orderError}</span>
+                          </p>
                         </motion.div>
                       )}
-                    </AnimatePresence>
-                    <div className={`py-4 space-y-4 border-t border-b my-4 mx-4 sm:mx-6 bg-gray-50 rounded-lg shadow-inner`}>
-                      <div className="flex items-start space-x-4 p-3">
-                        <motion.div className={`w-16 h-16 flex-shrink-0 rounded-md border p-1 flex items-center justify-center ${imageBackgroundColor}`} whileHover={{ scale: 1.05 }}><img src={displayImageUrl} alt={product.name} className="max-w-full max-h-full object-contain" /></motion.div>
-                        <div className="flex-1 min-w-0"><p className="font-medium text-gray-800 truncate">{product.name}</p><p className="text-sm text-gray-500 mt-1">Unit Price: ₹{product.price.toFixed(2)}</p><div className="flex items-center mt-2"><span className="text-xs text-gray-500 mr-2">Qty:</span>{checkoutStep === 1 ? (<QuantitySelector quantity={quantity} onQuantityChange={handleQuantityChange} stock={currentStock} minOrderQty={moq} size="small" />) : (<span className="text-sm font-medium">{quantity}</span>)}</div></div>
-                        <p className="text-sm font-medium text-gray-800 whitespace-nowrap">₹{(product.price * quantity).toFixed(2)}</p>
-                      </div>
-                      <div className="flex justify-between items-center text-base font-medium pt-2 px-3"><span className="text-gray-600">Total Amount:</span><span className="text-gray-900 text-lg font-semibold">₹{totalPurchasePrice}</span></div>
+                      <DialogFooter className="p-5 sm:p-6 pt-4 flex flex-col sm:flex-row sm:justify-between gap-3 sticky bottom-0 bg-white border-t border-neutral-200">
+                        {checkoutStep === 1 ? (
+                          <>
+                            <DialogClose asChild>
+                              <Button type="button" variant="outline" className="w-full sm:w-auto rounded-full" disabled={isProcessingOrder}>Cancel</Button>
+                            </DialogClose>
+                            <Button type="button" className="w-full sm:w-auto rounded-full bg-neutral-900 hover:bg-neutral-800 text-white" onClick={handleNextStep}>Continue to payment</Button>
+                          </>
+                        ) : (
+                          <>
+                            <Button type="button" variant="outline" className="w-full sm:w-auto rounded-full" onClick={handlePrevStep} disabled={isProcessingOrder}>Back</Button>
+                            <Button type="button" className="w-full sm:w-auto rounded-full text-white flex items-center justify-center gap-2" style={{ backgroundColor: productDisplayColor }} onClick={handleConfirmPurchase} disabled={isProcessingOrder}>
+                              {isProcessingOrder ? (<><Loader2 size={16} className="animate-spin" /> Processing…</>) : 'Place order'}
+                            </Button>
+                          </>
+                        )}
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+              </motion.div>
+
+              {/* Trust row */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+                className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-3"
+              >
+                {[
+                  { Icon: Truck, title: 'Free shipping', body: 'On orders over ₹500' },
+                  { Icon: Package, title: 'Same-day dispatch', body: 'Ordered before 2 PM' },
+                  { Icon: Shield, title: 'Secure checkout', body: '100% satisfaction' },
+                ].map(({ Icon, title, body }) => (
+                  <div key={title} className="flex items-start gap-3 p-4 rounded-xl bg-neutral-50 border border-neutral-200">
+                    <Icon size={18} className="text-neutral-700 shrink-0 mt-0.5" />
+                    <div>
+                      <div className="text-sm text-neutral-900" style={{ fontFamily: "'Neue Montreal Regular', system-ui, sans-serif", fontWeight: 600 }}>{title}</div>
+                      <div className="text-[11px] text-neutral-500 mt-0.5">{body}</div>
                     </div>
-                    {orderError && (<motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mx-4 sm:mx-6 p-3 bg-red-50 border border-red-100 rounded-md mb-4 shadow-sm"><p className="text-sm text-red-600 flex items-start"><AlertTriangle size={14} className="mr-1.5 mt-0.5 flex-shrink-0" /><span>{orderError}</span></p></motion.div>)}
-                    <DialogFooter className="p-4 sm:p-6 pt-3 bg-gradient-to-t from-gray-50 to-gray-100 flex flex-col sm:flex-row sm:justify-between gap-3 sticky bottom-0 z-10">
-                      {checkoutStep === 1 ? (<><DialogClose asChild><Button type="button" variant="outline" className="w-full sm:w-auto shadow-sm hover:shadow-md transition-shadow" disabled={isProcessingOrder}>Cancel</Button></DialogClose><Button type="button" variant="default" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 shadow-sm hover:shadow-md transition-shadow" onClick={handleNextStep}>Continue to Payment</Button></>) : (<><Button type="button" variant="outline" className="w-full sm:w-auto shadow-sm hover:shadow-md transition-shadow" onClick={handlePrevStep} disabled={isProcessingOrder}>Back</Button><Button type="button" variant="default" className="w-full sm:w-auto text-white flex items-center justify-center gap-2 shadow-sm hover:shadow-md transition-shadow" style={{ backgroundColor: productDisplayColor }} onClick={handleConfirmPurchase} disabled={isProcessingOrder}>{isProcessingOrder ? (<><Loader2 size={18} className="animate-spin" /> Processing...</>) : ("Place Order")}</Button></>)}
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
+                  </div>
+                ))}
+              </motion.div>
+
+              {/* Features quick list */}
+              {product.features?.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                  className="mt-10"
+                >
+                  <p
+                    className="text-[11px] uppercase text-neutral-500 mb-5"
+                    style={{ fontFamily: "'SF Pro Text Regular', ui-monospace, monospace", letterSpacing: '0.2em' }}
+                  >
+                    — What's inside
+                  </p>
+                  <ul className="grid sm:grid-cols-2 gap-3">
+                    {product.features.map((f, i) => (
+                      <li key={i} className="flex items-start gap-3 text-sm text-neutral-700">
+                        <span className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: productDisplayColor }} />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              )}
+            </div>
+          </div>
+
+          {/* Tabs — Description / Features / Usage */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="mt-24 md:mt-32 border-t border-neutral-200 pt-16"
+          >
+            <div className="flex items-center gap-1 border-b border-neutral-200 mb-8">
+              {['description', 'features'].map((t) => {
+                const isActive = activeTab === t;
+                return (
+                  <button
+                    key={t}
+                    onClick={() => setActiveTab(t)}
+                    className="relative px-4 py-3 text-sm text-neutral-900 capitalize transition-colors"
+                    style={{ fontFamily: "'Neue Montreal Regular', system-ui, sans-serif", fontWeight: 600 }}
+                  >
+                    <span className={isActive ? 'text-neutral-900' : 'text-neutral-400'}>{t}</span>
+                    {isActive && (
+                      <motion.span
+                        layoutId="tabUnderline"
+                        className="absolute left-0 right-0 bottom-[-1px] h-[2px] bg-neutral-900"
+                      />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+            <AnimatePresence mode="wait">
+              {activeTab === 'description' && (
+                <motion.p
+                  key="description"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                  className="text-base md:text-lg text-neutral-700 leading-relaxed max-w-3xl"
+                >
+                  {product.longDescription || product.description}
+                </motion.p>
+              )}
+              {activeTab === 'features' && (
+                <motion.ul
+                  key="features"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                  className="grid sm:grid-cols-2 gap-5 max-w-3xl"
+                >
+                  {product.features?.length > 0 ? product.features.map((f, i) => (
+                    <li key={i} className="flex items-start gap-3 text-base text-neutral-700">
+                      <CheckCircle size={18} className="mt-0.5 shrink-0" style={{ color: productDisplayColor }} />
+                      {f}
+                    </li>
+                  )) : <li>No specific features listed.</li>}
+                </motion.ul>
+              )}
+            </AnimatePresence>
+          </motion.div>
+
+          {/* Usage + note cards */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="mt-20 md:mt-24 grid md:grid-cols-2 gap-5"
+          >
+            <div className="p-8 rounded-[1.5rem] bg-neutral-50 border border-neutral-200">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center">
+                  <Info size={18} />
+                </span>
+                <h3 className="text-xl tracking-[-0.02em] text-neutral-900" style={{ fontFamily: "'Neue Montreal Regular', system-ui, sans-serif", fontWeight: 600 }}>Usage instructions</h3>
               </div>
-            </motion.div>
+              <p className="text-sm text-neutral-600 leading-relaxed">
+                For optimal results, use as directed by your veterinarian. Store
+                in a cool, dry place away from direct sunlight. Keep out of
+                reach of children and animals. Consult your vet before use if
+                the animal is pregnant, nursing, or on medication.
+              </p>
+            </div>
+            <div className="p-8 rounded-[1.5rem] bg-neutral-50 border border-neutral-200">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="w-10 h-10 rounded-full bg-amber-600 text-white flex items-center justify-center">
+                  <AlertTriangle size={18} />
+                </span>
+                <h3 className="text-xl tracking-[-0.02em] text-neutral-900" style={{ fontFamily: "'Neue Montreal Regular', system-ui, sans-serif", fontWeight: 600 }}>Important note</h3>
+              </div>
+              <p className="text-sm text-neutral-600 leading-relaxed">
+                Intended for animal use only. Not for human consumption. Follow
+                recommended dosage and consult a veterinarian before introducing
+                new supplements. Discontinue use if adverse reactions occur.
+              </p>
+            </div>
+          </motion.div>
 
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <Card className="border-none shadow-sm bg-white"><CardContent className="p-4 flex items-center gap-3"><Truck size={22} className="text-blue-500 shrink-0" /><div><h4 className="font-semibold text-sm text-gray-800">Free Shipping</h4><p className="text-xs text-gray-500">On orders over ₹500</p></div></CardContent></Card>
-              <Card className="border-none shadow-sm bg-white"><CardContent className="p-4 flex items-center gap-3"><Package size={22} className="text-green-500 shrink-0" /><div><h4 className="font-semibold text-sm text-gray-800">Same Day Dispatch</h4><p className="text-xs text-gray-500">Orders before 2 PM</p></div></CardContent></Card>
-              <Card className="border-none shadow-sm bg-white"><CardContent className="p-4 flex items-center gap-3"><Shield size={22} className="text-purple-500 shrink-0" /><div><h4 className="font-semibold text-sm text-gray-800">Secure Checkout</h4><p className="text-xs text-gray-500">100% satisfaction</p></div></CardContent></Card>
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-              <Card className="border-none shadow-sm bg-white overflow-hidden">
-                <div className="border-b border-gray-200"><div className="flex px-1"><button className={`py-3 px-5 text-sm font-medium border-b-2 transition-colors duration-200 ease-in-out focus:outline-none ${activeTab === "description" ? "border-blue-600 text-blue-600" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"}`} onClick={() => setActiveTab("description")}>Description</button><button className={`py-3 px-5 text-sm font-medium border-b-2 transition-colors duration-200 ease-in-out focus:outline-none ${activeTab === "features" ? "border-blue-600 text-blue-600" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"}`} onClick={() => setActiveTab("features")}>Features</button></div></div>
-                <CardContent className="p-6 min-h-[120px] prose prose-sm max-w-none">
-                  <AnimatePresence mode="wait">
-                    {activeTab === "description" && <motion.div key="description" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}><p className="text-gray-700 leading-relaxed">{product.longDescription || product.description}</p></motion.div>}
-                    {activeTab === "features" && <motion.div key="features" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}><ul className="space-y-2.5 pl-1 list-none">{product.features && product.features.length > 0 ? product.features.map((feature, index) => (<li key={index} className="flex items-start"><CheckCircle size={16} className="mr-2.5 mt-0.5 text-green-500 shrink-0" /><span className="text-gray-700">{feature}</span></li>)) : (<li>No specific features listed.</li>)}</ul></motion.div>}
-                  </AnimatePresence>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </div>
-        </motion.div>
-
-        <motion.div className="mt-12" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>
-          <h2 className="text-xl font-bold mb-4 text-gray-800">Product Information</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="border-none shadow-sm bg-white"><CardContent className="p-6"><h3 className="flex items-center text-lg font-semibold mb-3 text-gray-800"><Info size={18} className="mr-2 text-blue-500" />Usage Instructions</h3><p className="text-sm text-gray-600 leading-relaxed">For optimal results, use as directed by your veterinarian. Store in a cool, dry place away from direct sunlight. Keep out of reach of children and animals. Consult your vet before use if the animal is pregnant, nursing, or on medication.</p></CardContent></Card>
-            <Card className="border-none shadow-sm bg-white"><CardContent className="p-6"><h3 className="flex items-center text-lg font-semibold mb-3 text-gray-800"><AlertTriangle size={18} className="mr-2 text-amber-500" />Important Note</h3><p className="text-sm text-gray-600 leading-relaxed">This product is intended for animal use only. Not for human consumption. Follow recommended dosage and consult a veterinarian before introducing new supplements. Discontinue use if adverse reactions occur.</p></CardContent></Card>
-          </div>
-        </motion.div>
-
-        <motion.div className="mt-12 mb-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}>
-          <Card className="border-none shadow-md overflow-hidden">
-            <motion.div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between" variants={shimmerAnimation} initial="hidden" animate="visible" style={{ backgroundSize: "200% 100%", backgroundImage: "linear-gradient(to right, #3b82f6, #8b5cf6, #3b82f6)", }}>
-              <div className="text-white mb-4 sm:mb-0"><h3 className="text-xl font-bold flex items-center"><TicketPercent size={24} className="mr-2" />Special Offer</h3><p className="mt-2">Free shipping on your first order! </p></div>
-              <Button variant="outline" className="bg-white hover:bg-gray-100 text-blue-700 border-0 font-medium shadow-sm hover:shadow" onClick={() => navigate("/products")}>Shop More</Button>
-            </motion.div>
-          </Card>
-        </motion.div>
+          {/* Offer band */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="mt-16 md:mt-20 relative rounded-[2rem] overflow-hidden bg-[#05070f] text-white"
+          >
+            <div
+              aria-hidden
+              className="absolute inset-0 pointer-events-none"
+              style={{ background: 'linear-gradient(135deg, #05070f 0%, #080d20 45%, #050814 100%)' }}
+            />
+            <div
+              aria-hidden
+              className="absolute -right-20 -top-20 w-[28rem] h-[28rem] rounded-full blur-3xl opacity-60"
+              style={{ background: `radial-gradient(circle, ${productDisplayColor}66 0%, transparent 60%)` }}
+            />
+            <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-6 p-8 md:p-12">
+              <div>
+                <p className="text-[11px] uppercase text-emerald-300/90 mb-3" style={{ fontFamily: "'SF Pro Text Regular', ui-monospace, monospace", letterSpacing: '0.2em' }}>— Offer</p>
+                <h3 className="text-2xl md:text-3xl tracking-[-0.02em]" style={{ fontFamily: "'Neue Montreal Regular', system-ui, sans-serif", fontWeight: 600 }}>
+                  <TicketPercent size={22} className="inline mr-2 -mt-1" />
+                  Free shipping on your first order
+                </h3>
+                <p className="mt-2 text-white/65 text-sm max-w-md">
+                  Applies automatically at checkout for all first-time buyers.
+                </p>
+              </div>
+              <button
+                onClick={() => navigate('/products')}
+                className="group inline-flex items-center gap-3 px-6 py-3.5 rounded-full bg-white text-black hover:bg-emerald-300 transition-colors active:scale-[0.98]"
+                style={{ fontFamily: "'Neue Montreal Regular', system-ui, sans-serif", fontWeight: 600 }}
+              >
+                <span className="text-sm">Explore more</span>
+                <ChevronRight size={15} className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1" />
+              </button>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </HelmetProvider>
   );
