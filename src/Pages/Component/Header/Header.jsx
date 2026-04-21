@@ -162,7 +162,7 @@ export default function Header() {
           </motion.span>
           <span className="hidden md:flex flex-col leading-tight">
             <span
-              className="text-[10px] uppercase text-neutral-400 tracking-[0.22em]"
+              className="text-[10px] uppercase text-neutral-900 tracking-[0.22em]"
               style={MONO}
             >
               Innovation

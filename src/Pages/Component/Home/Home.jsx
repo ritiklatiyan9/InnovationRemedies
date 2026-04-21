@@ -35,6 +35,7 @@ import dogs from "../../../assets/Images/dogs.png";
 import sheep from "../../../assets/Images/sheep.png";
 import cat from "../../../assets/Images/cat.png";
 import fish from "../../../assets/Images/fish.png";
+import heroBanner from "../../../assets/Images/banner.png";
 import { products as allProducts } from "../../../data/products";
 
 /* ----------------------------- Font tokens ------------------------------- */
@@ -155,7 +156,7 @@ function Hero() {
   });
   const reduce = useReducedMotion();
   const videoY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
-  const videoScale = useTransform(scrollYProgress, [0, 1], [1.05, 1.18]);
+  const videoScale = useTransform(scrollYProgress, [0, 1], [1, 1]);
   const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "-25%"]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
@@ -186,110 +187,31 @@ function Hero() {
       <motion.div
         aria-hidden
         style={reduce ? {} : { y: videoY, scale: videoScale }}
-        className="absolute inset-0 -z-10"
+        className="absolute inset-0 z-0"
       >
-        {/* Shifting multi-stop gradient — dark but visibly colorful */}
-        <motion.div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(135deg, #0a0823 0%, #1a0f3a 20%, #082a4d 40%, #0a3b4a 60%, #1f0f3d 80%, #0a0823 100%)",
-            backgroundSize: "400% 400%",
-          }}
-          animate={
-            reduce
-              ? {}
-              : {
-                  backgroundPosition: [
-                    "0% 0%",
-                    "100% 50%",
-                    "50% 100%",
-                    "0% 50%",
-                    "0% 0%",
-                  ],
-                }
-          }
-          transition={{ duration: 28, repeat: Infinity, ease: "easeInOut" }}
+        {/* Banner image — full cover on mobile (focal point on farmer), right-anchored on desktop */}
+        <img
+          src={heroBanner}
+          alt=""
+          aria-hidden
+          className="absolute inset-y-0 right-0 h-full w-full object-cover [object-position:65%_center] md:w-auto md:max-w-none md:object-right"
+          style={{ imageRendering: "auto" }}
         />
-
-        {/* Purple / violet orb — top left */}
-        <motion.div
-          className="absolute w-[60vw] h-[60vw] rounded-full blur-3xl"
+        {/* Left-to-right dark gradient — minimal on mobile, strong on desktop */}
+        <div
+          className="absolute inset-0 hidden md:block"
           style={{
             background:
-              "radial-gradient(circle, rgba(139, 92, 246, 0.45) 0%, transparent 65%)",
-            top: "-20%",
-            left: "-15%",
+              "linear-gradient(90deg, rgba(5,5,15,1) 0%, rgba(5,5,15,0.97) 20%, rgba(5,5,15,0.85) 38%, rgba(5,5,15,0.55) 52%, rgba(5,5,15,0.15) 70%, rgba(5,5,15,0) 100%)",
           }}
-          animate={
-            reduce
-              ? {}
-              : {
-                  x: [0, 50, 0],
-                  y: [0, 30, 0],
-                }
-          }
-          transition={{ duration: 24, repeat: Infinity, ease: "easeInOut" }}
         />
-
-        {/* Teal / emerald orb — bottom right */}
-        <motion.div
-          className="absolute w-[65vw] h-[65vw] rounded-full blur-3xl"
+        {/* Mobile-only: left-dark right-bright gradient */}
+        <div
+          className="absolute inset-0 md:hidden"
           style={{
             background:
-              "radial-gradient(circle, rgba(20, 184, 166, 0.40) 0%, transparent 65%)",
-            bottom: "-25%",
-            right: "-15%",
+              "linear-gradient(90deg, rgba(5,5,15,0.82) 0%, rgba(5,5,15,0.60) 30%, rgba(5,5,15,0.25) 60%, rgba(5,5,15,0.05) 100%)",
           }}
-          animate={
-            reduce
-              ? {}
-              : {
-                  x: [0, -40, 0],
-                  y: [0, -30, 0],
-                }
-          }
-          transition={{ duration: 32, repeat: Infinity, ease: "easeInOut" }}
-        />
-
-        {/* Indigo orb — mid */}
-        <motion.div
-          className="absolute w-[45vw] h-[45vw] rounded-full blur-3xl opacity-80"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(59, 89, 200, 0.45) 0%, transparent 65%)",
-            top: "30%",
-            right: "15%",
-          }}
-          animate={
-            reduce
-              ? {}
-              : {
-                  x: [0, -40, 30, 0],
-                  y: [0, 25, -15, 0],
-                }
-          }
-          transition={{ duration: 36, repeat: Infinity, ease: "easeInOut" }}
-        />
-
-        {/* Pink / rose orb — subtle accent */}
-        <motion.div
-          className="absolute w-[40vw] h-[40vw] rounded-full blur-3xl opacity-50"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(244, 63, 94, 0.35) 0%, transparent 65%)",
-            bottom: "20%",
-            left: "25%",
-          }}
-          animate={
-            reduce
-              ? {}
-              : {
-                  x: [0, 40, -20, 0],
-                  y: [0, -30, 20, 0],
-                }
-          }
-          transition={{ duration: 28, repeat: Infinity, ease: "easeInOut" }}
         />
       </motion.div>
 
@@ -315,7 +237,7 @@ function Hero() {
       {/* Foreground */}
       <motion.div
         style={reduce ? {} : { y: contentY, opacity: contentOpacity }}
-        className="relative z-10 h-full flex flex-col justify-end pb-60 md:pb-28 px-6 md:px-10"
+        className="relative z-10 h-full flex flex-col justify-end pb-40 md:pb-28 px-6 md:px-10"
       >
         <div className="max-w-[1400px] mx-auto w-full">
           {/* Eyebrow */}
@@ -337,7 +259,7 @@ function Hero() {
 
             <span
               aria-hidden
-              className="block leading-[0.82] tracking-[-0.04em] text-[12vw] md:text-[15vw] lg:text-[13.5vw] font-normal"
+              className="block leading-[0.82] tracking-[0.02em] text-[10.5vw] md:text-[12.5vw] lg:text-[11.5vw] font-normal whitespace-nowrap"
               style={BRAND}
             >
               <SplitWords
@@ -353,21 +275,24 @@ function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: EASE_OUT, delay: 0.55 }}
               aria-hidden
-              className="mt-3 md:mt-4 flex items-center gap-4 md:gap-6"
+              className="mt-2 md:mt-12 flex items-center gap-4 md:gap-6"
             >
               <motion.span
                 initial={reduce ? false : { scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={{ duration: 1, ease: EASE_OUT, delay: 0.65 }}
-                className="block h-px bg-white/50 w-12 md:w-24 origin-left"
+                className="hidden md:block h-px bg-white/50 w-12 md:w-24 origin-left"
               />
               <span
-                className="text-lg md:text-2xl lg:text-3xl tracking-[0.05em] text-white/85 font-light inline-flex items-center gap-2 md:gap-3 flex-wrap"
+                className="text-2xl md:text-4xl lg:text-5xl tracking-[0.03em] text-white/90 font-light inline-flex items-center gap-2 md:gap-3 flex-wrap"
                 style={BODY}
               >
                 <span>Remedies&nbsp;</span>
+                {/* Mobile: plain white */}
+                <span className="font-normal text-white md:hidden">Life Science</span>
+                {/* Desktop: animated gradient */}
                 <motion.span
-                  className="font-normal bg-clip-text text-transparent"
+                  className="hidden md:inline font-normal bg-clip-text text-transparent"
                   style={{
                     backgroundImage:
                       "linear-gradient(90deg, #6ee7b7 0%, #60a5fa 25%, #a78bfa 50%, #f472b6 75%, #6ee7b7 100%)",
@@ -395,7 +320,7 @@ function Hero() {
                   initial={{ opacity: 0, scale: 0.6 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.6, delay: 0.9, ease: EASE_OUT }}
-                  className="ml-1 inline-flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full relative shrink-0"
+                  className="ml-1 inline-flex items-center justify-center w-9 h-9 md:w-12 md:h-12 rounded-full relative shrink-0"
                   style={{
                     background:
                       "conic-gradient(from 0deg, #6ee7b7, #60a5fa, #a78bfa, #f472b6, #6ee7b7)",
@@ -415,7 +340,7 @@ function Hero() {
                     }}
                   />
                   <span className="relative flex items-center justify-center w-[70%] h-[70%] rounded-full bg-[#0a0823]">
-                    <Sparkles size={12} className="text-white" />
+                    <Sparkles size={18} className="text-white" />
                   </span>
                 </motion.span>
               </span>
@@ -446,27 +371,7 @@ function Hero() {
                 className="group relative inline-flex items-center gap-3 pl-6 pr-1.5 py-1.5 rounded-full bg-white text-neutral-900 shadow-[0_10px_40px_-12px_rgba(255,255,255,0.5)] hover:shadow-[0_14px_50px_-8px_rgba(110,231,183,0.45)] transition-all duration-500 active:scale-[0.97]"
                 style={DISPLAY}
               >
-                {/* Animated gradient border ring */}
-                <motion.span
-                  aria-hidden
-                  className="absolute inset-0 rounded-full p-[1.5px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                  style={{
-                    background:
-                      "conic-gradient(from 0deg, #6ee7b7, #60a5fa, #a78bfa, #f472b6, #6ee7b7)",
-                    WebkitMask:
-                      "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-                    WebkitMaskComposite: "xor",
-                    maskComposite: "exclude",
-                  }}
-                  animate={
-                    reduce
-                      ? {}
-                      : {
-                          rotate: 360,
-                        }
-                  }
-                  transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-                />
+
                 <span className="relative text-sm tracking-tight">
                   Explore products
                 </span>
